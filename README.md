@@ -2,7 +2,7 @@
 
 > 从电子书（PDF/EPUB/MOBI/TXT/MD）中提取结构化知识，存入可查询的 SQLite 数据库。
 
-**快速使用：** `/ebook-knowledge-extractor 书名`
+**快速使用：** `/ebook-knowledge-extractor 电子书路径/书名.epub`
 
 > 本文档中的示意图使用 [/ppt-master](https://github.com/hugohe3/ppt-master) 制作。
 
