@@ -1,0 +1,297 @@
+{
+  "book_name": "百年孤独",
+  "source_file": "C:\\Users\\Mors\\Documents\\百年孤独.epub",
+  "total_chunks": 48,
+  "chunk_size": 5000,
+  "overlap": 100,
+  "chunks": [
+    {
+      "seq": 1,
+      "filename": "百年孤独_001.txt",
+      "char_count": 4954,
+      "status": "pending"
+    },
+    {
+      "seq": 2,
+      "filename": "百年孤独_002.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 3,
+      "filename": "百年孤独_003.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 4,
+      "filename": "百年孤独_004.txt",
+      "char_count": 4962,
+      "status": "pending"
+    },
+    {
+      "seq": 5,
+      "filename": "百年孤独_005.txt",
+      "char_count": 4947,
+      "status": "pending"
+    },
+    {
+      "seq": 6,
+      "filename": "百年孤独_006.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 7,
+      "filename": "百年孤独_007.txt",
+      "char_count": 4929,
+      "status": "pending"
+    },
+    {
+      "seq": 8,
+      "filename": "百年孤独_008.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 9,
+      "filename": "百年孤独_009.txt",
+      "char_count": 4965,
+      "status": "pending"
+    },
+    {
+      "seq": 10,
+      "filename": "百年孤独_010.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 11,
+      "filename": "百年孤独_011.txt",
+      "char_count": 4998,
+      "status": "pending"
+    },
+    {
+      "seq": 12,
+      "filename": "百年孤独_012.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 13,
+      "filename": "百年孤独_013.txt",
+      "char_count": 4990,
+      "status": "pending"
+    },
+    {
+      "seq": 14,
+      "filename": "百年孤独_014.txt",
+      "char_count": 4950,
+      "status": "pending"
+    },
+    {
+      "seq": 15,
+      "filename": "百年孤独_015.txt",
+      "char_count": 4973,
+      "status": "pending"
+    },
+    {
+      "seq": 16,
+      "filename": "百年孤独_016.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 17,
+      "filename": "百年孤独_017.txt",
+      "char_count": 4965,
+      "status": "pending"
+    },
+    {
+      "seq": 18,
+      "filename": "百年孤独_018.txt",
+      "char_count": 4984,
+      "status": "pending"
+    },
+    {
+      "seq": 19,
+      "filename": "百年孤独_019.txt",
+      "char_count": 4970,
+      "status": "pending"
+    },
+    {
+      "seq": 20,
+      "filename": "百年孤独_020.txt",
+      "char_count": 4982,
+      "status": "pending"
+    },
+    {
+      "seq": 21,
+      "filename": "百年孤独_021.txt",
+      "char_count": 4960,
+      "status": "pending"
+    },
+    {
+      "seq": 22,
+      "filename": "百年孤独_022.txt",
+      "char_count": 4973,
+      "status": "pending"
+    },
+    {
+      "seq": 23,
+      "filename": "百年孤独_023.txt",
+      "char_count": 4989,
+      "status": "pending"
+    },
+    {
+      "seq": 24,
+      "filename": "百年孤独_024.txt",
+      "char_count": 5000,
+      "status": "pending"
+    },
+    {
+      "seq": 25,
+      "filename": "百年孤独_025.txt",
+      "char_count": 4975,
+      "status": "pending"
+    },
+    {
+      "seq": 26,
+      "filename": "百年孤独_026.txt",
+      "char_count": 4979,
+      "status": "pending"
+    },
+    {
+      "seq": 27,
+      "filename": "百年孤独_027.txt",
+      "char_count": 4984,
+      "status": "pending"
+    },
+    {
+      "seq": 28,
+      "filename": "百年孤独_028.txt",
+      "char_count": 4975,
+      "status": "pending"
+    },
+    {
+      "seq": 29,
+      "filename": "百年孤独_029.txt",
+      "char_count": 5000,
+      "status": "pending"
+    },
+    {
+      "seq": 30,
+      "filename": "百年孤独_030.txt",
+      "char_count": 4999,
+      "status": "pending"
+    },
+    {
+      "seq": 31,
+      "filename": "百年孤独_031.txt",
+      "char_count": 4984,
+      "status": "pending"
+    },
+    {
+      "seq": 32,
+      "filename": "百年孤独_032.txt",
+      "char_count": 4932,
+      "status": "pending"
+    },
+    {
+      "seq": 33,
+      "filename": "百年孤独_033.txt",
+      "char_count": 4998,
+      "status": "pending"
+    },
+    {
+      "seq": 34,
+      "filename": "百年孤独_034.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 35,
+      "filename": "百年孤独_035.txt",
+      "char_count": 4970,
+      "status": "pending"
+    },
+    {
+      "seq": 36,
+      "filename": "百年孤独_036.txt",
+      "char_count": 4969,
+      "status": "pending"
+    },
+    {
+      "seq": 37,
+      "filename": "百年孤独_037.txt",
+      "char_count": 4990,
+      "status": "pending"
+    },
+    {
+      "seq": 38,
+      "filename": "百年孤独_038.txt",
+      "char_count": 4988,
+      "status": "pending"
+    },
+    {
+      "seq": 39,
+      "filename": "百年孤独_039.txt",
+      "char_count": 4998,
+      "status": "pending"
+    },
+    {
+      "seq": 40,
+      "filename": "百年孤独_040.txt",
+      "char_count": 4986,
+      "status": "pending"
+    },
+    {
+      "seq": 41,
+      "filename": "百年孤独_041.txt",
+      "char_count": 4997,
+      "status": "pending"
+    },
+    {
+      "seq": 42,
+      "filename": "百年孤独_042.txt",
+      "char_count": 4911,
+      "status": "pending"
+    },
+    {
+      "seq": 43,
+      "filename": "百年孤独_043.txt",
+      "char_count": 4963,
+      "status": "pending"
+    },
+    {
+      "seq": 44,
+      "filename": "百年孤独_044.txt",
+      "char_count": 4985,
+      "status": "pending"
+    },
+    {
+      "seq": 45,
+      "filename": "百年孤独_045.txt",
+      "char_count": 4939,
+      "status": "pending"
+    },
+    {
+      "seq": 46,
+      "filename": "百年孤独_046.txt",
+      "char_count": 4976,
+      "status": "pending"
+    },
+    {
+      "seq": 47,
+      "filename": "百年孤独_047.txt",
+      "char_count": 4971,
+      "status": "pending"
+    },
+    {
+      "seq": 48,
+      "filename": "百年孤独_048.txt",
+      "char_count": 2894,
+      "status": "pending"
+    }
+  ]
+}

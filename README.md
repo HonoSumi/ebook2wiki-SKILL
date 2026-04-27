@@ -205,6 +205,8 @@ FROM nouns WHERE source_urls != '' LIMIT 10;
 SELECT * FROM nouns WHERE noun LIKE '%batik%';
 ```
 
+> 📁 完整执行示例（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)。
+
 ---
 
 ## 输出
