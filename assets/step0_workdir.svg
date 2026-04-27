@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="450 100 800 560" width="800" height="560">
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#0F172A" flood-opacity="0.06" result="shadowColor"/>
+      <feComposite in="shadowColor" in2="offsetblur" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+
+  <!-- Terminal panel -->
+  <g filter="url(#cardShadow)">
+    <rect x="470" y="120" width="760" height="530" rx="12" fill="#1E293B"/>
+    <!-- Terminal header -->
+    <rect x="470" y="120" width="760" height="40" rx="12" fill="#0F172A"/>
+    <rect x="470" y="148" width="760" height="12" fill="#0F172A"/>
+    <circle cx="495" cy="140" r="6" fill="#EF4444"/>
+    <circle cx="515" cy="140" r="6" fill="#F59E0B"/>
+    <circle cx="535" cy="140" r="6" fill="#10B981"/>
+    <text x="850" y="146" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">终端</text>
+
+    <text x="490" y="195" font-family="Consolas, Courier New, monospace" font-size="14" fill="#10B981">$</text>
+    <text x="505" y="195" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"># 进入电子书所在目录</text>
+    <text x="490" y="225" font-family="Consolas, Courier New, monospace" font-size="14" fill="#10B981">$</text>
+    <text x="505" y="225" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"># 创建工作目录</text>
+    <text x="490" y="260" font-family="Consolas, Courier New, monospace" font-size="16" fill="#E2E8F0">mkdir "红楼梦_tmp"</text>
+
+    <line x1="490" y1="295" x2="1200" y2="295" stroke="#334155" stroke-width="1"/>
+
+    <text x="490" y="325" font-family="Consolas, Courier New, monospace" font-size="14" fill="#10B981">$</text>
+    <text x="505" y="325" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"># 验证目录创建成功</text>
+    <text x="490" y="360" font-family="Consolas, Courier New, monospace" font-size="16" fill="#E2E8F0">ls -la</text>
+
+    <!-- Output simulation -->
+    <text x="490" y="395" font-family="Consolas, Courier New, monospace" font-size="13" fill="#94A3B8">drwxr-xr-x   user staff   128 Jun 15 10:30 .</text>
+    <text x="490" y="418" font-family="Consolas, Courier New, monospace" font-size="13" fill="#94A3B8">drwxr-xr-x   user staff   256 Jun 15 10:30 ..</text>
+    <text x="490" y="441" font-family="Consolas, Courier New, monospace" font-size="13" fill="#94A3B8">-rw-r--r--   user staff  1024 Jun 15 10:30 红楼梦.pdf</text>
+    <text x="490" y="464" font-family="Consolas, Courier New, monospace" font-size="13" fill="#2563EB">drwxr-xr-x   user staff    64 Jun 15 10:30 红楼梦_tmp</text>
+
+    <line x1="490" y1="495" x2="1200" y2="495" stroke="#334155" stroke-width="1"/>
+
+    <text x="490" y="530" font-family="Consolas, Courier New, monospace" font-size="14" fill="#F59E0B">提示</text>
+    <text x="490" y="555" font-family="Consolas, Courier New, monospace" font-size="13" fill="#94A3B8">工作目录是所有后续步骤的运行基础。</text>
+    <text x="490" y="578" font-family="Consolas, Courier New, monospace" font-size="13" fill="#94A3B8">请确保磁盘空间充足（视电子书大小而定）。</text>
+  </g>
+</svg>

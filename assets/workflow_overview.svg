@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+      <feOffset dx="0" dy="2" result="offsetblur" />
+      <feFlood flood-color="#0F172A" flood-opacity="0.06" result="shadowColor" />
+      <feComposite in="shadowColor" in2="offsetblur" operator="in" result="shadow" />
+      <feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <linearGradient id="headerBg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0,0 L 10,5 L 0,10 Z" fill="#94A3B8" />
+    </marker>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+
+  
+  <rect x="0" y="0" width="1280" height="6" fill="url(#headerBg)" />
+
+  
+  <text x="640" y="65" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="36" font-weight="bold" fill="#1E293B">工作流全景：五大步骤</text>
+  <text x="640" y="95" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="14" fill="#64748B">从原始电子书到结构化知识库的完整链路</text>
+
+  
+  <line x1="235" y1="270" x2="340" y2="270" stroke="#CBD5E1" stroke-width="2.5" marker-end="url(#arrow)" />
+  <line x1="470" y1="270" x2="575" y2="270" stroke="#CBD5E1" stroke-width="2.5" marker-end="url(#arrow)" />
+  <line x1="705" y1="270" x2="810" y2="270" stroke="#CBD5E1" stroke-width="2.5" marker-end="url(#arrow)" />
+  <line x1="940" y1="270" x2="1045" y2="270" stroke="#CBD5E1" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  
+  <g filter="url(#cardShadow)">
+    <circle cx="180" cy="270" r="38" fill="#2563EB" />
+    <text x="180" y="266" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">01</text>
+    <text x="180" y="282" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="9" fill="#FFFFFF" fill-opacity="0.8">STEP</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M85,335 H275 A10,10 0 0 1 285,345 V555 A10,10 0 0 1 275,565 H85 A10,10 0 0 1 75,555 V345 A10,10 0 0 1 85,335 Z" />
+    <rect x="75" y="360" width="4" height="30" fill="#2563EB" />
+    <text x="95" y="380" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#1E293B">准备工作目录</text>
+    <text x="95" y="400" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">Step 0</text>
+    <line x1="95" y1="420" x2="265" y2="420" stroke="#F1F5F9" stroke-width="1.5" />
+    
+  <g transform="translate(100.0, 440.0) scale(1.5)" fill="none" stroke="#2563EB" stroke-width="2">
+    <path d="M5 19l2.757 -7.351a1 1 0 0 1 .936 -.649h12.307a1 1 0 0 1 .986 1.164l-.996 5.211a2 2 0 0 1 -1.964 1.625h-14.026a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v2" />
+  </g>
+    <text x="150" y="465" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">创建 {书名}_tmp/</text>
+    <text x="150" y="487" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">存放中间文件</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <circle cx="405" cy="270" r="38" fill="#2563EB" />
+    <text x="405" y="266" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">02</text>
+    <text x="405" y="282" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="9" fill="#FFFFFF" fill-opacity="0.8">STEP</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M310,335 H500 A10,10 0 0 1 510,345 V555 A10,10 0 0 1 500,565 H310 A10,10 0 0 1 300,555 V345 A10,10 0 0 1 310,335 Z" />
+    <rect x="300" y="360" width="4" height="30" fill="#2563EB" />
+    <text x="320" y="380" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#1E293B">分段电子书</text>
+    <text x="320" y="400" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">Step 1</text>
+    <line x1="320" y1="420" x2="490" y2="420" stroke="#F1F5F9" stroke-width="1.5" />
+    
+  <g transform="translate(325.0, 440.0) scale(1.5)" fill="none" stroke="#2563EB" stroke-width="2">
+    <path d="M7 8l-4 4l4 4" />
+    <path d="M17 8l4 4l-4 4" />
+    <path d="M14 4l-4 16" />
+  </g>
+    <text x="375" y="465" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">5000字/块</text>
+    <text x="375" y="487" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">自动格式检测</text>
+    <text x="375" y="509" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">生成 _plan.json</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <circle cx="640" cy="270" r="38" fill="#7C3AED" />
+    <text x="640" y="266" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">03</text>
+    <text x="640" y="282" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="9" fill="#FFFFFF" fill-opacity="0.8">STEP</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M545,335 H735 A10,10 0 0 1 745,345 V555 A10,10 0 0 1 735,565 H545 A10,10 0 0 1 535,555 V345 A10,10 0 0 1 545,335 Z" />
+    <rect x="535" y="360" width="4" height="30" fill="#7C3AED" />
+    <text x="555" y="380" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#1E293B">创建任务列表</text>
+    <text x="555" y="400" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">Step 2</text>
+    <line x1="555" y1="420" x2="725" y2="420" stroke="#F1F5F9" stroke-width="1.5" />
+    
+  <g transform="translate(560.0, 440.0) scale(1.5)" fill="none" stroke="#7C3AED" stroke-width="2">
+    <path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+    <path d="M14 19l2 2l4 -4" />
+    <path d="M9 8h4" />
+    <path d="M9 12h2" />
+  </g>
+    <text x="610" y="465" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">TaskCreate追踪</text>
+    <text x="610" y="487" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">依赖链串行</text>
+    <text x="610" y="509" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">/tasks 查看进度</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <circle cx="875" cy="270" r="38" fill="#7C3AED" />
+    <text x="875" y="266" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">04</text>
+    <text x="875" y="282" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="9" fill="#FFFFFF" fill-opacity="0.8">STEP</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M780,335 H970 A10,10 0 0 1 980,345 V555 A10,10 0 0 1 970,565 H780 A10,10 0 0 1 770,555 V345 A10,10 0 0 1 780,335 Z" />
+    <rect x="770" y="360" width="4" height="30" fill="#7C3AED" />
+    <text x="790" y="380" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#1E293B">串行提取知识</text>
+    <text x="790" y="400" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">Step 3</text>
+    <line x1="790" y1="420" x2="960" y2="420" stroke="#F1F5F9" stroke-width="1.5" />
+    
+  <g transform="translate(795.0, 440.0) scale(1.5)" fill="none" stroke="#7C3AED" stroke-width="2">
+    <path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4" />
+    <path d="M12 2v2" />
+    <path d="M9 12v9" />
+    <path d="M15 12v9" />
+    <path d="M5 16l4 -2" />
+    <path d="M15 14l4 2" />
+    <path d="M9 18h6" />
+    <path d="M10 8v.01" />
+    <path d="M14 8v.01" />
+  </g>
+    <text x="845" y="465" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">Subagent处理</text>
+    <text x="845" y="487" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">互联网检索验证</text>
+    <text x="845" y="509" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">YAML/JSON输出</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <circle cx="1100" cy="270" r="38" fill="#06B6D4" />
+    <text x="1100" y="266" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">05</text>
+    <text x="1100" y="282" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="9" fill="#FFFFFF" fill-opacity="0.8">STEP</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M1005,335 H1195 A10,10 0 0 1 1205,345 V555 A10,10 0 0 1 1195,565 H1005 A10,10 0 0 1 995,555 V345 A10,10 0 0 1 1005,335 Z" />
+    <rect x="995" y="360" width="4" height="30" fill="#06B6D4" />
+    <text x="1015" y="380" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#1E293B">合并到SQLite</text>
+    <text x="1015" y="400" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">Step 4</text>
+    <line x1="1015" y1="420" x2="1185" y2="420" stroke="#F1F5F9" stroke-width="1.5" />
+    
+  <g transform="translate(1020.0, 440.0) scale(1.5)" fill="none" stroke="#06B6D4" stroke-width="2">
+    <path d="M4 6a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" />
+    <path d="M4 6v6a8 3 0 0 0 16 0v-6" />
+    <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
+  </g>
+    <text x="1070" y="465" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">去重合并</text>
+    <text x="1070" y="487" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">生成 {书名}.db</text>
+    <text x="1070" y="509" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">结构化知识库</text>
+  </g>
+
+  
+  <text x="1220" y="690" text-anchor="end" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">02</text>
+</svg>

@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+      <feOffset dx="0" dy="2" result="offsetblur" />
+      <feFlood flood-color="#0F172A" flood-opacity="0.06" result="shadowColor" />
+      <feComposite in="shadowColor" in2="offsetblur" operator="in" result="shadow" />
+      <feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <linearGradient id="headerBg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="6" fill="url(#headerBg)" />
+
+  <path fill="#7C3AED" d="M65,60 H135 A15,15 0 0 1 150,75 V75 A15,15 0 0 1 135,90 H65 A15,15 0 0 1 50,75 V75 A15,15 0 0 1 65,60 Z" />
+  <text x="100" y="80" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">步骤 3</text>
+  <text x="170" y="80" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="28" font-weight="bold" fill="#1E293B">知识提取标准</text>
+
+  
+  <path fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1" d="M60,115 H1220 A10,10 0 0 1 1230,125 V155 A10,10 0 0 1 1220,165 H60 A10,10 0 0 1 50,155 V125 A10,10 0 0 1 60,115 Z" />
+  
+  <g transform="translate(70.0, 128.0)" fill="none" stroke="#7C3AED" stroke-width="2">
+    <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+    <path d="M21 21l-6 -6" />
+  </g>
+  <text x="110" y="146" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" fill="#5B21B6">核心判断标准：<tspan font-weight="bold">"一个不了解背景的读者，看到这个词会需要查资料才能理解吗？"</tspan></text>
+
+  
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M60,185 H420 A10,10 0 0 1 430,195 V285 A10,10 0 0 1 420,295 H60 A10,10 0 0 1 50,285 V195 A10,10 0 0 1 60,185 Z" />
+    <path fill="#2563EB" d="M52,185 H52 A2,2 0 0 1 54,187 V293 A2,2 0 0 1 52,295 H52 A2,2 0 0 1 50,293 V187 A2,2 0 0 1 52,185 Z" />
+    <text x="75" y="215" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#1E293B">物件 · 工艺</text>
+    <text x="75" y="240" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">民族特色物品、手工艺品、食物</text>
+    <text x="75" y="262" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#2563EB">如：扎染、银饰、蜡染、油纸伞</text>
+    <text x="75" y="282" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">排除：普通日用品（碗、筷子）</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M460,185 H820 A10,10 0 0 1 830,195 V285 A10,10 0 0 1 820,295 H460 A10,10 0 0 1 450,285 V195 A10,10 0 0 1 460,185 Z" />
+    <path fill="#7C3AED" d="M452,185 H452 A2,2 0 0 1 454,187 V293 A2,2 0 0 1 452,295 H452 A2,2 0 0 1 450,293 V187 A2,2 0 0 1 452,185 Z" />
+    <text x="475" y="215" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#1E293B">习俗 · 仪式</text>
+    <text x="475" y="240" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">有特定文化背景的风俗、节日、礼仪</text>
+    <text x="475" y="262" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#7C3AED">如：跳月、成年礼、祭山神</text>
+    <text x="475" y="282" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">包括祭祀、禁忌等文化传统</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M860,185 H1220 A10,10 0 0 1 1230,195 V285 A10,10 0 0 1 1220,295 H860 A10,10 0 0 1 850,285 V195 A10,10 0 0 1 860,185 Z" />
+    <path fill="#06B6D4" d="M852,185 H852 A2,2 0 0 1 854,187 V293 A2,2 0 0 1 852,295 H852 A2,2 0 0 1 850,293 V187 A2,2 0 0 1 852,185 Z" />
+    <text x="875" y="215" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#1E293B">概念 · 观念</text>
+    <text x="875" y="240" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">特有的思想、信仰、价值观</text>
+    <text x="875" y="262" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#06B6D4">如：天地君亲师、万物有灵</text>
+    <text x="875" y="282" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">包括民间说法和哲学思想</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M60,315 H420 A10,10 0 0 1 430,325 V415 A10,10 0 0 1 420,425 H60 A10,10 0 0 1 50,415 V325 A10,10 0 0 1 60,315 Z" />
+    <path fill="#F59E0B" d="M52,315 H52 A2,2 0 0 1 54,317 V423 A2,2 0 0 1 52,425 H52 A2,2 0 0 1 50,423 V317 A2,2 0 0 1 52,315 Z" />
+    <text x="75" y="345" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#1E293B">事件 · 典故</text>
+    <text x="75" y="370" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">具有历史或文化意义的事件、传说</text>
+    <text x="75" y="392" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#D97706">如：走西口、赶秋、端午起源</text>
+    <text x="75" y="412" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">包括历史典故和民间传说</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M460,315 H820 A10,10 0 0 1 830,325 V415 A10,10 0 0 1 820,425 H460 A10,10 0 0 1 450,415 V325 A10,10 0 0 1 460,315 Z" />
+    <path fill="#10B981" d="M452,315 H452 A2,2 0 0 1 454,317 V423 A2,2 0 0 1 452,425 H452 A2,2 0 0 1 450,423 V317 A2,2 0 0 1 452,315 Z" />
+    <text x="475" y="345" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#1E293B">人物</text>
+    <text x="475" y="370" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">仅限于真实历史人物或文化符号人物</text>
+    <text x="475" y="392" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#10B981">如：屈原、阿凡提</text>
+    <text x="475" y="412" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#EF4444">排除：书中叙事角色（翠翠）</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M860,315 H1220 A10,10 0 0 1 1230,325 V415 A10,10 0 0 1 1220,425 H860 A10,10 0 0 1 850,415 V325 A10,10 0 0 1 860,315 Z" />
+    <path fill="#EF4444" d="M852,315 H852 A2,2 0 0 1 854,317 V423 A2,2 0 0 1 852,425 H852 A2,2 0 0 1 850,423 V317 A2,2 0 0 1 852,315 Z" />
+    <text x="875" y="345" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#1E293B">地点</text>
+    <text x="875" y="370" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">具有历史文化意义的场所</text>
+    <text x="875" y="392" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#EF4444">如：茶马古道、吊脚楼</text>
+    <text x="875" y="412" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">排除：普通故事发生地</text>
+  </g>
+
+  
+  <path fill="#FFFFFF" stroke="#FECACA" stroke-width="1" d="M62,450 H1218 A12,12 0 0 1 1230,462 V648 A12,12 0 0 1 1218,660 H62 A12,12 0 0 1 50,648 V462 A12,12 0 0 1 62,450 Z" />
+  <text x="70" y="480" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#EF4444">明确排除清单</text>
+
+  
+  <g transform="translate(70.0, 500.0) scale(0.6666666666666666)" fill="none" stroke="#EF4444" stroke-width="2">
+    <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3" />
+    <path d="M18 13.3l-6.3 -6.3" />
+  </g>
+  <text x="95" y="514" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">书中普通人物名字（无论主角配角），除非是真实历史人物</text>
+
+  
+  <g transform="translate(70.0, 532.0) scale(0.6666666666666666)" fill="none" stroke="#EF4444" stroke-width="2">
+    <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3" />
+    <path d="M18 13.3l-6.3 -6.3" />
+  </g>
+  <text x="95" y="546" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">普通日常物品（桌子、水、房子等）</text>
+
+  
+  <g transform="translate(70.0, 564.0) scale(0.6666666666666666)" fill="none" stroke="#EF4444" stroke-width="2">
+    <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3" />
+    <path d="M18 13.3l-6.3 -6.3" />
+  </g>
+  <text x="95" y="578" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">通用动作或状态（走路、吃饭、高兴等）</text>
+
+  
+  <g transform="translate(640.0, 500.0) scale(0.6666666666666666)" fill="none" stroke="#EF4444" stroke-width="2">
+    <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3" />
+    <path d="M18 13.3l-6.3 -6.3" />
+  </g>
+  <text x="665" y="514" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">仅作为叙事背景出现、无需额外解释的概念</text>
+
+  <path fill="#FEF2F2" d="M78,600 H602 A8,8 0 0 1 610,608 V632 A8,8 0 0 1 602,640 H78 A8,8 0 0 1 70,632 V608 A8,8 0 0 1 78,600 Z" />
+  <text x="80" y="625" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#991B1B">按实提取，不设上下限。有多少知识型条目就提取多少。</text>
+
+  <path fill="#F0FDF4" d="M648,600 H1202 A8,8 0 0 1 1210,608 V632 A8,8 0 0 1 1202,640 H648 A8,8 0 0 1 640,632 V608 A8,8 0 0 1 648,600 Z" />
+  <text x="650" y="625" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#166534">牢记"知识型"判断标准：读者是否需要查资料才能理解？</text>
+
+  <text x="1220" y="690" text-anchor="end" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">07</text>
+</svg>

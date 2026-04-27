@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+      <feOffset dx="0" dy="2" result="offsetblur" />
+      <feFlood flood-color="#0F172A" flood-opacity="0.06" result="shadowColor" />
+      <feComposite in="shadowColor" in2="offsetblur" operator="in" result="shadow" />
+      <feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <linearGradient id="headerBg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="6" fill="url(#headerBg)" />
+
+  <text x="640" y="65" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="28" font-weight="bold" fill="#1E293B">数据库结构与查询</text>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M62,90 H618 A12,12 0 0 1 630,102 V373 A12,12 0 0 1 618,385 H62 A12,12 0 0 1 50,373 V102 A12,12 0 0 1 62,90 Z" />
+    <path fill="#2563EB" d="M62,90 H618 A12,12 0 0 1 630,102 V123 A12,12 0 0 1 618,135 H62 A12,12 0 0 1 50,123 V102 A12,12 0 0 1 62,90 Z" />
+    <rect x="50" y="123" width="580" height="12" fill="#2563EB" />
+    
+  <g transform="translate(70.0, 105.0) scale(0.8333333333333334)" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <path d="M4 6a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" />
+    <path d="M4 6v6a8 3 0 0 0 16 0v-6" />
+    <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
+  </g>
+    <text x="100" y="120" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">nouns 表 — 知识条目</text>
+
+    
+    <path fill="#F1F5F9" d="M74,150 H606 A4,4 0 0 1 610,154 V176 A4,4 0 0 1 606,180 H74 A4,4 0 0 1 70,176 V154 A4,4 0 0 1 74,150 Z" />
+    <text x="100" y="170" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" font-weight="bold" fill="#475569">列名</text>
+    <text x="300" y="170" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" font-weight="bold" fill="#475569">说明</text>
+
+    <line x1="70" y1="180" x2="610" y2="180" stroke="#E2E8F0" stroke-width="1" />
+
+    <rect x="70" y="180" width="540" height="28" fill="#FFFFFF" />
+    <text x="100" y="199" font-family="Consolas, Courier New, monospace" font-size="13" fill="#2563EB" font-weight="bold">noun</text>
+    <text x="300" y="199" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">名词（主键，不区分大小写去重）</text>
+
+    <rect x="70" y="208" width="540" height="28" fill="#F8FAFC" />
+    <text x="100" y="227" font-family="Consolas, Courier New, monospace" font-size="13" fill="#1E293B">explanation</text>
+    <text x="300" y="227" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">综合解释</text>
+
+    <rect x="70" y="236" width="540" height="28" fill="#FFFFFF" />
+    <text x="100" y="255" font-family="Consolas, Courier New, monospace" font-size="13" fill="#1E293B">original_text</text>
+    <text x="300" y="255" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">书中原文片段</text>
+
+    <rect x="70" y="264" width="540" height="28" fill="#F8FAFC" />
+    <text x="100" y="283" font-family="Consolas, Courier New, monospace" font-size="13" fill="#1E293B">source_urls</text>
+    <text x="300" y="283" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">网络来源 URL</text>
+
+    <rect x="70" y="292" width="540" height="28" fill="#FFFFFF" />
+    <text x="100" y="311" font-family="Consolas, Courier New, monospace" font-size="13" fill="#1E293B">created_at / updated_at</text>
+    <text x="300" y="311" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">创建时间 / 更新时间</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" d="M62,400 H618 A12,12 0 0 1 630,412 V538 A12,12 0 0 1 618,550 H62 A12,12 0 0 1 50,538 V412 A12,12 0 0 1 62,400 Z" />
+    <path fill="#7C3AED" d="M62,400 H618 A12,12 0 0 1 630,412 V433 A12,12 0 0 1 618,445 H62 A12,12 0 0 1 50,433 V412 A12,12 0 0 1 62,400 Z" />
+    <rect x="50" y="433" width="580" height="12" fill="#7C3AED" />
+    
+  <g transform="translate(70.0, 415.0) scale(0.8333333333333334)" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <path d="M10 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M3 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M17 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M6.5 17.5l5.5 -4.5l5.5 4.5" />
+    <path d="M12 7l0 6" />
+  </g>
+    <text x="100" y="430" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">metadata 表 — 处理元信息</text>
+
+    <path fill="#F1F5F9" d="M74,460 H606 A4,4 0 0 1 610,464 V486 A4,4 0 0 1 606,490 H74 A4,4 0 0 1 70,486 V464 A4,4 0 0 1 74,460 Z" />
+    <text x="100" y="480" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" font-weight="bold" fill="#475569">列名</text>
+    <text x="300" y="480" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" font-weight="bold" fill="#475569">说明</text>
+    <line x1="70" y1="490" x2="610" y2="490" stroke="#E2E8F0" stroke-width="1" />
+
+    <rect x="70" y="490" width="540" height="26" fill="#FFFFFF" />
+    <text x="100" y="509" font-family="Consolas, Courier New, monospace" font-size="13" fill="#7C3AED" font-weight="bold">key</text>
+    <text x="300" y="509" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">元信息键名</text>
+
+    <rect x="70" y="516" width="540" height="26" fill="#F8FAFC" />
+    <text x="100" y="535" font-family="Consolas, Courier New, monospace" font-size="13" fill="#1E293B">value</text>
+    <text x="300" y="535" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">元信息值</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#1E293B" d="M672,90 H1218 A12,12 0 0 1 1230,102 V538 A12,12 0 0 1 1218,550 H672 A12,12 0 0 1 660,538 V102 A12,12 0 0 1 672,90 Z" />
+    <path fill="#0F172A" d="M672,90 H1218 A12,12 0 0 1 1230,102 V118 A12,12 0 0 1 1218,130 H672 A12,12 0 0 1 660,118 V102 A12,12 0 0 1 672,90 Z" />
+    <rect x="660" y="118" width="570" height="12" fill="#0F172A" />
+    <circle cx="685" cy="110" r="6" fill="#EF4444" />
+    <circle cx="705" cy="110" r="6" fill="#F59E0B" />
+    <circle cx="725" cy="110" r="6" fill="#10B981" />
+    <text x="945" y="116" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="12" fill="#64748B">SQL 查询示例</text>
+
+    <text x="680" y="165" font-family="Consolas, Courier New, monospace" font-size="14" fill="#94A3B8">-- 查询解释最长的前10个条目</text>
+    <text x="680" y="195" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0">SELECT noun, length(explanation) <tspan fill="#60A5FA">AS</tspan> expl_len</text>
+    <text x="680" y="220" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">FROM</tspan> nouns</text>
+    <text x="680" y="245" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">ORDER BY</tspan> expl_len <tspan fill="#60A5FA">DESC</tspan></text>
+    <text x="680" y="270" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">LIMIT</tspan> 10;</text>
+
+    <line x1="680" y1="295" x2="1200" y2="295" stroke="#334155" stroke-width="1" />
+
+    <text x="680" y="325" font-family="Consolas, Courier New, monospace" font-size="14" fill="#94A3B8">-- 查询有网络来源的条目</text>
+    <text x="680" y="355" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0">SELECT noun, source_urls</text>
+    <text x="680" y="380" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">FROM</tspan> nouns</text>
+    <text x="680" y="405" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">WHERE</tspan> source_urls != ''</text>
+    <text x="680" y="430" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">LIMIT</tspan> 10;</text>
+
+    <line x1="680" y1="455" x2="1200" y2="455" stroke="#334155" stroke-width="1" />
+
+    <text x="680" y="485" font-family="Consolas, Courier New, monospace" font-size="14" fill="#94A3B8">-- 按类别搜索知识点</text>
+    <text x="680" y="515" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0">SELECT * <tspan fill="#60A5FA">FROM</tspan> nouns</text>
+    <text x="680" y="540" font-family="Consolas, Courier New, monospace" font-size="14" fill="#E2E8F0"><tspan fill="#60A5FA">WHERE</tspan> noun <tspan fill="#60A5FA">LIKE</tspan> '%扎染%';</text>
+  </g>
+
+  
+  <path fill="#F0FDF4" stroke="#A7F3D0" stroke-width="1" d="M670,565 H1220 A10,10 0 0 1 1230,575 V665 A10,10 0 0 1 1220,675 H670 A10,10 0 0 1 660,665 V575 A10,10 0 0 1 670,565 Z" />
+  
+  <g transform="translate(680.0, 583.0)" fill="none" stroke="#10B981" stroke-width="2">
+    <path d="M5 7l5 5l-5 5" />
+    <path d="M12 19l7 0" />
+  </g>
+  <text x="715" y="602" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="15" font-weight="bold" fill="#065F46">查询方式</text>
+  <text x="680" y="630" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">生成的 .db 文件是标准 SQLite 数据库，可以使用任何 SQLite 工具</text>
+  <text x="680" y="655" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="13" fill="#475569">（如 sqlite3 命令行、DB Browser、Python sqlite3 模块）查询。</text>
+
+  <text x="1220" y="690" text-anchor="end" font-family="Microsoft YaHei, PingFang SC, Arial, sans-serif" font-size="11" fill="#94A3B8">11</text>
+</svg>
