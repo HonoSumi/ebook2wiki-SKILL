@@ -2,7 +2,9 @@
 
 > 从电子书（PDF/EPUB/MOBI/TXT/MD）中提取结构化知识，存入可查询的 SQLite 数据库。
 
-**快速使用：** `/ebook-knowledge-extractor 电子书路径/书名.epub`
+> **快速使用样例**：`/ebook-knowledge-extractor 百年孤独.epub`
+
+📁 样例完整执行产物（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)。
 
 > 本文档中的示意图使用 [/ppt-master](https://github.com/hugohe3/ppt-master) 制作。
 
@@ -205,8 +207,6 @@ FROM nouns WHERE source_urls != '' LIMIT 10;
 SELECT * FROM nouns WHERE noun LIKE '%batik%';
 ```
 
-> 📁 完整执行示例（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)。
-
 ---
 
 ## 输出
@@ -248,9 +248,3 @@ SELECT * FROM nouns WHERE noun LIKE '%batik%';
 3. **知识型条目优先** — 只提取读者需要查资料才能理解的内容
 4. **互联网验证** — 绝不凭空编造；始终结合书中原文和网络搜索结果
 5. **结构化输出** — 去重的 SQLite 数据库，便于查询和复用
-
----
-
-## 许可证
-
-本项目属于 Claude Code skill 生态系统的一部分。
