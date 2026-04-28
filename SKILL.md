@@ -79,67 +79,61 @@ touch "{书名}_tmp/already_searched.txt"
 
 文件由 `manage_keywords.py filter` 命令自动维护，无需手动编辑。
 
-### 步骤 3：创建处理任务列表
+### 步骤 3：读取分块计划
 
-读取 `_plan.json`，使用 **TaskCreate** 为每个文本块创建一个任务，用 TaskList/TaskUpdate 追踪全局进度。
+读取 `_plan.json`，了解总块数，存入变量 `TOTAL_CHUNKS`。
 
 ```
 读取 _plan.json，共 42 个文本块
-为每个块创建一个 TaskCreate：
-  Task 1: [001/042] 红楼梦_001.txt (5234 字符)
-  Task 2: [002/042] 红楼梦_002.txt (4987 字符)
-  ...
-  Task 42: [042/042] 红楼梦_042.txt (5123 字符)
 ```
 
-然后把这一批 task 互相用 `addBlockedBy` 串成依赖链：
-- Task 2 blockedBy Task 1, Task 3 blockedBy Task 2, ...
-- 这样 TaskList 视图天然显示谁在阻塞谁
+确认总块数后告知用户预计耗时（每块约 2-5 分钟）。
 
-这样用户随时可以用 `/tasks` 查看当前处理进度和剩余任务。
-
-### 步骤 4：串行提取每个文本块的知识（脚本化去重）
+### 步骤 4：串行提取每个文本块的知识（subagent 隔离处理）
 
 这是核心步骤。**心态上要放慢**：无论有 5 个块还是 500 个块，都一个接一个地处理，不急不躁。
 我们最不缺的就是时间，最不需要的就是效率。提取质量远比速度重要。
 
-对每个文本块，**按顺序串行**启动 subagent，一个完成后才启动下一个。
+#### 设计思路
 
-#### 脚本化去重原理
+每个文本块的全部处理委托给一个独立的 subagent，主流程只负责串行调度和进度汇报。subagent 内部完成：
+1. 读取文本块 → 提取关键词（无 WebSearch）
+2. 运行 `manage_keywords.py filter` 去重
+3. 对新关键词做 WebSearch + 撰写 YAML
+4. 运行 `yaml_to_json.py` 转换
 
-使用两阶段提取 + 脚本化去重，避免重复搜索已提取过的关键词：
-
-1. **Phase 1 — 关键词提取**：subagent 仅读取文本块，识别知识型条目，输出一个纯文本关键词列表（无需 WebSearch）
-2. **脚本过滤**：`manage_keywords.py filter` 将关键词列表与 `already_searched.txt` 比对，输出未搜索过的新关键词，增量追加到文件
-3. **Phase 2 — 检索撰写**：仅对**新关键词**启动 subagent 做 WebSearch + YAML 输出；若无新关键词则跳过，不浪费 token
-
-已搜索过的关键词不会出现在结果中，全程无需 `<already_searched>` 标签，稳定且省 token。
+整个 pipeline 在 subagent 上下文中完成，主流程不接触每块的关键词文件、YAML、JSON 等中间产物细节，极大节省主上下文窗口。
 
 #### 处理流程
 
-对 `_plan.json` 中的每个文本块（按 seq 升序）：
+对 `_plan.json` 中的每个文本块（按 seq 升序），串行执行：
 
-1. **更新进度** — 告知用户当前处理到第几个文本块。不必着急，每完成一块简短汇报一次即可，用户有耐心等
+1. **告知用户** — `[003/042] 正在处理 红楼梦_003.txt……`
 
-2. **更新计划状态** — 将该块状态从 `pending` 改为 `processing`
+2. **启动 subagent 处理该块** — 使用 Agent 工具（prompt 见下方），**等待其完成后再启动下一个**
 
-3. **Phase 1：启动 subagent 提取关键词** — 使用 Agent 工具，prompt 如下：
+3. **汇报进度** — subagent 返回后，简短向用户报告：
+   - `[003/042] 红楼梦_003.txt → 5 个关键词，累计 23 个`
+
+4. **若失败** — 重试该块，连续 3 次失败则跳过并在最终报告注明
+
+#### subagent prompt
 
 ```
-你是一个电子书知识提取助手。
+你是一个电子书知识提取助手。请完整处理一个文本块的知识提取 pipeline。
 
-请阅读以下文本块，提取其中包含的**知识型条目**的关键词列表。
+参数（替换实际值）：
+- 书名: {book_name}
+- 文本块序号: {seq}/{total}
+- 文本块文件: {chunk_filepath}
+- 工作目录: {tmp_dir}
+- 去重列表: {tmp_dir}/already_searched.txt
+- 关键词输出文件: {tmp_dir}/keywords_{seq}.txt
+- YAML 输出文件: {tmp_dir}/output_{seq}.yaml
 
-书名: {book_name}
-文本块序号: {seq}/{total}
-文件路径: {chunk_filepath}
+=== 步骤 1：提取关键词 ===
 
-任务：
-1. 阅读这个文本块
-2. 识别其中的知识型条目（具有文化、历史、民族、地方特色的概念）
-3. 将关键词列表保存到以下文件（使用 Write 工具）：
-
-   {keywords_filepath}
+使用 Read 工具阅读文本块文件，提取其中的**知识型条目**，将关键词列表写入 {tmp_dir}/keywords_{seq}.txt（使用 Write 工具）。
 
 判断标准：**"一个不了解背景的读者，看到这个词会需要查资料才能理解吗？"**
 - 需要 → 知识点，提取（如"扎染"、"傩戏"、"土楼"）
@@ -154,118 +148,79 @@ touch "{书名}_tmp/already_searched.txt"
 - 地点 — 仅限有历史文化意义的地点（排除虚构场景名）
 
 关键约束 — 输出文件必须**纯词汇，不含任何类别标题**：
-```
 ✅ 正确格式（只有词汇，一行一个）：
-扎染
-傩戏
-土楼
+  扎染
+  傩戏
+  土楼
 
 ❌ 错误格式（禁止包含任何类别名、冒号、分隔线）：
-物件·工艺
-扎染           ← 类别名 "物件·工艺" 不应出现
-傩戏
-土楼
-习俗·仪式
-默祷           ← "习俗·仪式" 不应出现
-```
+  物件·工艺
+  扎染           ← 类别名不应出现
 
 重要要求：
-- **输出文件中禁止出现任何类别名**（如"物件·工艺""习俗·仪式""人物""地点"等），只能有纯词汇
+- 输出文件中**禁止出现任何类别名**，只能有纯词汇
 - 无需分类、无需分组、无需标题、无需序号、无需分隔线
-- 只需输出关键词列表，**不要使用 WebSearch**，不要写解释
-- 按实提取，不设上下限，文本块中有多少知识型条目就提取多少
+- 不要使用 WebSearch，不要写解释
+- 按实提取，不设上下限
+
+=== 步骤 2：去重过滤 ===
+
+运行 Bash 命令对关键词去重：
+
+```bash
+python scripts/manage_keywords.py filter "{tmp_dir}/already_searched.txt" --from-file "{tmp_dir}/keywords_{seq}.txt" --output "{tmp_dir}/filtered_{seq}.txt"
 ```
 
-4. **等待 subagent 完成** — 阻塞等待
+将输出（新关键词列表）保存到变量 NEW_KEYWORDS。
 
-5. **脚本过滤关键词** — 运行 `manage_keywords.py filter`：
-   ```bash
-   python scripts/manage_keywords.py filter "{书名}_tmp/already_searched.txt" --from-file {keywords_filepath} --output "{书名}_tmp/filtered_{seq}.txt"
-   ```
-   
-   脚本会：
-   - 将新关键词追加到 `already_searched.txt`
-   - 向 stdout 输出新关键词（每行一个）
-   - 同时写入 `filtered_{seq}.txt` 文件（供审计中间产物）
-   
-   将输出保存到变量 `NEW_KEYWORDS`，供下一步使用。
-   
-   如果输出为空（所有关键词都已搜索过），**跳过 Phase 2**，直接标记完成。
+如果输出为空（无新关键词），直接跳过步骤 3 和 4，任务完成。
 
-6. **Phase 2：启动 subagent 检索并生成 YAML** — 仅当有新关键词时执行，使用 Agent 工具：
+=== 步骤 3：检索并撰写 YAML ===
 
-```
-你是一个电子书知识提取助手。
+对 NEW_KEYWORDS 中的每个关键词，使用 WebSearch 进行互联网检索，结合书中原文撰写综合解释。
 
-请处理以下文本块，对指定的关键词进行互联网检索并生成 YAML 输出。
+- 用 Read 工具再次阅读文本块，找到每个关键词对应的原文句子
+- 使用 WebSearch 检索每个关键词
+- 输出 YAML 到 {tmp_dir}/output_{seq}.yaml
 
-书名: {book_name}
-文本块序号: {seq}/{total}
-文件路径: {chunk_filepath}
-
-需要处理的新关键词（仅对这些关键词进行 WebSearch）：
-```
-{NEW_KEYWORDS}
-```
-
-任务：
-1. 使用 Read 工具阅读文本块
-2. 使用 WebSearch 对上述每个关键词进行互联网检索
-3. 结合书中内容和检索结果，为每个关键词撰写综合解释
-4. 将结果保存为 YAML 文件到以下路径（使用 Write 工具）：
-
-   {output_yaml_path}
-
-YAML 格式（注意多行文本用 `|`，完全不用操心引号问题）：
+YAML 格式：
 ```yaml
 - 名词: 扎染
   解释: |
-    中国传统的手工染色技术，以绞扎、浸染为主要工艺。
-    扎染图案自然晕染，每件独一无二。
+    中国传统的手工染色技术。
   书中原文: |
-    她穿着一件扎染的蓝布衣裳，在人群中显得格外与众不同。
+    她穿着一件扎染的蓝布衣裳。
   网络来源: |
     https://baike.baidu.com/item/扎染
-    https://zh.wikipedia.org/wiki/扎染
 ```
 
 YAML 书写规则：
 - 每条记录以 `- 名词:` 开头
 - 字段缩进 2 空格
-- 短文本直接跟在 `: ` 后面写
 - 多行文本用 `: |` 换行，内容缩进 4 空格
-- 引号完全不需要转义，YAML 会正确处理
+- 不需要引号
 
 重要要求：
-- **只处理上述关键词列表中的条目**，不要自行添加新关键词
-- 每个关键词都使用 WebSearch 检索，找到对应的概念解释
+- 只处理 NEW_KEYWORDS 中的关键词
 - "书中原文"必须是书中出现的**完整可读的句子**
-- 如果网络检索不到，在"解释"中注明"未检索到网络资料"
-- 禁止自行编造信息
+- 检索不到则注明"未检索到网络资料"
+- 禁止编造信息
+
+=== 步骤 4：强制 YAML→JSON 转换 ===
+
+```bash
+python scripts/yaml_to_json.py "{tmp_dir}/output_{seq}.yaml"
 ```
 
-7. **等待 subagent 完成** — 阻塞等待
-
-8. **验证 YAML 输出** — 确认 YAML 文件已生成
-
-9. **强制 YAML→JSON 转换**：
-   ```bash
-   python scripts/yaml_to_json.py {output_yaml_path}
-   ```
-
-10. **验证 JSON** — 确认转换后的 JSON 文件存在且可解析
-
-11. **更新计划状态** — 将该 task 标记为 `completed`
-
-12. **向用户报告进度** — 简短汇报当前完成情况，格式如：
-    - `[005/042] 百年孤独_005.txt → 3 个关键词（跳过 2 个已搜索），累计 87 个关键词`
+验证输出的 JSON 文件存在。若失败则重试步骤 3 和 4。
+```
 
 #### 串行约束
 
-- **必须串行，禁止并行** — 每次只启动一个 subagent，等待其完成后再启动下一个。Phase 1 和 Phase 2 是同一个 task 内的顺序步骤，不要跨 task 并行
-- **慢就是快** — 每块处理可能需要数分钟，这是正常的
-- 如果某个 subagent 出错，重试该块而不是跳过。连续 3 次失败才跳过
-- 如果 Phase 1 输出为空（文本块中无知识型条目），或 Phase 2 没有新关键词，直接标记完成即可
+- **必须串行，禁止并行** — 每次只启动一个 subagent，阻塞等待其完成后才启动下一个
+- **慢就是快** — 每块可能需要数分钟，这是正常的
+- subagent 是独立上下文，其内部细节不会污染主流程上下文窗口
+- 若某块 subagent 连续失败 3 次，跳过该块，在最终报告中注明
 
 ### 步骤 5：合并到 SQLite
 
@@ -349,8 +304,8 @@ SELECT noun, source_urls FROM nouns WHERE source_urls != '' LIMIT 10;
 
 你会回答好的，然后执行：
 1. 运行 `python scripts/chunk_ebook.py 边城.pdf`
-2. 读取 `_plan.json` 列出 15 个文本块
-3. 告知用户预计处理时间，然后开始串行处理
-4. 每完成 5 块汇报一次进度
+2. 读取 `_plan.json` 列出 15 个文本块，告知用户预计时间
+3. 串行启动 15 个 subagent，每个处理一个文本块的完整 pipeline（关键词提取→去重→检索→YAML→JSON）
+4. 每块完成后简短汇报一次进度
 5. 全部完成后运行 `python scripts/merge_to_sqlite.py 边城_tmp`
 6. 展示最终统计
