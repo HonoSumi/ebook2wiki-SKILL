@@ -80,18 +80,10 @@ def normalize_keys(entry):
     return normalized
 
 
-ALREADY_SEARCHED_TAG = "<already_searched>"
-
-
 def deduplicate_entries(entries):
     """
     按名词去重（不区分大小写）。
     同名词合并：解释拼接、URL 去重合并、原文拼接。
-
-    去重左移逻辑：
-    - 若新条目的 解释 为 <already_searched>，跳过解释合并（保留旧解释）
-    - 若新条目的 网络来源 为 <already_searched>，跳过 URL 合并
-    - 书中原文始终合并追加（不受 <already_searched> 影响）
     """
     deduped = {}
 
@@ -109,41 +101,34 @@ def deduplicate_entries(entries):
         if key in deduped:
             existing = deduped[key]
 
-            # 合并解释（跳过 <already_searched> 的追加）
+            # 合并解释
             new_expl = entry.get("解释", "").strip()
             old_expl = existing.get("解释", "").strip()
-            if new_expl and new_expl != ALREADY_SEARCHED_TAG and new_expl != old_expl:
+            if new_expl and new_expl != old_expl:
                 existing["解释"] = f"{old_expl}\n---\n{new_expl}" if old_expl else new_expl
 
-            # 合并原文（始终追加）
+            # 合并原文
             new_text = entry.get("书中原文", "").strip()
             old_text = existing.get("书中原文", "").strip()
             if new_text and new_text not in old_text:
                 existing["书中原文"] = f"{old_text}\n---\n{new_text}" if old_text else new_text
 
-            # 合并 URL（跳过 <already_searched> 的追加）
+            # 合并 URL
             new_urls_str = entry.get("网络来源", "").strip()
             old_urls_str = existing.get("网络来源", "").strip()
-            if new_urls_str and new_urls_str != ALREADY_SEARCHED_TAG:
+            if new_urls_str:
                 all_urls = set()
                 for u in (old_urls_str + "\n" + new_urls_str).split("\n"):
                     u = u.strip()
-                    if u and u != ALREADY_SEARCHED_TAG:
+                    if u:
                         all_urls.add(u)
                 existing["网络来源"] = "\n".join(sorted(all_urls))
         else:
-            # 首次出现：如果解释就是 <already_searched>，置空（不应发生在正常流程中，但防御性处理）
-            expl = entry.get("解释", "")
-            if expl.strip() == ALREADY_SEARCHED_TAG:
-                expl = ""
-            urls = entry.get("网络来源", "")
-            if urls.strip() == ALREADY_SEARCHED_TAG:
-                urls = ""
             deduped[key] = {
                 "名词": noun,
-                "解释": expl,
+                "解释": entry.get("解释", ""),
                 "书中原文": entry.get("书中原文", ""),
-                "网络来源": urls,
+                "网络来源": entry.get("网络来源", ""),
             }
 
     return list(deduped.values())
