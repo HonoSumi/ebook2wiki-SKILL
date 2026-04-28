@@ -11,7 +11,7 @@
 sql-studio sqlite 百年孤独.db
 ```
 
-![sqlite可视化db文件样例](assets/sqlite-vis-example.png)
+![sqlite可视化db文件样例](assets/sqlite-visualization-example.png)
 
 > 本文档下方的流程及原理示意图使用 [/ppt-master](https://github.com/hugohe3/ppt-master) 制作。
 
