@@ -7,6 +7,9 @@
 📁 样例完整执行产物（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)。
 
 产物中的 db 文件推荐使用 sqlite 可视化工具快速查看，例如 [SQL Studio](https://github.com/frectonz/sql-studio)。
+```bash
+sql-studio sqlite 百年孤独.db
+```
 
 ![sqlite可视化db文件样例](assets/sqlite-vis-example.png)
 
