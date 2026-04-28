@@ -8,7 +8,9 @@
 
 产物中的 db 文件推荐使用 sqlite 可视化工具快速查看，例如 [SQL Studio](https://github.com/frectonz/sql-studio)。
 
-> 本文档中的示意图使用 [/ppt-master](https://github.com/hugohe3/ppt-master) 制作。
+![sqlite可视化db文件样例](assets/sqlite-vis-example.png)
+
+> 本文档下方的流程及原理示意图使用 [/ppt-master](https://github.com/hugohe3/ppt-master) 制作。
 
 专为希望*系统化地*从书中捕获文化、历史和领域知识的读者而设计——不只是标注句子，而是构建一个经过互联网验证的结构化知识库。
 
