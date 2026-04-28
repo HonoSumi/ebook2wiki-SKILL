@@ -24,10 +24,11 @@ description: >
 ## 前置条件
 
 - Python 3.7+
-- 三个固化脚本在 `scripts/` 目录下：
+- 四个固化脚本在 `scripts/` 目录下：
   - `chunk_ebook.py` — 电子书分段
   - `yaml_to_json.py` — 将 subagent 输出的 YAML 转为标准 JSON（避免引号问题）
-  - `merge_to_sqlite.py` — 合并 JSON 到 SQLite
+  - `manage_keywords.py` — 管理 `already_searched.txt` 关键词去重列表（读取/追加）
+  - `merge_to_sqlite.py` — 合并 JSON 到 SQLite（支持 `<already_searched>` 去重左移）
 
 ---
 
@@ -67,7 +68,17 @@ python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
 ============================================================
 ```
 
-### 步骤 2：创建处理任务列表
+### 步骤 2（可选）：初始化关键词去重列表
+
+如果希望跨文本块去重，避免已提取过的关键词重复搜索浪费 token，可在 `{书名}_tmp/` 目录下初始化关键词列表：
+
+```bash
+touch "{书名}_tmp/already_searched.txt"
+```
+
+文件格式为 `序号: 关键词名称`，由后续步骤自动维护，无需手动编辑。
+
+### 步骤 3：创建处理任务列表
 
 读取 `_plan.json`，使用 **TaskCreate** 为每个文本块创建一个任务，用 TaskList/TaskUpdate 追踪全局进度。
 
@@ -86,20 +97,36 @@ python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
 
 这样用户随时可以用 `/tasks` 查看当前处理进度和剩余任务。
 
-### 步骤 3：串行提取每个文本块的知识
+### 步骤 4：串行提取每个文本块的知识（含去重左移）
 
 这是核心步骤。**心态上要放慢**：无论有 5 个块还是 500 个块，都一个接一个地处理，不急不躁。
 我们最不缺的就是时间，最不需要的就是效率。提取质量远比速度重要。
 
 对每个文本块，**按顺序串行**启动 subagent，一个完成后才启动下一个。
 
+#### 去重左移原理
+
+每次启动 subagent 前，脚本化读取 `already_searched.txt`，将已搜索过的关键词注入 subagent prompt。
+subagent 对这些关键词**跳过 WebSearch**，仅从原文提取 `书中原文`，`解释` 和 `网络来源` 标记为 `<already_searched>`。
+处理完成后，将本次新增的关键词追加到 `already_searched.txt`。
+最终 `merge_to_sqlite.py` 合并时，自动跳过 `<already_searched>` 的解释追加，但正常保留原文引用。
+
+这样跨文本块的重复关键词只搜索一次，后续块直接左移跳过，节省大量 token。
+
 #### 处理流程
 
 对 `_plan.json` 中的每个文本块（按 seq 升序）：
 
 1. **更新进度** — 告知用户当前处理到第几个文本块。不必着急，每完成一块简短汇报一次即可，用户有耐心等
+
 2. **更新计划状态** — 将该块状态从 `pending` 改为 `processing`
-3. **启动 subagent 处理该文本块** — 使用 Agent 工具，prompt 模板如下：
+
+3. **读取已搜索关键词** — 脚本化读取 `already_searched.txt`，获取已有列表：
+   ```bash
+   ALREADY_SEARCHED=$(python scripts/manage_keywords.py read "{书名}_tmp/already_searched.txt")
+   ```
+
+4. **启动 subagent 处理该文本块** — 使用 Agent 工具，prompt 模板如下（嵌入 `$ALREADY_SEARCHED`）：
 
 ```
 你是一个电子书知识提取助手。
@@ -126,10 +153,19 @@ python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
    - 人物 — 仅限真实历史人物或文化符号人物（排除书中叙事角色）
    - 地点 — 仅限有历史文化意义的地点（排除虚构场景名）
 
-3. 对于每个识别出的条目，使用 WebSearch 工具检索互联网，找到对应的概念解释，
-   然后结合书中内容撰写综合解释。
+3. 【去重左移】以下关键词已在之前的文本块中搜索过，你看到它们时**不要使用 WebSearch**：
+   {ALREADY_SEARCHED}
+   
+   对于这些已搜索过的关键词：
+   - 正常从原文提取，提供"书中原文"
+   - "解释"字段填写: <already_searched>
+   - "网络来源"字段填写: <already_searched>
+   - 禁止对这些关键词调用 WebSearch
 
-4. 将结果保存为 **YAML 文件** 到以下路径（使用 Write 工具，扩展名为 `.yaml`）：
+4. 对于**不在上述列表中的新关键词**，使用 WebSearch 工具检索互联网，
+   找到对应的概念解释，然后结合书中内容撰写综合解释。
+
+5. 将结果保存为 **YAML 文件** 到以下路径（使用 Write 工具，扩展名为 `.yaml`）：
    {output_yaml_path}
 
 YAML 格式（注意多行文本用 `|`，完全不用操心引号问题）：
@@ -146,6 +182,15 @@ YAML 格式（注意多行文本用 `|`，完全不用操心引号问题）：
     https://zh.wikipedia.org/wiki/扎染
 ```
 
+已搜索关键词的标记示例（不要 WebSearch，仅从原文提取）：
+```yaml
+- 名词: 扎染
+  解释: <already_searched>
+  书中原文: |
+    她穿着一件扎染的蓝布衣裳，在人群中显得格外与众不同。
+  网络来源: <already_searched>
+```
+
 YAML 书写规则：
 - 每条记录以 `- 名词:` 开头
 - 字段缩进 2 空格
@@ -158,19 +203,30 @@ YAML 书写规则：
 - 牢记"知识型"判断标准：读者是否需要查资料才能理解？不需要则不提取
 - 明确排除：书中普通人物角色名、日常物品、通用概念
 - "书中原文"必须是书中出现的**完整可读的句子**，让人一眼看出上下文来源
-- 如果网络检索不到某个条目，在"解释"中注明"未检索到网络资料"
+- 新关键词如果网络检索不到，在"解释"中注明"未检索到网络资料"
+- **已搜索关键词禁止调用 WebSearch**，直接标记 `<already_searched>`
 - 禁止自行编造信息
 ```
 
-4. **等待 subagent 完成** — 阻塞等待，不启动下一个直到完成
-5. **验证 YAML 输出** — 确认 YAML 文件已生成
-6. **强制 YAML→JSON 转换** — 运行脚本将 YAML 转为 JSON（这步是由代码做的，保证 JSON 格式绝对正确）：
+5. **等待 subagent 完成** — 阻塞等待，不启动下一个直到完成
+
+6. **验证 YAML 输出** — 确认 YAML 文件已生成
+
+7. **强制 YAML→JSON 转换** — 运行脚本将 YAML 转为 JSON（这步是由代码做的，保证 JSON 格式绝对正确）：
    ```bash
    python scripts/yaml_to_json.py {output_yaml_path}
    ```
-7. **验证 JSON** — 确认转换后的 JSON 文件存在且可解析
-8. **更新计划状态** — 将该 task 标记为 `completed`
-9. **向用户报告进度** — 简短汇报当前完成情况
+
+8. **追加关键词到去重列表** — 将本次提取的所有关键词写入 `already_searched.txt`（自动去重）：
+   ```bash
+   python scripts/manage_keywords.py append-from-json "{书名}_tmp/already_searched.txt" {output_json_path}
+   ```
+
+9. **验证 JSON** — 确认转换后的 JSON 文件存在且可解析
+
+10. **更新计划状态** — 将该 task 标记为 `completed`
+
+11. **向用户报告进度** — 简短汇报当前完成情况（含已搜索关键词累计数）
 
 #### 串行约束
 
@@ -179,7 +235,7 @@ YAML 书写规则：
 - 如果某个 subagent 出错，重试该块而不是跳过。连续 3 次失败才跳过
 - 即使最后有几百个块待处理，也保持这个节奏。质量面前，效率让步
 
-### 步骤 4：合并到 SQLite
+### 步骤 5：合并到 SQLite
 
 所有文本块处理完毕后，使用固化脚本 `scripts/merge_to_sqlite.py` 合并所有 JSON 到 SQLite 数据库。
 
@@ -192,9 +248,10 @@ python scripts/merge_to_sqlite.py <json_dir>
 
 脚本会自动：
 1. 扫描目录下的所有 `*.json` 文件（排除 `_` 开头的）
-2. 按名词去重（不区分大小写），合并解释和网络来源
-3. 写入 SQLite 数据库，文件名为 `{书名}.db`
-4. 输出统计信息
+2. 按名词去重（不区分大小写），自动跳过 `<already_searched>` 的解释追加
+3. 合并原文引用和网络来源
+4. 写入 SQLite 数据库，文件名为 `{书名}.db`
+5. 输出统计信息
 
 脚本执行完成后，向用户汇报最终统计：
 
