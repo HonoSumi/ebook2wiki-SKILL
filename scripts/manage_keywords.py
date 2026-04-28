@@ -15,13 +15,15 @@
     python manage_keywords.py append-from-json <filepath> <json_path>
         从 JSON 文件中提取所有"名词"字段，追加到列表
 
-    python manage_keywords.py filter <filepath> --from-file <keywords_file>
+    python manage_keywords.py filter <filepath> --from-file <keywords_file> [--output <filtered_file>]
         从文件中读取关键词列表（每行一个），过滤出未搜索过的新关键词。
         将新关键词追加到 already_searched.txt，并输出到 stdout（每行一个）。
+        可选的 --output 参数：将过滤结果写入文件（用于审计中间产物）。
 
-    python manage_keywords.py filter <filepath> --stdin
+    python manage_keywords.py filter <filepath> --stdin [--output <filtered_file>]
         从 stdin 读取关键词列表（每行一个或逗号分隔），过滤出新关键词。
         将新关键词追加到 already_searched.txt，并输出到 stdout（每行一个）。
+        可选的 --output 参数：将过滤结果写入文件（用于审计中间产物）。
 """
 
 import sys
@@ -167,6 +169,16 @@ def main():
 
     elif command == "filter":
         input_keywords = []
+        output_path = None
+
+        # 解析 --output / -o
+        for opt in ("--output", "-o"):
+            if opt in sys.argv:
+                idx = sys.argv.index(opt)
+                if idx + 1 < len(sys.argv):
+                    output_path = sys.argv[idx + 1]
+                break
+
         if "--from-file" in sys.argv:
             idx = sys.argv.index("--from-file")
             if idx + 1 < len(sys.argv):
@@ -178,8 +190,17 @@ def main():
             sys.exit(1)
 
         new_keywords = filter_keywords(filepath, input_keywords)
+
+        # stdout（供 AI 捕获为变量）
         for kw in new_keywords:
             print(kw)
+
+        # --output 文件（供人工审计，即使为空也写出，确保每个 chunk 都有对应文件）
+        if output_path:
+            os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as f:
+                for kw in new_keywords:
+                    f.write(f"{kw}\n")
 
     else:
         print(f"未知命令: {command}", file=sys.stderr)

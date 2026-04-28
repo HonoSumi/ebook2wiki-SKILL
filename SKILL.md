@@ -168,12 +168,13 @@ touch "{书名}_tmp/already_searched.txt"
 
 5. **脚本过滤关键词** — 运行 `manage_keywords.py filter`：
    ```bash
-   python scripts/manage_keywords.py filter "{书名}_tmp/already_searched.txt" --from-file {keywords_filepath}
+   python scripts/manage_keywords.py filter "{书名}_tmp/already_searched.txt" --from-file {keywords_filepath} --output "{书名}_tmp/filtered_{seq}.txt"
    ```
    
    脚本会：
    - 将新关键词追加到 `already_searched.txt`
    - 向 stdout 输出新关键词（每行一个）
+   - 同时写入 `filtered_{seq}.txt` 文件（供审计中间产物）
    
    将输出保存到变量 `NEW_KEYWORDS`，供下一步使用。
    

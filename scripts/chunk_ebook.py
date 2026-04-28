@@ -234,7 +234,7 @@ def main():
     base_name = os.path.splitext(os.path.basename(ebook_path))[0]
     base_name = re.sub(r'[\\/:*?"<>|]', "_", base_name)  # 去除非法字符
 
-    output_dir = f"{base_name}_tmp"
+    output_dir = os.path.join(os.path.dirname(ebook_path), f"{base_name}_tmp")
     os.makedirs(output_dir, exist_ok=True)
 
     print(f"[1/4] 正在提取文本: {ebook_path}")
