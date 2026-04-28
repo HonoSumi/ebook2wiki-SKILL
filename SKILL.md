@@ -79,7 +79,7 @@ touch "{书名}_tmp/already_searched.txt"
 
 文件由 `manage_keywords.py filter` 命令自动维护，无需手动编辑。
 
-### 步骤 3：读取分块计划
+### 步骤 3：读取分块计划，检测断点
 
 读取 `_plan.json`，了解总块数，存入变量 `TOTAL_CHUNKS`。
 
@@ -87,7 +87,13 @@ touch "{书名}_tmp/already_searched.txt"
 读取 _plan.json，共 42 个文本块
 ```
 
-确认总块数后告知用户预计耗时（每块约 2-5 分钟）。
+扫描 `{tmp_dir}/` 下以 `output_` 开头、`.json` 结尾的文件，提取已完成的 seq 编号：
+```bash
+ls "{tmp_dir}"/output_*.json 2>/dev/null | grep -oP '\d+(?=\.json$)' | sort -n
+```
+- 若存在，解析出已完成 seq 集合；告知用户：`检测到已有 15/42 块完成，将从第 16 块继续`
+- 若所有块都已完成，跳过步骤 4 直接进入步骤 5
+- 若不存在，说明是全新处理，从第 1 块开始
 
 ### 步骤 4：串行提取每个文本块的知识（subagent 隔离处理）
 
@@ -108,14 +114,16 @@ touch "{书名}_tmp/already_searched.txt"
 
 对 `_plan.json` 中的每个文本块（按 seq 升序），串行执行：
 
-1. **告知用户** — `[003/042] 正在处理 红楼梦_003.txt……`
+1. **跳过已完成** — 若 `{tmp_dir}/output_{seq}.json` 已存在，跳过不处理
 
-2. **启动 subagent 处理该块** — 使用 Agent 工具（prompt 见下方），**等待其完成后再启动下一个**
+2. **告知用户** — `[003/042] 正在处理 红楼梦_003.txt……`
 
-3. **汇报进度** — subagent 返回后，简短向用户报告：
+3. **启动 subagent 处理该块** — 使用 Agent 工具（prompt 见下方），**等待其完成后再启动下一个**
+
+4. **汇报进度** — subagent 返回后，简短向用户报告：
    - `[003/042] 红楼梦_003.txt → 5 个关键词，累计 23 个`
 
-4. **若失败** — 重试该块，连续 3 次失败则跳过并在最终报告注明
+5. **若失败** — 重试该块，连续 3 次失败则跳过并在最终报告注明
 
 #### subagent prompt
 
@@ -173,7 +181,13 @@ python scripts/manage_keywords.py filter "{tmp_dir}/already_searched.txt" --from
 
 将输出（新关键词列表）保存到变量 NEW_KEYWORDS。
 
-如果输出为空（无新关键词），直接跳过步骤 3 和 4，任务完成。
+如果输出为空（无新关键词），直接写一个空 JSON 数组作为完成标记并结束：
+
+```bash
+echo '[]' > "{tmp_dir}/output_{seq}.json"
+```
+
+然后结束任务（跳过步骤 3 和 4）。
 
 === 步骤 3：检索并撰写 YAML ===
 
@@ -288,7 +302,7 @@ SELECT noun, source_urls FROM nouns WHERE source_urls != '' LIMIT 10;
 ## 错误处理
 
 ### subagent 处理失败
-如果某个文本块的 subagent 处理失败（超时、格式错误等），**重试该块**而不是跳到下一个。如果连续 3 次失败，跳过该块并在最终报告中注明。
+如果某个文本块的 subagent 处理失败（超时、格式错误等），**重试该块**而不是跳到下一个。如果连续 3 次失败，跳过该块并在最终报告中注明。重试时 `already_searched.txt` 中的关键词不会被重复搜索，不会浪费 token。
 
 ### 分段脚本失败
 如果 `chunk_ebook.py` 失败，先检查文件格式是否支持。对于不支持的格式（如 MOBI 且没有 calibre），提示用户转换格式。
