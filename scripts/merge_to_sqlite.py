@@ -54,6 +54,11 @@ def read_all_json_files(json_dir):
             if isinstance(data, list):
                 all_entries.extend(data)
                 print(f"  读取 {json_file}: {len(data)} 条记录")
+            elif isinstance(data, dict):
+                # 兼容对象格式（键为名词，值为条目）
+                entries = list(data.values())
+                all_entries.extend(entries)
+                print(f"  读取 {json_file}: {len(entries)} 条记录（对象格式）")
             else:
                 print(f"  跳过 {json_file}: 不是 JSON 数组格式")
         except json.JSONDecodeError as e:
@@ -68,6 +73,7 @@ def normalize_keys(entry):
     """
     兼容中英文键名，统一为中文键。
     输入键名可以是: 名词/noun, 解释/explanation, 书中原文/original_text, 网络来源/source_urls
+    将列表类型的值自动转换为字符串（以换行连接）。
     """
     key_map = {
         "noun": "名词", "explanation": "解释",
@@ -76,6 +82,9 @@ def normalize_keys(entry):
     normalized = {}
     for k, v in entry.items():
         k2 = key_map.get(k, k)
+        # 将列表转换为换行分隔的字符串
+        if isinstance(v, list):
+            v = "\n".join(str(item) for item in v)
         normalized[k2] = v
     return normalized
 
@@ -269,12 +278,12 @@ def main():
     print()
 
     # 4. 验证
-    print("[4/4] 验证数据库...")
+    print(f"[4/4] 验证数据库...")
     sample = conn.execute(
         "SELECT noun, length(explanation), length(source_urls) FROM nouns LIMIT 5"
     ).fetchall()
     for row in sample:
-        print(f"      ✓ {row[0]} (解释 {row[1]} 字符, 来源 {row[2]} 字符)")
+        print(f"      [OK] {row[0]} (解释 {row[1]} 字符, 来源 {row[2]} 字符)")
     conn.close()
     print()
 
