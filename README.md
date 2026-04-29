@@ -1,6 +1,6 @@
 # Ebook Knowledge Extractor
 
-> 从电子书（PDF/EPUB/MOBI/TXT/MD）中提取结构化知识，存入可查询的 SQLite 数据库。
+> 从电子书（PDF/EPUB/MOBI/TXT/MD）中提取结构化知识，存入可查询的 SQLite 数据库，可用于已读书籍的书外内容拓展深化、外语及外国文化的积累与理解等。
 
 > **快速使用样例**：`/ebook-knowledge-extractor 百年孤独.epub`
 
