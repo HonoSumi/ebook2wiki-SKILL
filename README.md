@@ -1,10 +1,16 @@
 # Ebook Knowledge Extractor
 
-> 从电子书（PDF/EPUB/MOBI/TXT/MD）中提取结构化知识，存入可查询的 SQLite 数据库，可用于已读书籍的书外内容拓展深化、外语及外国文化的积累与理解等。
+> 从电子书（PDF/EPUB/MOBI/TXT/MD）中提取结构化知识，存入可查询的 SQLite 数据库。
+
+适用场景：
+1. **量化分析** — 基于 SQLite 数据库对作品中的时代背景、文化习俗、物质生活等维度进行统计与分析，适用于开展大数据量的文学研究。
+2. **延伸理解** — 捕捉作者引入特定事物的小巧思、仅靠一目十行的阅读无法体会到的地域特色与象征意味。
+3. **语言与文化积累** — 拆解外语作品中的关键实体，系统积累特定文化的概念、习俗和特有表达。开始啃一本外语作品前快速过一遍此类实体便于后续阅读。
+4. **更加泛化的目的** — 直接修改分块逻辑中的目的相关的提示词，构造自定义目的全书级文本分析工具。
 
 > **快速使用样例**：`/ebook-knowledge-extractor 百年孤独.epub`
 
-📁 样例完整执行产物（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)。
+📁 样例完整执行产物（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)，使用模型 deepseek-v4 flash 生成。
 
 产物中的 db 文件推荐使用 sqlite 可视化工具快速查看，例如 [SQL Studio](https://github.com/frectonz/sql-studio)。
 ```bash
