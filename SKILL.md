@@ -15,6 +15,7 @@ description: >
 
 ## 核心原则
 
+0. **断点续传** — 每次启动必须先检测断点（扫描 `{book_name}_*.json` 文件），有已完成块则从断点继续，无断点才全新开始。严禁不检查直接从头处理。
 1. **禁止直接读取整本电子书** — 对电子书的访问仅限于读取文件名、目录列表和分块后的文本块
 2. **分块处理** — 每个文本块约 5000 字符，块间 100 字符重叠，保证上下文连贯但不溢出
 3. **串行处理** — 每个文本块依次处理，禁止并行启动 subagent，确保质量
@@ -35,17 +36,54 @@ description: >
 
 ## 详细工作步骤
 
-### 步骤 0：创建工作目录
+### 步骤 0：创建/检查工作目录
 
-在电子书所在目录下创建 `{书名}_tmp/` 目录，用于存放所有中间文件。
+检查 `{书名}_tmp/` 目录是否存在。若不存在则创建：
 
 ```
-mkdir "{书名}_tmp"
+mkdir -p "{书名}_tmp"
 ```
 
-### 步骤 1：分段电子书
+### 步骤 1：检测断点（先于分片）
 
-使用固化脚本 `scripts/chunk_ebook.py` 将电子书分割为多个重叠的小文本块。
+**这是首要步骤。** 每次启动必须先检测断点，根据已有数据决定后续走向。
+
+#### 1a. 检查是否已有分片文本
+
+检查 `{书名}_tmp/` 目录下是否已有 `.txt` 分片文件：
+
+```bash
+ls "{书名}_tmp/"*_001.txt 2>/dev/null && echo "分片已存在" || echo "需要分片"
+```
+
+#### 1b. 检查是否已有分片计划
+
+检查 `{书名}_tmp/_plan.json` 是否存在。
+
+#### 1c. 检测已完成处理结果
+
+若分片存在，扫描 `{tmp_dir}/` 下以 `{book_name}_` 开头、`.json` 结尾的文件：
+
+```bash
+ls "{tmp_dir}"/{book_name}_*.json 2>/dev/null | sed 's/.*_//' | sed 's/\.json//' | sort -n
+```
+
+#### 1d. 根据检测结果决定走向
+
+| 情况 | 分片 txt 文件 | _plan.json | JSON 结果 | 处理方式 |
+|------|-------------|-----------|----------|---------|
+| 全新处理 | 不存在 | 不存在 | 不存在 | → 去步骤 2（分片），完成后继续步骤 4 |
+| 部分完成 | 存在 | 存在 | 部分存在 | → 去步骤 4，从断点继续 |
+| 全部完成 | 存在 | 存在 | 全部存在 | → 直接跳到步骤 5（合并） |
+
+例如：
+- 全新：`检测到无已有分片，将进行分片 → 共 202 个文本块待处理`
+- 断点：`检测到已有 15/42 块完成，将从第 16 块继续`
+- 全部完成：`检测到所有 42 块已完成，跳过提取直接合并`
+
+### 步骤 2：分段电子书（仅在无分片时执行）
+
+若步骤 1 检测到无已有分片，使用固化脚本 `scripts/chunk_ebook.py` 将电子书分割为多个重叠的小文本块。
 
 ```bash
 python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
@@ -69,9 +107,9 @@ python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
 ============================================================
 ```
 
-### 步骤 2（可选）：初始化关键词去重列表
+### 步骤 3（可选）：初始化关键词去重列表
 
-如果希望跨文本块去重，避免同一关键词被多次提取浪费 token，可在 `{书名}_tmp/` 目录下初始化空列表：
+如果 `{书名}_tmp/already_searched.txt` 不存在，新建空文件：
 
 ```bash
 touch "{书名}_tmp/already_searched.txt"
@@ -79,21 +117,7 @@ touch "{书名}_tmp/already_searched.txt"
 
 文件由 `manage_keywords.py filter` 命令自动维护，无需手动编辑。
 
-### 步骤 3：读取分块计划，检测断点
-
-读取 `_plan.json`，了解总块数，存入变量 `TOTAL_CHUNKS`。
-
-```
-读取 _plan.json，共 42 个文本块
-```
-
-扫描 `{tmp_dir}/` 下以 `output_` 开头、`.json` 结尾的文件，提取已完成的 seq 编号：
-```bash
-ls "{tmp_dir}"/output_*.json 2>/dev/null | grep -oP '\d+(?=\.json$)' | sort -n
-```
-- 若存在，解析出已完成 seq 集合；告知用户：`检测到已有 15/42 块完成，将从第 16 块继续`
-- 若所有块都已完成，跳过步骤 4 直接进入步骤 5
-- 若不存在，说明是全新处理，从第 1 块开始
+### 步骤 4：串行提取每个文本块的知识（subagent 隔离处理）
 
 ### 步骤 4：串行提取每个文本块的知识（subagent 隔离处理）
 
@@ -114,7 +138,7 @@ ls "{tmp_dir}"/output_*.json 2>/dev/null | grep -oP '\d+(?=\.json$)' | sort -n
 
 对 `_plan.json` 中的每个文本块（按 seq 升序），串行执行：
 
-1. **跳过已完成** — 若 `{tmp_dir}/output_{seq}.json` 已存在，跳过不处理
+1. **跳过已完成** — 若 `{tmp_dir}/{book_name}_{seq}.json` 已存在，跳过不处理
 
 2. **告知用户** — `[003/042] 正在处理 红楼梦_003.txt……`
 
@@ -137,7 +161,7 @@ ls "{tmp_dir}"/output_*.json 2>/dev/null | grep -oP '\d+(?=\.json$)' | sort -n
 - 工作目录: {tmp_dir}
 - 去重列表: {tmp_dir}/already_searched.txt
 - 关键词输出文件: {tmp_dir}/keywords_{seq}.txt
-- YAML 输出文件: {tmp_dir}/output_{seq}.yaml
+- YAML 输出文件: {tmp_dir}/{book_name}_{seq}.yaml
 
 === 步骤 1：提取关键词 ===
 
@@ -181,13 +205,13 @@ python scripts/manage_keywords.py filter "{tmp_dir}/already_searched.txt" --from
 
 将输出（新关键词列表）保存到变量 NEW_KEYWORDS。
 
-如果输出为空（无新关键词），直接写一个空 JSON 数组作为完成标记并结束：
+**如果过滤后无新关键词（输出为空），必须将空 JSON 数组 `[]` 写入 `{book_name}_{seq}.json` 作为完成标记再结束，否则系统扫描不到该文件会认为该块未处理而重复执行：**
 
 ```bash
-echo '[]' > "{tmp_dir}/output_{seq}.json"
+echo '[]' > "{tmp_dir}/{book_name}_{seq}.json"
 ```
 
-然后结束任务（跳过步骤 3 和 4）。
+**写完后立即结束任务（跳过步骤 3 和 4），不要做任何多余操作。**
 
 === 步骤 3：检索并撰写 YAML ===
 
@@ -195,7 +219,7 @@ echo '[]' > "{tmp_dir}/output_{seq}.json"
 
 - 用 Read 工具再次阅读文本块，找到每个关键词对应的原文句子
 - 使用 WebSearch 检索每个关键词
-- 输出 YAML 到 {tmp_dir}/output_{seq}.yaml
+- 输出 YAML 到 {tmp_dir}/{book_name}_{seq}.yaml
 
 YAML 格式：
 ```yaml
@@ -223,7 +247,7 @@ YAML 书写规则：
 === 步骤 4：强制 YAML→JSON 转换 ===
 
 ```bash
-python scripts/yaml_to_json.py "{tmp_dir}/output_{seq}.yaml"
+python scripts/yaml_to_json.py "{tmp_dir}/{book_name}_{seq}.yaml"
 ```
 
 验证输出的 JSON 文件存在。若失败则重试步骤 3 和 4。
@@ -245,7 +269,7 @@ python scripts/merge_to_sqlite.py <json_dir>
 # 例如: python scripts/merge_to_sqlite.py 红楼梦_tmp
 ```
 
-其中 `<json_dir>` 就是步骤 1 中创建的 `{书名}_tmp/` 目录。
+其中 `<json_dir>` 就是步骤 0/2 中创建/使用的 `{书名}_tmp/` 目录。
 
 脚本会自动：
 1. 扫描目录下的所有 `*.json` 文件（排除 `_` 开头的）
@@ -314,12 +338,14 @@ SELECT noun, source_urls FROM nouns WHERE source_urls != '' LIMIT 10;
 
 ## 使用范例
 
-用户说："帮我提取《边城》这本书的知识点"
+用户说："帮我提取《百年孤独》这本书的知识点"
 
 你会回答好的，然后执行：
-1. 运行 `python scripts/chunk_ebook.py 边城.pdf`
-2. 读取 `_plan.json` 列出 15 个文本块，告知用户预计时间
-3. 串行启动 15 个 subagent，每个处理一个文本块的完整 pipeline（关键词提取→去重→检索→YAML→JSON）
-4. 每块完成后简短汇报一次进度
-5. 全部完成后运行 `python scripts/merge_to_sqlite.py 边城_tmp`
-6. 展示最终统计
+1. 检查 `百年孤独_tmp/` 目录是否存在，检测断点 → 判断是否为全新处理
+2. 若为全新，运行 `python scripts/chunk_ebook.py 百年孤独.epub` 分片
+3. 确保 `百年孤独_tmp/already_searched.txt` 存在
+4. 读取 `_plan.json` 列出文本块数，告知用户预计时间
+5. 串行启动 subagent（从断点处开始），每个处理一个文本块的完整 pipeline
+6. 每块完成后简短汇报一次进度
+7. 全部完成后运行 `python scripts/merge_to_sqlite.py 百年孤独_tmp`
+8. 展示最终统计
