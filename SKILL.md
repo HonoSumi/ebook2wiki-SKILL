@@ -128,9 +128,12 @@ touch "{书名}_tmp/already_searched.txt"
 
 每个文本块的全部处理委托给一个独立的 subagent，主流程只负责串行调度和进度汇报。subagent 内部完成：
 1. 读取文本块 → 提取关键词（无 WebSearch）
-2. 运行 `manage_keywords.py filter` 去重
+2. 运行 `manage_keywords.py check` 只读去重（**不追加**到去重列表）
 3. 对新关键词做 WebSearch + 撰写 YAML
 4. 运行 `yaml_to_json.py` 转换
+5. JSON 验收通过后，运行 `manage_keywords.py append-from-json` 追加到去重列表
+
+**关键改进**：去重追加操作放在 pipeline 末尾而非开头。如果 subagent 在步骤 3~4 失败，已提取的关键词不会被"消耗"——重跑时 `check` 仍然能正确识别出新词，保证断点续传的可靠性。
 
 整个 pipeline 在 subagent 上下文中完成，主流程不接触每块的关键词文件、YAML、JSON 等中间产物细节，极大节省主上下文窗口。
 
@@ -197,27 +200,32 @@ touch "{书名}_tmp/already_searched.txt"
 - 不要使用 WebSearch，不要写解释
 - 按实提取，不设上下限
 
-=== 步骤 2：去重过滤 ===
+=== 步骤 2：去重检查（只读，不追加） ===
 
-运行 Bash 命令对关键词去重：
-
-```bash
-python scripts/manage_keywords.py filter "{tmp_dir}/already_searched.txt" --from-file "{tmp_dir}/keywords_{seq}.txt" --output "{tmp_dir}/filtered_{seq}.txt"
-```
-
-将输出（新关键词列表）保存到变量 NEW_KEYWORDS。
-
-**如果过滤后无新关键词（输出为空），必须将空 JSON 数组 `[]` 写入 `{book_name}_{seq}.json` 作为完成标记再结束，否则系统扫描不到该文件会认为该块未处理而重复执行：**
+使用 `check` 命令（只读，**不修改** `already_searched.txt`）找出未搜索过的新关键词：
 
 ```bash
-echo '[]' > "{tmp_dir}/{book_name}_{seq}.json"
+python scripts/manage_keywords.py check "{tmp_dir}/already_searched.txt" --from-file "{tmp_dir}/keywords_{seq}.txt" --output "{tmp_dir}/filtered_{seq}.txt"
 ```
 
-**写完后立即结束任务（跳过步骤 3 和 4），不要做任何多余操作。**
+**判断是否有新关键词（通过文件大小判断，最可靠）：**
+```bash
+wc -c < "{tmp_dir}/filtered_{seq}.txt"
+```
+- 输出为 "0"（文件为空）：无新关键词，写入空 JSON 数组作为完成标记并立即结束
+  ```bash
+  echo '[]' > "{tmp_dir}/{book_name}_{seq}.json"
+  ```
+- 输出不为 "0"（文件有内容）：读取关键词列表，继续步骤 3
+  ```bash
+  cat "{tmp_dir}/filtered_{seq}.txt"
+  ```
+
+**为什么用 `check` 而不是 `filter`？** `check` 是只读操作，不修改 `already_searched.txt`。这样即使 subagent 在后续步骤中失败，重跑时 `check` 仍然能正确识别出新词，不会"消耗"关键词。
 
 === 步骤 3：检索并撰写 YAML ===
 
-对 NEW_KEYWORDS 中的每个关键词，使用 WebSearch 进行互联网检索，结合书中原文撰写综合解释。
+对 `filtered_{seq}.txt` 中的每个关键词，使用 WebSearch 进行互联网检索，结合书中原文撰写综合解释。
 
 - 用 Read 工具再次阅读文本块，找到每个关键词对应的原文句子
 - 使用 WebSearch 检索每个关键词
@@ -247,7 +255,7 @@ YAML 书写规则：
 - `网络来源` 字段：保留原始 URL
 
 其他重要要求：
-- 只处理 NEW_KEYWORDS 中的关键词
+- 只处理 `filtered_{seq}.txt` 中的关键词
 - "书中原文"必须是书中出现的**完整可读的句子**
 - 检索不到则注明"未检索到网络资料"
 - 禁止编造信息
@@ -276,7 +284,17 @@ python scripts/yaml_to_json.py "{tmp_dir}/{book_name}_{seq}.yaml"
 - 核心字段为空
 - 格式不是有效的 YAML/JSON
 
-验收通过后，只输出一句确认（例："块 42/329 完成，3 个关键词"），**禁止输出任何总结、表格、分类统计、类别名、markdown 表格、分隔线**。拒绝输出表格式的任何内容。
+验收通过后，执行最后一步（如 JSON 为空 `[]` 则跳过此步）：
+
+=== 步骤 6：追加关键词到去重列表 ===
+
+```bash
+python scripts/manage_keywords.py append-from-json "{tmp_dir}/already_searched.txt" "{tmp_dir}/{book_name}_{seq}.json"
+```
+
+这一步将本次成功处理的词条追加到 `already_searched.txt`，确保后续文本块不会重复检索。
+
+最后输出一句确认（例："块 42/329 完成，3 个关键词"），**禁止输出任何总结、表格、分类统计、类别名、markdown 表格、分隔线**。拒绝输出表格式的任何内容。
 
 ```
 

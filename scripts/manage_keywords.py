@@ -15,6 +15,11 @@
     python manage_keywords.py append-from-json <filepath> <json_path>
         从 JSON 文件中提取所有"名词"字段，追加到列表
 
+    python manage_keywords.py check <filepath> --from-file <keywords_file> [--output <filtered_file>]
+        从文件中读取关键词列表（每行一个），找出未搜索过的新关键词。
+        只输出到 stdout 和 --output 文件，**不修改 already_searched.txt**。
+        用于 subagent pipeline 中先做只读检查，待 JSON 确认写入后再追加。
+
     python manage_keywords.py filter <filepath> --from-file <keywords_file> [--output <filtered_file>]
         从文件中读取关键词列表（每行一个），过滤出未搜索过的新关键词。
         将新关键词追加到 already_searched.txt，并输出到 stdout（每行一个）。
@@ -28,6 +33,18 @@
 
 import sys
 import os
+
+# Windows GBK 编码兼容：强制 stdout/stderr 使用 UTF-8
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 import re
 import json
 
@@ -167,6 +184,48 @@ def main():
         added = append_from_json(filepath, json_path)
         print(f"  关键词: 新增 {added} 个，已写入 {filepath}")
 
+    elif command == "check":
+        """只读检查：找出新关键词但不追加到 already_searched.txt"""
+        input_keywords = []
+        output_path = None
+
+        for opt in ("--output", "-o"):
+            if opt in sys.argv:
+                idx = sys.argv.index(opt)
+                if idx + 1 < len(sys.argv):
+                    output_path = sys.argv[idx + 1]
+                break
+
+        if "--from-file" in sys.argv:
+            idx = sys.argv.index("--from-file")
+            if idx + 1 < len(sys.argv):
+                input_keywords = read_keywords_from_file(sys.argv[idx + 1])
+        else:
+            print("错误: check 命令需要 --from-file 参数", file=sys.stderr)
+            sys.exit(1)
+
+        existing = read_keywords(filepath)
+        existing_set = set(k.lower().strip() for k in existing)
+
+        new_keywords = []
+        for kw in input_keywords:
+            kw = kw.strip().strip('",\'')
+            if not kw:
+                continue
+            if kw.lower() not in existing_set:
+                new_keywords.append(kw)
+
+        # stdout
+        for kw in new_keywords:
+            print(kw)
+
+        # --output 文件（即使为空也写出，便于 subagent 按文件存在性判断）
+        if output_path:
+            os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as f:
+                for kw in new_keywords:
+                    f.write(f"{kw}\n")
+
     elif command == "filter":
         input_keywords = []
         output_path = None
@@ -204,7 +263,7 @@ def main():
 
     else:
         print(f"未知命令: {command}", file=sys.stderr)
-        print("可用命令: read, append-from-json, filter", file=sys.stderr)
+        print("可用命令: read, check, filter, append-from-json", file=sys.stderr)
         sys.exit(1)
 
 
