@@ -1,0 +1,405 @@
+{
+  "book_name": "吾輩は猫である",
+  "source_file": "E:\\ebook-kb\\吾輩は猫である.epub",
+  "total_chunks": 66,
+  "chunk_size": 5000,
+  "overlap": 100,
+  "chunks": [
+    {
+      "seq": 1,
+      "filename": "吾輩は猫である_001.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 2,
+      "filename": "吾輩は猫である_002.txt",
+      "char_count": 4978,
+      "status": "pending"
+    },
+    {
+      "seq": 3,
+      "filename": "吾輩は猫である_003.txt",
+      "char_count": 4988,
+      "status": "pending"
+    },
+    {
+      "seq": 4,
+      "filename": "吾輩は猫である_004.txt",
+      "char_count": 4910,
+      "status": "pending"
+    },
+    {
+      "seq": 5,
+      "filename": "吾輩は猫である_005.txt",
+      "char_count": 4964,
+      "status": "pending"
+    },
+    {
+      "seq": 6,
+      "filename": "吾輩は猫である_006.txt",
+      "char_count": 4763,
+      "status": "pending"
+    },
+    {
+      "seq": 7,
+      "filename": "吾輩は猫である_007.txt",
+      "char_count": 4971,
+      "status": "pending"
+    },
+    {
+      "seq": 8,
+      "filename": "吾輩は猫である_008.txt",
+      "char_count": 4961,
+      "status": "pending"
+    },
+    {
+      "seq": 9,
+      "filename": "吾輩は猫である_009.txt",
+      "char_count": 4980,
+      "status": "pending"
+    },
+    {
+      "seq": 10,
+      "filename": "吾輩は猫である_010.txt",
+      "char_count": 4956,
+      "status": "pending"
+    },
+    {
+      "seq": 11,
+      "filename": "吾輩は猫である_011.txt",
+      "char_count": 4968,
+      "status": "pending"
+    },
+    {
+      "seq": 12,
+      "filename": "吾輩は猫である_012.txt",
+      "char_count": 4972,
+      "status": "pending"
+    },
+    {
+      "seq": 13,
+      "filename": "吾輩は猫である_013.txt",
+      "char_count": 4986,
+      "status": "pending"
+    },
+    {
+      "seq": 14,
+      "filename": "吾輩は猫である_014.txt",
+      "char_count": 4987,
+      "status": "pending"
+    },
+    {
+      "seq": 15,
+      "filename": "吾輩は猫である_015.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 16,
+      "filename": "吾輩は猫である_016.txt",
+      "char_count": 4991,
+      "status": "pending"
+    },
+    {
+      "seq": 17,
+      "filename": "吾輩は猫である_017.txt",
+      "char_count": 4895,
+      "status": "pending"
+    },
+    {
+      "seq": 18,
+      "filename": "吾輩は猫である_018.txt",
+      "char_count": 4951,
+      "status": "pending"
+    },
+    {
+      "seq": 19,
+      "filename": "吾輩は猫である_019.txt",
+      "char_count": 4949,
+      "status": "pending"
+    },
+    {
+      "seq": 20,
+      "filename": "吾輩は猫である_020.txt",
+      "char_count": 4961,
+      "status": "pending"
+    },
+    {
+      "seq": 21,
+      "filename": "吾輩は猫である_021.txt",
+      "char_count": 4926,
+      "status": "pending"
+    },
+    {
+      "seq": 22,
+      "filename": "吾輩は猫である_022.txt",
+      "char_count": 4994,
+      "status": "pending"
+    },
+    {
+      "seq": 23,
+      "filename": "吾輩は猫である_023.txt",
+      "char_count": 4934,
+      "status": "pending"
+    },
+    {
+      "seq": 24,
+      "filename": "吾輩は猫である_024.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 25,
+      "filename": "吾輩は猫である_025.txt",
+      "char_count": 4928,
+      "status": "pending"
+    },
+    {
+      "seq": 26,
+      "filename": "吾輩は猫である_026.txt",
+      "char_count": 4976,
+      "status": "pending"
+    },
+    {
+      "seq": 27,
+      "filename": "吾輩は猫である_027.txt",
+      "char_count": 4992,
+      "status": "pending"
+    },
+    {
+      "seq": 28,
+      "filename": "吾輩は猫である_028.txt",
+      "char_count": 4915,
+      "status": "pending"
+    },
+    {
+      "seq": 29,
+      "filename": "吾輩は猫である_029.txt",
+      "char_count": 4942,
+      "status": "pending"
+    },
+    {
+      "seq": 30,
+      "filename": "吾輩は猫である_030.txt",
+      "char_count": 4948,
+      "status": "pending"
+    },
+    {
+      "seq": 31,
+      "filename": "吾輩は猫である_031.txt",
+      "char_count": 4975,
+      "status": "pending"
+    },
+    {
+      "seq": 32,
+      "filename": "吾輩は猫である_032.txt",
+      "char_count": 4980,
+      "status": "pending"
+    },
+    {
+      "seq": 33,
+      "filename": "吾輩は猫である_033.txt",
+      "char_count": 4972,
+      "status": "pending"
+    },
+    {
+      "seq": 34,
+      "filename": "吾輩は猫である_034.txt",
+      "char_count": 4999,
+      "status": "pending"
+    },
+    {
+      "seq": 35,
+      "filename": "吾輩は猫である_035.txt",
+      "char_count": 4953,
+      "status": "pending"
+    },
+    {
+      "seq": 36,
+      "filename": "吾輩は猫である_036.txt",
+      "char_count": 4998,
+      "status": "pending"
+    },
+    {
+      "seq": 37,
+      "filename": "吾輩は猫である_037.txt",
+      "char_count": 4986,
+      "status": "pending"
+    },
+    {
+      "seq": 38,
+      "filename": "吾輩は猫である_038.txt",
+      "char_count": 4976,
+      "status": "pending"
+    },
+    {
+      "seq": 39,
+      "filename": "吾輩は猫である_039.txt",
+      "char_count": 4980,
+      "status": "pending"
+    },
+    {
+      "seq": 40,
+      "filename": "吾輩は猫である_040.txt",
+      "char_count": 5000,
+      "status": "pending"
+    },
+    {
+      "seq": 41,
+      "filename": "吾輩は猫である_041.txt",
+      "char_count": 4988,
+      "status": "pending"
+    },
+    {
+      "seq": 42,
+      "filename": "吾輩は猫である_042.txt",
+      "char_count": 4994,
+      "status": "pending"
+    },
+    {
+      "seq": 43,
+      "filename": "吾輩は猫である_043.txt",
+      "char_count": 4993,
+      "status": "pending"
+    },
+    {
+      "seq": 44,
+      "filename": "吾輩は猫である_044.txt",
+      "char_count": 5000,
+      "status": "pending"
+    },
+    {
+      "seq": 45,
+      "filename": "吾輩は猫である_045.txt",
+      "char_count": 4906,
+      "status": "pending"
+    },
+    {
+      "seq": 46,
+      "filename": "吾輩は猫である_046.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 47,
+      "filename": "吾輩は猫である_047.txt",
+      "char_count": 4967,
+      "status": "pending"
+    },
+    {
+      "seq": 48,
+      "filename": "吾輩は猫である_048.txt",
+      "char_count": 4882,
+      "status": "pending"
+    },
+    {
+      "seq": 49,
+      "filename": "吾輩は猫である_049.txt",
+      "char_count": 4971,
+      "status": "pending"
+    },
+    {
+      "seq": 50,
+      "filename": "吾輩は猫である_050.txt",
+      "char_count": 4988,
+      "status": "pending"
+    },
+    {
+      "seq": 51,
+      "filename": "吾輩は猫である_051.txt",
+      "char_count": 4961,
+      "status": "pending"
+    },
+    {
+      "seq": 52,
+      "filename": "吾輩は猫である_052.txt",
+      "char_count": 4861,
+      "status": "pending"
+    },
+    {
+      "seq": 53,
+      "filename": "吾輩は猫である_053.txt",
+      "char_count": 4966,
+      "status": "pending"
+    },
+    {
+      "seq": 54,
+      "filename": "吾輩は猫である_054.txt",
+      "char_count": 4995,
+      "status": "pending"
+    },
+    {
+      "seq": 55,
+      "filename": "吾輩は猫である_055.txt",
+      "char_count": 4984,
+      "status": "pending"
+    },
+    {
+      "seq": 56,
+      "filename": "吾輩は猫である_056.txt",
+      "char_count": 4988,
+      "status": "pending"
+    },
+    {
+      "seq": 57,
+      "filename": "吾輩は猫である_057.txt",
+      "char_count": 4992,
+      "status": "pending"
+    },
+    {
+      "seq": 58,
+      "filename": "吾輩は猫である_058.txt",
+      "char_count": 4944,
+      "status": "pending"
+    },
+    {
+      "seq": 59,
+      "filename": "吾輩は猫である_059.txt",
+      "char_count": 4998,
+      "status": "pending"
+    },
+    {
+      "seq": 60,
+      "filename": "吾輩は猫である_060.txt",
+      "char_count": 4958,
+      "status": "pending"
+    },
+    {
+      "seq": 61,
+      "filename": "吾輩は猫である_061.txt",
+      "char_count": 4997,
+      "status": "pending"
+    },
+    {
+      "seq": 62,
+      "filename": "吾輩は猫である_062.txt",
+      "char_count": 4987,
+      "status": "pending"
+    },
+    {
+      "seq": 63,
+      "filename": "吾輩は猫である_063.txt",
+      "char_count": 4986,
+      "status": "pending"
+    },
+    {
+      "seq": 64,
+      "filename": "吾輩は猫である_064.txt",
+      "char_count": 4961,
+      "status": "pending"
+    },
+    {
+      "seq": 65,
+      "filename": "吾輩は猫である_065.txt",
+      "char_count": 4962,
+      "status": "pending"
+    },
+    {
+      "seq": 66,
+      "filename": "吾輩は猫である_066.txt",
+      "char_count": 1148,
+      "status": "pending"
+    }
+  ]
+}
