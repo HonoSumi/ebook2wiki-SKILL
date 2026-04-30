@@ -12,12 +12,18 @@
 
 📁 样例完整执行产物（包括文本块、YAML、JSON 等中间文件）请参见 [`assets/samples/`](assets/samples/)，使用模型 deepseek-v4 flash 生成。
 
-产物中的 db 文件推荐使用 sqlite 可视化工具快速查看，例如 [SQL Studio](https://github.com/frectonz/sql-studio)。
+产物中的 db 文件推荐使用 sqlite 可视化工具快速查看，例如网页版工具 [SQL Studio](https://github.com/frectonz/sql-studio) 或者 windows 平台的exe工具[SQLiteStudio](https://sqlitestudio.pl/)。
 ```bash
 sql-studio sqlite 百年孤独.db
 ```
 
-![sqlite可视化db文件样例](assets/sqlite-visualization-example.png)
+![sql-studio可视化db文件样例](assets/sqlite-visualization-example.png)
+
+```bash
+SQLiteStudio
+```
+![SQLitestudio可视化db文件样例](assets/sqlitestudio.PNG)
+
 
 > 本文档下方的流程及原理示意图使用 [/ppt-master](https://github.com/hugohe3/ppt-master) 制作。
 
