@@ -1,0 +1,51 @@
+[
+  {
+    "名词": "Model T Ford",
+    "分类": "物件",
+    "解释": "福特T型车是福特汽车公司于1908年至1927年间生产的汽车，被认为是第一款 affordable automobile，革命性地采用了流水线装配，大幅降低了成本，让普通美国人也能买得起汽车，被誉为\"把美国装上轮子\"的车型。",
+    "书中原文": "Enclosed by this barricade was a dirty yard containing the remains of a Model-T Ford (on blocks), a discarded dentist's chair, an ancient icebox...",
+    "网络来源": "https://www.britannica.com/technology/Model-T"
+  },
+  {
+    "名词": "geranium",
+    "分类": "物件",
+    "解释": "天竺葵（学名Pelargonium），实际指牻牛儿苗科天竺葵属植物，原产南非，作为观赏花卉广泛栽培。虽然在日常用语中常被称为\"geranium\"，但植物学上真正的老鹳草属（Geranium）与天竺葵属（Pelargonium）是两个不同的属。在小说中，Mayella Ewell在破旧的院子里用slop jar种植了鲜艳的红色天竺葵，与周围的破败形成鲜明对比。",
+    "书中原文": "Against the fence, in a line, were six chipped-enamel slop jars holding brilliant red geraniums, cared for as tenderly as if they belonged to Miss Maudie Atkinson, had Miss Maudie deigned to permit a geranium on her premises. People said they were Mayella Ewell's.",
+    "网络来源": "https://www.britannica.com/plant/geranium-plant-genus-Geranium"
+  },
+  {
+    "名词": "limestone",
+    "分类": "物件",
+    "解释": "石灰岩是一种碳酸盐沉积岩，主要由方解石（碳酸钙，CaCO₃）组成，约占地球上所有沉积岩的20-25%。通常形成于温暖的浅海环境中，由海洋生物的壳和骨骼堆积而成。石灰岩遇稀盐酸会剧烈起泡，是其重要的野外鉴定特征。在建筑和工业中有广泛用途，如生产水泥和作为建筑材料。",
+    "书中原文": "the cabin rested uneasily upon four irregular lumps of limestone.",
+    "网络来源": "https://en.wikipedia.org/wiki/Limestone"
+  },
+  {
+    "名词": "barbed wire",
+    "分类": "物件",
+    "解释": "带刺铁丝网是一种在铁丝上带有锋利尖刺的 fencing 材料，由Joseph Glidden于1874年获得关键专利。它在美国西部的开发中起到了革命性作用，提供了廉价耐用的围栏解决方案，取代了稀缺的木石材料，结束了自由放牧的\"开放牧场\"时代。后来也被广泛用于军事防御，特别是在第一次世界大战的堑壕战中。",
+    "书中原文": "held on with pieces of barbed wire.",
+    "网络来源": "https://en.wikipedia.org/wiki/Barbed_wire"
+  },
+  {
+    "名词": "shotgun house",
+    "分类": "地点",
+    "解释": "猎枪屋是一种窄长的矩形住宅，通常宽度不超过3.5米，房间呈直线排列，前后门对齐，没有走廊。这种建筑风格源于西非，经由海地传入美国新奥尔良，在南北战争后至1920年代成为美国南部最流行的住宅样式。其名称的由来有两种说法：一是如果所有门都打开，一枪从正门射入可直穿屋后；二是源自西非约鲁巴语\"to-gun\"（意为\"房屋\"）的英语讹误。",
+    "书中原文": "shotgun hall, the cabin rested uneasily upon four irregular lumps of limestone.",
+    "网络来源": "https://en.wikipedia.org/wiki/Shotgun_house"
+  },
+  {
+    "名词": "slop jar",
+    "分类": "物件",
+    "解释": "污水罐（也称chamber pot或combinet）是一种在室内管道普及前使用的带盖容器，用于收集夜间或室内产生的废水（洗脸、刷牙后的脏水）甚至排泄物。通常比chamber pot更高，带有把手和盖子，材质多为陶瓷、搪瓷金属（graniteware）等。在美国南部的农村地区，这种用具一直使用到20世纪中期。在小说中，Mayella Ewell用破旧的搪瓷污水罐种植天竺葵。",
+    "书中原文": "Against the fence, in a line, were six chipped-enamel slop jars holding brilliant red geraniums, cared for as tenderly as if they belonged to Miss Maudie Atkinson.",
+    "网络来源": "https://en.wikipedia.org/wiki/Chamber_pot"
+  },
+  {
+    "名词": "opossum",
+    "分类": "物件",
+    "解释": "弗吉尼亚负鼠（Didelphis virginiana）是北美洲唯一的有袋类动物，体型与家猫相仿，以长而裸露的尾巴、白色的面部和尖吻为特征。它们是夜行性杂食动物，以\"装死\"（playing possum）的行为闻名，遇到威胁时会进入强直性休克状态。负鼠对蛇毒有免疫力，且因体温较低很少感染狂犬病。名称源自阿尔冈昆语\"aposoum\"，意为\"白色野兽\"。",
+    "书中原文": "Jem and I detected squirrel cooking, but it took an old countryman like Atticus to identify possum and rabbit, aromas that vanished when we rode back past the Ewell residence.",
+    "网络来源": "https://en.wikipedia.org/wiki/Virginia_opossum"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "name": "水墨",
+  "description": "黑白水墨风格，适合古典文学、历史著作、哲学",
+  "colors": {
+    "--bg": "#f5f0e8",
+    "--bg-card": "#ffffff",
+    "--bg-detail": "#fafaf7",
+    "--text": "#2c2c2c",
+    "--text-secondary": "#666666",
+    "--text-muted": "#999999",
+    "--heading": "#1a1a1a",
+    "--border": "#d9d4cc",
+    "--accent": "#333333",
+    "--accent-hover": "#555555",
+    "--link": "#444444",
+    "--tag-bg": "#e8e3d8",
+    "--tag-text": "#444444",
+    "--divider": "#d9d4cc",
+    "--shadow": "0 1px 3px rgba(0,0,0,0.08)",
+    "--shadow-hover": "0 3px 12px rgba(0,0,0,0.1)"
+  },
+  "fonts": {
+    "--font-heading": "\"Noto Serif SC\", \"Source Han Serif SC\", \"SimSun\", serif",
+    "--font-body": "\"Noto Serif SC\", \"Source Han Serif SC\", \"SimSun\", serif",
+    "--font-mono": "\"Courier New\", monospace"
+  }
+}

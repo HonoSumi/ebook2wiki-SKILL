@@ -1,38 +1,47 @@
 ---
-name: ebook-knowledge-extractor
+name: ebook2wiki
 description: >
-  从电子书中提取结构化知识的完整工作流。
+  从电子书中提取结构化知识并生成静态 Wiki 站点的完整工作流。
   支持 PDF / EPUB / MOBI / TXT / MD 等多种电子书格式。
   特点：(1) 分块处理避免上下文爆炸，绝不直接读取全书；
-  (2) 每块串行通过 subagent 提取名词，结合互联网检索给出解释；
-  (3) 最终汇总到 SQLite 数据库。
+  (2) 每次最多 5 个文本块并行通过 subagent 提取名词，结合互联网检索给出解释；
+  (3) 5 字段结构：名词（原文用词）、分类、解释、书中原文、网络来源；
+  (4) 汇总到 SQLite 数据库后，自动生成分类导航的静态 Wiki 页面。
   当用户需要"提取电子书知识"、"做读书笔记"、"整理书中人物/事件"、
   "归档书中概念"、"结构化电子书内容"时务必使用此 skill。
   也适用于用户想从书中提取具有民族特色或地方特色的文化元素时。
 ---
 
-# 电子书知识提取工作流
+# 电子书知识提取 → Wiki 生成工作流
 
 ## 核心原则
 
 0. **断点续传** — 每次启动必须先检测断点（扫描 `{book_name}_*.json` 文件），有已完成块则从断点继续，无断点才全新开始。严禁不检查直接从头处理。
 1. **禁止直接读取整本电子书** — 对电子书的访问仅限于读取文件名、目录列表和分块后的文本块
 2. **分块处理** — 每个文本块约 5000 字符，块间 100 字符重叠，保证上下文连贯但不溢出
-3. **串行处理** — 每个文本块依次处理，禁止并行启动 subagent，确保质量
+3. **有限并行处理** — 文本块以 batch 方式处理，每批最多 5 个 subagent 并行，批内完成后才启动下一批。既利用并发加速，又避免瞬时上下文爆炸和资源争抢
 4. **知识型条目优先，严禁单词收集** — 提取的是"知识点"而非"名词"。判断标准：该条目是否有足够的知识密度，值得出现在维基百科上？如果是，才提取。主角名字、普通日常物品、通用概念、**可查英汉词典获得的普通英语词汇**一律不收录
 5. **纯词汇输出** — 关键词文件只允许包含纯词汇（每行一个），禁止写入类别名、分组标题、分隔线等任何非词汇内容
 6. **互联网辅助** — 对每个条目检索互联网，结合书中内容进行解释，不做纯虚构
-7. **YAML 四字段约束** — 每个知识条目严格 4 字段：`名词`、`解释`、`书中原文`、`网络来源`。禁止出现任何额外字段。
-8. **subagent 静默模式** — subagent 只产出文件，禁止在最终消息中输出任何总结、表格、分类、类别名或分析。最多一句话确认完成。
+7. **名词字段原文约束（铁律）** — `名词` 字段必须使用**书中原文用词**，禁止模型自行翻译、改写、添加括号注释或任何形式的解释性文字。英文书则保留英文，日文书则保留日文，不得擅自转换为其他语言。禁止出现如「White Walkers（异鬼）」「Hogwarts（霍格沃茨魔法学校）」等括号注释形式——括号注释是词典，不是百科条目名。
+8. **YAML 五字段约束（铁律）** — 每个知识条目**严格且只有** 5 个字段：`名词`、`分类`、`解释`、`书中原文`、`网络来源`。字段名必须**完全一致**（繁体简体都必须是"名词""分类""解释""书中原文""网络来源"），不得使用别名（如"关键字""出处""来源""类别""标签""references""category"）。字段值必须是**纯字符串**，禁止使用列表、子对象等复杂类型。违反此约束的条目会被 `yaml_to_json.py` 拒绝（退出码 1），subagent 必须重做。
+9. **六分类约束（铁律）** — 每个知识条目的「分类」字段必须精确匹配以下 6 个值之一：`人物`、`地点`、`物件`、`事件`、`概念`、`习俗`。`yaml_to_json.py` 中包含分类白名单校验，不在范围内的分类直接拒绝（退出码 1），subagent 必须重做。
+10. **subagent 静默模式** — subagent 只产出文件，禁止在最终消息中输出任何总结、表格、分类、类别名或分析。最多一句话确认完成。
 
 ## 前置条件
 
 - Python 3.7+
-- 四个固化脚本在 `scripts/` 目录下：
+- 八个固化脚本在 `scripts/` 目录下：
   - `chunk_ebook.py` — 电子书分段
-  - `yaml_to_json.py` — 将 subagent 输出的 YAML 转为标准 JSON（避免引号问题）
-  - `manage_keywords.py` — 管理 `already_searched.txt` 关键词去重列表（读取/追加）
+  - `detect_checkpoint.py` — 断点检测（判断 FRESH / INCOMPLETE / COMPLETE）
+  - `chunk_step2.py` — subagent 步骤 2：去重 + 自动完成
+  - `yaml_to_json.py` — 将 subagent 输出的 YAML 转为标准 JSON（严格校验 5 字段）
+  - `check_chunk_output.py` — 主 agent 产物检视
   - `merge_to_sqlite.py` — 合并 JSON 到 SQLite
+  - `manage_keywords.py` — 管理 `already_searched.txt` 关键词去重列表
+  - `generate_wiki.py` — 从 SQLite 数据库生成静态 Wiki 站点
+
+在整个工作流中，`{scripts_dir}` 表示当前 skill 的 `scripts/` 子目录的**绝对路径**（不依赖 CWD）。主 Agent 应自行解析：SKILL.md 所在目录下的 `scripts/` 子目录即为 `{scripts_dir}`。
 
 ---
 
@@ -40,62 +49,43 @@ description: >
 
 ### 步骤 0：创建/检查工作目录
 
-检查 `{书名}_tmp/` 目录是否存在。若不存在则创建：
+`{tmp_dir}` = `{book_name}_tmp`（与电子书同目录）。
+
+检查 `{tmp_dir}` 是否存在。若不存在则创建：
 
 ```
-mkdir -p "{书名}_tmp"
+mkdir -p "{tmp_dir}"
 ```
 
 ### 步骤 1：检测断点（先于分片）
 
-**这是首要步骤。** 每次启动必须先检测断点，根据已有数据决定后续走向。
-
-#### 1a. 检查是否已有分片文本
-
-检查 `{书名}_tmp/` 目录下是否已有 `.txt` 分片文件：
+**这是首要步骤。** 运行 `detect_checkpoint.py`：
 
 ```bash
-ls "{书名}_tmp/"*_001.txt 2>/dev/null && echo "分片已存在" || echo "需要分片"
+python "{scripts_dir}/detect_checkpoint.py" "{tmp_dir}"
 ```
 
-#### 1b. 检查是否已有分片计划
+根据输出决定走向：
 
-检查 `{书名}_tmp/_plan.json` 是否存在。
-
-#### 1c. 检测已完成处理结果
-
-若分片存在，扫描 `{tmp_dir}/` 下以 `{book_name}_` 开头、`.json` 结尾的文件：
-
-```bash
-ls "{tmp_dir}"/{book_name}_*.json 2>/dev/null | sed 's/.*_//' | sed 's/\.json//' | sort -n
-```
-
-#### 1d. 根据检测结果决定走向
-
-| 情况 | 分片 txt 文件 | _plan.json | JSON 结果 | 处理方式 |
-|------|-------------|-----------|----------|---------|
-| 全新处理 | 不存在 | 不存在 | 不存在 | → 去步骤 2（分片），完成后继续步骤 4 |
-| 部分完成 | 存在 | 存在 | 部分存在 | → 去步骤 4，从断点继续 |
-| 全部完成 | 存在 | 存在 | 全部存在 | → 直接跳到步骤 5（合并） |
-
-例如：
-- 全新：`检测到无已有分片，将进行分片 → 共 202 个文本块待处理`
-- 断点：`检测到已有 15/42 块完成，将从第 16 块继续`
-- 全部完成：`检测到所有 42 块已完成，跳过提取直接合并`
+| 输出 | 含义 | 处理方式 |
+|------|------|---------|
+| `FRESH` | 无已有分片和计划 | → 步骤 2（分片），完成后继续步骤 4 |
+| `INCOMPLETE:N:M:next` | N/M 块完成，下一块序号为 next | → 步骤 4，从 next 断点继续 |
+| `COMPLETE:M` | 全部 M 块已完成 | → 跳到步骤 5（合并） |
 
 ### 步骤 2：分段电子书（仅在无分片时执行）
 
-若步骤 1 检测到无已有分片，使用固化脚本 `scripts/chunk_ebook.py` 将电子书分割为多个重叠的小文本块。
+若步骤 1 检测到无已有分片，使用固化脚本 `chunk_ebook.py` 将电子书分割为多个重叠的小文本块。
 
 ```bash
-python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
+python "{scripts_dir}/chunk_ebook.py" <电子书路径> --chunk-size 5000
 ```
 
 脚本会自动：
 1. 检测文件格式并提取全文
 2. 自动安装所需 Python 依赖
 3. 分割为约 5000 字符的文本块（块间重叠约 100 字符）
-4. 将文本块保存到 `{书名}_tmp/{书名}_001.txt`、`{书名}_002.txt`… 中
+4. 将文本块保存到 `{tmp_dir}/{book_name}_1.txt`、`{book_name}_2.txt`… 中（无前导零）
 5. 生成 `_plan.json` 处理计划文件
 
 **务必使用此脚本执行分段，不要手动分段。**
@@ -111,294 +101,95 @@ python scripts/chunk_ebook.py <电子书路径> --chunk-size 5000
 
 ### 步骤 3（可选）：初始化关键词去重列表
 
-如果 `{书名}_tmp/already_searched.txt` 不存在，新建空文件：
+如果 `{tmp_dir}/already_searched.txt` 不存在，新建空文件：
 
 ```bash
-touch "{书名}_tmp/already_searched.txt"
+touch "{tmp_dir}/already_searched.txt"
 ```
 
-文件由 `manage_keywords.py filter` 命令自动维护，无需手动编辑。
+去重由 `chunk_step2.py` 和 `yaml_to_json.py` 自动维护，无需手动编辑。
 
 ### 步骤 4：串行提取每个文本块的知识（subagent 隔离处理）
 
-这是核心步骤。**心态上要放慢**：无论有 5 个块还是 500 个块，都一个接一个地处理，不急不躁。
-我们最不缺的就是时间，最不需要的就是效率。提取质量远比速度重要。
+每个文本块的全部处理委托给独立的 subagent。主流程只负责串行调度、产物检视、汇报进度。
 
-#### 设计思路
+#### subagent prompt 来源
 
-每个文本块的全部处理委托给一个独立的 subagent，主流程只负责串行调度和进度汇报。subagent 内部完成：
-1. 读取文本块 → 提取关键词（无 WebSearch）
-2. 运行 `manage_keywords.py check` 只读去重（**不追加**到去重列表）
-3. 对新关键词做 WebSearch + 撰写 YAML
-4. 运行 `yaml_to_json.py` 转换
-5. JSON 验收通过后，运行 `manage_keywords.py append-from-json` 追加到去重列表
+唯一的 subagent prompt 在 `references/subagent_prompt_template.md`。SKILL.md 不含任何 subagent prompt 内容。
 
-**关键改进**：去重追加操作放在 pipeline 末尾而非开头。如果 subagent 在步骤 3~4 失败，已提取的关键词不会被"消耗"——重跑时 `check` 仍然能正确识别出新词，保证断点续传的可靠性。
+启动 subagent 时：
+1. Read `references/subagent_prompt_template.md`
+2. 填写参数占位符（见下表）
+3. 通过 Agent 工具发送
 
-整个 pipeline 在 subagent 上下文中完成，主流程不接触每块的关键词文件、YAML、JSON 等中间产物细节，极大节省主上下文窗口。
+必要占位符：
+| 占位符 | 说明 | 示例 |
+|--------|------|------|
+| `{book_name}` | 书名（不含扩展名，无路径） | `Harry Potter and the Philosophers Stone` |
+| `{tmp_dir}` | 工作目录绝对路径 | `E:/ebook-kb/Harry Potter and the Philosophers Stone_tmp` |
+| `{seq}` | 当前文本块序号 | `18` |
+| `{total}` | 总文本块数 | `90` |
+| `{chunk_filepath}` | 文本块文件绝对路径 | `E:/ebook-kb/..._tmp/..._18.txt` |
+| `{scripts_dir}` | 脚本目录绝对路径 | `{skill_root}/scripts/`（skill 根目录下的 `scripts/` 子目录） |
 
 #### 处理流程
 
-对 `_plan.json` 中的每个文本块（按 seq 升序），串行执行：
+1. **跳过已完成** — `_plan.json` 中 status 为 `completed` 或 `failed` 的块跳过
 
-1. **跳过已完成** — 若 `{tmp_dir}/{book_name}_{seq}.json` 已存在，跳过不处理
+2. **告知用户** — `[003/042] 正在处理 第 3 块……`
 
-2. **告知用户** — `[003/042] 正在处理 百年孤独_003.txt……`
+3. **启动 subagent** — 读取模板 → 填参数 → 发送
 
-3. **启动 subagent 处理该块** — 使用 Agent 工具（prompt 见下方），**等待其完成后再启动下一个**
+4. **产物检视（subagent 返回后）**：
+   ```bash
+   python "{scripts_dir}/check_chunk_output.py" "{tmp_dir}" "{book_name}" "{seq}"
+   ```
+   脚本自动检查 JSON 存在性、字段完整性、分类合规性、plan 状态。根据中间产物残留输出不同级别的诊断信息：`OK: N 条记录`、`MISSING: <阶段>`、`ERROR: <详情>`
 
-4. **汇报进度（精简模式）** — subagent 返回后，只报告一行：
-   - `[003/042] 百年孤独_003.txt → 5 个关键词，累计 23 个`
-   - **不要复述 subagent 输出的任何表格、分类、总结**
-   - subagent 如果输出了多余内容，忽略即可，不转发给用户
+5. **汇报进度** — `[003/042] 第 3 块 → 5 个关键词，累计 23 个`
+   **不要复述 subagent 输出的任何内容。**
 
-5. **若失败** — 重试该块，连续 3 次失败则跳过并在最终报告注明
+6. **失败处理** — 产物检视失败则重试该块，连续 3 次失败则跳过
 
-#### subagent prompt
+#### 并行调度约束
 
-```
-你是一个电子书知识提取助手。请完整处理一个文本块的知识提取 pipeline。
-
-参数（替换实际值）：
-- 书名: {book_name}
-- 文本块序号: {seq}/{total}
-- 文本块文件: {chunk_filepath}
-- 工作目录: {tmp_dir}
-- 去重列表: {tmp_dir}/already_searched.txt
-- 关键词输出文件: {tmp_dir}/keywords_{seq}.txt
-- YAML 输出文件: {tmp_dir}/{book_name}_{seq}.yaml
-
-=== 步骤 1：提取关键词 ===
-
-使用 Read 工具阅读文本块文件，提取其中的**知识型条目**，将关键词列表写入 {tmp_dir}/keywords_{seq}.txt（使用 Write 工具）。
-
-**核心判断标准（严格执行，缺一不可）：**
-
-> 这个条目是否代表一个**具备文化/历史/知识背景**的概念，以至于一个对该文化不了解的读者需要查阅**百科全书**（而非词典）才能理解？
-
-通过标准——必须同时满足：
-1. 不是普通词汇（非普通形容词、动词、名词）
-2. 具有知识密度——背后有故事、历史、文化背景
-3. 值得写一个独立的百科条目（Wikipedia worthy）
-
-**✅ 应该提取（知识型条目）：**
-
-| 类别 | 示例（中文书） | 示例（英文书） |
-|------|---------------|---------------|
-| 物件·工艺 | 扎染、土楼 | Baritsu（福尔摩斯用的武术）、gasogene（维多利亚时代的苏打水机） |
-| 习俗·仪式 | 傩戏、祭祀 | coming-out season（名媛社交 debut）、Penny Dreadful（廉价惊悚小说） |
-| 概念·观念 | 因果报应 | consulting detective（咨询侦探概念）、ratiocination（推理法） |
-| 事件·典故 | 庚子赔款、安史之乱 | Reichenbach Fall（莱辛巴赫瀑布）、Mormon migration（摩门教徒迁徙） |
-| 人物（真实历史人物） | 拿破仑、杜甫 | Edgar Allan Poe、Émile Gaboriau |
-| 地点（有历史文化意义） | 敦煌、布达拉宫 | Scotland Yard、Baker Street、Charing Cross |
-
-**❌ 绝不提取（普通词汇/叙事要素）：**
-
-**禁止提取以下任何类型：**
-- **形容词**：floundering、stealthily、gaunt、haggard、livid、brutal、sinewy、tottered、rueful
-- **普通动词/名词**：vigil、agitation、disgrace、perish、villain、swindle、creditors、vengeance
-- **可在英汉词典直接查到译义的普通英语单词**
-- **书中叙事角色**：Sherlock Holmes、Dr. Watson、Lestrade（除非该角色本身已成为文化符号）
-- **普通日常物品**：table、door、window、hat
-
-**⛔ 硬性红线 — 违反将导致整块重做：**
-- 禁止提取纯英语词汇（形容词、副词、普通动词、无特殊文化背景的名词）
-- 禁止将"这个词中文读者可能不认识"作为提取理由 —— 不认识但能从词典查到译义的词一律不提取
-- 提取前必须自问："这个词的**知识密度**够吗？维基百科上有独立条目吗？" 如果没有 → 不提取
-- 所有 extracted 条目必须能够明确归入上述 6 个知识类别之一（物件、习俗、概念、事件、人物、地点），归不进去的 → 不提取
-
-筛选类别（仅用于辅助判断，**禁止写入输出文件**）：
-- 物件·工艺 — 有民族/地方特色的物品、手工艺品、食物等（排除普通日用品）
-- 习俗·仪式 — 有文化背景的风俗、节日、祭祀、禁忌
-- 概念·观念 — 特有的思想、信仰、民间说法
-- 事件·典故 — 有文化意义的历史事件、传说
-- 人物 — 仅限真实历史人物或文化符号人物（排除书中叙事角色）
-- 地点 — 仅限有历史文化意义的地点（排除虚构场景名）
-
-关键约束 — 输出文件必须**纯词汇，不含任何类别标题**：
-✅ 正确格式（只有词汇，一行一个）：
-  扎染
-  傩戏
-  土楼
-  Baritsu
-  Scotland Yard
-
-❌ 错误格式（禁止包含任何类别名、冒号、分隔线）：
-  物件·工艺
-  扎染           ← 类别名不应出现
-
-重要要求：
-- 输出文件中**禁止出现任何类别名**，只能有纯词汇
-- 无需分类、无需分组、无需标题、无需序号、无需分隔线
-- 不要使用 WebSearch，不要写解释
-- 按实提取，不设上下限
-- **关键词提取完毕后，逐条自问：它会出现在维基百科上吗？如果答案是"不会"或者"只配出现在英汉词典里"，立即删除**
-
-=== 步骤 2：去重检查（只读，不追加） ===
-
-使用 `check` 命令（只读，**不修改** `already_searched.txt`）找出未搜索过的新关键词：
-
-```bash
-python scripts/manage_keywords.py check "{tmp_dir}/already_searched.txt" --from-file "{tmp_dir}/keywords_{seq}.txt" --output "{tmp_dir}/filtered_{seq}.txt"
-```
-
-**判断是否有新关键词（通过文件大小判断，最可靠）：**
-```bash
-wc -c < "{tmp_dir}/filtered_{seq}.txt"
-```
-- 输出为 "0"（文件为空）：无新关键词，写入空 JSON 数组作为完成标记并立即结束
-  ```bash
-  echo '[]' > "{tmp_dir}/{book_name}_{seq}.json"
-  ```
-- 输出不为 "0"（文件有内容）：读取关键词列表，继续步骤 3
-  ```bash
-  cat "{tmp_dir}/filtered_{seq}.txt"
-  ```
-
-**为什么用 `check` 而不是 `filter`？** `check` 是只读操作，不修改 `already_searched.txt`。这样即使 subagent 在后续步骤中失败，重跑时 `check` 仍然能正确识别出新词，不会"消耗"关键词。
-
-=== 步骤 3：检索并撰写 YAML ===
-
-对 `filtered_{seq}.txt` 中的每个关键词，使用 WebSearch 进行互联网检索，结合书中原文撰写综合解释。
-
-- 用 Read 工具再次阅读文本块，找到每个关键词对应的原文句子
-- 使用 WebSearch 检索每个关键词
-- 输出 YAML 到 {tmp_dir}/{book_name}_{seq}.yaml
-
-YAML 格式：
-```yaml
-- 名词: White Walkers
-  解释: |
-    《冰与火之歌》中的神秘生物，又称异鬼，是长城以北的传说中存在。他们是一种寒冷而邪恶的人形生物，拥有将死者复活为尸鬼的能力。
-  书中原文: |
-    He had seen the white walkers in the woods beyond the Wall.
-  网络来源: |
-    https://iceandfire.fandom.com/wiki/White_Walkers
-```
-
-YAML 书写规则：
-- 每条记录以 `- 名词:` 开头
-- 字段缩进 2 空格
-- 多行文本用 `: |` 换行，内容缩进 4 空格
-- 不需要引号
-
----
-
-**⚡ 语言要求（最高优先级约束，其重要性高于其他所有要求）**
-
-**硬性规定：**
-1. `解释` 字段 → **必须使用中文撰写。** 这是不可谈判的约束。无论原书是日文、英文还是其他语言，解释一律用中文。需要读者查字典才能理解的，不是好的中文解释。
-2. `名词` 字段 → **保留原文语言**（原文是日文就保持日文，英文就保持英文，不翻译）
-3. `书中原文` 字段 → **保留书中原始文本**，不做任何翻译或改写
-4. `网络来源` 字段 → 保留原始 URL
-
-**❌ 错误示范（不可容忍）：**
-```yaml
-# 反面案例：解释用了日文/英文——这违反最高优先级约束，必须重做
-- 名词: 書生
-  解释: |
-    A student who lives in someone's house doing housework in exchange for education.
-  书中原文: |
-    しかもあとで聞くとそれは書生という人間中で一番獰悪な種族であったそうだ。
-  网络来源: |
-    https://example.com
-```
-
-**✅ 正确示范：**
-```yaml
-- 名词: 書生
-  解释: |
-    日本明治时代特有的社会角色，指寄宿在别人家中、通过帮助家务换取食宿和学习机会的学生或青年。
-  书中原文: |
-    しかもあとで聞くとそれは書生という人間中で一番獰悪な種族であったそうだ。
-  网络来源: |
-    https://example.com
-```
-
-**自检方法**：写完后问自己——"这个解释不用查字典，一个中文母语者能直接读懂吗？" 如果不能，重写。
-
----
-
-其他重要要求：
-- 只处理 `filtered_{seq}.txt` 中的关键词
-- "书中原文"必须是书中出现的**完整可读的句子**
-- 检索不到则注明"未检索到网络资料"
-- 禁止编造信息
-
-=== 步骤 4：强制 YAML→JSON 转换 ===
-
-```bash
-python scripts/yaml_to_json.py "{tmp_dir}/{book_name}_{seq}.yaml"
-```
-
-验证输出的 JSON 文件存在。若失败则重试步骤 3 和 4。
-
-=== 【验收】步骤 5：字段合规检查 + 语言检查 ===
-
-用 Read 工具读取生成的 JSON 文件，**逐条逐字段严格检查**：
-
-```python
-# 每条记录必须通过以下所有检查：
-# 1. dict 的 keys 必须严格等于 {"名词", "解释", "书中原文", "网络来源"}
-# 2. 不允许有第 5 个字段，不允许字段名错误
-# 3. 没有一个字段为空或为 null
-# 4. 「解释」字段值必须是中文文本（需要逐字确认不含日文/英文长句）
-# 5. 「名词」字段值必须是原文语言（保留原文）
-```
-
-**最重要的单项检查 — 解释语言**：
-- 逐条读取 `解释` 的值
-- 确认全部是中文。如果发现任何解释包含非中文内容（例如日语原文或英语句子）→ **判定为不合格，必须回到步骤 3 重新生成 YAML**
-- 这是最高优先级约束，违反此约束的记录不得进入最终数据库
-
-如果任何条目存在以下问题，**必须回到步骤 3 重新生成 YAML**：
-- 出现第 5 个额外字段
-- 字段名错误（如"词条"代替"名词"）
-- 核心字段为空
-- 格式不是有效的 YAML/JSON
-
-验收通过后，执行最后一步（如 JSON 为空 `[]` 则跳过此步）：
-
-=== 步骤 6：追加关键词到去重列表 ===
-
-```bash
-python scripts/manage_keywords.py append-from-json "{tmp_dir}/already_searched.txt" "{tmp_dir}/{book_name}_{seq}.json"
-```
-
-这一步将本次成功处理的词条追加到 `already_searched.txt`，确保后续文本块不会重复检索。
-
-最后输出一句确认（例："块 42/329 完成，3 个关键词"），**禁止输出任何总结、表格、分类统计、类别名、markdown 表格、分隔线**。拒绝输出表格式的任何内容。
-
-```
-
-#### 串行约束
-
-- **必须串行，禁止并行** — 每次只启动一个 subagent，阻塞等待其完成后才启动下一个
-- **慢就是快** — 每块可能需要数分钟，这是正常的
-- subagent 是独立上下文，其内部细节不会污染主流程上下文窗口
-- 若某块 subagent 连续失败 3 次，跳过该块，在最终报告中注明
+- **分批并行，整体串行** — 工作流步骤 0→1→2→3→4→5→6 严格顺序执行，但在步骤 4 内部以 batch 方式并行：
+  - 每批最多 **5 个 subagent 同时运行**，将待处理块按 5 个一组分批
+  - 同一批内的 subagent 并行启动（在一条消息中同时发出多个 Agent 工具调用）
+  - 等待当前批次**全部完成**（含产物检视）后，才启动下一批
+  - 失败的块在批次末尾单独重试，连续 3 次失败则跳过
+- **平衡原则** — 5 个并行是上限而非目标。小块（≤20 块）可适当减少并行数（2-3 个），避免不必要的上下文开销。大书（>80 块）用满 5 个并行以加速
 
 ### 步骤 5：合并到 SQLite
 
-所有文本块处理完毕后，使用固化脚本 `scripts/merge_to_sqlite.py` 合并所有 JSON 到 SQLite 数据库。
+所有文本块处理完毕后，使用固化脚本 `merge_to_sqlite.py` 合并所有 JSON 到 SQLite 数据库。
 
 ```bash
-python scripts/merge_to_sqlite.py <json_dir>
-# 例如: python scripts/merge_to_sqlite.py 百年孤独_tmp
+python "{scripts_dir}/merge_to_sqlite.py" <json_dir>
+# 例如: python "{scripts_dir}/merge_to_sqlite.py" 百年孤独_tmp
 ```
 
 其中 `<json_dir>` 就是步骤 0/2 中创建/使用的 `{书名}_tmp/` 目录。
 
 脚本会自动：
 1. 扫描目录下的所有 `*.json` 文件（排除 `_` 开头的）
-2. 按名词去重（不区分大小写），合并解释、原文和来源
-3. 写入 SQLite 数据库，文件名为 `{书名}.db`
+2. 校验每个条目的分类是否在 6 个允许值中（不在则一次性报错退出）
+3. 按名词去重（不区分大小写），合并解释、原文和来源
+4. 写入 SQLite 数据库，文件名为 `{书名}.db`
 5. 输出统计信息
+
+**如果脚本因分类校验失败退出** — 脚本会列出所有 JSON 文件中不合规的条目（文件、序号、名词、错误分类）。此时主 Agent 必须：
+
+1. 读取报错中提到的每个 JSON 文件
+2. 对每个不合规的条目，根据其内容（名词、解释、原文）从 `人物/地点/物件/事件/概念/习俗` 中选择最合适的分类
+3. 只修改该条目的「分类」字段，保留其他 4 个字段不变
+4. 写回 JSON 文件
+5. 重新运行 `merge_to_sqlite.py`，直到所有分类合规
 
 脚本执行完成后，向用户汇报最终统计：
 
 ```
-📊 处理完成统计
+处理完成统计
 ────────────────────────────────
 总文本块数:    42
 总原始条目:    587
@@ -406,6 +197,45 @@ python scripts/merge_to_sqlite.py <json_dir>
 数据库文件:    百年孤独.db
 ────────────────────────────────
 ```
+
+### 步骤 6：生成静态 Wiki 站点
+
+合并完成后，根据电子书的基调选择主题，然后使用 `generate_wiki.py` 生成静态 Wiki。
+
+#### 6a：确定主题
+
+主 Agent 根据电子书的**内容基调**选择主题枚举值（无需脚本，直接判断）：
+
+| 主题枚举 | 风格 | 适用场景 |
+|----------|------|---------|
+| `ink` | 水墨黑白 | 古典文学、历史著作、哲学 |
+| `parchment` | 羊皮纸暖黄 | 奇幻小说、历史小说、探险 |
+| `sky` | 天空浅蓝 | 科幻小说、科技类 |
+| `forest` | 森林绿意 | 自然散文、游记、田园 |
+| `obsidian` | 暗色深邃 | 悬疑推理、哥特、恐怖 |
+| `sakura` | 樱花粉白 | 日本文学、轻小说、俳句 |
+
+选择原则：根据书名、内容风格判断即可，不必纠结边界情况。默认使用 `parchment`。
+
+#### 6b：执行生成
+
+```bash
+python "{scripts_dir}/generate_wiki.py" <db_path> --theme <theme_name>
+# 例如: python "{scripts_dir}/generate_wiki.py" "E:/ebook-kb/百年孤独.db" --theme ink
+```
+
+脚本自动：
+1. 读取 SQLite 数据库中的 nouns 表
+2. 按「分类」字段聚合条目
+3. 在电子书同级目录生成 `{书名}_wiki.html`（首页入口），以及 `{书名}_wiki/` 子目录（分类页和详情页）：
+   - `{书名}_wiki.html` — 首页，按分类展示所有条目
+   - `{书名}_wiki/{分类}/index.html` — 该分类下所有条目的列表
+   - `{书名}_wiki/{分类}/{条目}.html` — 单条知识点的详情页（解释、书中原文、参考链接）
+4. 自动应用选中主题的配色和排版
+
+Wiki 不需要服务器，直接用浏览器打开 `{书名}_wiki.html` 即可浏览。
+
+主题配置文件位于 skill 的 `themes/` 目录下，每个主题一个 JSON 文件。如需查看或调整配色，可直接编辑对应文件。
 
 ---
 
@@ -420,6 +250,7 @@ python scripts/merge_to_sqlite.py <json_dir>
 | 列名 | 说明 |
 |------|------|
 | noun | 名词（主键，不区分大小写去重） |
+| category | 分类 |
 | explanation | 综合解释 |
 | original_text | 书中原文片段 |
 | source_urls | 网络来源 URL |
@@ -435,8 +266,21 @@ python scripts/merge_to_sqlite.py <json_dir>
 
 查询示例：
 ```sql
-SELECT noun, length(explanation) as expl_len FROM nouns ORDER BY expl_len DESC LIMIT 10;
+SELECT noun, category, length(explanation) as expl_len FROM nouns ORDER BY expl_len DESC LIMIT 10;
 SELECT noun, source_urls FROM nouns WHERE source_urls != '' LIMIT 10;
+SELECT category, COUNT(*) FROM nouns GROUP BY category ORDER BY COUNT(*) DESC;
+```
+
+### 静态 Wiki 结构
+
+```
+{书名}_wiki.html           # 首页入口 — 按分类卡片展示，位于电子书同级目录
+{书名}_wiki/
+├── {分类名}/
+│   ├── index.html          # 该分类下的条目列表
+│   ├── {条目名1}.html      # 单条知识点详情
+│   ├── {条目名2}.html
+│   └── ...
 ```
 
 ---
@@ -452,6 +296,9 @@ SELECT noun, source_urls FROM nouns WHERE source_urls != '' LIMIT 10;
 ### 合并脚本失败
 如果 `merge_to_sqlite.py` 失败，检查 JSON 文件是否完整。可以手动修复损坏的 JSON 后重试。
 
+### Wiki 生成失败
+如果 `generate_wiki.py` 失败，检查数据库文件路径是否正确。脚本已自动兼容旧版无 category 列的数据库。
+
 ---
 
 ## 使用范例
@@ -460,10 +307,12 @@ SELECT noun, source_urls FROM nouns WHERE source_urls != '' LIMIT 10;
 
 你会回答好的，然后执行：
 1. 检查 `百年孤独_tmp/` 目录是否存在，检测断点 → 判断是否为全新处理
-2. 若为全新，运行 `python scripts/chunk_ebook.py 百年孤独.epub` 分片
+2. 若为全新，运行 `python "{scripts_dir}/chunk_ebook.py" 百年孤独.epub` 分片
 3. 确保 `百年孤独_tmp/already_searched.txt` 存在
 4. 读取 `_plan.json` 列出文本块数，告知用户预计时间
 5. 串行启动 subagent（从断点处开始），每个处理一个文本块的完整 pipeline
-6. 每块完成后简短汇报一次进度
-7. 全部完成后运行 `python scripts/merge_to_sqlite.py 百年孤独_tmp`
+6. 每块完成后进行产物检视并汇报进度
+7. 全部完成后运行 `python "{scripts_dir}/merge_to_sqlite.py" 百年孤独_tmp`
 8. 展示最终统计
+9. 判断主题（《百年孤独》→ `ink` 水墨风格），运行 `python "{scripts_dir}/generate_wiki.py" 百年孤独.db --theme ink`
+10. 告知用户 Wiki 路径，用浏览器打开展示

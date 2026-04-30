@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地点 · To Kill a Mocking Bird</title>
+<style>
+:root {
+  --bg: #f4e4c1;
+  --bg-card: #fef9ee;
+  --bg-detail: #fdf6e4;
+  --text: #3b2e1e;
+  --text-secondary: #6b5d4f;
+  --text-muted: #9b8d7f;
+  --heading: #2c1f0e;
+  --border: #d4c4a0;
+  --accent: #8b6914;
+  --accent-hover: #a67c18;
+  --link: #7d5a0b;
+  --tag-bg: #ecd9aa;
+  --tag-text: #5c3d0e;
+  --divider: #d4c4a0;
+  --shadow: 0 1px 3px rgba(91,61,14,0.08);
+  --shadow-hover: 0 3px 12px rgba(91,61,14,0.12);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">地点 · To Kill a Mocking Bird</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../To Kill a Mocking Bird_wiki.html">Home</a>
+<span>/</span>
+地点
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">52 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="5th Judicial Circuit Court.html">
+  <div class="noun">5th Judicial Circuit Court</div>
+  <div class="snippet">小说中审判Tom Robinson的法院正式名称，Scout在思考是去听Dolphus Raymond说话还是回到法庭时提及。基于Harper Lee家乡阿拉巴马州Monroeville的真实Monroe County Courthouse</div>
+</a>
+<a class="entry-item" href="Alabama.html">
+  <div class="noun">Alabama</div>
+  <div class="snippet">阿拉巴马州，美国东南部的一个州，首府蒙哥马利，1819年成为第22个州。是美国民权运动的重要舞台，也是《杀死一只知更鸟》的故事发生地。</div>
+</a>
+<a class="entry-item" href="Alabama Territory.html">
+  <div class="noun">Alabama Territory</div>
+  <div class="snippet">阿拉巴马领地是1817年3月3日美国国会从密西西比领地东部分设组建的一个合并建制领地。首任（也是唯一一任）领地总督为威廉·怀亚特·比布（William Wyatt Bibb），首府设在St. Stephens。领地人口因&quot;阿拉巴马热&quot;（Al</div>
+</a>
+<a class="entry-item" href="Arlington House.html">
+  <div class="noun">Arlington House</div>
+  <div class="snippet">阿灵顿庄园（又称卡斯蒂斯-李庄园）是美国弗吉尼亚州阿灵顿国家公墓内的一座希腊复兴风格历史建筑，位于波托马克河对岸与华盛顿特区相望。该建筑由乔治·华盛顿的继孙乔治·华盛顿·帕克·卡斯蒂斯于1802-1818年间建造，是美国第一座神庙式住宅。南</div>
+</a>
+<a class="entry-item" href="Auburn.html">
+  <div class="noun">Auburn</div>
+  <div class="snippet">指奥本大学（Auburn University），美国阿拉巴马州的一所公立赠地研究型大学。1856年特许成立，最初名为东阿拉巴马男子学院，1872年成为阿拉巴马州第一所赠地大学，先后更名为阿拉巴马农工学院和阿拉巴马理工学院，1960年正式定</div>
+</a>
+<a class="entry-item" href="Barker's Eddy.html">
+  <div class="noun">Barker&#x27;s Eddy</div>
+  <div class="snippet">小说中虚构的一个河湾游泳地，位于梅科姆镇外的Meridian高速公路附近。eddy（回流区）指溪流中障碍物下游形成的水潭，孩子们常去那里游泳。杰姆在这里教迪尔游泳。斯库特在第3章曾威胁说要跳进Barker&#x27;s Eddy淹死自己让卡尔珀尼亚后</div>
+</a>
+<a class="entry-item" href="Birmingham.html">
+  <div class="noun">Birmingham</div>
+  <div class="snippet">伯明翰是美国亚拉巴马州最大的城市，成立于1871年重建时期，以英国工业城市伯明翰命名，意图打造南方的钢铁工业中心。因附近富藏铁矿、煤矿和石灰岩三种炼钢原料而飞速发展，绰号&quot;魔法之城&quot;和&quot;南方匹兹堡&quot;。大萧条时期遭受重创，后在民权运动中成为关</div>
+</a>
+<a class="entry-item" href="Birmingham Alabama.html">
+  <div class="noun">Birmingham Alabama</div>
+  <div class="snippet">阿拉巴马州最大城市，在小说第24章中被Mrs. Merriweather提及，作为Eleanor Roosevelt试图与黑人同坐的地点。伯明翰在20世纪60年代民权运动中成为关键战场，哈珀·李通过这一引用映射了当时南方种族隔离的尖锐现实。</div>
+</a>
+<a class="entry-item" href="Boston.html">
+  <div class="noun">Boston</div>
+  <div class="snippet">波士顿，美国马萨诸塞州首府和最大城市，新英格兰地区的文化、教育和经济中心。1630年由清教徒建立，是美国最古老的城市之一。美国独立战争的多起关键事件（波士顿倾茶事件、波士顿大屠杀、列克星敦和康科德战役）均发生在该地区，因此被称为&quot;自由摇篮&quot;</div>
+</a>
+<a class="entry-item" href="Calpurnia's house.html">
+  <div class="noun">Calpurnia&#x27;s house</div>
+  <div class="snippet">卡尔珀尼亚的家是斯库特一直好奇想去拜访的地方。这代表了斯库特对跨种族理解和卡尔珀尼亚个人生活的真诚好奇心——她想了解这个抚养她长大的黑人女性在芬奇家之外的真实生活。亚历山德拉姑姑对此坚决反对，反映了当时严格的种族隔离社会规范。斯库特后来确实</div>
+</a>
+<a class="entry-item" href="Chester County.html">
+  <div class="noun">Chester County</div>
+  <div class="snippet">《杀死一只知更鸟》中的虚构县名，恩菲尔德监狱农场所在县，位于梅科姆县70英里外。此县在现实中并不存在于阿拉巴马州——阿拉巴马州有67个县，但没有切斯特县。哈珀·李使用虚构地名来构建小说的地理框架。</div>
+</a>
+<a class="entry-item" href="Clanton Alabama.html">
+  <div class="noun">Clanton Alabama</div>
+  <div class="snippet">阿拉巴马州克莱顿市，奇尔顿县县治，位于该州中部。1868年由阿尔弗雷德·贝克建立，最初称为&quot;鹅塘&quot;，1870年沿路易斯维尔和纳什维尔铁路规划，1873年正式建市。以美墨战争和内战邦联准将詹姆斯·霍尔特·克兰顿命名。以桃子产业闻名，现产阿拉巴</div>
+</a>
+<a class="entry-item" href="Colored balcony.html">
+  <div class="noun">Colored balcony</div>
+  <div class="snippet">梅科姆县法院二楼的有色人种专用座位区，像一个环绕三面墙的二层走廊。在种族隔离的吉姆·克劳时代，黑人观众只能在这上面观看庭审。当斯库特、杰姆和迪尔在一楼找不到座位时，赛克斯牧师带他们到 balcony，四名黑人观众主动让出前排座位。孩子们坐在</div>
+</a>
+<a class="entry-item" href="Cornwall.html">
+  <div class="noun">Cornwall</div>
+  <div class="snippet">康沃尔，英格兰西南端的一个郡，位于大西洋与英吉利海峡之间的半岛上。历史上属于凯尔特民族地区之一，拥有独特的凯尔特语言（康沃尔语）和文化传统，被认定为凯尔特六国之一。以锡矿开采和康沃尔菜肉馅饼闻名于世。其文化身份与英格兰其他地区有明显差异。</div>
+</a>
+<a class="entry-item" href="county jail.html">
+  <div class="noun">county jail</div>
+  <div class="snippet">梅科姆县监狱，位于镇广场西北角，介于廷达尔五金店和梅科姆论坛报社之间。小说描述它是一座&quot;迷你哥特式玩笑&quot;建筑，一单元格宽、两单元格高，带有城垛和飞扶壁。在汤姆·罗宾逊审判前夕，泰特警长将汤姆转移至此，阿提克斯坐在监狱门口彻夜守护，防止私刑暴</div>
+</a>
+<a class="entry-item" href="Courtroom.html">
+  <div class="noun">Courtroom</div>
+  <div class="snippet">梅科姆县法庭是审判汤姆·罗宾逊的场所，位于法院大楼二楼。这是一个维多利亚式建筑，陪审团坐在左侧长窗下，证人席在右侧。有色人种只能坐在&quot;有色人种专区&quot;——沿三面墙如阳台般的楼座。审判日整个梅科姆镇几乎全员到齐，气氛既紧张又几乎像节日般喧闹。法</div>
+</a>
+<a class="entry-item" href="dump.html">
+  <div class="noun">dump</div>
+  <div class="snippet">梅科姆镇垃圾场，Ewell家的住所位于其后。他们从垃圾堆中捡拾可用物品，房屋用铁皮和压平的锡罐拼凑而成，庭院里堆满了从垃圾场捡来的杂物。垃圾场的位置象征着Ewell家在梅科姆社会中的最低地位。</div>
+</a>
+<a class="entry-item" href="Enfield Prison Farm.html">
+  <div class="noun">Enfield Prison Farm</div>
+  <div class="snippet">《杀死一只知更鸟》中的虚构监狱农场，位于切斯特县，距离梅科姆镇约70英里。汤姆·罗宾逊被定罪后被关押于此等待上诉。在第24章中，汤姆在此试图越狱时被警卫射杀17枪。其家人不被允许探视。此监狱反映了吉姆·克劳时代南方的监狱农场制度。</div>
+</a>
+<a class="entry-item" href="Finch's Landing.html">
+  <div class="noun">Finch&#x27;s Landing</div>
+  <div class="snippet">芬奇庄园，是哈珀·李小说《杀死一只知更鸟》中芬奇家族的祖宅庄园，位于亚拉巴马河畔，由斯库特的祖先西蒙·芬奇在19世纪初建立。阿提克斯·芬奇在此长大，后离家前往蒙哥马利学习法律，其兄杰克前往波士顿学医，妹妹亚历山德拉则留守庄园。该地象征着芬奇</div>
+</a>
+<a class="entry-item" href="First Purchase African M.E. Church.html">
+  <div class="noun">First Purchase African M.E. Church</div>
+  <div class="snippet">小说《杀死一只知更鸟》中梅科姆镇的黑人教堂，位于镇南界线外的Quarters区域，是一座油漆剥落的木结构建筑，因由获得自由的奴隶用第一笔收入购买建造而得名&quot;First Purchase&quot;（第一次购买），是镇上唯一带有尖顶和钟的教堂。</div>
+</a>
+<a class="entry-item" href="First Purchase Church.html">
+  <div class="noun">First Purchase Church</div>
+  <div class="snippet">全称 First Purchase African M.E. Church（第一购买非洲卫理公会教堂），位于梅科姆镇外的黑人聚居区&quot;The Quarters&quot;。该教堂以解放后的奴隶用第一笔收入购买而得名，条件简陋破旧，没有钱买赞美诗集，大多</div>
+</a>
+<a class="entry-item" href="Garden of Gethsemane.html">
+  <div class="noun">Garden of Gethsemane</div>
+  <div class="snippet">客西马尼园，位于耶路撒冷橄榄山脚下、汲沦溪对岸的一个花园，在基督教传统中被认为是耶稣在受难前夜祷告并被犹大出卖的地点。其名源自亚兰语&quot;油榨&quot;，因该地曾设有橄榄榨油设施。园内现存多棵古橄榄树，部分经碳-14测定树龄超过900年。</div>
+</a>
+<a class="entry-item" href="Jamaica.html">
+  <div class="noun">Jamaica</div>
+  <div class="snippet">牙买加，加勒比海第三大岛国，位于古巴以南。原为泰诺（阿拉瓦克）印第安人居住地，1494年哥伦布抵达后成为西班牙殖民地，1655年被英国占领，1962年独立。以雷鬼音乐、博布·马利、蓝山咖啡、朗姆酒和短跑运动闻名于世。其座右铭为&quot;出多门，归一</div>
+</a>
+<a class="entry-item" href="livery stable.html">
+  <div class="noun">livery stable</div>
+  <div class="snippet">马车出租行，19世纪美国城镇中提供马匹寄养、马车出租、马匹买卖等服务的商业场所，相当于现代的汽车租赁公司加停车场。客户可按日、周、月寄养马匹，或租用马车、轻便车。小说中孩子们将轻便车放到马车出租行车顶上是他们万圣节恶作剧的常见方式之一。</div>
+</a>
+<a class="entry-item" href="Maycomb.html">
+  <div class="noun">Maycomb</div>
+  <div class="snippet">哈珀·李小说《杀死一只知更鸟》中虚构的阿拉巴马州小镇，以作者的家乡门罗维尔（Monroeville, Alabama）为原型。小说设定在经济大萧条时期，Maycomb被描绘为一个保守、种族隔离、社会等级分明的南方乡村小镇，街道尘土飞扬，日常</div>
+</a>
+<a class="entry-item" href="Maycomb Alabama.html">
+  <div class="noun">Maycomb Alabama</div>
+  <div class="snippet">哈珀·李创作的虚构小镇，是《杀死一只知更鸟》的主要故事背景。其原型是作者的家乡Monroeville, Alabama。小说中描绘它为一座&quot;疲惫的老城&quot;，经济萧条，种族隔离森严，社会阶层分明。镇上有著名的Radley Place、法院大楼和</div>
+</a>
+<a class="entry-item" href="Maycomb balcony.html">
+  <div class="noun">Maycomb balcony</div>
+  <div class="snippet">梅科姆县法院内的&quot;有色人种 balcony&quot;，沿三面墙延伸，黑人观众只能在此观看审判。这一物理隔离体现了吉姆·克劳法下的种族隔离制度。斯库特和杰姆在此观看审判，黑人观众在阿蒂克斯离场时全体起立致敬。</div>
+</a>
+<a class="entry-item" href="Maycomb County.html">
+  <div class="noun">Maycomb County</div>
+  <div class="snippet">梅科姆县是哈珀·李在《杀死一只知更鸟》中虚构的阿拉巴马州南部的一个县，县治为同名小镇梅科姆。该县名是对作者家乡Monroe县（阿拉巴马州门罗维尔所在地）的戏仿。小说故事发生在大萧条时期（约1933-1935年），梅科姆被描绘成一个与世隔绝、</div>
+</a>
+<a class="entry-item" href="Maycomb County Courthouse.html">
+  <div class="noun">Maycomb County Courthouse</div>
+  <div class="snippet">梅科姆县法院是哈珀·李小说《杀死一只知更鸟》中虚构的核心地点，汤姆·罗宾逊的审判在此进行。该法院的建筑融合了多种风格——南面是原建筑1856年火灾后幸存下来的希腊复兴立柱，主体是早期维多利亚风格，顶部有一个19世纪的大型钟楼。这种不协调的建</div>
+</a>
+<a class="entry-item" href="Maycomb County Courthouse balcony.html">
+  <div class="noun">Maycomb County Courthouse balcony</div>
+  <div class="snippet">梅科姆县法院内的隔离座位区即「有色人种 balcony」，沿法庭三面墙壁延伸。审判期间黑人观众只能在此就座。Scout、Jem和Dill由Reverend Sykes带领在此观看审判，获得了观察审判的独特视角。</div>
+</a>
+<a class="entry-item" href="Maycomb Drugstore.html">
+  <div class="noun">Maycomb Drugstore</div>
+  <div class="snippet">梅科姆镇（Maycomb）的一家本地药店，是镇上商业区的一部分。小说中斯库特和杰姆在镇上行走时曾看到农民在此橱窗前研究灌肠袋。这家药店与西蒙·芬奇（Simon Finch）作为药剂师的家世背景相呼应，是哈珀·李描绘南方小镇生活的重要场景元素</div>
+</a>
+<a class="entry-item" href="Maycomb jail.html">
+  <div class="noun">Maycomb jail</div>
+  <div class="snippet">梅科姆县监狱，小说中的虚构地点，被描述为一座微型哥特式建筑，仅一个牢房宽、两个牢房高，配有城齿和飞扶壁。在汤姆·罗宾逊审判前夕，阿提克斯·芬奇坐在监狱门口保护汤姆，阻止了私刑暴徒。</div>
+</a>
+<a class="entry-item" href="Maycomb Junction.html">
+  <div class="noun">Maycomb Junction</div>
+  <div class="snippet">梅科姆枢纽站，小说中虚构的火车站/铁路枢纽，位于艾伯特县（毗邻梅科姆县的虚构县），是前往梅科姆镇的主要交通站点。人物在此乘火车抵达或离开，再从该站坐出租车往返梅科姆镇（约14英里路程）。</div>
+</a>
+<a class="entry-item" href="Meridian.html">
+  <div class="noun">Meridian</div>
+  <div class="snippet">美国密西西比州东部城市，是《杀死一只知更鸟》中角色迪尔（Dill Harris）的家乡。迪尔每年暑假到梅科姆县与姑姑同住，开学后返回梅里迪安。该城市在小说中作为迪尔&quot;外来者&quot;身份背景的一部分，反映了美国南方小城镇之间的地理关系。历史上梅里迪</div>
+</a>
+<a class="entry-item" href="Meridian highway.html">
+  <div class="noun">Meridian highway</div>
+  <div class="snippet">小说中连接梅里迪安（Meridian, Mississippi）与虚构的梅科姆县（Maycomb, Alabama）的公路。这条公路在小说中出现多次：迪尔从梅里迪安乘火车到梅科姆中转站后沿着这条路搭便车或步行前往梅科姆；Barker&#x27;s E</div>
+</a>
+<a class="entry-item" href="Meridian Mississippi.html">
+  <div class="noun">Meridian Mississippi</div>
+  <div class="snippet">密西西比州梅里迪安，美国密西西比州东部劳德代尔县县城，是该州第八大城市。19世纪因铁路交汇而兴起，曾是密西西比州最大城市（1890-1930年）。在小说中是迪尔的家乡。</div>
+</a>
+<a class="entry-item" href="Mississippi Territory.html">
+  <div class="noun">Mississippi Territory</div>
+  <div class="snippet">美国历史上一个建制合并领土，存在于1798年至1817年。1795年西班牙根据《圣洛伦索条约》将此地割让给美国，最初涵盖今密西西比州和亚拉巴马州的南部区域。1817年西部以密西西比州身份加入联邦，东部成为亚拉巴马领地。</div>
+</a>
+<a class="entry-item" href="Mobile.html">
+  <div class="noun">Mobile</div>
+  <div class="snippet">莫比尔，美国亚拉巴马州最古老的城市（1702年建城），也是该州唯一的海港城市，位于莫比尔湾畔。历史上先后由法国、英国和西班牙统治，是墨西哥湾沿岸仅次于新奥尔良的重要港口。美国第一个有组织狂欢节（Mardi Gras）庆祝活动即起源于莫比尔。</div>
+</a>
+<a class="entry-item" href="Montgomery.html">
+  <div class="noun">Montgomery</div>
+  <div class="snippet">蒙哥马利，美国亚拉巴马州首府，位于亚拉巴马河畔。1846年成为州首府。美国内战期间曾任美利坚联盟国（南方邦联）的第一个首都（1861年），杰斐逊·戴维斯在此宣誓就任邦联总统。20世纪50年代，蒙哥马利巴士抵制运动（1955–1956）在此爆</div>
+</a>
+<a class="entry-item" href="Montgomery, Alabama.html">
+  <div class="noun">Montgomery, Alabama</div>
+  <div class="snippet">蒙哥马利是美国阿拉巴马州的首府和第三大城市，位于该州中南部。该城于1819年建市，1846年取代塔斯卡卢萨成为州首府。1861年曾短暂作为美利坚联盟国（南方邦联）的首都。20世纪中期，蒙哥马利是美国民权运动的核心地点——1955年罗莎·帕克</div>
+</a>
+<a class="entry-item" href="Nova Scotia.html">
+  <div class="noun">Nova Scotia</div>
+  <div class="snippet">加拿大东南部的一个省份，拉丁语意为&quot;新苏格兰&quot;。首府为哈利法克斯。早期是法国殖民地阿卡迪亚（Acadia）的一部分，1713年通过《乌得勒支条约》转归英国。1755-1764年间发生了大规模驱逐阿卡迪亚人的事件（Le Grand Déran</div>
+</a>
+<a class="entry-item" href="O.K. Cafe.html">
+  <div class="noun">O.K. Cafe</div>
+  <div class="snippet">梅科姆镇广场北侧的一家简朴餐馆，在镇上被视为不太体面的场所。杜博斯太太曾用&quot;你将来会在O.K. Cafe端盘子&quot;来侮辱斯库特，暗示她缺乏淑女风范和前途。该地点象征着梅科姆镇的社会阶层分化。</div>
+</a>
+<a class="entry-item" href="Old Sarum.html">
+  <div class="noun">Old Sarum</div>
+  <div class="snippet">英格兰威尔特郡的一座古老山堡遗址，位于索尔兹伯里以北约两英里。此地自铁器时代就有人类居住，诺曼征服后建有城堡和大教堂，1086年《末日审判书》可能在此呈交给征服者威廉。13世纪因教堂迁往新址而逐渐废弃。尽管几乎无人居住，Old Sarum </div>
+</a>
+<a class="entry-item" href="Pensacola.html">
+  <div class="noun">Pensacola</div>
+  <div class="snippet">美国佛罗里达州西北部的一座港口城市，濒临墨西哥湾，因其历史上先后悬挂西班牙、法国、英国、美国和美利坚联盟国五面旗帜而被称为&quot;五旗之城&quot;。1559年西班牙探险家建立欧洲定居点，早于圣奥古斯丁（1565年）和詹姆斯敦（1607年），是今美国大陆</div>
+</a>
+<a class="entry-item" href="Philadelphia.html">
+  <div class="noun">Philadelphia</div>
+  <div class="snippet">费城，美国宾夕法尼亚州最大城市，1682年由贵格会领袖威廉·潘建立。在美国独立战争期间具有核心历史地位：独立宣言和美国宪法均在此签署和制定。1790至1800年曾担任美国临时首都。费城被称为美国&quot;独立摇篮&quot;，自由钟和独立宫是美国国家象征。</div>
+</a>
+<a class="entry-item" href="Radley Place.html">
+  <div class="noun">Radley Place</div>
+  <div class="snippet">拉德利宅院，梅科姆镇上芬奇家以南三户处的一座阴森破败的老房子。小说中描述为石板灰色、屋顶盖着朽烂的木瓦、院子杂草丛生（长满约翰逊草和烟草草），宅前有一棵大橡树。这座宅院是布·拉德利隐居的地方，由于镇上流传的各种恐怖传说，成为斯库特和杰姆童年</div>
+</a>
+<a class="entry-item" href="shotgun house.html">
+  <div class="noun">shotgun house</div>
+  <div class="snippet">猎枪屋是一种窄长的矩形住宅，通常宽度不超过3.5米，房间呈直线排列，前后门对齐，没有走廊。这种建筑风格源于西非，经由海地传入美国新奥尔良，在南北战争后至1920年代成为美国南部最流行的住宅样式。其名称的由来有两种说法：一是如果所有门都打开，</div>
+</a>
+<a class="entry-item" href="Sinkfield's Tavern.html">
+  <div class="noun">Sinkfield&#x27;s Tavern</div>
+  <div class="snippet">辛克菲尔德酒馆是《杀死一只知更鸟》中虚构的梅科姆镇发源地。据Scout讲述，在早期历史中，一个名叫Sinkfield的人在两条猪径交汇处开设了该地区唯一的酒馆。当州长派遣的测量队前来确定县政府所在地时，Sinkfield将他们灌醉，诱使他们</div>
+</a>
+<a class="entry-item" href="spring.html">
+  <div class="noun">spring</div>
+  <div class="snippet">泉水，位于垃圾场一端，是Ewell全家的饮用水和生活用水来源。他们家需要用桶从泉水处打水运回家，周围区域被他们清理保持无垃圾。</div>
+</a>
+<a class="entry-item" href="swamp.html">
+  <div class="noun">swamp</div>
+  <div class="snippet">沼泽地，Bob Ewell经常前往酗酒数日的地方。他在沼泽中饮酒数天后回到家时常常病倒，进一步证明了其酗酒恶习和对家庭的忽视。</div>
+</a>
+<a class="entry-item" href="Tuscaloosa.html">
+  <div class="noun">Tuscaloosa</div>
+  <div class="snippet">美国阿拉巴马州西部城市，以乔克托族酋长Tuskaloosa命名，意为&quot;黑武士&quot;。该城于1819年建市，1826至1846年间曾为阿拉巴马州首府。1831年成立的阿拉巴马大学位于该市。在内战期间，联邦军队烧毁了大学大部分建筑。1960年代民权</div>
+</a>
+<a class="entry-item" href="Winston Swamp.html">
+  <div class="noun">Winston Swamp</div>
+  <div class="snippet">温斯顿沼泽是《杀死一只知更鸟》中虚构的地点。据Scout在小说第13章中叙述，如果Sinkfield没有要花招欺骗测量员，梅科姆镇本应建在温斯顿沼泽中央——一个&quot;完全乏味无趣的地方&quot;。温斯顿沼泽在小说中代表了梅科姆幸运避免的、不理想的选址方</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:25
+</footer>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件 · To Kill a Mocking Bird</title>
+<style>
+:root {
+  --bg: #f4e4c1;
+  --bg-card: #fef9ee;
+  --bg-detail: #fdf6e4;
+  --text: #3b2e1e;
+  --text-secondary: #6b5d4f;
+  --text-muted: #9b8d7f;
+  --heading: #2c1f0e;
+  --border: #d4c4a0;
+  --accent: #8b6914;
+  --accent-hover: #a67c18;
+  --link: #7d5a0b;
+  --tag-bg: #ecd9aa;
+  --tag-text: #5c3d0e;
+  --divider: #d4c4a0;
+  --shadow: 0 1px 3px rgba(91,61,14,0.08);
+  --shadow-hover: 0 3px 12px rgba(91,61,14,0.12);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">物件 · To Kill a Mocking Bird</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../To Kill a Mocking Bird_wiki.html">Home</a>
+<span>/</span>
+物件
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">120 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="Air-rifle.html">
+  <div class="noun">Air-rifle</div>
+  <div class="snippet">气步枪（Air-rifle），也称气枪（air gun），是一种利用压缩空气或其他气体（而非火药等化学反应）作为动力发射弹丸的枪械。气步枪通常发射哑铃形铅弹（pellet）或圆形BB弹，枪管带有膛线以提高精度。根据动力来源可分为：弹簧活塞式</div>
+</a>
+<a class="entry-item" href="ambrosia.html">
+  <div class="noun">ambrosia</div>
+  <div class="snippet">美国南部传统的圣诞水果沙拉/甜点，起源于19世纪60年代。最早的食谱记载于1867年的《Dixie Cookery》烹饪书中，最初仅由新鲜椰子丝、切片橙子和糖三种原料层叠而成。其名称源自希腊罗马神话中众神的食物&quot;ambrosia&quot;。随着佛罗</div>
+</a>
+<a class="entry-item" href="asafoetida.html">
+  <div class="noun">asafoetida</div>
+  <div class="snippet">阿魏，一种从伞形科植物 Ferula asafoetida 的根茎中提取的树脂胶，主要产于伊朗、阿富汗和印度。具有强烈的硫磺气味（生闻刺鼻，烹饪后变香），在印度菜中广泛用作调味料和药用香料，传统医学中用于治疗消化不良、胀气、哮喘和神经系统疾</div>
+</a>
+<a class="entry-item" href="barbed wire.html">
+  <div class="noun">barbed wire</div>
+  <div class="snippet">带刺铁丝网是一种在铁丝上带有锋利尖刺的 fencing 材料，由Joseph Glidden于1874年获得关键专利。它在美国西部的开发中起到了革命性作用，提供了廉价耐用的围栏解决方案，取代了稀缺的木石材料，结束了自由放牧的&quot;开放牧场&quot;时代</div>
+</a>
+<a class="entry-item" href="Bird dog.html">
+  <div class="noun">Bird dog</div>
+  <div class="snippet">猎鸟犬（Bird dog），也称枪猎犬（gun dog或gundog），是经过专门训练用于协助猎人在狩猎过程中寻找、惊起、指示和/或拾回猎鸟的猎犬品种。猎鸟犬主要通过追踪空气中的气味来工作，分为三种主要类型：（1）指示犬（Pointing </div>
+</a>
+<a class="entry-item" href="bloodhounds.html">
+  <div class="noun">bloodhounds</div>
+  <div class="snippet">寻血猎犬，以其卓越的嗅觉追踪能力著称的犬种。在美国南方历史中，寻血猎犬曾被用于追踪逃跑的奴隶，成为种族压迫的工具。小说中，赫克·塔特警长调用县里的寻血猎犬追踪恶作剧的孩子们，但猎犬只是跑到房子后面对着地窖门嚎叫，暴露了家具被藏在地窖里的真相</div>
+</a>
+<a class="entry-item" href="bob-white.html">
+  <div class="noun">bob-white</div>
+  <div class="snippet">北美鹑（Northern Bobwhite，学名 Colinus virginianus），一种原产于北美洲的地栖鸟类，因其标志性的口哨声听起来像&quot;bob-white&quot;而得名。它是美国东部唯一本土鹑类物种，常见于农田边缘和林地，是重要的狩猎</div>
+</a>
+<a class="entry-item" href="breastworks.html">
+  <div class="noun">breastworks</div>
+  <div class="snippet">Breastwork（胸墙）是一种临时性的野战防御工事，通常用泥土、沙袋或可获得的材料匆忙构筑，高度约至成人胸部（4-5英尺），使防守者可以站立射击并在胸墙后获得掩护。与永久性的石砌城防工事不同，胸墙强调快速建造和临时性。在第一次世界大战中</div>
+</a>
+<a class="entry-item" href="broken watch and chain.html">
+  <div class="noun">broken watch and chain</div>
+  <div class="snippet">坏掉的怀表和表链，布·拉德利留在树洞中的最后一批礼物之一，附有一把小铝刀。阿提克斯说如果表还能走的话值十美元。杰姆曾试图修好它，并像父亲一样把表链挂在身上。这是布留给孩子们最私人的物品之一，象征着他将自己珍视的童年记忆分享给两个孩子的愿望。</div>
+</a>
+<a class="entry-item" href="Brown's Mule.html">
+  <div class="noun">Brown&#x27;s Mule</div>
+  <div class="snippet">R.J.雷诺兹烟草公司（R.J. Reynolds Tobacco Company）于1901年推出的一种嚼烟（chewing tobacco）品牌。布朗骡子嚼烟是雷诺兹公司最早的品牌之一，在北卡罗来纳州温斯顿-塞勒姆生产，商标至今仍维持注</div>
+</a>
+<a class="entry-item" href="Calomel.html">
+  <div class="noun">Calomel</div>
+  <div class="snippet">甘汞（Calomel，化学名氯化亚汞，Hg₂Cl₂）是一种白色粉末状的汞化合物，自16世纪起被广泛用作泻药和杀菌剂，尤其在美国19世纪的&quot;英雄医学&quot;实践中大量使用。本杰明·拉什（Benjamin Rush）等著名医生曾推崇其疗效。然而甘汞毒</div>
+</a>
+<a class="entry-item" href="camellia.html">
+  <div class="noun">camellia</div>
+  <div class="snippet">山茶属（Camellia）是山茶科（Theaceae）下的一个常绿灌木或小乔木属，由林奈以耶稣会植物学家乔治·约瑟夫·卡梅尔（Georg Joseph Kamel）命名。该属原产于东亚和南亚，从喜马拉雅山脉向东延伸至日本和印度尼西亚。已知物</div>
+</a>
+<a class="entry-item" href="Camisole.html">
+  <div class="noun">Camisole</div>
+  <div class="snippet">女性无袖贴身内衣或外穿吊带衫，通常由丝绸、棉、尼龙等轻质面料制成，配细肩带。起源于维多利亚时代作为束胸衣的遮盖物，现已演变为兼具内衣和外穿功能的时尚单品。</div>
+</a>
+<a class="entry-item" href="castile soap.html">
+  <div class="noun">castile soap</div>
+  <div class="snippet">卡斯蒂利亚肥皂，一种以纯橄榄油为基底制成的硬质白皂，起源于西班牙卡斯蒂利亚（Castile）地区。其源头可追溯至古叙利亚阿勒颇的橄榄油月桂皂，随十字军传入欧洲后在西班牙地区改良——使用当地橄榄油和苏打灰代替动物油脂和月桂油，成为历史上第一种</div>
+</a>
+<a class="entry-item" href="catawba worms.html">
+  <div class="noun">catawba worms</div>
+  <div class="snippet">美国南部民间对梓蚕蛾幼虫的俗称（实为毛虫而非虫），因栖息于梓树（Catalpa tree）而得名。在美国南方被珍视为钓鲶鱼的极佳饵料，其坚韧的皮和特殊气味使其在水中极具吸引力。南方家庭常种植梓树作为天然的饵料来源。</div>
+</a>
+<a class="entry-item" href="cellar.html">
+  <div class="noun">cellar</div>
+  <div class="snippet">地窖，房屋地下的储藏空间。在美国南方，完整的地下室并不常见，因为气候较温和、霜冻线较浅；但一些房屋有用于储存根茎类蔬菜的&quot;根菜地窖&quot;。小说中巴伯姐妹的房子拥有梅科姆唯一的地窖，孩子们将她们所有的家具搬进地窖藏匿，猎犬找到地窖门时狂吠不止。</div>
+</a>
+<a class="entry-item" href="cement patch.html">
+  <div class="noun">cement patch</div>
+  <div class="snippet">水泥补丁，内森·拉德利封堵橡树树洞时填入的水泥。当杰姆和斯库特准备给树洞的主人写感谢信时，发现树洞已被水泥填满。内森谎称树生病了需要填补，但阿提克斯检验后告诉杰姆树很健康。树洞的水泥补丁象征着布与外界联系的被切断，也是杰姆成长中的失望时刻—</div>
+</a>
+<a class="entry-item" href="charlotte.html">
+  <div class="noun">charlotte</div>
+  <div class="snippet">夏洛特甜点（Charlotte Russe），一种源自法国的经典冷冻甜点，在20世纪30年代的美国南方非常流行。由手指饼干或蛋糕条围边，填入巴伐利亚奶油（whipped cream慕斯加吉利丁定型），通常冷藏过夜后食用。在小说中，卡尔珀尼亚</div>
+</a>
+<a class="entry-item" href="chewing gum.html">
+  <div class="noun">chewing gum</div>
+  <div class="snippet">口香糖，布·拉德利在树洞中为芬奇孩子们留下的第一批礼物之一。斯库特首先发现了两块包在锡纸里的箭牌双薄荷口香糖，后来在树洞中又出现一整包口香糖。当她第一次吃下时，杰姆担心有毒逼她吐掉。这些平凡的小礼物体现了布对孩子们的友善和渴望交流的心意，与</div>
+</a>
+<a class="entry-item" href="chicken wire costume.html">
+  <div class="noun">chicken wire costume</div>
+  <div class="snippet">铁丝网服装，指用六边形铁丝网制作骨架再覆以布料的戏剧服装制作工艺。铁丝网轻便、柔韧且价格低廉，是剧院服装制作中用于塑造大型立体造型的常见材料，源自爱德华时代女帽制作中的金属丝框架技术。小说中斯库特的火腿costume就是用鸡笼铁丝网弯成火腿</div>
+</a>
+<a class="entry-item" href="chiffarobe.html">
+  <div class="noun">chiffarobe</div>
+  <div class="snippet">一种组合家具，集衣柜（wardrobe）与抽屉柜（chest of drawers）于一体，源于美式英语词汇chiffonier（小抽屉柜）与wardrobe（衣柜）的合成。20世纪初通过西尔斯（Sears）商品目录推广，在美国南方尤为常见</div>
+</a>
+<a class="entry-item" href="chinaberry.html">
+  <div class="noun">chinaberry</div>
+  <div class="snippet">一种原产亚洲的楝科植物（学名 Melia azedarach），又称苦楝、印度楝。其果实中的硬核种子被干燥抛光后用于制作念珠，在亚洲寺庙宗教仪式中使用。该树通过殖民贸易传入美国南部，曾广泛种植作为观赏树木，是美国南方乡村景观中具有代表性的树</div>
+</a>
+<a class="entry-item" href="Coca-Cola.html">
+  <div class="noun">Coca-Cola</div>
+  <div class="snippet">多尔夫斯·雷蒙德先生纸袋中实际装有的饮料，而非镇民们以为的威士忌。迪尔喝了一口后发现只是可乐，这揭示了雷蒙德假装酗酒的秘密。可乐在此象征了表象与现实的巨大差距。</div>
+</a>
+<a class="entry-item" href="collard.html">
+  <div class="noun">collard</div>
+  <div class="snippet">美国南方烹饪中的标志性绿叶蔬菜，属于羽衣甘蓝类（Brassica oleracea），是灵魂料理（soul food）的核心食材之一。起源于地中海地区，经由西非烹饪传统传入美国南方，通常与烟熏猪肉一同慢炖至软烂。在美国南方文化中，新年时食用</div>
+</a>
+<a class="entry-item" href="collards.html">
+  <div class="noun">collards</div>
+  <div class="snippet">羽衣甘蓝的一种，美国南方饮食文化中的标志性蔬菜，在非洲裔美国人烹饪传统中具有深厚历史根基。通常与熏肉或火腿一起慢煮至软烂，搭配玉米面包食用。在新年传统中与黑眼豌豆一起食用，象征财富和好运。其耐寒易生长的特性被视作非裔美国人坚韧精神的象征。</div>
+</a>
+<a class="entry-item" href="Colored News.html">
+  <div class="noun">Colored News</div>
+  <div class="snippet">《梅科姆论坛报》中刊登黑人社区新闻的专栏。汤姆·罗宾逊的死讯在该专栏中有一条简短的讣告，但同时安德伍德也在报纸上发表了社论。这反映了20世纪30年代美国南方报纸的种族隔离现实——黑人的新闻被归入独立且通常不平等的专栏。</div>
+</a>
+<a class="entry-item" href="corncribs.html">
+  <div class="noun">corncribs</div>
+  <div class="snippet">Corncrib（玉米仓）是一种传统农用通风式谷仓，专门用于储存和干燥带穗玉米。其墙壁通常由木条或金属网制成，留有缝隙以促进空气流通，底部架空以防范啮齿动物。这种建筑最早由美洲原住民使用，后被欧洲殖民者采纳。20世纪中期以后，随着联合收割机</div>
+</a>
+<a class="entry-item" href="cotton.html">
+  <div class="noun">cotton</div>
+  <div class="snippet">棉花是梅科姆县大萧条时期的经济基础。汤姆·罗宾逊为林克·迪斯先生摘棉花为生。棉花经济的崩溃导致了南方普遍的贫困，而棉花价格与私刑数量的直接关联揭示了种族暴力的经济根源。芬奇庄园曾是自给自足的棉花种植园，体现了奴隶制遗留问题。</div>
+</a>
+<a class="entry-item" href="cotton wagon.html">
+  <div class="noun">cotton wagon</div>
+  <div class="snippet">棉花马车，19世纪美国南部用于运输棉花的马拉货车。通常车身长而高，两端倾斜，由5-6匹马牵引，覆盖帆布或棉布遮篷。棉花从田间采摘后被装上这种马车，运往轧棉厂或火车站，是前工业化时代南方棉花经济的标志性运输工具。</div>
+</a>
+<a class="entry-item" href="crackling bread.html">
+  <div class="noun">crackling bread</div>
+  <div class="snippet">美国南部的一种传统玉米面包，将猪油渣（cracklings）揉入玉米面糊中烤制而成。起源于美国原住民的玉米饮食文化，后与欧洲殖民者的猪肉饮食传统融合，成为美国南部乡村家庭一种节俭而富有地方特色的主食。</div>
+</a>
+<a class="entry-item" href="CSA pistol.html">
+  <div class="noun">CSA pistol</div>
+  <div class="snippet">美国南北战争时期邦联军队使用的手枪，由于南方钢铁短缺，多为黄铜框架。著名型号包括斯皮勒伯尔、利奇里格登等厂生产的左轮手枪，是珍贵的历史文物。</div>
+</a>
+<a class="entry-item" href="Cutex Natural.html">
+  <div class="noun">Cutex Natural</div>
+  <div class="snippet">成立于1911年的美国指甲油品牌，由Northam Warren Company创立，1917年推出了第一款液体指甲油（源自汽车漆配方）。Natural（自然色）是该品牌的经典色号，是一种淡粉色或米色的低调指甲油，符合1930年代推崇的自然</div>
+</a>
+<a class="entry-item" href="dewberry tarts.html">
+  <div class="noun">dewberry tarts</div>
+  <div class="snippet">露莓塔，一种美国南方传统甜点。露莓（dewberry）是一种与黑莓近似的野生浆果，比黑莓更酸更多汁，在南方初夏成熟。将新鲜露莓加糖填入酥皮塔壳中烤制而成。在小说中，作为传道会茶会的点心之一，展现了南方家庭聚会的精致饮食传统和卡尔珀尼亚出色的</div>
+</a>
+<a class="entry-item" href="divinity.html">
+  <div class="noun">divinity</div>
+  <div class="snippet">一种源自美国南部的牛轧糖状甜品，以打发蛋清、玉米糖浆和糖制成，口感轻盈如棉花糖与蛋白霜的结合，常加入美洲山核桃。因对湿度极为敏感而难以制作成功，在美国南方常作为圣诞节等节庆的传统手工糖果。</div>
+</a>
+<a class="entry-item" href="ear trumpet.html">
+  <div class="noun">ear trumpet</div>
+  <div class="snippet">耳喇叭，19世纪至20世纪初使用的机械助听装置，呈漏斗状，通过收集声波并将其导入耳道来放大声音。它无电子放大功能，最大增益约30分贝。耳喇叭通常由镀镍银、象牙、铜或锡制成，著名的使用者包括贝多芬。弗鲁蒂小姐使用了一个巨大的耳喇叭。</div>
+</a>
+<a class="entry-item" href="flagpole.html">
+  <div class="noun">flagpole</div>
+  <div class="snippet">指1920年代至1930年代初在美国风靡一时的「旗杆静坐」耐力热潮（flagpole sitting），由曾为水手的特技演员阿尔文·&quot;沉船&quot;·凯利（Alvin &quot;Shipwreck&quot; Kelly）在1924年引发。参与者爬上旗杆顶端的小平台</div>
+</a>
+<a class="entry-item" href="Flintlock.html">
+  <div class="noun">Flintlock</div>
+  <div class="snippet">燧发枪——17世纪至19世纪中期主导的火器点火机构。原理是燧石撞击钢制击砧产生火花，引燃火药池中的底火药，火焰通过传火孔点燃枪管中的主装药。燧发手枪在小说中被卡什·圣克莱尔（Cousin Joshua）使用但因炸膛而失效。</div>
+</a>
+<a class="entry-item" href="flivver.html">
+  <div class="noun">flivver</div>
+  <div class="snippet">20世纪初美国俚语，指廉价、破旧的小汽车，尤指福特T型车（Ford Model T）的绰号。该词约1905-1910年间进入美国俚语，最初泛指任何廉价或劣质物品，1914年后与福特T型车紧密关联。后逐渐被jalopy一词取代，成为汽车文化早</div>
+</a>
+<a class="entry-item" href="footlights.html">
+  <div class="noun">footlights</div>
+  <div class="snippet">放置在舞台前沿地板上的一排照明灯，用于照亮演员下半身并柔化顶光产生的阴影。源于17世纪英国舞台上的油灯，最初被称为&quot;floats&quot;，19世纪改用煤气灯，19世纪末引入白炽电灯。在现代剧场中，脚灯通常嵌入舞台地板内，是镜框式舞台（prosce</div>
+</a>
+<a class="entry-item" href="fountain pen.html">
+  <div class="noun">fountain pen</div>
+  <div class="snippet">钢笔（自来水笔），是一种内置储墨装置的书写工具，通过毛细作用将墨水引导至笔尖。1884年美国人Lewis Waterman发明了首支实用型钢笔，解决了墨水流量和气压平衡问题。在20世纪中期圆珠笔普及之前，钢笔是主要的日常书写工具。小说中At</div>
+</a>
+<a class="entry-item" href="Franklin stove.html">
+  <div class="noun">Franklin stove</div>
+  <div class="snippet">本杰明·富兰克林于1742年发明的铸铁取暖炉，最初称为&quot;宾夕法尼亚壁炉&quot;。其设计包含后挡板以改善空气流动，使热量向四周辐射，比传统壁炉更高效节能、产烟更少。富兰克林拒绝申请专利，将设计无偿贡献给公众。该炉具是美国家庭取暖史上的重要发明，体现</div>
+</a>
+<a class="entry-item" href="gavel.html">
+  <div class="noun">gavel</div>
+  <div class="snippet">小木槌，法官或会议主席使用的仪式性工具，用于敲击以维持秩序、宣布裁决或表示会议开始/结束。在美国法庭中广泛使用，象征司法权威。</div>
+</a>
+<a class="entry-item" href="geranium.html">
+  <div class="noun">geranium</div>
+  <div class="snippet">天竺葵（学名Pelargonium），实际指牻牛儿苗科天竺葵属植物，原产南非，作为观赏花卉广泛栽培。虽然在日常用语中常被称为&quot;geranium&quot;，但植物学上真正的老鹳草属（Geranium）与天竺葵属（Pelargonium）是两个不同的属</div>
+</a>
+<a class="entry-item" href="ham costume.html">
+  <div class="noun">ham costume</div>
+  <div class="snippet">斯库特在万圣节文艺汇演中穿的火腿costume，由当地女裁缝克林肖太太用铁丝网和棕色布料制作而成。这个火腿形状的服装几乎垂到斯库特的膝盖，上面留有两个窥视孔。它虽让斯库特感到尴尬，却在回家路上意外地救了她的命——鲍勃·尤厄尔的刀刺在铁丝网上</div>
+</a>
+<a class="entry-item" href="hatchet.html">
+  <div class="noun">hatchet</div>
+  <div class="snippet">短柄斧是梅耶拉给汤姆用来劈开旧衣柜（chiffarobe）的工具。汤姆用斧头无偿帮助梅耶拉劈柴，拒绝了她的五分钱报酬。这个细节展示了汤姆善良无私的&quot;知更鸟&quot;品质，与尤厄尔家诬告他的暴力罪名形成鲜明对比，也证实了汤姆之前曾在春天帮助过梅耶拉。</div>
+</a>
+<a class="entry-item" href="Hearts of Love hairdressing.html">
+  <div class="noun">Hearts of Love hairdressing</div>
+  <div class="snippet">20世纪早期美国黑人社区中使用的一种发油（hair pomade）品牌，出现于《杀死一只知更鸟》第12章中卡尔珀尼亚带斯库特和杰姆去黑人教堂时描写的场景，是哈珀·李用来营造教堂氛围的真实时代产品之一。该品牌已极为罕见，但作为历史文献中保存的</div>
+</a>
+<a class="entry-item" href="hoe.html">
+  <div class="noun">hoe</div>
+  <div class="snippet">锄头是汤姆·罗宾逊在春天帮梅耶拉劈衣柜时随身携带的农具。汤姆回忆说当时是&quot;锄地时节&quot;（choppin&#x27; time），他带着锄头路过尤厄尔家时被梅耶拉叫进去帮忙。这个细节强化了汤姆作为一个勤劳诚实的农场工人的形象，并帮助确立了他第一次帮助梅耶</div>
+</a>
+<a class="entry-item" href="hookah.html">
+  <div class="noun">hookah</div>
+  <div class="snippet">起源于16世纪印度莫卧儿帝国的水烟管，通过水容器过滤烟雾。后传入波斯和奥斯曼帝国，成为中东及南亚地区重要的社交和文化象征，常见于咖啡馆等社交场所。其名称在各地有所不同（shisha、nargile、arghile等）。</div>
+</a>
+<a class="entry-item" href="hookworms.html">
+  <div class="noun">hookworms</div>
+  <div class="snippet">一种肠道寄生虫感染，由钩虫幼虫穿透皮肤（通常通过赤脚接触被污染的土壤）引起， 会导致严重贫血、疲劳、发育迟缓和认知障碍。20世纪初，钩虫病在美国南部农村极为 普遍，约750万人感染，与贫困、缺乏卫生设施和赤脚行走密切相关。该病曾被称作 &quot;懒</div>
+</a>
+<a class="entry-item" href="Hoover cart.html">
+  <div class="noun">Hoover cart</div>
+  <div class="snippet">大萧条时期的一种自制交通工具，将汽车的发动机和车窗拆除，后轮连接成推车状，用马或骡子牵引。因民众将经济困境归咎于时任总统赫伯特·胡佛（Herbert Hoover）而得名，象征着大萧条时代的普遍贫困。</div>
+</a>
+<a class="entry-item" href="Hoover carts.html">
+  <div class="noun">Hoover carts</div>
+  <div class="snippet">大萧条时期美国农村出现的简易畜力车，由拆除发动机的汽车底盘改装而成，用骡子或马牵引。因时任总统赫伯特·胡佛被民众认为应对经济危机负责而得名，反映了当时农村的贫困和民众的政治不满情绪。加拿大类似车辆被称为&quot;Bennett buggy&quot;（以总理</div>
+</a>
+<a class="entry-item" href="horn-rimmed glasses.html">
+  <div class="noun">horn-rimmed glasses</div>
+  <div class="snippet">角质框架眼镜（Horn-rimmed glasses）是一种以厚重、醒目的镜框为特征的眼镜样式。最初的角质框架眼镜确实使用动物角或玳瑁壳制成，但后来多采用厚塑料模仿这些材质。该风格由喜剧演员哈罗德·劳埃德（Harold Lloyd）在191</div>
+</a>
+<a class="entry-item" href="Hoyt's Cologne.html">
+  <div class="noun">Hoyt&#x27;s Cologne</div>
+  <div class="snippet">E.W.霍伊特公司（E.W. Hoyt &amp; Co.）约1868年在马萨诸塞州洛厄尔推出的一款古龙水品牌，最初名为Hoyt&#x27;s German Cologne。创始人伊莱·韦特·霍伊特（Eli Waite Hoyt）从药剂师起家，通过全国杂志广</div>
+</a>
+<a class="entry-item" href="Indian-head pennies.html">
+  <div class="noun">Indian-head pennies</div>
+  <div class="snippet">印第安头便士，美国1859至1909年间发行的一美分硬币，正面为戴羽毛头饰的印第安女性侧面头像。在小说中，布·拉德利将这些硬币（一枚1900年、一枚1906年）装在小天鹅绒盒子里，放在树洞中作为给杰姆和斯库特的礼物。杰姆视其为幸运币。这些礼</div>
+</a>
+<a class="entry-item" href="Indian-heads.html">
+  <div class="noun">Indian-heads</div>
+  <div class="snippet">指美国历史上发行的印第安头分币（Indian Head cent），1859年至1909年间由美国铸币局铸造，面值一美分。由费城铸币厂首席雕刻师詹姆斯·巴顿·朗埃克设计，正面图案为一位戴着羽毛头饰的女性形象（象征&quot;自由&quot;），背面最初为月桂花</div>
+</a>
+<a class="entry-item" href="Ivanhoe.html">
+  <div class="noun">Ivanhoe</div>
+  <div class="snippet">《艾凡赫》（Ivanhoe: A Romance）是沃尔特·斯科特（Walter Scott）于1819年出版的经典历史小说，是其&quot;威弗利小说&quot;系列之一。故事设定在1194年的英格兰，围绕撒克逊骑士威尔弗雷德·艾凡赫展开，涉及狮心王理查、罗</div>
+</a>
+<a class="entry-item" href="Jew's Harp.html">
+  <div class="noun">Jew&#x27;s Harp</div>
+  <div class="snippet">Jew&#x27;s Harp（犹太竖琴/口簧琴）是一种古老的弹拨体鸣乐器，被认为是人类最古老的乐器之一。演奏时将其置于唇间，用手指拨动簧片，通过口腔形状变化调节音高。该乐器起源于亚洲，在4世纪的中国绘画中已有出现，后传入欧洲并在中世纪广泛流行。其英</div>
+</a>
+<a class="entry-item" href="kudzu.html">
+  <div class="noun">kudzu</div>
+  <div class="snippet">葛藤（学名 Pueraria montana var. lobata），原产于东亚的多年生藤本植物，1876年作为观赏植物引入美国后在美国南部疯狂蔓延，被称为&quot;吞噬南方的藤蔓&quot;。其生长速度可达每天30厘米，能覆盖并窒息原生植被，对美国南部生</div>
+</a>
+<a class="entry-item" href="Lane cake.html">
+  <div class="noun">Lane cake</div>
+  <div class="snippet">美国南方传统多层白色蛋糕，由阿拉巴马州的Emma Rylander Lane于1890年代发明，因此得名。蛋糕以波本威士忌浸泡的葡萄干、山核桃、椰子和蛋奶馅层层夹心，表面覆盖白色糖霜。Lane cake在2016年被正式指定为阿拉巴马州官方</div>
+</a>
+<a class="entry-item" href="lightning rod.html">
+  <div class="noun">lightning rod</div>
+  <div class="snippet">避雷针（又称接闪器），本杰明·富兰克林于1752年发明的防雷装置。其原理是在建筑物最高点安装尖头金属杆，通过导线将雷电流安全引入大地，从而保护建筑物免受雷击起火或结构损坏。富兰克林因此获得1753年英国皇家学会科普利奖章，该发明被视为启蒙时</div>
+</a>
+<a class="entry-item" href="limestone.html">
+  <div class="noun">limestone</div>
+  <div class="snippet">石灰岩是一种碳酸盐沉积岩，主要由方解石（碳酸钙，CaCO₃）组成，约占地球上所有沉积岩的20-25%。通常形成于温暖的浅海环境中，由海洋生物的壳和骨骼堆积而成。石灰岩遇稀盐酸会剧烈起泡，是其重要的野外鉴定特征。在建筑和工业中有广泛用途，如生</div>
+</a>
+<a class="entry-item" href="Linotype.html">
+  <div class="noun">Linotype</div>
+  <div class="snippet">莱诺整行铸排机，19世纪末由德裔美国发明家奥特马尔·默根塔勒（Ottmar Mergenthaler）于1884年发明的革命性排版机器。它能通过键盘操作一次性铸造整行铅字（称为slug），极大提升了印刷效率，使报纸和书籍出版速度大幅提高。L</div>
+</a>
+<a class="entry-item" href="Live oak.html">
+  <div class="noun">Live oak</div>
+  <div class="snippet">南方活橡树（Quercus virginiana），原产于美国东南部的一种常绿橡树，是&quot;旧南方&quot;的标志性树种。以其庞大的体型、伸展的枝干和历史意义著称。木材密度高、耐腐蚀，历史上被广泛用于舰船建造。常见于美国南方的公共广场和种植园。</div>
+</a>
+<a class="entry-item" href="live oaks.html">
+  <div class="noun">live oaks</div>
+  <div class="snippet">指美国南部的标志性常绿橡树（学名：Quercus virginiana），俗称南方活橡树。其树冠宽阔舒展，枝干上常挂满西班牙苔藓，是美国南方景观的典型象征。木质极其坚硬耐腐，历史上曾用于建造海军舰船（如美国宪法号「老铁甲」）。</div>
+</a>
+<a class="entry-item" href="lye soap.html">
+  <div class="noun">lye soap</div>
+  <div class="snippet">使用碱液（通常由木灰浸出制成）与动物脂肪或植物油混合，通过皂化反应制成的传统手工肥皂。其制作历史可追溯至约四千年前的古巴比伦。在殖民地时期和拓荒时代的美国，碱液肥皂是家庭日常必需品，用于洗衣、洗澡和清洁等多种用途。因其强碱性具有杀菌和去污能</div>
+</a>
+<a class="entry-item" href="Mandrake.html">
+  <div class="noun">Mandrake</div>
+  <div class="snippet">曼德拉草（Mandragora officinarum），茄科多年生草本植物，原产地中海地区。其根部分叉、形似人形，因而围绕着丰富的民间传说：拔出时发出致命尖叫、可用于催情/麻醉/巫术。含有托烷生物碱（莨菪碱、东莨菪碱），历史上被用作麻醉剂</div>
+</a>
+<a class="entry-item" href="Maycomb Tribune.html">
+  <div class="noun">Maycomb Tribune</div>
+  <div class="snippet">梅科姆镇的本地报纸，由布拉克斯顿·安德伍德拥有和经营。报社位于法院广场的西北角，紧邻监狱。在小说中，它最重要的作用是刊登了安德伍德关于汤姆·罗宾逊之死的社论，谴责杀害残疾人的行为，将其比作&quot;无谓地屠杀鸣禽&quot;。安德伍德还在监狱暴民事件中从报社</div>
+</a>
+<a class="entry-item" href="Mobile Press.html">
+  <div class="noun">Mobile Press</div>
+  <div class="snippet">《莫比尔新闻报》（Mobile Press）是美国亚拉巴马州莫比尔市的一份报纸，由拉尔夫·钱德勒（Ralph B. Chandler）等投资者于1929年创办，旨在与当时的《莫比尔纪事报》（Mobile Register）竞争。1932年因</div>
+</a>
+<a class="entry-item" href="Mobile Register.html">
+  <div class="noun">Mobile Register</div>
+  <div class="snippet">阿拉巴马州历史最悠久的报纸，创刊于1813年，最初名为Mobile Gazette。该报在小说中作为阿提克斯日常阅读的报纸出现，反映了芬奇家典型的中产阶级生活方式和南方小镇的文化氛围。</div>
+</a>
+<a class="entry-item" href="Model T Ford.html">
+  <div class="noun">Model T Ford</div>
+  <div class="snippet">福特T型车是福特汽车公司于1908年至1927年间生产的汽车，被认为是第一款 affordable automobile，革命性地采用了流水线装配，大幅降低了成本，让普通美国人也能买得起汽车，被誉为&quot;把美国装上轮子&quot;的车型。</div>
+</a>
+<a class="entry-item" href="molasses.html">
+  <div class="noun">molasses</div>
+  <div class="snippet">一种粘稠的糖浆状食品，是甘蔗或甜菜制糖过程中的副产物。在美国南方烹饪中有着悠久的历史，是殖民地时期和南北战争前南方家庭的主要甜味剂，常用于制作姜饼、烤豆、烧烤酱和朗姆酒。根据熬煮次数不同分为浅色糖蜜和深色黑糖蜜（blackstrap mol</div>
+</a>
+<a class="entry-item" href="Monkey-puzzle.html">
+  <div class="noun">Monkey-puzzle</div>
+  <div class="snippet">智利南洋杉（Araucaria araucana），又称猴谜树，是一种常绿针叶树，原产于智利南部和阿根廷西部安第斯山脉。其枝条坚硬、叶片尖锐呈鳞片状紧密排列，维多利亚时代得名&quot;猴谜树&quot;，寓意猴子也难以攀爬。被IUCN列为濒危物种，在智利被宣</div>
+</a>
+<a class="entry-item" href="Montgomery Advertiser.html">
+  <div class="noun">Montgomery Advertiser</div>
+  <div class="snippet">阿拉巴马州蒙哥马利市一家历史悠久的日报，创刊于1829年，原名The Planter&#x27;s Gazette，1833年更名为Montgomery Advertiser，是阿拉巴马州最大的报纸之一，曾获普利策奖，也是美国南部历史最悠久的报纸之一</div>
+</a>
+<a class="entry-item" href="Mr. Dolphus Raymond's cotton gin.html">
+  <div class="noun">Mr. Dolphus Raymond&#x27;s cotton gin</div>
+  <div class="snippet">杜尔弗斯·雷蒙德先生是梅科姆县一位富有的白人地主，他与黑人女性同居并育有混血子女。他名下的轧棉机是汤姆·鲁滨逊童年受伤的事故地点。小说中他假装酗酒（实际纸袋里装的是可乐），为镇上的人提供一个可以理解他另类生活方式的借口。他与孩子们分享秘密，</div>
+</a>
+<a class="entry-item" href="Nearer My God to Thee.html">
+  <div class="noun">Nearer My God to Thee</div>
+  <div class="snippet">《与主更亲近》，19世纪著名基督教赞美诗，由英国诗人莎拉·弗劳尔·亚当斯（Sarah Flower Adams）于1841年作词。歌词灵感源自《圣经·创世纪》第28章中雅各梦见天梯的故事。该赞美诗最著名的关联事件是1912年泰坦尼克号沉没时</div>
+</a>
+<a class="entry-item" href="negligee.html">
+  <div class="noun">negligee</div>
+  <div class="snippet">女用薄纱睡衣/晨袍（源自法语neglige，意为&quot;随意/疏忽&quot;），一种轻薄透明的女性就寝服装，通常由丝绸、尼龙等薄纱制成，饰有蕾丝、缎带。18世纪起源于法国，最初指宽松的日常便服，20世纪30年代后演变为性感内衣的代名词。</div>
+</a>
+<a class="entry-item" href="Nehi Cola.html">
+  <div class="noun">Nehi Cola</div>
+  <div class="snippet">Nehi是一种水果味碳酸软饮料品牌，1924年由克罗德·哈彻在美国乔治亚州哥伦布市推出，名称是&quot;knee-high&quot;的双关语，指其高瓶身设计。该品牌曾是Nehi公司的主打产品，现归Keurig Dr Pepper所有，主要在美国南方销售。</div>
+</a>
+<a class="entry-item" href="Octagon soap.html">
+  <div class="noun">Octagon soap</div>
+  <div class="snippet">高露洁公司（Colgate &amp; Co.）于1887年推出的一种洗衣皂品牌，是美国历史上最早注册的肥皂商标之一（1888年注册）。该产品是一种碱性皂（lye soap），主要用于洗衣，以棕色粗条包装销售，曾通过优惠券和赠品计划进行广泛营销。商</div>
+</a>
+<a class="entry-item" href="old dresser.html">
+  <div class="noun">old dresser</div>
+  <div class="snippet">旧衣柜（chiffarobe/chifforobe），一种集挂衣空间和抽屉柜于一体的组合家具。Mayella声称她叫Tom Robinson来劈碎这件旧衣柜当柴火，这是Tom出现在Ewell家院子的借口，也是案件的关键物证。</div>
+</a>
+<a class="entry-item" href="On Jordan's Stormy Banks.html">
+  <div class="noun">On Jordan&#x27;s Stormy Banks</div>
+  <div class="snippet">一首经典的基督教赞美诗，由英国浸信会牧师塞缪尔·斯坦内特(Samuel Stennett, 1727–1795)创作，1787年首次出版。歌词以圣经中以色列人渡过约旦河进入迦南应许之地的故事为隐喻，象征信徒从尘世走向天国的旅程。该诗在美国边</div>
+</a>
+<a class="entry-item" href="opossum.html">
+  <div class="noun">opossum</div>
+  <div class="snippet">弗吉尼亚负鼠（Didelphis virginiana）是北美洲唯一的有袋类动物，体型与家猫相仿，以长而裸露的尾巴、白色的面部和尖吻为特征。它们是夜行性杂食动物，以&quot;装死&quot;（playing possum）的行为闻名，遇到威胁时会进入强直性休</div>
+</a>
+<a class="entry-item" href="papoose.html">
+  <div class="noun">papoose</div>
+  <div class="snippet">源自纳拉甘西特语(阿尔冈昆语系)对&quot;婴儿&quot;的称呼，早期殖民者误将其指代北美原住民使用的婴儿背板(cradleboard)。这是一种将婴儿紧紧包裹并固定在扁平木板上的传统携带方式，可以背在背上、靠在身边或挂在马鞍上。现代语境中也指软结构的婴儿</div>
+</a>
+<a class="entry-item" href="patent leather.html">
+  <div class="noun">patent leather</div>
+  <div class="snippet">漆皮，一种表面具有高光泽涂层的皮革。1818年美国发明家塞思·博伊登（Seth Boyden）在新泽西纽瓦克通过逆向工程复制了德国制造的漆皮工艺，使用亚麻籽油基清漆涂层，并于1819年开始商业化生产。现代漆皮多采用聚氨酯（PU）涂层工艺，广</div>
+</a>
+<a class="entry-item" href="pecan.html">
+  <div class="noun">pecan</div>
+  <div class="snippet">山核桃是拉德利家山核桃树结出的果实。在小说中，孩子们因为恐惧和迷信而不敢吃这些掉在校园里的核桃。这个意象象征着毫无根据的恐惧——一个社区对未知者的非理性排斥，这与后来导致汤姆·罗宾逊定罪的社会偏见形成呼应。</div>
+</a>
+<a class="entry-item" href="pecan trees.html">
+  <div class="noun">pecan trees</div>
+  <div class="snippet">拉德利家的山核桃树。拉德利家的山核桃树将果实摇落到校园里，但由于镇上对布·拉德利的迷信和恐惧，孩子们不敢吃这些山核桃。这个细节象征着梅科姆社区毫无根据的恐惧和偏见——人们宁愿相信谣言也不愿相信理性。</div>
+</a>
+<a class="entry-item" href="Pickled pigs' knuckles.html">
+  <div class="noun">Pickled pigs&#x27; knuckles</div>
+  <div class="snippet">一种美国南方传统腌制食品，将猪膝关节（即火腿肘子部位）用醋、盐和香料腌制而成。在小说中，这是梅科姆镇的黑人居民送给阿提克斯的众多食物之一，阿提克斯看到后开玩笑说想知道亚历山德拉姑妈是否会允许他在餐厅里吃这东西。</div>
+</a>
+<a class="entry-item" href="Popular Mechanics.html">
+  <div class="noun">Popular Mechanics</div>
+  <div class="snippet">美国著名大众科技杂志，由亨利·哈文·温莎于1902年1月11日在芝加哥创刊。最初为16页的周刊，后改为月刊。杂志以通俗易懂的语言解释科学技术原理为宗旨，涵盖汽车、DIY、科学、技术、家居等领域。自1958年起由赫斯特集团拥有。</div>
+</a>
+<a class="entry-item" href="pot liquor.html">
+  <div class="noun">pot liquor</div>
+  <div class="snippet">Pot liquor（也拼作potlikker）是美国南方传统烹饪术语，指煮绿叶蔬菜（如羽衣甘蓝、芥菜、芜菁叶）或豆类后剩下的富含营养的汤汁。通常用盐、胡椒和熏猪肉（如火腿骨）调味，传统吃法是用玉米面包蘸着吃。在小说中，杰姆提到阿提克斯&quot;比</div>
+</a>
+<a class="entry-item" href="poundcake.html">
+  <div class="noun">poundcake</div>
+  <div class="snippet">一种传统的英式重油蛋糕，得名于其原始配方中使用各一磅（pound）的面粉、黄油、鸡蛋和糖。最早见于1747年汉娜·格拉斯（Hannah Glasse）的烹饪书《The Art of Cookery》，后传入法国成为&quot;Quatre-Quart</div>
+</a>
+<a class="entry-item" href="rattlesnake.html">
+  <div class="noun">rattlesnake</div>
+  <div class="snippet">响尾蛇（Crotalus属），美洲特有的剧毒蝮蛇，以其尾端由角质环组成的响器著称。遇险时尾部快速震动发出警示声。体长从50厘米到超过150厘米不等，具有颊窝（热感应器官）和血循毒液。小说中出现在雷切尔小姐讲述的轶事中。</div>
+</a>
+<a class="entry-item" href="Redbug.html">
+  <div class="noun">Redbug</div>
+  <div class="snippet">红虫/恙螨——蛛形纲恙螨科（Trombiculidae）幼虫的俗称。体型极小（0.2-0.4毫米），呈橙红色。叮咬时并非吸血，而是注入消化酶溶解皮肤组织形成取食管（stylostome），吸取液化组织。叮咬引起剧烈瘙痒。在美国南部地区常见于</div>
+</a>
+<a class="entry-item" href="roly-poly.html">
+  <div class="noun">roly-poly</div>
+  <div class="snippet">一种小型陆生甲壳动物（Armadillidium vulgare，俗称球鼠妇/西瓜虫），属于等足目卷甲虫科。它不是昆虫，而是与虾、蟹亲缘关系更近的甲壳动物。当受到惊扰时，它会将身体卷成一个紧密的灰球（conglobation），因此得名&quot;r</div>
+</a>
+<a class="entry-item" href="Rosetta Stone.html">
+  <div class="noun">Rosetta Stone</div>
+  <div class="snippet">1799年在埃及罗塞塔镇发现的一块古埃及石碑，刻有同一份祭司诏书的三种文字版本（古埃及象形文字、世俗体文字和古希腊文）。这块石碑成为破译古埃及象形文字的关键钥匙，由法国学者商博良于1822年成功解读，从而开创了现代埃及学。在小说中，斯库特用</div>
+</a>
+<a class="entry-item" href="rusty medal.html">
+  <div class="noun">rusty medal</div>
+  <div class="snippet">生锈的奖牌，布·拉德利留在树洞中的礼物之一，是一枚拼写比赛奖牌，可能来自布自己的童年时代。这枚奖牌暗示布曾经是一个正常、聪明的孩子，在被迫与社会隔绝之前也曾取得过学业成就。它是将布从&quot;鬼怪&quot;还原为有血有肉的人的重要物件，揭示了隐藏在外界谣言</div>
+</a>
+<a class="entry-item" href="scrip stamps.html">
+  <div class="noun">scrip stamps</div>
+  <div class="snippet">大萧条时期在美国广泛使用的替代货币或信用凭证。当银行大量倒闭、官方货币短缺时， 地方政府、企业和慈善机构发行scrip（临时凭证）供穷人兑换基本生活物资。其中 &quot;stamp scrip&quot;是一种特殊形式，要求使用者定期粘贴邮票以保持其有效，以</div>
+</a>
+<a class="entry-item" href="Scuppernong.html">
+  <div class="noun">Scuppernong</div>
+  <div class="snippet">美国东南部原生的一种马斯卡丁葡萄品种，果皮呈青铜色/绿色，比普通葡萄大而圆。名称源自北卡罗来纳州的斯库珀农河，是北卡罗来纳州的官方州果，历史上用于酿酒和制果酱。</div>
+</a>
+<a class="entry-item" href="scuppernongs.html">
+  <div class="noun">scuppernongs</div>
+  <div class="snippet">一种原产于美国东南部的青铜色麝香葡萄品种，属于圆叶葡萄（Vitis rotundifolia）的一种。其名称源自北卡罗来纳州的斯卡珀农河，而河名又来自阿尔冈昆语系词汇。斯卡珀农葡萄在美国南部文化中具有重要地位，北卡罗来纳州将其定为州果。早在</div>
+</a>
+<a class="entry-item" href="shorthand.html">
+  <div class="noun">shorthand</div>
+  <div class="snippet">速记法，一种使用符号或缩写快速记录口语的书写系统，起源于古罗马的泰罗速记法。19世纪后Pitman和Gregg两大体系广泛用于法庭记录、秘书工作和新闻采访。</div>
+</a>
+<a class="entry-item" href="slop jar.html">
+  <div class="noun">slop jar</div>
+  <div class="snippet">污水罐（也称chamber pot或combinet）是一种在室内管道普及前使用的带盖容器，用于收集夜间或室内产生的废水（洗脸、刷牙后的脏水）甚至排泄物。通常比chamber pot更高，带有把手和盖子，材质多为陶瓷、搪瓷金属（granit</div>
+</a>
+<a class="entry-item" href="smocking.html">
+  <div class="noun">smocking</div>
+  <div class="snippet">一种传统的刺绣工艺，通过在布料上缝制规则的褶皱图案来使服装具有弹性，并形成装饰性花纹。起源于中世纪英格兰，最初用于农工和牧羊人的工作服（smock），后广泛应用于儿童服装和女性服饰。在弹性材料发明之前，smocking是服装中实现伸缩功能的</div>
+</a>
+<a class="entry-item" href="Snow-on-the-Mountain.html">
+  <div class="noun">Snow-on-the-Mountain</div>
+  <div class="snippet">一种山茶花品种，学名 Camellia sasanqua &#x27;Snow on the Mountain&#x27;（日文名 Mine-no-yuki，意为峰顶之雪），开纯白色重瓣花朵，盛花期如白雪覆枝。 --- Snow-on-the-Mountain</div>
+</a>
+<a class="entry-item" href="soap dolls.html">
+  <div class="noun">soap dolls</div>
+  <div class="snippet">肥皂雕像，布·拉德利用肥皂雕刻的两个小人像——一个男孩和一个穿裙子的女孩，酷似杰姆和斯库特。这是他在树洞中留给孩子们的最为个人化、最感人的礼物，证明他一直在默默观察着这两个孩子，并且具备雕刻艺术才能。斯库特最初被吓到（以为是巫毒），但后来理</div>
+</a>
+<a class="entry-item" href="Spittoon.html">
+  <div class="noun">Spittoon</div>
+  <div class="snippet">痰盂（又称吐壶），金属或陶瓷制成的容器，供嚼烟草者吐痰用。在美国南方旧式法庭中常见。小说中泰勒法官在休庭后返回审判席，从背心口袋取出雪茄，咬掉一端，精准地将残端吐入痰盂，发出响亮的水声。迪尔见状低声评论&quot;我打赌他当年扔纸团肯定很厉害&quot;。这一</div>
+</a>
+<a class="entry-item" href="stumphole whiskey.html">
+  <div class="noun">stumphole whiskey</div>
+  <div class="snippet">美国阿巴拉契亚山区俚语，指非法私酿的威士忌（moonshine），因蒸馏器常藏匿于密林中挖空的大树桩（stump hole）内而得名。这种未经陈化的玉米威士忌酒精度极高，通常清澈透明，在美国禁酒令时期及之前的南方乡村地区广泛流行，是当地重要</div>
+</a>
+<a class="entry-item" href="Sweetly Sings the Donkey.html">
+  <div class="noun">Sweetly Sings the Donkey</div>
+  <div class="snippet">一首来源不详的英美传统民谣/轮唱曲，歌词模仿驴叫(Hee Haw)，是儿童和童子军营火晚会的经典歌曲。在小说中被视为粗俗的乡村文化符号。</div>
+</a>
+<a class="entry-item" href="Tangee Natural.html">
+  <div class="noun">Tangee Natural</div>
+  <div class="snippet">20世纪20至40年代风靡美国的经典口红品牌，由药剂师George W. Luft于1920年左右创立，品牌名源自&quot;tangerine&quot;（橘子）。其标志性特点是&quot;变色配方&quot;：口红在管中呈橘色，涂抹后根据个人肤色变成玫瑰红，创造出自然效果。1</div>
+</a>
+<a class="entry-item" href="tapeworm.html">
+  <div class="noun">tapeworm</div>
+  <div class="snippet">绦虫（tapeworm）是一种扁平的、带状寄生蠕虫，寄生于包括人类在内的动物肠道内。它通过头节附着在肠壁上吸收宿主消化后的营养物质。人类感染绦虫主要通过食用未煮熟的受污染肉类（牛肉、猪肉或鱼肉）。常见治疗药物为吡喹酮（Praziquante</div>
+</a>
+<a class="entry-item" href="The Gray Ghost.html">
+  <div class="noun">The Gray Ghost</div>
+  <div class="snippet">美国作家罗伯特·F·舒尔克斯（Robert F. Schulkers）以笔名 Seckatary Hawkins 创作的一部儿童冒险推理小说，是&quot;Seckatary Hawkins&quot;系列中的一部，最初于1926年出版。故事围绕神秘人物&quot;灰影</div>
+</a>
+<a class="entry-item" href="The Grit Paper.html">
+  <div class="noun">The Grit Paper</div>
+  <div class="snippet">《GRIT》是一份创刊于1882年美国宾夕法尼亚州威廉斯波特的家庭报纸，以刊登&#x27;好消息&#x27;著称，主要面向农村和小镇读者，是当时许多乡村学校学生获取阅读材料的重要来源。</div>
+</a>
+<a class="entry-item" href="The Light of the World (painting).html">
+  <div class="noun">The Light of the World (painting)</div>
+  <div class="snippet">《世界之光》是英国拉斐尔前派画家威廉·霍尔曼·亨特（William Holman Hunt）于1851-1854年间创作的 allegorical 油画，描绘耶稣手持灯笼敲击一扇长满杂草、久未开启的门，寓意《启示录》3:20&quot;看哪，我站在门</div>
+</a>
+<a class="entry-item" href="The Maycomb Tribune.html">
+  <div class="noun">The Maycomb Tribune</div>
+  <div class="snippet">《梅科姆论坛报》是梅科姆镇唯一的报纸，由B.B.安德伍德独自拥有和经营。斯库特描述安德伍德对任何组织都没兴趣，除了《梅科姆论坛报》。他在排字机旁工作，偶尔从一加仑樱桃酒壶里喝上一口。第25章中，该报刊登了安德伍德为汤姆·罗宾逊之死撰写的社论</div>
+</a>
+<a class="entry-item" href="The Mobile Register.html">
+  <div class="noun">The Mobile Register</div>
+  <div class="snippet">美国阿拉巴马州莫比尔市历史最悠久的报纸，创刊于1813年，是阿拉巴马州连续出版时间最长的报纸。该报在19世纪是州内重要的政治发声平台，亦是《杀死一只知更鸟》中阿提克斯·芬奇每日阅读的报纸。2023年2月26日停止印刷版，全面转向数字出版。</div>
+</a>
+<a class="entry-item" href="The Montgomery Advertiser.html">
+  <div class="noun">The Montgomery Advertiser</div>
+  <div class="snippet">《蒙哥马利广告报》是阿拉巴马州首府蒙哥马利的真实报纸，创刊于1829年，是该州最古老的报纸。在小说中，梅科姆镇的人认为安德伍德的社论写得富有诗意，足以被《蒙哥马利广告报》转载，暗示了社论的高质量。哈珀·李生长于阿拉巴马州门罗维尔，对该报十分</div>
+</a>
+<a class="entry-item" href="the Rosetta Stone.html">
+  <div class="noun">the Rosetta Stone</div>
+  <div class="snippet">古埃及的一块花岗闪长岩石碑残片，刻有公元前196年埃及祭司颁布的同一份诏书的三种文字版本（埃及象形文字、埃及世俗体文字和古希腊文）。1799年被拿破仑远征军在埃及罗塞塔镇附近发现，后入藏大英博物馆。该石碑的破译让学者得以首次成功解读古埃及象</div>
+</a>
+<a class="entry-item" href="thoroughbred.html">
+  <div class="noun">thoroughbred</div>
+  <div class="snippet">纯血马是一种以赛马性能著称的马品种，起源于17-18世纪的英格兰，由本地母马与从阿拉伯、巴巴里和土库曼引进的公马杂交培育而成。所有现代纯血马的血统都可追溯至三匹著名的种公马：拜尔利土耳其、达利阿拉伯和高多芬阿拉伯。</div>
+</a>
+<a class="entry-item" href="Time magazine.html">
+  <div class="noun">Time magazine</div>
+  <div class="snippet">美国最具影响力的新闻周刊之一，由布里顿·哈登（Briton Hadden）和亨利·卢斯（Henry Luce）于1923年创办，是世界上第一份每周新闻杂志。以红色边框封面、简洁的专题报道以及年度「时代年度风云人物」（Person of th</div>
+</a>
+<a class="entry-item" href="Tootsie Roll.html">
+  <div class="noun">Tootsie Roll</div>
+  <div class="snippet">一种经典的美国巧克力糖果，由奥地利犹太移民里奥·赫什菲尔德（Leo Hirschfeld）于1907年发明，以女儿克拉拉·&quot;Tootsie&quot;·赫什菲尔德命名，是美国最早的单片包装便士糖。在第23章中，杰姆在安抚哭泣的妹妹斯库特时，从口袋里掏</div>
+</a>
+<a class="entry-item" href="union suit.html">
+  <div class="noun">union suit</div>
+  <div class="snippet">19世纪末至20世纪初流行的一种连体式内衣，覆盖躯干、手臂和腿部，通常由红色法兰绒制成。前襟从上到下有一排纽扣，臀部处有可开合的后裆盖以便如厕。最初作为女性服装改革的产物（替代紧身胸衣），后成为男性劳动阶层的标准穿着。</div>
+</a>
+<a class="entry-item" href="Victorian privy.html">
+  <div class="noun">Victorian privy</div>
+  <div class="snippet">维多利亚式户外厕所（privy），是19世纪维多利亚时期典型的卫生设施。通常为后院独立小木屋，内设木制座位和坑洞，下方连接砖砌粪池。工人阶级家庭多使用共用设施，卫生条件恶劣常导致疾病传播；富裕家庭则建造隐蔽精巧的私人厕所。</div>
+</a>
+<a class="entry-item" href="Victrola.html">
+  <div class="noun">Victrola</div>
+  <div class="snippet">维克多牌留声机，由维克多谈话机器公司（Eldridge R. Johnson创立）于1906年推出的家用留声机。其创新之处在于将唱盘和放大喇叭隐藏在木制柜体内，使其看起来像家具而非机器。完全机械驱动，需手摇上弦，转速78 RPM。小说中杰姆</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:25
+</footer>
+</body>
+</html>

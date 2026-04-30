@@ -1,0 +1,27 @@
+{
+  "name": "樱花",
+  "description": "淡雅樱花粉白风格，适合日本文学、轻小说、俳句",
+  "colors": {
+    "--bg": "#faf5f6",
+    "--bg-card": "#ffffff",
+    "--bg-detail": "#fefafb",
+    "--text": "#4a3548",
+    "--text-secondary": "#7a6578",
+    "--text-muted": "#aa95a8",
+    "--heading": "#3a2538",
+    "--border": "#e8d5de",
+    "--accent": "#b8727e",
+    "--accent-hover": "#c98a94",
+    "--link": "#a05a68",
+    "--tag-bg": "#f2e2e8",
+    "--tag-text": "#8a5068",
+    "--divider": "#e8d5de",
+    "--shadow": "0 1px 3px rgba(74,53,72,0.06)",
+    "--shadow-hover": "0 3px 12px rgba(74,53,72,0.1)"
+  },
+  "fonts": {
+    "--font-heading": "\"Noto Serif SC\", \"Source Han Serif SC\", \"Hiragino Mincho Pro\", serif",
+    "--font-body": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+    "--font-mono": "\"Consolas\", \"Courier New\", monospace"
+  }
+}

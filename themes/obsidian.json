@@ -1,0 +1,27 @@
+{
+  "name": "曜石",
+  "description": "暗色深邃风格，适合悬疑推理、哥特、恐怖",
+  "colors": {
+    "--bg": "#1a1d22",
+    "--bg-card": "#242830",
+    "--bg-detail": "#1e2127",
+    "--text": "#c8ccd4",
+    "--text-secondary": "#969ba5",
+    "--text-muted": "#636872",
+    "--heading": "#e0e3e8",
+    "--border": "#363a42",
+    "--accent": "#8bb4d6",
+    "--accent-hover": "#a3c8e4",
+    "--link": "#7aa8cc",
+    "--tag-bg": "#2a2e36",
+    "--tag-text": "#8bb4d6",
+    "--divider": "#363a42",
+    "--shadow": "0 1px 3px rgba(0,0,0,0.3)",
+    "--shadow-hover": "0 3px 12px rgba(0,0,0,0.4)"
+  },
+  "fonts": {
+    "--font-heading": "\"Noto Serif SC\", \"Source Han Serif SC\", Georgia, serif",
+    "--font-body": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+    "--font-mono": "\"Consolas\", \"Courier New\", monospace"
+  }
+}

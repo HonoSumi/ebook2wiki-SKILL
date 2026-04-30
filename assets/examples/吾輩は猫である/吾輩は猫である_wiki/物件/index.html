@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件 · 吾輩は猫である</title>
+<style>
+:root {
+  --bg: #faf5f6;
+  --bg-card: #ffffff;
+  --bg-detail: #fefafb;
+  --text: #4a3548;
+  --text-secondary: #7a6578;
+  --text-muted: #aa95a8;
+  --heading: #3a2538;
+  --border: #e8d5de;
+  --accent: #b8727e;
+  --accent-hover: #c98a94;
+  --link: #a05a68;
+  --tag-bg: #f2e2e8;
+  --tag-text: #8a5068;
+  --divider: #e8d5de;
+  --shadow: 0 1px 3px rgba(74,53,72,0.06);
+  --shadow-hover: 0 3px 12px rgba(74,53,72,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "Hiragino Mincho Pro", serif;
+  --font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">物件 · 吾輩は猫である</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../吾輩は猫である_wiki.html">Home</a>
+<span>/</span>
+物件
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">319 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="おがら.html">
+  <div class="noun">おがら</div>
+  <div class="snippet">剥去表皮的麻（大麻）的茎干。在日本宗教仪式中用于盂兰盆节（お盆）的迎火与送火仪式，将麻干放在素烧陶皿上点燃，以引导祖先之灵来去。也用于神道仪式中的祓具等。亦写作&quot;麻幹&quot;。</div>
+</a>
+<a class="entry-item" href="お多角（おたかく）.html">
+  <div class="noun">お多角（おたかく）</div>
+  <div class="snippet">夏目漱石在本文中使用的独特表达，由お多福（阿多福面，日式圆脸微笑的女性面具）衍化而来。形容天生面部棱角分明、表情固定如能面般缺乏变化的人。在本文中用于描写女佣御三对猫的哀鸣无动于衷的态度，暗讽其不通人情。</div>
+</a>
+<a class="entry-item" href="しごき.html">
+  <div class="noun">しごき</div>
+  <div class="snippet">和服男带的一种，细长柔软的筒状束带，用于系在和服腰带外侧起到固定和装饰作用。也称&quot;しごき帯&quot;。原为武士或男性的实用束带，明治以后作为文士和服的配件之一。在作品中盗贼将带上げ和しごき连接起来作为捆绑包裹的绳子使用。</div>
+</a>
+<a class="entry-item" href="ちゃんちゃん.html">
+  <div class="noun">ちゃんちゃん</div>
+  <div class="snippet">亦称&quot;ちゃんちゃんこ&quot;，日式幼儿穿的无袖或短袖棉袄外套，通常加棉保暖，是日本传统儿童服装的一种。在作品中，盗贼将小孩的&quot;ちゃんちゃん&quot;两件塞入主人衣物中盗走。</div>
+</a>
+<a class="entry-item" href="つくつくぼうし.html">
+  <div class="noun">つくつくぼうし</div>
+  <div class="snippet">つくつくぼうし（ツクツクボウシ / Tsukutsukuboushi），学名 Meimuna opalifera，日本秋季代表蝉种。体长约40-46mm，翅透明，体色为橄榄绿与黑色斑纹。鸣声为&quot;ツクツクボーシ…&quot;，是夏末秋初的标志性声音，常</div>
+</a>
+<a class="entry-item" href="つくつく法師.html">
+  <div class="noun">つくつく法師</div>
+  <div class="snippet">つくつく法師（ツクツクボウシ），学名 Meimuna opalifera，蝉科寒蝉属的一种， 中文称寒蝉或法师蝉。体长约4.5厘米，体色暗黄绿色带黑色斑纹，背上有W字形纹路。 因其鸣叫声如「ツクツクオーシ」而得名。与其他夏蝉不同，它在晚夏至</div>
+</a>
+<a class="entry-item" href="つくばい.html">
+  <div class="noun">つくばい</div>
+  <div class="snippet">日本茶庭（露地）中设置的低矮手水钵及其周围役石构成的设施，茶客在入茶席前蹲身洗手漱口以清净身心，是茶道中重要的精神准备环节。</div>
+</a>
+<a class="entry-item" href="とろろ汁.html">
+  <div class="noun">とろろ汁</div>
+  <div class="snippet">日本传统料理，将山药（特别是自然薯/野生山芋）磨成泥状，加入高汤、酱油、味醂等调味制成的黏稠汤汁。通常浇在米饭上食用（とろろかけご飯），营养丰富、口感滑润。是日本山间乡土料理的代表之一。在作品中主人调侃说，盗贼偷山药可能是准备做とろろ汁食用</div>
+</a>
+<a class="entry-item" href="へっつい（竈）.html">
+  <div class="noun">へっつい（竈）</div>
+  <div class="snippet">日语古语，指传统的土灶或砖砌炉灶（かまど）。以柴或炭为燃料，上置锅釜用于烹煮。语源一说来自火つい（焚火之处）。是日本旧式家庭厨房的核心设备，明治后期逐渐被燃气灶取代。近畿地区常用此方言称呼。</div>
+</a>
+<a class="entry-item" href="みんみん.html">
+  <div class="noun">みんみん</div>
+  <div class="snippet">みんみん（ミンミンゼミ / Minminzemi），即鸣鸣蝉，学名 Hyalessa maculaticollis。翅透明，前翅有烟褐色斑点，体长约30-36mm，体色黑底有青绿色斑点。鸣声为&quot;ミーンミンミンミンミー…&quot;，因叫声得名。7月下</div>
+</a>
+<a class="entry-item" href="めり安.html">
+  <div class="noun">めり安</div>
+  <div class="snippet">日语&quot;メリヤス&quot;（莫大小/目利安）的汉字表记，来自葡萄牙语 meias，指南蛮贸易传入日本的针织品。最初指针织袜，后泛指编织物、针织布。明治时代发展为日本近代纺织业的重要品类，用于制作内衣、袜子等。在作品中指主人苦沙弥的针织腿套（股引）。</div>
+</a>
+<a class="entry-item" href="アンチピリン.html">
+  <div class="noun">アンチピリン</div>
+  <div class="snippet">安替比林（Antipyrine/Phenazone），1883年由德国化学家路德维希·克诺尔（Ludwig Knorr）合成的世界最早的化学合成解热镇痛剂之一。属于吡唑啉酮类药物，具有解热、镇痛、抗炎作用。明治时代后期传入日本，作为西药代表</div>
+</a>
+<a class="entry-item" href="ウェブスターの大字典.html">
+  <div class="noun">ウェブスターの大字典</div>
+  <div class="snippet">诺亚·韦伯斯特（Noah Webster，1758—1843）编纂的《美国英语词典》（An American Dictionary of the English Language），初版于1828年，收录7万词条。韦伯斯特被誉为&quot;美国学术和</div>
+</a>
+<a class="entry-item" href="カイゼル髭.html">
+  <div class="noun">カイゼル髭</div>
+  <div class="snippet">一种将口髭两端用力向上翘起的胡须造型，因仿效德意志皇帝威廉二世（Kaiser Wilhelm II）的胡须风格而得名。&quot;カイゼル&quot;（Kaiser）在德语中意为&quot;皇帝&quot;。该造型由柏林理发师哈比（Haby）于1887年为威廉二世设计后迅速风靡德</div>
+</a>
+<a class="entry-item" href="サンドラ・ベロニ.html">
+  <div class="noun">サンドラ・ベロニ</div>
+  <div class="snippet">英国维多利亚时代小说家乔治·梅瑞狄斯（George Meredith, 1828-1909）创作的小说。原名《Emilia in England》（1864），1887年修订后改题为《Sandra Belloni》。作品描写一位富有音乐才华</div>
+</a>
+<a class="entry-item" href="ステッキ.html">
+  <div class="noun">ステッキ</div>
+  <div class="snippet">西洋式の装飾用杖。明治時代に西洋文化の流入とともに日本に普及し、文明開化の象徴として上流階級や知識人の間で用いられた。作中では苦沙弥が書生を追いかける際に使用。</div>
+</a>
+<a class="entry-item" href="タカジヤスターゼ.html">
+  <div class="noun">タカジヤスターゼ</div>
+  <div class="snippet">日本科学家高峰让吉（Jokichi Takamine）于1894年从清酒酿造用的麹菌（Aspergillus oryzae）中提取的消化酶制剂，是世界上第一种微生物酵素药物。名称由&quot;Takamine（高峰）&quot;与&quot;diastase（淀粉酶）&quot;</div>
+</a>
+<a class="entry-item" href="チョン髷.html">
+  <div class="noun">チョン髷</div>
+  <div class="snippet">汉字写作丁髷，日本江户时代男性的传统发型，尤以武士阶层为代表。特征是将前额至头顶的头发剃光（月代），剩余头发向后梳拢在头顶盘成发髻。起源于战国时代武士戴头盔的需要，江户时代普及至各阶层。明治四年（1871年）因&quot;散发脱刀令&quot;而迅速消亡，但至</div>
+</a>
+<a class="entry-item" href="トチメンボー.html">
+  <div class="noun">トチメンボー</div>
+  <div class="snippet">栃木县传统食品&quot;栃麺&quot;的制作工具——栃麺棒（栃面棒），也可指代该食品。栃麺是将栃（日本七叶树）果实粉末混入小麦粉中制成的面条，因栃麺比普通面更容易断裂，制作时需要快速擀制和切割，因而派生出了&quot;とちめんぼうを踏む&quot;（慌乱失措·失败）的惯用语。</div>
+</a>
+<a class="entry-item" href="ニコラス・ニックルベー.html">
+  <div class="noun">ニコラス・ニックルベー</div>
+  <div class="snippet">英国作家查尔斯·狄更斯的第三部长篇小说，1838至1839年连载，讲述主人公尼古拉斯·尼克尔贝在叔父迫害下克服重重困难的故事，批判了当时约克郡寄宿学校的虐待问题。</div>
+</a>
+<a class="entry-item" href="ニッケルの袂時計.html">
+  <div class="noun">ニッケルの袂時計</div>
+  <div class="snippet">镍制袖兜怀表。&quot;袂時計&quot;（Tamotodokei）指放在和服袖子（袂）口袋中的怀表。镍（Nickel）材质相比金银更为廉价耐用，明治后期普及品级的怀表多采用镍或洋白合金。在作品中，猫注意到苦沙弥枕边放着镍制怀表，在春夜中泛着与季节不相称的寒</div>
+</a>
+<a class="entry-item" href="パナマ帽.html">
+  <div class="noun">パナマ帽</div>
+  <div class="snippet">パナマ帽（Panama hat），即巴拿马草帽，原产于厄瓜多尔，是用托奎拉草（Toquilla）纤维手工编织而成的浅色草帽。19世纪中叶因巴拿马运河建设期间大量流通而得名。明治时期的日本作为西洋时尚品传入，成为知识阶层和绅士的夏季帽饰。在《</div>
+</a>
+<a class="entry-item" href="フロックコート.html">
+  <div class="noun">フロックコート</div>
+  <div class="snippet">福乐克外套（Frock coat），19世纪至20世纪初西洋男性正式礼服之一，特征是及膝长度的合身外套，前襟双排扣或单排扣。明治时代随西洋文化传入日本，成为官公厅仪式、社交场合的正式礼装。与羽织袴并列为日本近代礼装的两大规范。在《我是猫》中</div>
+</a>
+<a class="entry-item" href="フヶンガー・ボール.html">
+  <div class="noun">フヶンガー・ボール</div>
+  <div class="snippet">即Finger bowl（フィンガーボール），19世纪西洋正式宴会中用于餐间清洗手指的小玻璃碗，常盛香水或清水，为当时正式餐桌必备器具。</div>
+</a>
+<a class="entry-item" href="ペンペン草.html">
+  <div class="noun">ペンペン草</div>
+  <div class="snippet">ナズナ（薺）の別名。アブラナ科の越年草で春の七草の一つ。果実の形が三味線の撥に似ていることから、その音に例えて「ぺんぺん草」と呼ばれる。荒地に生え、荒廃した家の象徴として用いられる。</div>
+</a>
+<a class="entry-item" href="ホヤ.html">
+  <div class="noun">ホヤ</div>
+  <div class="snippet">日语&quot;火屋&quot;的读音，指油灯、煤油灯上覆盖火焰的玻璃灯罩（lamp chimney）。明治时代随着西洋煤油灯的普及而进入日本，用于防风、稳定燃烧和扩散光线。乳白色的玻璃灯罩（乳色ホヤ）能柔化光线，营造温馨氛围。在作品中描写盗贼点烟时烟雾缭绕乳</div>
+</a>
+<a class="entry-item" href="メリンス.html">
+  <div class="noun">メリンス</div>
+  <div class="snippet">来自荷兰语&quot;merinos&quot;的日语音译，指使用美利奴（Merino）羊毛织成的细幅毛织物。江户末期至明治时代大量进口至日本，主要用于洋服布料、披肩、座布团等。作为当时的高级进口纺织品，推动了日本近代毛纺织业的发展。在西方织物流入日本的背景下</div>
+</a>
+<a class="entry-item" href="メンチボー.html">
+  <div class="noun">メンチボー</div>
+  <div class="snippet">即&quot;メンチカツ&quot;（炸肉饼），日本洋食的代表之一。将牛肉或猪肉馅与洋葱末混合，裹面包糠油炸而成。名称源自英语&quot;minced meat cutlet&quot;，明治末至大正时期在东京浅草的洋食店诞生，后扩散至全日本。常搭配伍斯特酱食用，也是家常料理和便</div>
+</a>
+<a class="entry-item" href="七輪（しちりん）.html">
+  <div class="noun">七輪（しちりん）</div>
+  <div class="snippet">一种使用木炭作燃料的日本传统陶制烹饪炉，通常用硅藻土制成。小巧便携，用于烧肉、烤鱼等炭火料理。也称七厘。昭和前期之前是日本家庭常见的厨具，至今仍在烧烤店和户外活动中广泛使用。</div>
+</a>
+<a class="entry-item" href="万年漬.html">
+  <div class="noun">万年漬</div>
+  <div class="snippet">一种经过长期腌制的日本酱菜（渍物），通常使用米糠酱床或酱油反复腌渍，可保存数年。口感咸硬。作品中作为禅寺僧堂的简陋食物之一，被认为导致营养不良。</div>
+</a>
+<a class="entry-item" href="万朝.html">
+  <div class="noun">万朝</div>
+  <div class="snippet">即《万朝报》（よろずちょうほう），日本明治时期极具影响力的报纸。1892年由黑岩泪香创办，以&quot;简单、明了、痛快&quot;为编辑方针，大量刊登社会新闻和揭丑报道。1940年与《东京每夕新闻》合并后停刊。</div>
+</a>
+<a class="entry-item" href="丈八の蛇矛.html">
+  <div class="noun">丈八の蛇矛</div>
+  <div class="snippet">中国古典小说《三国演义》中张飞使用的标志性武器，长度约一丈八尺（约4米），矛头呈蛇形弯曲。但据正史《三国志》记载，张飞仅用&quot;矛&quot;而未指定具体形制。&quot;丈八蛇矛&quot;最早出现于《晋书》载陈安使用此武器，比张飞年代更晚。因此张飞持丈八蛇矛的形象主要源</div>
+</a>
+<a class="entry-item" href="三味線屋.html">
+  <div class="noun">三味線屋</div>
+  <div class="snippet">制作和修理三味线（日本传统三弦乐器）的店铺。三味线的音箱（胴）传统上使用猫皮或狗皮蒙面，因此&quot;三味线屋&quot;在《我是猫》中带有特殊的黑色幽默——猫担心自己被剥皮卖给三味线屋做乐器，体现了猫对自身命运的忧虑。江户时代流传着猫的魂魄在化为三味线后仍</div>
+</a>
+<a class="entry-item" href="三盆.html">
+  <div class="noun">三盆</div>
+  <div class="snippet">日本传统精制砂糖，全称&quot;和三盆&quot;（わさんぼん），产于香川（赞岐）和德岛（阿波）。原料为&quot;竹糖&quot;品种的甘蔗，经压榨、熬煮后在盆中手工反复研磨三次而得名。色泽淡黄，颗粒细腻，口感温润甘甜，入口即化。江户时代起用于高级和果子制作，与粗糖相对。作品</div>
+</a>
+<a class="entry-item" href="三鞭酒.html">
+  <div class="noun">三鞭酒</div>
+  <div class="snippet">香槟（champagne）在日语中的历史音译表记（当て字），源自法语 champagne。19世纪末至20世纪初使用，现已废弃，改用片假名&quot;シャンパン/シャンペン&quot;。中文中&quot;三鞭酒&quot;后来演变为指代不同的药酒。</div>
+</a>
+<a class="entry-item" href="下駄.html">
+  <div class="noun">下駄</div>
+  <div class="snippet">日本传统木制鞋履，由木板鞋台（台）、底部的齿（歯）和人字形鼻绪（鼻緒）构成。起源可追溯至弥生时代，最初作为田下駄使用。与和服、浴衣搭配穿着，是日本夏季风物诗（花火大会、祭典）不可或缺的要素。</div>
+</a>
+<a class="entry-item" href="中形（ちゅうがた）.html">
+  <div class="noun">中形（ちゅうがた）</div>
+  <div class="snippet">日本江户时代发展起来的传统型染工艺，使用中型型纸进行防染糊染色的和服技法。以长板中形最为著名，将布贴在长板上，用型纸和防染糊施以蓝染，表里花纹须完全一致。主要用于浴衣和庶民日常和服，体现江户平民的粋（粹）审美。</div>
+</a>
+<a class="entry-item" href="久留米絣.html">
+  <div class="noun">久留米絣</div>
+  <div class="snippet">日本三大絣之一，福冈县久留米市出产的传统棉织品。采用先染工艺，以手工扎结防染后浸入蓝靛染色，织出边缘模糊的白色花纹。由井上传于1800年左右发明，1976年被指定为国家传统工艺品。</div>
+</a>
+<a class="entry-item" href="乱杭.html">
+  <div class="noun">乱杭</div>
+  <div class="snippet">日本传统防御设施，指将一端削尖的木桩斜向钉入地面，用以阻止敌人或马匹进攻的障碍物。在城郭防御中，常布置于城门两侧、虎口及环壕周围，与&quot;逆茂木&quot;等配合使用构成多重防线。起源于弥生时代的环壕集落防御，后广泛应用于战国时期的城郭与野战筑城。在《我</div>
+</a>
+<a class="entry-item" href="二絃琴.html">
+  <div class="noun">二絃琴</div>
+  <div class="snippet">日本传统拨弦乐器，琴身呈长板形，张有两根同音高琴弦，左手按压弦上勘所改变音高，右手弹奏，属琴族乐器中的古型，多用于神道音乐和独奏。</div>
+</a>
+<a class="entry-item" href="五円札.html">
+  <div class="noun">五円札</div>
+  <div class="snippet">面值五日元的纸币。文中指明治时期流通的五日元纸币（明治通宝五円券），1872年（明治5年）发行，是日本最早的西洋式印刷纸币，在德国制造，故又称&quot;ゲルマン札&quot;。1899年废止。</div>
+</a>
+<a class="entry-item" href="交番.html">
+  <div class="noun">交番</div>
+  <div class="snippet">日本最基层的警察机构，起源于1874年明治时期的&quot;交番所&quot;，由警察官交替立番而得名。集执勤、巡逻、社区服务于一体的综合性警务设施。</div>
+</a>
+<a class="entry-item" href="京焼.html">
+  <div class="noun">京焼</div>
+  <div class="snippet">日本京都地区生产的陶瓷器总称，与清水烧并称。起源于桃山时代，随茶道流行而发展，以华丽的彩绘技法著称，1977年被指定为国家传统工艺品。</div>
+</a>
+<a class="entry-item" href="今戸焼.html">
+  <div class="noun">今戸焼</div>
+  <div class="snippet">今戸焼是日本东京都台东区今户地区出产的传统陶器，起源于15世纪室町时代。江户时期作为东京（江户）代表性陶器而繁荣，以生产日用杂器、茶道具、土人偶、火鉢等为主。代表人物为白井半七家族，二代目半七在享保年间（1716-1736年）确立了釉药技法</div>
+</a>
+<a class="entry-item" href="伊予絣.html">
+  <div class="noun">伊予絣</div>
+  <div class="snippet">日本传统絣织物之一，产于爱媛县（旧伊予国）。以蓝染为基底，具有素朴简洁的花纹风格，被列为日本三大絣之一。昭和中期以前广泛用作日常和服衣料，现作为爱媛县传统工艺品传承。</div>
+</a>
+<a class="entry-item" href="位牌.html">
+  <div class="noun">位牌</div>
+  <div class="snippet">佛教祭祀中使用的一种木制牌位，上面书写故人的戒名（法名）及去世日期。起源于中国的儒教丧礼传统，后与佛教融合，经由禅宗在镰仓时代传入日本，江户时代因寺请制度普及至平民阶层。位牌通常安置在家中的佛坛（佛龛）上，供后人祭拜。</div>
+</a>
+<a class="entry-item" href="元禄（げんろく）.html">
+  <div class="noun">元禄（げんろく）</div>
+  <div class="snippet">原指日本元禄时代（1688-1704年），江户中期町人文化繁荣的时期。在本文中指该时期流行的华丽和服图案样式，即元禄模样——以大胆构图、鲜艳色彩、大花纹为特征的奢侈小袖图案。后文通过孩子之口说明中形图案都叫元禄，揭示了孩子对词汇的误解和滑稽</div>
+</a>
+<a class="entry-item" href="八分体.html">
+  <div class="noun">八分体</div>
+  <div class="snippet">中国书法中隶书的一种重要书体，又称八分书。特征是笔画左右分布、波磔分明，形如&quot;八&quot;字向两侧张开。起源于秦末汉初，成熟于东汉，代表碑刻有《曹全碑》等。唐代以后与隶书逐渐混同。书中用来形容信封上收件人名字的字体风格。</div>
+</a>
+<a class="entry-item" href="八字髯.html">
+  <div class="noun">八字髯</div>
+  <div class="snippet">指上唇两侧的胡须呈&quot;八&quot;字形分向左右的胡须样式。在日本亦常称为&quot;仁丹胡&quot;（じんたんひげ），因制药公司&quot;森下仁丹&quot;自明治末期以来长期使用该胡须造型作为商标和产品标识而广为人知。八字髯在日本传统中常被视为上品、有格调的胡须样式，与身份地位相关联</div>
+</a>
+<a class="entry-item" href="八犬伝.html">
+  <div class="noun">八犬伝</div>
+  <div class="snippet">日本江户时代作家曲亭马琴（泷泽马琴）创作的长篇读本小说《南总里见八犬传》的简称。作品以室町时代战国的安房国为背景，讲述里见家与八位名字带&quot;犬&quot;字、身佩牡丹痣的武士的传奇故事，全98卷106册，历时28年完成，是日本古典文学史上最长的长篇小说</div>
+</a>
+<a class="entry-item" href="六つ井物産会社.html">
+  <div class="noun">六つ井物産会社</div>
+  <div class="snippet">夏目漱石《我是猫》中虚构的公司名称，是多々良三平任职的企业。一般认为该名称为日本实际存在的巨型财阀&quot;三井物産&quot;（Mitsui Bussan）的戏仿——将&quot;三&quot;翻倍为&quot;六&quot;。这一命名体现了漱石对明治时期资本主义和财阀社会的讽刺。作品中多々良三</div>
+</a>
+<a class="entry-item" href="兵児帯.html">
+  <div class="noun">兵児帯</div>
+  <div class="snippet">日本传统和服腰带的一种，最初特指鹿儿岛地方年轻男性使用的&quot;扱き帯&quot;。用柔软的棉布等材料制成，比一般的袋带或名古屋带更细更轻，易于打结。名称中的&quot;兵児&quot;（へこ）在鹿儿岛方言中指年轻男子。现代已广泛用于男女老少的浴衣和日常和服，特别是儿童和服的</div>
+</a>
+<a class="entry-item" href="兵古帯.html">
+  <div class="noun">兵古帯</div>
+  <div class="snippet">日语&quot;兵児帯&quot;（へこおび），一种柔软的筒状腰带，用布直接缝制而不加芯材，不打折。原为男性或儿童用的轻便腰带，因质地柔软、系结方便而广泛使用。不同于正式场合用的硬质角带，兵古带属休闲和服带。在作品中，盗贼用女主人遗落的丝绸兵古带来捆绑山芋箱。</div>
+</a>
+<a class="entry-item" href="判子.html">
+  <div class="noun">判子</div>
+  <div class="snippet">日语中指个人姓名印章，用于代替签名。日本社会中使用广泛，按用途分为认印、银行印、实印等。作品中刑事巡査提醒苦沙弥领取被盗物品时需要携带印章以便签署领收书（请书）。</div>
+</a>
+<a class="entry-item" href="刺身.html">
+  <div class="noun">刺身</div>
+  <div class="snippet">生の魚介類を薄く切って食べる日本料理。室町時代に「刺身」と呼ばれるようになり、江戸時代に濃口醤油の普及とともに広まった。作中では金田が鮪の刺身を食べる描写がある。</div>
+</a>
+<a class="entry-item" href="力石.html">
+  <div class="noun">力石</div>
+  <div class="snippet">日本传统民俗文化中用于比试力气的石头，广泛分布于全国各地的神社和寺院中。江户时代，青年男子和力士们在农闲期或祭礼时举行举石力比试（力競べ），将举起过的石头奉纳于神社并刻上姓名、重量和年号。石头重量从数十公斤到两百公斤以上不等。东京佃浪除稻荷</div>
+</a>
+<a class="entry-item" href="十文半（じゅうもんはん）.html">
+  <div class="noun">十文半（じゅうもんはん）</div>
+  <div class="snippet">日本传统木屐（下駄）的一种款式，特点是屐齿（前齿）较高。文是江户时代的长度单位，一文约2.4厘米，十文半约25.2厘米，指木屐的长度或齿高。穿这种木屐时脚背弓起明显，故文中描写主人足背很高的脚伸出被窝之外。</div>
+</a>
+<a class="entry-item" href="半纏.html">
+  <div class="noun">半纏</div>
+  <div class="snippet">日式短外套，和服的一种，无衬里或加棉，长至腰臀。汉字的&quot;袢纏&quot;&quot;半纏&quot;通用，起源于江户时代，最初为庶民和职人的劳动服。明治以后作为日常和服外套广泛使用。其特征是前襟交叉，以细带系结，袖口较窄便于活动。作品中盗贼身穿唐桟布制的半缠。</div>
+</a>
+<a class="entry-item" href="半股引.html">
+  <div class="noun">半股引</div>
+  <div class="snippet">和服半截裤装内衣（日语：はんももひき）。长度至膝盖的短款下穿裤，较长的&quot;股引&quot;短。原本是江户时代消防员和工匠的装束，祭典时与法被搭配穿着。也称&quot;半だこ&quot;。夏装和传统祭礼服饰的组成部分。</div>
+</a>
+<a class="entry-item" href="半襦袢.html">
+  <div class="noun">半襦袢</div>
+  <div class="snippet">和服半身内衣（日语：はんじゅばん）。长度到胯部或大腿的上衣式衬衣，穿在长襦袢或肌襦袢外层、和服内层。源自葡萄牙语&quot;gibão&quot;。作用是保护外衣不被身体弄脏，同时领口半衿外露形成层次美感。</div>
+</a>
+<a class="entry-item" href="南蛮鉄.html">
+  <div class="noun">南蛮鉄</div>
+  <div class="snippet">日本战国时代至江户初期由葡萄牙人、西班牙人（当时日本称「南蛮人」）输入的进口铁材。原料主要为印度产的乌兹钢（Wootz steel），实际多经中国广东转口。因日本国产玉钢生产效率极低，南蛮铁成为刀剑、甲胄、铁炮的重要原材料。著名刀工越前康继</div>
+</a>
+<a class="entry-item" href="単衣.html">
+  <div class="noun">単衣</div>
+  <div class="snippet">単衣（ひとえ），日本和服的一种，指无里衬的单层和服。与之相对的是&quot;袷&quot;（有里衬的双层和服）。单衣主要在6月（梅雨季至初夏）和9月（初秋）的换季时期穿着，比袷轻便透气。盛夏（7-8月）则穿更薄的&quot;薄物&quot;。在《我是猫》中，女主人提及此前因天气凉</div>
+</a>
+<a class="entry-item" href="博多帯.html">
+  <div class="noun">博多帯</div>
+  <div class="snippet">福冈博多地区生产的传统绢织腰带，属于博多织的一种。起源于镰仓时代，南宋僧人将织造技术带回博多。江户时代黑田长政将其作为献上品进贡将军家，故称&quot;献上博多带&quot;。以&quot;独钴(佛具)&quot;&quot;华皿&quot;&quot;縞(条纹)&quot;三种纹样为特征，质地厚实硬挺，系结后不易松缓</div>
+</a>
+<a class="entry-item" href="印形.html">
+  <div class="noun">印形</div>
+  <div class="snippet">印章或盖下的印迹，较正式或古典的用语。与&quot;判子&quot;基本同义，但更偏重书面语。作品中刑事叮嘱苦沙弥不要忘记带印章（印形）。</div>
+</a>
+<a class="entry-item" href="印籠.html">
+  <div class="noun">印籠</div>
+  <div class="snippet">日本传统小型容器，原为收纳印章之用，后发展为武士挂在腰带上的药盒兼装饰品。江户时代因和服无口袋而成为随身必需品。通常以木、竹为胎，施加精美的蒔絵或螺鈿装饰，配以根付（固定纽扣）使用。小小的表面凝聚了漆工艺的精华，兼具实用性与艺术性。作品中的</div>
+</a>
+<a class="entry-item" href="卵塔婆.html">
+  <div class="noun">卵塔婆</div>
+  <div class="snippet">日本佛教墓地中的一种卵形（椭圆形）石造塔婆，也称&quot;無縫塔&quot;（むほうとう）。其造型为无棱角、无缝隙的卵形石塔，象征&quot;诸法无相&quot;的禅宗境界。起源于中国唐代南阳慧忠国师的&quot;无缝塔&quot;典故，镰仓时代随禅宗传入日本，作为高僧的墓塔使用。名称&quot;卵塔&quot;因其</div>
+</a>
+<a class="entry-item" href="双六.html">
+  <div class="noun">双六</div>
+  <div class="snippet">日本传统桌上游戏，源自古代印度经中国传入。分为&quot;盘双六&quot;（类似西洋双陆棋的二人对战）和&quot;绘双六&quot;（掷骰前进的棋盘游戏）。江户时代在上流社会和庶民间均广泛流行，现已成为日本新年期间家庭团聚时的传统游艺项目。</div>
+</a>
+<a class="entry-item" href="双六（すごろく）.html">
+  <div class="noun">双六（すごろく）</div>
+  <div class="snippet">一种源自古代印度的传统棋盘游戏，经中国传入日本。奈良时代传入后盛行于平安至江户时代。分为盘双六（二人对战，类似西洋双陆棋）和绘双六（多人掷骰沿图画前进）。新年期间常玩，江户时代是上流社会女性的常见游戏。</div>
+</a>
+<a class="entry-item" href="古毛布.html">
+  <div class="noun">古毛布</div>
+  <div class="snippet">古旧的毛织毯子。&quot;毛布&quot;（もうふ）在日语中指毛毯、绒毯，&quot;古毛布&quot;即旧毛毯。明治时期日本进口西洋毛织品，毛毯成为家庭常见用品。在作品中，主人苦沙弥将古毛布扔进书房，后被阴士（盗贼）用来包裹盗品。</div>
+</a>
+<a class="entry-item" href="吉備団子.html">
+  <div class="noun">吉備団子</div>
+  <div class="snippet">日本冈山县（古称吉备国）的著名传统点心。以糯米粉为主要原料，制成求肥（gyūhi）状的软糯团子，表面撒上黍粉。因桃太郎传说中桃太郎带着团子收服犬、猿、雉而闻名遐迩。1856年（安政3年）由广荣堂创始人改良定型，明治19年（1886年）曾进献</div>
+</a>
+<a class="entry-item" href="吉野紙（よしのがみ）.html">
+  <div class="noun">吉野紙（よしのがみ）</div>
+  <div class="snippet">产自奈良县吉野地区的传统手工和纸。以楮（こうぞ）为原料，以极薄、柔软为最大特色。平安时代末期至镰仓时代，曾作为上流社会的高级厕纸使用。在本文中比喻沸汤溢出后在锅沿干结的米汤薄皮的状态。</div>
+</a>
+<a class="entry-item" href="名刺.html">
+  <div class="noun">名刺</div>
+  <div class="snippet">日语对&quot;名片&quot;的称呼，源自中国古代&quot;刺&quot;（竹木简上书姓名）。日本名刺文化自唐代传入，江户时期用于身份表明，明治时期随近代商业发展而普及至一般民众。名刺交换在日本商务礼仪中具有重大意义，被视为个人信用与身份的象征，交换时有严格的礼仪规范。</div>
+</a>
+<a class="entry-item" href="吐月峰.html">
+  <div class="noun">吐月峰</div>
+  <div class="snippet">日本烟管（kiseru）所用灰吹（烟灰容器）的一种。源自连歌师宗长在静冈柴屋寺竹林取竹制作并命名&quot;吐月峰&quot;（&quot;月を吐く峰&quot;），后成为灰吹的代名词，也指一种唾壶。文中指印有吐月峰印记的高级灰吹。</div>
+</a>
+<a class="entry-item" href="呉服屋.html">
+  <div class="noun">呉服屋</div>
+  <div class="snippet">日语中指销售和服用丝织品和布料的商店。&quot;呉服&quot;原指从中国吴地（江南）传入日本的丝织品，与销售棉麻制品的&quot;太物屋&quot;相对。明治时期洋服传入后，&quot;呉服&quot;逐渐成为所有和服布料商店的通称。著名的三越百货即由江户时代的越后屋吴服店发展而来。</div>
+</a>
+<a class="entry-item" href="味淋.html">
+  <div class="noun">味淋</div>
+  <div class="snippet">日本传统甜味调味酒，以糯米、米曲和烧酎为原料发酵而成。与酱油、味噌、柴鱼并称日本料理四大基本调味料。具有去腥、提鲜、增添光泽、紧缩蛋白质等功效，广泛用于照烧、炖煮等料理。酒精度约13-14%，甜度较高。</div>
+</a>
+<a class="entry-item" href="唐桟.html">
+  <div class="noun">唐桟</div>
+  <div class="snippet">江户时代从印度经中国传入日本的棉织条纹布。名称来源于印度港口&quot;圣多默&quot;（São Tomé），日语读作&quot;とうざん&quot;。以细密纵条纹为特征，多用红、蓝、白、黄等色，江户后期至明治时代在庶民中广泛流行，常被用于制作半缠（和服短外套）。具有丝绸般的光</div>
+</a>
+<a class="entry-item" href="唐茄子.html">
+  <div class="noun">唐茄子</div>
+  <div class="snippet">日语中南瓜的古称（tounasu），字面意为&quot;唐（外国）的茄子&quot;。战国时代天文年间（1532年）由葡萄牙船传入日本丰后（今大分县）。江户时代东京地区多用此称，关西则称&quot;唐瓜&quot;。《我是猫》中迷亭将装在笼子里贩卖的女童比作&quot;唐茄子&quot;，表现了当时</div>
+</a>
+<a class="entry-item" href="嘴.html">
+  <div class="noun">嘴</div>
+  <div class="snippet">鸟类的喙、嘴。指鸟类上下颌前端的角质突起，用于取食、整理羽毛等。文中描写乌鸦用嘴擦拭的行为。</div>
+</a>
+<a class="entry-item" href="四つ目垣.html">
+  <div class="noun">四つ目垣</div>
+  <div class="snippet">日本传统庭园中常见的竹篱笆，属于&quot;透篱&quot;（透かし垣）中最基础的一种。用圆形立柱（亲柱·间柱）支撑，将竹材纵横向稀疏编组，形成方形网格状空隙，四角形的空洞即为&quot;四目&quot;得名由来。兼具隔断与通风功能，因竹间有缝可透景，具有一定观赏性。在《我是猫》</div>
+</a>
+<a class="entry-item" href="四ツ目垣.html">
+  <div class="noun">四ツ目垣</div>
+  <div class="snippet">四目垣（よつめがき），日本庭园中极具代表性的竹篱笆种类之一，属于&quot;透垣&quot;（透过竹条间隙可见对面景色）。其特点是将竹材纵横交叉编成四方形格子（即&quot;目&quot;为四个），结构简洁、视觉效果通透，是茶室庭园（露地）不可或缺的元素。四目垣看似简单，实则需要</div>
+</a>
+<a class="entry-item" href="四寸角.html">
+  <div class="noun">四寸角</div>
+  <div class="snippet">日本传统尺贯法中的尺寸，四寸见方（约12厘米×12厘米）的方形空间。寸是尺贯法的基本长度单位，1寸约3.03厘米。四寸角即约12厘米见方的孔洞。在日本木造建筑中，&quot;四寸角&quot;也指120毫米见方的角柱料。在《我是猫》中，指四目栅栏（四つ目垣）的</div>
+</a>
+<a class="entry-item" href="囲炉裏.html">
+  <div class="noun">囲炉裏</div>
+  <div class="snippet">围炉里（いろり），日本传统民居中铺设在房间地板下的方形火坑，四周镶木框，内铺灰烬，用于燃烧木柴或木炭取暖、烹饪。上方通常悬挂&quot;自在钩&quot;以吊挂铁锅或水壶，可调节高度控制火力。围炉里周围座位有严格的等级秩序（横座为上位、客座、嬶座等）。围炉里兼</div>
+</a>
+<a class="entry-item" href="垣根.html">
+  <div class="noun">垣根</div>
+  <div class="snippet">篱笆、围墙。指用竹木等编成的界墙。在日语中&quot;垣&quot;指围墙，&quot;根&quot;表示根基，合称指围绕房屋或庭院的矮墙。猫在本章中频繁在垣根上进行走墙运动。</div>
+</a>
+<a class="entry-item" href="埃及煙草.html">
+  <div class="noun">埃及煙草</div>
+  <div class="snippet">指埃及产的高级香烟，19世纪末至20世纪初风靡全球的奢侈品。当时埃及香烟使用土耳其烟叶制作，由希腊移民企业家在埃及设厂生产，将产品出口到欧洲、美国和日本。明治时期的日本，埃及香烟被视为高级舶来品。</div>
+</a>
+<a class="entry-item" href="夜着（よぎ）.html">
+  <div class="noun">夜着（よぎ）</div>
+  <div class="snippet">日本传统寝具，指内填棉花的和服式大被子，兼作睡衣和盖被使用。与现代被褥不同，夜着是穿在身上的寝具，形状像一件特别宽大的棉袍。掻巻（かいまき）为其别称。在本文中描写主人头蒙夜着躲避妻子催起床的场面。</div>
+</a>
+<a class="entry-item" href="大丸.html">
+  <div class="noun">大丸</div>
+  <div class="snippet">大丸（Daimaru），日本历史悠久的连锁百货公司，发源于近畿地区。1717年（享保2年）下村彦右卫门正启在京都伏见开设吴服店&quot;大文字屋&quot;，为创业起点。1728年在名古屋首次使用&quot;大丸屋&quot;名称。1907年公司化，1912年京都大丸以百货公司</div>
+</a>
+<a class="entry-item" href="大風呂敷.html">
+  <div class="noun">大風呂敷</div>
+  <div class="snippet">即大型包袱布，日本传统包装用具。日语中&quot;风吕敷&quot;原指在澡堂铺放衣物的布巾，后演变为日常包裹物品的方形布片。大尺寸的风吕敷可包裹被子等大件物品。此外&quot;大風呂敷を広げる&quot;也是惯用语，意为说大话、吹牛。</div>
+</a>
+<a class="entry-item" href="天保銭.html">
+  <div class="noun">天保銭</div>
+  <div class="snippet">日本江户时代末期（1835年）开始铸造的椭圆形铜钱，正式名称为天保通宝，面值百文，但因劣质而实际按80文流通。书中用天保钱中央有方孔来形容主人公苦沙弥的心思有漏洞，像天保钱一样看似面值大却不通用。</div>
+</a>
+<a class="entry-item" href="天水桶.html">
+  <div class="noun">天水桶</div>
+  <div class="snippet">日本传统木造建筑中置于屋顶或屋檐处的雨水储水桶，用于收集雨水。其主要用途为防火防灾——江户时代木造建筑密集，火灾频发，天水桶作为重要的初期灭火水源被广泛设置于民宅与商家屋顶。现代建筑中仍可见其作为传统防災设施或环保雨水收集装置的遗存。</div>
+</a>
+<a class="entry-item" href="天然痘.html">
+  <div class="noun">天然痘</div>
+  <div class="snippet">由天花病毒引起的高度传染性疾病，在日本历史上俗称&quot;疱瘡&quot;（ほうそう）。日本首次有记录的大流行是奈良时代天平年间（735-737年），导致当时人口约25-35%死亡。明治政府推行强制种痘制度，使感染率大幅下降。WHO于1980年宣布全球根除。</div>
+</a>
+<a class="entry-item" href="天秤棒.html">
+  <div class="noun">天秤棒</div>
+  <div class="snippet">日本传统的搬运工具，将竹或木制的扁担置于肩上，两端悬挂货物行走，江户时代行商（棒手振）的必备工具。</div>
+</a>
+<a class="entry-item" href="天麩羅.html">
+  <div class="noun">天麩羅</div>
+  <div class="snippet">日本代表性油炸料理，用面粉、鸡蛋调成薄糊裹上鱼虾或蔬菜炸至金黄。16世纪由葡萄牙传教士带入日本（长崎），最初为&quot;南蛮料理&quot;。名称由江户时代剧作家山東京传所创：&quot;天&quot;指天竺（印度）表示外来，&quot;麩&quot;指小麦粉面衣，&quot;羅&quot;指薄薄外衣。江户时代中期菜</div>
+</a>
+<a class="entry-item" href="太陽.html">
+  <div class="noun">太陽</div>
+  <div class="snippet">《太阳》是日本明治至大正时期（1895-1928）由博文馆发行的最大规模综合杂志，共531卷。内容涵盖政治、经济、文学、艺术、民俗等领域。夏目漱石等众多明治文人在此发表过作品，是近代日本重要的文化刊物。</div>
+</a>
+<a class="entry-item" href="女大学.html">
+  <div class="noun">女大学</div>
+  <div class="snippet">江户时代儒学家贝原益轩所著的女训书，以&quot;三从四德&quot;为核心的女性道德教科书。由《和俗童子训》第五卷独立而成，共19条，系统讲述儒教妇道，对江户至二战前的日本女性教育影响深远。</div>
+</a>
+<a class="entry-item" href="宝丹.html">
+  <div class="noun">宝丹</div>
+  <div class="snippet">日本江户时代后期贩卖的一种嗅药（闻香药），用于提神醒脑、改善心情的民间传统药物，属古语用法。</div>
+</a>
+<a class="entry-item" href="寄木細工.html">
+  <div class="noun">寄木細工</div>
+  <div class="snippet">寄木細工（よせぎざいく），日本神奈川县箱根地区传承约200年的传统木工技艺。将水木、樱木、黄莲、桂等多种天然木材按其本色精密拼接成几何图案，不施人工着色，制成薄木片（约0.15mm）贴于小箱表面。代表性产品有需特定滑动手法才能打开的&quot;秘密箱</div>
+</a>
+<a class="entry-item" href="寄生虫.html">
+  <div class="noun">寄生虫</div>
+  <div class="snippet">寄生在宿主身体内或表面的微小生物，从宿主获取营养并造成损害。文中指猫身上的一种名为&quot;み&quot;的寄生虫（可能指蚤或虱），导致猫被主人嫌弃。</div>
+</a>
+<a class="entry-item" href="密猟船.html">
+  <div class="noun">密猟船</div>
+  <div class="snippet">指非法捕捞（偷猎）海兽的船只。明治时期（1870-1880年代），千岛列岛周边海域常有外国船只非法猎捕海獭、海豹等海兽（主要用于获取珍贵毛皮），日本开拓使对此类&quot;密猟船&quot;屡禁不止。在《我是猫》中，猫用&quot;密猟船&quot;来比喻悄悄靠进、试图抓学生的教</div>
+</a>
+<a class="entry-item" href="小桶.html">
+  <div class="noun">小桶</div>
+  <div class="snippet">小木桶。澡堂中用于盛水或坐着洗浴的木质小桶。文中描写这些小桶被以三角形（金字塔形）堆叠起来，猫对此表现出拟人化的幽默同情。</div>
+</a>
+<a class="entry-item" href="山の芋.html">
+  <div class="noun">山の芋</div>
+  <div class="snippet">日语中指山药、薯蓣，日本原产的一种山芋，属于 Dioscorea 属。比市售的长芋更黏稠、风味更浓，可生吃或磨成泥做とろろ汁。在作品中，唐津出身的乡人多々良三平作为土特产带来山芋一箱，放置在女主人枕边。后盗贼将此箱山芋误当作贵重物品偷走，成</div>
+</a>
+<a class="entry-item" href="山葵.html">
+  <div class="noun">山葵</div>
+  <div class="snippet">日本原产的一种辛辣调味植物（学名：Eutrema japonica），中文常误称为&quot;芥末&quot;。其食用部位为地下茎，磨碎后产生独特的芳香和辛辣感，与鱼类和荞麦面等料理搭配使用。山葵对生长环境要求极高——需清澈流动的溪水灌溉、夏季水温不超过16°</div>
+</a>
+<a class="entry-item" href="山高帽子.html">
+  <div class="noun">山高帽子</div>
+  <div class="snippet">山高帽，即西洋的 bowler hat（圆顶硬礼帽）或 silk hat（丝织高礼帽）。明治时代文明开化背景下从西方传入日本，成为上流阶层和知识分子的时尚标志。1896年静冈县浜松市创立了帝国正帽株式会社，开始国产化生产。夏目漱石本人也曾用</div>
+</a>
+<a class="entry-item" href="巻煙草.html">
+  <div class="noun">巻煙草</div>
+  <div class="snippet">紙巻きたばこ。日本では1877年に岩谷松平が「天狗タバコ」を発売したのが始まり。明治期にキセルに代わって普及し、1898年には大蔵省専売局による煙草専売制度が開始された。</div>
+</a>
+<a class="entry-item" href="帆木綿.html">
+  <div class="noun">帆木綿</div>
+  <div class="snippet">一种厚实的棉织帆布，质地坚韧，传统上用于制作船帆。文中指学生穿的白帆布夏服，耐穿耐磨。</div>
+</a>
+<a class="entry-item" href="帯上げ.html">
+  <div class="noun">帯上げ</div>
+  <div class="snippet">和服配件之一，穿在腰带（帯）上方束紧的细带或装饰带，用以提升和固定腰带的位置，同时也作为腰带装饰的一部分露出在外。原是男性用的实用束带，后来女性用带上げ演化出丰富的色彩和装饰性。在作品中盗贼将带上げ和しごき连接起来捆绑包裹。</div>
+</a>
+<a class="entry-item" href="干し柿.html">
+  <div class="noun">干し柿</div>
+  <div class="snippet">日本传统保存食品。将涩柿去皮后，用绳子吊挂在通风处自然干燥，使涩味转化为甜味，表面析出白色果糖结晶（柿霜）。是日本冬季的乡土风味食品，亦为茶席点心。</div>
+</a>
+<a class="entry-item" href="干瓢.html">
+  <div class="noun">干瓢</div>
+  <div class="snippet">日本传统干燥食品，将葫芦（瓢箪）的果实削成带状后经天日干燥制成。常用于寿司卷（干瓢巻き）、煮物等日本料理中。江户时代已成为近江水口等地的特产品，歌川广重的浮世绘中也描绘过干瓢制作场景。书中用苦沙弥只懂得吃干瓢的醋味噌来讽刺其见识有限。</div>
+</a>
+<a class="entry-item" href="床の間.html">
+  <div class="noun">床の間</div>
+  <div class="snippet">日文读作とこのま，又称凹间，是和室中标志性的内凹装饰空间，由床柱与床框构成。起源于安土桃山时代的书院造建筑，受禅宗寺院影响，最初用于陈列挂轴、插花、工艺品等。前方的座位被视为上座。江户时代普通人建造床之间曾被禁止，明治以后才普及。是和室的精</div>
+</a>
+<a class="entry-item" href="彼岸桜.html">
+  <div class="noun">彼岸桜</div>
+  <div class="snippet">彼岸樱（学名Prunus subhirtella / Cerasus subhirtella）， 蔷薇科樱属落叶乔木，日本樱花的主要野生种之一。 于春分时节（&quot;彼岸&quot;）开花，故得名。花瓣单层，淡红至白色， 花萼下部呈球形膨起。树高可达15—</div>
+</a>
+<a class="entry-item" href="待合.html">
+  <div class="noun">待合</div>
+  <div class="snippet">江户时代至昭和初期的一种餐饮娱乐场所，客人可在此召艺伎陪酒宴游，也用作密会场所，是日本近世游廓文化的重要组成部分。</div>
+</a>
+<a class="entry-item" href="後架.html">
+  <div class="noun">後架</div>
+  <div class="snippet">日语中对厕所（便所）的古老称呼，原为禅宗寺院用语，指僧堂后方设置的盥洗架，后转指厕所。与&quot;厠&quot;（かわや）、&quot;雪隠&quot;（せっちん）、&quot;憚り&quot;（はばかり）等同为日语中厕所的雅称或隐语。明治时代虽仍是日常用语，但现已成为古语。在《我是猫》中，主人公</div>
+</a>
+<a class="entry-item" href="御櫃（おひつ）.html">
+  <div class="noun">御櫃（おひつ）</div>
+  <div class="snippet">日本传统木制饭桶，用于盛放和保存煮好的米饭。通常用杉木或桧木制成，具有调节湿度和保温的功能，能使米饭保持适口的状态。现代多被陶制或塑料容器取代，但在寿司店等场所仍有使用。</div>
+</a>
+<a class="entry-item" href="御灯明皿.html">
+  <div class="noun">御灯明皿</div>
+  <div class="snippet">日本佛坛（仏壇）中用于供奉灯明（蜡烛或油灯）的器皿，多为陶磁或金属制。灯明在佛教中象征智慧之光，能破除无明黑暗。据佛经记载，供奉灯明有肉眼不坏、天眼通、智慧明等十种功德。御灯明皿是&quot;灯明皿&quot;的敬称，大英博物馆收藏有日本中世时期的陶制灯明皿（</div>
+</a>
+<a class="entry-item" href="御納戸.html">
+  <div class="noun">御納戸</div>
+  <div class="snippet">日本传统色之一，深蓝中带微绿的沉静色调，江户时代极为流行。&quot;御納戸&quot;（おなんど）语源来自纳户（储藏室），因纳户帘幕使用此色而得名。江户时代男性着物最喜好的色系之一，后也用于女性衣物。在作品中指御纳户色的博多带。</div>
+</a>
+<a class="entry-item" href="御茶漬.html">
+  <div class="noun">御茶漬</div>
+  <div class="snippet">御茶漬（おちゃづけ），日本传统料理，即在米饭上浇煎茶或番茶等茶水制成的简单餐食。历史可追溯至平安时代的&quot;水饭&quot;和&quot;汤渍&quot;。江户时代普及于庶民，因简便快速且茶有醒脑作用，深受武士和劳动者的喜爱。现代常见梅干、鲑鱼、明太子等配料搭配。在《我是猫</div>
+</a>
+<a class="entry-item" href="徳利.html">
+  <div class="noun">徳利</div>
+  <div class="snippet">日本传统的陶瓷盛酒器，圆肚细颈，壶口收窄便于保温。起源于6世纪，江户时代广泛用于盛装日本清酒（尤其加热后的燗酒）。常见容量为1合（180ml）至2合（360ml），有备前烧、濑户烧、有田烧等多种产地款式。</div>
+</a>
+<a class="entry-item" href="心太.html">
+  <div class="noun">心太</div>
+  <div class="snippet">心太（ところてん）是日本传统食品，用红藻类植物天草（石花菜）熬煮后冷却凝固而成的透明果冻状食品。食用时用&quot;天突&quot;工具压成面条状，淋醋酱油（关东风，咸味）或黑蜜（关西风，甜味）食用。奈良时代从中国传入，最初为仪式用食品；平安时代已普及；江户时</div>
+</a>
+<a class="entry-item" href="扇子.html">
+  <div class="noun">扇子</div>
+  <div class="snippet">扇子（せんす/おうぎ），即折叠扇（折扇），日本传统工艺品。平安时代初期由桧扇（桧木薄片制成）起源，后发展为竹骨贴纸的蝙蝠扇。室町时代经中国改良后以&quot;唐扇&quot;形式传回日本，成为现代折扇原型。江户时代制扇成为&quot;京三职&quot;之一，普及至庶民。扇子在日本</div>
+</a>
+<a class="entry-item" href="手拭.html">
+  <div class="noun">手拭</div>
+  <div class="snippet">日本传统毛巾、布手巾。细长棉布，用于擦手、擦脸或沐浴。文中猫打算叼着手巾闯入洗汤（澡堂）。 --- 日本传统棉质手巾，长约90厘米、宽约35厘米，用于擦手、擦脸、洗澡、包头等日常用途。江户时代随着木棉普及而广泛使用，钱汤中客人常将手拭盖在头</div>
+</a>
+<a class="entry-item" href="拍子木.html">
+  <div class="noun">拍子木</div>
+  <div class="snippet">拍子木（ひょうしぎ），日本传统打击乐器，由两片硬木或竹片用细绳连接而成， 相互拍打发出清脆响亮的声音。在歌舞伎表演中有三种核心功能： (1) 告知（知らせ）——通知观众表演即将开始或结束； (2) 契机（切っ掛け）——为舞台装置动作（旋转舞</div>
+</a>
+<a class="entry-item" href="振袖.html">
+  <div class="noun">振袖</div>
+  <div class="snippet">日本未婚女性穿着的最高级别礼服和服，特征是袖子极长（中振袖约90-98cm，大振袖约110-120cm）。通常在成人式、婚礼（新娘装）等隆重场合穿着，是和服中最华丽的一种。</div>
+</a>
+<a class="entry-item" href="掛矢.html">
+  <div class="noun">掛矢</div>
+  <div class="snippet">日本传统的建筑用大型木槌，柄长、锤头大，需双手握持使用。主要用于房屋大木作施工中梁柱等大型构件的榫卯组装，利用重力敲击使构件紧密接合。与金属制的金槌（铁锤）不同，挂矢为木质锤头，不会损伤木构件表面。江户时代的大工具备多种槌具分工使用，挂矢是</div>
+</a>
+<a class="entry-item" href="摺鉢.html">
+  <div class="noun">摺鉢</div>
+  <div class="snippet">擂钵（すりばち，亦写作&quot;摺鉢&quot;&quot;擂鉢&quot;），日本传统陶制研磨器具。 钵体内部刻有细密纹路（称为&quot;目&quot;），用研杵（すりこぎ）将芝麻、 味噌、药材等食材研磨粉碎。钵口一侧有流嘴，方便倒出研磨物。 起源于日本古代，至今仍是日本家庭厨房中的常见用具。</div>
+</a>
+<a class="entry-item" href="敷島.html">
+  <div class="noun">敷島</div>
+  <div class="snippet">日本香烟品牌名（Shikishima），由台湾总督府专卖局（日据台湾时期）制造销售。名称来源于日本的古称&quot;敷岛&quot;（大和国的雅称），明治末期至大正时期广泛流通。包装为淡蓝色，印有&quot;敷島&quot;和&quot;專賣局&quot;字样。《我是猫》中寒月点燃敷岛烟，将烟雾吹向</div>
+</a>
+<a class="entry-item" href="文金高島田.html">
+  <div class="noun">文金高島田</div>
+  <div class="snippet">文金高島田（ぶんきんたかしまだ），日本传统女性发型中最为高级、正式的一种。&quot;文金&quot;源自&quot;元文小判&quot;（文字金），取其贵重之意；&quot;高島田&quot;是岛田髻中发根最高的样式。这种发型在江户时代只有上流武家或富贵家庭的未婚女性才能梳绾，象征着身份与品位。在</div>
+</a>
+<a class="entry-item" href="新撰蒙求.html">
+  <div class="noun">新撰蒙求</div>
+  <div class="snippet">小说中角色迷亭虚构的一部书名，讽刺性地模仿唐代李翰编纂的中国童蒙教育经典《蒙求》。《蒙求》是中国古代以历史典故编成四字对句的启蒙教材，宋代徐子光加注后广为流传。该书在平安时代传入日本，江户时代成为寺子屋和藩校中汉文教育的标准教科书，日本学者</div>
+</a>
+<a class="entry-item" href="日本新聞.html">
+  <div class="noun">日本新聞</div>
+  <div class="snippet">1889年（明治22年）2月11日由陆羯南在东京创刊的日刊报纸，简称《日本》。标榜&quot;国民主义&quot;，批判明治政府的盲目欧化政策，主张守护日本国民精神与固有文化，对明治中期的舆论和思想界产生深远影响。与《东京日日新闻》《朝日新闻》等并列为明治时期</div>
+</a>
+<a class="entry-item" href="春慶塗.html">
+  <div class="noun">春慶塗</div>
+  <div class="snippet">日本传统漆器技法之一，以飞驒（岐阜县高山市）和伊势（三重县）为代表产地。约400年前江户时代初期发祥，特点是不施金银彩绘，以黄蘗或弁柄着色后上多层透明漆，最大限度展现木纹之美。因色泽似陶工加藤景正所制茶罐&quot;飞驒春庆&quot;而得名。</div>
+</a>
+<a class="entry-item" href="更紗.html">
+  <div class="noun">更紗</div>
+  <div class="snippet">原产于印度的多色印花棉布，以花鸟、人物等彩色纹样为特征。16世纪由南蛮船传入日本，江户时代风靡一时，用于小袖、阵羽织、茶道具等。后在日本各地发展出京更纱、江户更纱等本土品种。</div>
+</a>
+<a class="entry-item" href="書翰.html">
+  <div class="noun">書翰</div>
+  <div class="snippet">即书信、手书。日语中正式的书信用语。作品中苦沙弥收到了立町老梅（天道公平）寄来的长信，认真研读后却发现寄信人不过是一名精神病人，感到既生气又羞愧。</div>
+</a>
+<a class="entry-item" href="最中.html">
+  <div class="noun">最中</div>
+  <div class="snippet">日本传统和果子（日式点心）。用糯米粉制成薄皮烘烤成酥脆外壳，中间夹入红豆沙馅。名称源自平安时代和歌中「今宵ぞ秋の最中なりける」之句。江户时代确立上下两片饼壳夹馅的形式，明治以后普及专用烤模，成为广受欢迎的茶点。东京老铺「空也」的最中尤以夏目</div>
+</a>
+<a class="entry-item" href="木魚.html">
+  <div class="noun">木魚</div>
+  <div class="snippet">仏教の法器。魚は昼夜目を閉じないことから、修行者の精進を促すための道具として用いられる。読経の際に節拍を取るために叩く。唐代から用いられ、日本にも伝来した。</div>
+</a>
+<a class="entry-item" href="札幌ビール.html">
+  <div class="noun">札幌ビール</div>
+  <div class="snippet">札幌啤酒（Sapporo Beer），日本最古老的啤酒品牌之一。起源可追溯到1876年（明治9年）北海道开拓使在札幌设立的开拓使麦酒酿造所，由在德国学习酿造技术的中川清兵卫担任首任酿造长。1906年与其他公司合并为大日本麦酒株式会社，战后经</div>
+</a>
+<a class="entry-item" href="杉箸.html">
+  <div class="noun">杉箸</div>
+  <div class="snippet">用日本柳杉（杉/すぎ）木材制作的一次性筷子，属于日本传统&quot;割箸&quot;（わりばし，即一次性筷子）的一种。杉木质地轻柔，带有天然清香，表面未经涂漆而保留木材纹理，摩擦力较大，特别适合夹取滑溜的荞麦面、素面和汤豆腐等料理。日本茶圣千利休（千利休）在款</div>
+</a>
+<a class="entry-item" href="束髪.html">
+  <div class="noun">束髪</div>
+  <div class="snippet">日文读作&quot;そくはつ&quot;，明治时代从西方传入的日本女性新式发型。相对于传统需要大量发油和复杂技巧的日本发髻（岛田髷、丸髷等），束髪是简单易打理的西洋风盘发造型，被视为&quot;文明开化&quot;的象征。明治中期&quot;大日本妇人束髪会&quot;成立后迅速普及，衍生出扬卷、夜</div>
+</a>
+<a class="entry-item" href="松脂.html">
+  <div class="noun">松脂</div>
+  <div class="snippet">松树分泌的树脂，粘性极强，不易去除。猫本想通过蹭松树皮止痒，但担心松脂粘附在毛上难以清洗，最终放弃了这个念头。</div>
+</a>
+<a class="entry-item" href="松薪.html">
+  <div class="noun">松薪</div>
+  <div class="snippet">松木柴薪。将松木劈成约八寸长的柴段作为燃料，是明治时代澡堂的主要燃料之一。文中与石炭并列为澡堂后院堆积的燃料。</div>
+</a>
+<a class="entry-item" href="柔術.html">
+  <div class="noun">柔術</div>
+  <div class="snippet">日本传统徒手武术体系，以&quot;柔克刚&quot;（柔よく剛を制す）为核心理念，通过投技、固技、绞技、当身技等技术，利用对手的力量和动作将其制服。起源于战国时代的&quot;鎧組討&quot;，江户时代发展为数百个流派。明治十五年（1882年）嘉纳治五郎统合起倒流与天神真杨流</div>
+</a>
+<a class="entry-item" href="柘榴口.html">
+  <div class="noun">柘榴口</div>
+  <div class="snippet">日本江户时代钱汤（公共澡堂）浴槽周围所设的低矮出入口。汤槽四周以板围起，仅留高约1米的小口作为出入口，入浴者须弯身屈膝才能通过，以保持浴槽内温度、防止蒸汽外泄。名称由来源说有二：一为&quot;身を屈めて入る&quot;的音转；二因其形似石榴（柘榴）开口。明治</div>
+</a>
+<a class="entry-item" href="柱時計.html">
+  <div class="noun">柱時計</div>
+  <div class="snippet">挂钟，即挂在墙壁或柱子上的摆钟。日本自明治改历（1873年）后，西洋式时钟迅速普及。明治初期大量进口美国制挂钟，1892年服部金太郎创立精工舍（Seikosha）开始国产化柱时计的量产。在作品中，夜深人静时猫听到的只有&quot;挂钟、妻子的鼾声和远</div>
+</a>
+<a class="entry-item" href="柳行李.html">
+  <div class="noun">柳行李</div>
+  <div class="snippet">用柳条（杞柳的枝条）编成的带盖箱形容器，日语读作&quot;やなぎごうり&quot;。柳条经水浸泡软化后编织而成，轻便牢固，用于收纳衣物、小物或旅行时搬运。明治至昭和初期是日本家庭常见的收纳用具，中文称&quot;柳条包&quot;或&quot;柳条箱&quot;。在作品中，柳行李被置于六叠房间的角</div>
+</a>
+<a class="entry-item" href="格子戸.html">
+  <div class="noun">格子戸</div>
+  <div class="snippet">日本传统建筑中的格子门（koushido），用细木条纵横交错组成格子的拉门或推门。具有采光、通风、保护隐私和装饰等多种功能。京都町家的格子户尤为著名，是日本传统街景的标志性元素。《我是猫》中格子戸的铃声响起，标志着新客人（越智东风）的到来，</div>
+</a>
+<a class="entry-item" href="桐.html">
+  <div class="noun">桐</div>
+  <div class="snippet">泡桐（Paulownia），日本文化中具有重要象征意义的树木。桐纹是日本仅次于菊花纹的高贵家纹，约140种以上变体。五七桐花紋现为日本政府及内阁总理大臣的徽章，亦见于500日元硬币图案。源于中国传说&quot;凤凰非梧桐不栖&quot;，自平安时代起被皇室用作</div>
+</a>
+<a class="entry-item" href="桶屋.html">
+  <div class="noun">桶屋</div>
+  <div class="snippet">日本传统木工职人，专门制作和修理木桶、木樽等圆形木器。使用曲刨（まげかんな）、指矩（さしがね）等特制工具，将木板拼接成形并以竹箍或铁箍固定。江户时代桶屋是重要的生活产业，产品涵盖水桶、澡盆、酱油桶、酒樽等。谚语&quot;桶屋が儲かる&quot;（桶屋赚钱）的</div>
+</a>
+<a class="entry-item" href="梧桐.html">
+  <div class="noun">梧桐</div>
+  <div class="snippet">梧桐科落叶乔木，原产中国和日本，树高10至20米，树皮绿色，叶掌状分裂。木材可制家具乐器，树皮纤维可织布，种子可食用入药。</div>
+</a>
+<a class="entry-item" href="椽の下.html">
+  <div class="noun">椽の下</div>
+  <div class="snippet">軒先の垂木（たるき）の下の空間。日本家屋の構造における見えにくい場所を指し、転じて人目につかない陰の部分の比喩としても用いられる。作中では猫が隠れて話を聞く場所。</div>
+</a>
+<a class="entry-item" href="椽側.html">
+  <div class="noun">椽側</div>
+  <div class="snippet">日本传统木造房屋中，介于室内与庭院之间的半户外走廊。通常铺设木地板，高于地面约45厘米，设有檐廊。它是连接室内与自然的&quot;中间领域&quot;（建筑家黑川纪章称之为&quot;灰空间&quot;），人们可在此坐观庭景。常见表记还有&quot;縁側&quot;，是日本建筑中极具特色的空间元素。</div>
+</a>
+<a class="entry-item" href="楼門.html">
+  <div class="noun">楼門</div>
+  <div class="snippet">日本传统寺院和神社建筑中的一种两层楼阁式大门。其特征是下层没有屋顶（只有高栏和阳台环绕），上层有屋顶。与&quot;二重门&quot;（下层也有屋檐）相区别。楼门起源于佛教建筑，飞鸟时代随佛教传入日本，后广泛用于寺院和神社入口。著名的楼门有东福寺三门、法隆寺中</div>
+</a>
+<a class="entry-item" href="標札.html">
+  <div class="noun">標札</div>
+  <div class="snippet">表札。家の入口に居住者の姓名を示す札。日本では1871年の平民への姓氏付与を経て、大正時代の関東大震災後に郵便配達や住所識別のために全国的に普及した。</div>
+</a>
+<a class="entry-item" href="欄間.html">
+  <div class="noun">欄間</div>
+  <div class="snippet">日本传统建筑中天花与鸭居之间设置的横长开口部分，兼具采光通风功能和装饰艺术价值，常见透雕、格子和障子等形式。</div>
+</a>
+<a class="entry-item" href="正宗.html">
+  <div class="noun">正宗</div>
+  <div class="snippet">日本清酒的常见铭柄（品牌）名称，源自佛教禅宗&quot;临济正宗&quot;。江户时代起众多酒造以此命名，其中以菊正宗、剑菱正宗等最为著名。</div>
+</a>
+<a class="entry-item" href="毛布.html">
+  <div class="noun">毛布</div>
+  <div class="snippet">羊毛などを用いた寝具用の布。日本では明治時代後半に国産化が進み、1896年に日本毛織会社が設立され本格的な生産が始まった。作中では苦沙弥の古びた白毛布が描写される。</div>
+</a>
+<a class="entry-item" href="毛穴.html">
+  <div class="noun">毛穴</div>
+  <div class="snippet">毛孔，皮肤表面毛囊的开口。猫运动出汗后汗水从毛穴渗出，但因被毛覆盖无法蒸发，导致刺痒不适。</div>
+</a>
+<a class="entry-item" href="毛衣.html">
+  <div class="noun">毛衣</div>
+  <div class="snippet">毛皮、动物的皮毛。&quot;毛衣&quot;是日文中对哺乳动物毛皮的诗意称呼，字面意为&quot;毛做成的衣服&quot;。文中指猫自己的毛皮外衣。</div>
+</a>
+<a class="entry-item" href="水彩画.html">
+  <div class="noun">水彩画</div>
+  <div class="snippet">以水为媒介调和颜料在纸面上创作的绘画，具有透明性和水色交融的独特表现力，起源于欧洲，18世纪在英国发展成熟为独立画种。</div>
+</a>
+<a class="entry-item" href="水瓜.html">
+  <div class="noun">水瓜</div>
+  <div class="snippet">日语&quot;水瓜&quot;（すいか）是西瓜的别写，指葫芦科蔓性一年生植物及其果实。果实多汁甘甜，是日本夏季代表性的水果。日语中&quot;水瓜&quot;亦可写作&quot;西瓜&quot;，&quot;水瓜&quot;的表记强调了果肉水分充沛的特征。作品中御夏以&quot;静岡には水瓜もあります&quot;为应答，委婉拒绝婚事。</div>
+</a>
+<a class="entry-item" href="水甕.html">
+  <div class="noun">水甕</div>
+  <div class="snippet">水瓮（みずがめ），日本传统用于储存饮用水的陶制大型容器。 日常放置在厨房或庭院中，以陶土烧制而成，具有良好的隔热性。 能在炎热的夏季保持水温清凉。与&quot;水指&quot;（茶道用具）及&quot;水差し&quot;（水壶）不同， 水瓮是更大型的居家储水用具，属于旧式日本家庭</div>
+</a>
+<a class="entry-item" href="水葵.html">
+  <div class="noun">水葵</div>
+  <div class="snippet">学名 Monochoria korsakowii，雨久花科一年生水生植物。夏季抽出花茎，开青紫色六瓣花。叶呈心形，有蜡质光泽。生于水田、沼泽。日本环境省列为准濒危物种。</div>
+</a>
+<a class="entry-item" href="汁粉.html">
+  <div class="noun">汁粉</div>
+  <div class="snippet">日本传统甜汤，以红豆加糖熬煮后放入烤年糕或糯米团子一起食用，是冬季最受欢迎的热甜品之一。关东地区指汤水较多的红豆汤，关西用法中带红豆皮的颗粒状红豆汤称为&quot;汁粉&quot;，过滤去皮的细腻豆沙汤则称为&quot;善哉&quot;。名称&quot;汁粉&quot;源自红豆煮汁中加入米粉团子之意</div>
+</a>
+<a class="entry-item" href="汗.html">
+  <div class="noun">汗</div>
+  <div class="snippet">汗液，皮肤汗腺分泌的液体。猫在运动后大量出汗，与跳蚤叮咬共同引发瘙痒，成为推动故事情节发展的关键生理因素。</div>
+</a>
+<a class="entry-item" href="沓脱.html">
+  <div class="noun">沓脱</div>
+  <div class="snippet">日文读作くつぬぎ，日本传统建筑中玄关处用于脱鞋的平石，又称沓脱石（くつぬぎいし）。设置在土间与上り框之间的地面，原是神社和住宅中区分神圣与世俗领域的境界石。日本高床式建筑产生的室内外地坪差，使脱鞋行为成为进入室内的必要礼仪。在书院造建筑和茶</div>
+</a>
+<a class="entry-item" href="沢庵.html">
+  <div class="noun">沢庵</div>
+  <div class="snippet">日本传统腌渍食品，将白萝卜日晒脱水后以米糠和盐腌制的糠渍物，色泽自然金黄，口感清脆。名称源自江户初期禅僧泽庵宗彭的相关传说。</div>
+</a>
+<a class="entry-item" href="沢庵石.html">
+  <div class="noun">沢庵石</div>
+  <div class="snippet">日本寺院墓地中一种圆柱形石造墓标，因其细长形状类似泽庵腌萝卜（たくあん漬け）而得名。泽庵渍是由禅僧泽庵宗彭（たくあん そうほう）创制的腌萝卜，色泽金黄、呈长圆柱形。&quot;沢庵石&quot;常作为刻有戒名（居士号）的墓碑使用。在本章中，迷亭调侃说与其让曾吕</div>
+</a>
+<a class="entry-item" href="河豚.html">
+  <div class="noun">河豚</div>
+  <div class="snippet">日语读作ふぐ（fugu），是一种含有剧毒（河豚毒素）但被广泛食用的高级鱼类。日本有严格的河豚处理师资格认证制度。河豚料理包括刺身（てっさ）、火锅（てっちり）、炸河豚等。历史上丰臣秀吉时期曾颁布禁食令，至明治时代才逐步解禁。书中将最早吃河豚的</div>
+</a>
+<a class="entry-item" href="河豚提灯.html">
+  <div class="noun">河豚提灯</div>
+  <div class="snippet">日本山口县下关市的传统工艺品，河豚的一种加工品。将河豚皮完整剥离后填充稻谷壳使其干燥定型，制成河豚鼓胀时的形态，再装上眼球等装饰。下关是日本著名的河豚产地，河豚提灯作为当地代表性乡土玩具和吉祥物，寓意招福纳财。价格从普通尺寸的5000日元到</div>
+</a>
+<a class="entry-item" href="油壺.html">
+  <div class="noun">油壺</div>
+  <div class="snippet">日本传统陶制油容器，历史上多用于盛装发油（燻油），女性梳头后用以保持光泽与柔顺。也可盛装灯油等。文中主人公从日本堤散步时掘出的奇特陶器，被戏称为&quot;油壺&quot;。</div>
+</a>
+<a class="entry-item" href="油蟬.html">
+  <div class="noun">油蟬</div>
+  <div class="snippet">油蟬（アブラゼミ / Aburazemi），日本最常见的蝉种，学名 Graptopsaltria nigrofuscata。翅不透明呈褐色，因翅面如涂油而得名。体长55-60mm，鸣声为&quot;ジージージー…&quot;的高音。7-9月活动，分布日本全国，</div>
+</a>
+<a class="entry-item" href="洋服.html">
+  <div class="noun">洋服</div>
+  <div class="snippet">明治时代从西方传入的服装，与传统的和服相对。明治政府推行&quot;文明开化&quot;政策，1871年发布&quot;散髪脱刀令&quot;鼓励洋装，从官服、军服、学生服开始逐步普及。1883年鹿鸣馆建成后，上流社会盛行洋装舞会。小说中用作比喻：好的裁缝做的西装一穿就合身，差的</div>
+</a>
+<a class="entry-item" href="洗湯.html">
+  <div class="noun">洗湯</div>
+  <div class="snippet">澡堂、公共浴场。日语中&quot;洗湯&quot;即&quot;銭湯&quot;的别称，指付费入浴的公共洗澡设施。明治时期城市中普遍存在。猫听闻主人常去洗汤，决定前往一探究竟。</div>
+</a>
+<a class="entry-item" href="浴場.html">
+  <div class="noun">浴場</div>
+  <div class="snippet">浴室、洗浴设施。此处指公共澡堂（銭湯/洗湯）。猫本段落后半段前往浴场探访，成为新的冒险舞台。</div>
+</a>
+<a class="entry-item" href="海鼠.html">
+  <div class="noun">海鼠</div>
+  <div class="snippet">日文读作なまこ（namako），即海参。在日本是冬季传统食材，常以醋渍生食。干燥品（煎海鼠、いりこ）从8世纪起就被作为贡品，江户时代更成为对华重要出口商品。海参肠的盐渍品（このわた）被视为高档珍味。书中将最早吃海参的人誉为胆识过人。</div>
+</a>
+<a class="entry-item" href="漆喰.html">
+  <div class="noun">漆喰</div>
+  <div class="snippet">漆喰（しっくい）是日本传统建筑中广泛使用的石灰灰泥（lime plaster）涂装材料，主要用于墙壁和天花板的表面。主要成分包括消石灰（熟石灰）、海藻糊（布海苔作为粘合剂）、植物纤维（麻丝等增强抗裂性）等。具有优良的调湿性能（多孔结构可吸收</div>
+</a>
+<a class="entry-item" href="潜り戸.html">
+  <div class="noun">潜り戸</div>
+  <div class="snippet">日本建筑中大门或主门上设置的小门，需要弯腰（&quot;潜る&quot;）才能通过。用于日常人员进出，不必频繁开合大门。体现了日本传统建筑中的实用性设计。也称&quot;くぐり門&quot;。</div>
+</a>
+<a class="entry-item" href="火消壺.html">
+  <div class="noun">火消壺</div>
+  <div class="snippet">日本传统厨房用具，陶制带盖容器。将燃烧后的炭火或柴薪余烬放入壶中，加盖密封以断绝氧气，使火安全熄灭。因不使用水，熄灭后的炭可回收再利用（称为&quot;消炭&quot;，易于下次点火），兼具防火与资源循环的功能。在江户时代的木造密集住宅区中，是台所防火不可或缺</div>
+</a>
+<a class="entry-item" href="炬燵.html">
+  <div class="noun">炬燵</div>
+  <div class="snippet">日本传统冬季取暖用具，中文常译为&quot;暖桌&quot;或&quot;被炉&quot;。由矮桌、棉被和发热器组成，人们将腿伸入桌下取暖。起源于室町时代的&quot;火闥&quot;，最初为地面挖坑放入炭火的&quot;掘炬燵&quot;，二战后发展为使用红外线加热的电动式。炬燵是日本冬季最具代表性的生活场景之一，象</div>
+</a>
+<a class="entry-item" href="炭坑.html">
+  <div class="noun">炭坑</div>
+  <div class="snippet">日语中指煤矿（炭鉱）的坑道及采掘场所。九州地区（尤其是福冈县筑丰炭田和佐贺县、长崎县）是日本近代最重要的产煤区，在明治至昭和年间为日本的工业革命提供了主要能源。作品中铃木藤十郎曾在九州炭坑工作，后被调回东京总部任职，反映了明治时期技术人员从</div>
+</a>
+<a class="entry-item" href="烏.html">
+  <div class="noun">烏</div>
+  <div class="snippet">乌鸦，鸦科鸟类，全身黑色羽毛。日语中称为&quot;からす&quot;，汉字&quot;烏&quot;由&quot;鳥&quot;字去掉代表眼睛的一点构成，象征其羽毛漆黑、目不可见。在日本文化中乌鸦兼具神圣与不吉的双重意涵。</div>
+</a>
+<a class="entry-item" href="烏賊の墨.html">
+  <div class="noun">烏賊の墨</div>
+  <div class="snippet">烏賊の墨（いかのすみ），即乌贼（墨鱼）喷出的墨汁，是头足类动物（乌贼、章鱼等）最重要的防御机制。当遭遇捕食者攻击时，乌贼会喷出墨团作为&quot;诱饵&quot;（decoy），吸引捕食者攻击墨团而自身借机逃脱。研究表明墨汁中还含有麻痹捕食者嗅觉的成分。在《我</div>
+</a>
+<a class="entry-item" href="牡丹餅.html">
+  <div class="noun">牡丹餅</div>
+  <div class="snippet">糯米を炊いて軽く潰し小豆餡で包んだ和菓子。春の彼岸に供え物として作られる。同じ菓子でも秋彼岸には「萩餅（おはぎ）」と呼ばれ、「棚から牡丹餅」のことわざでも知られる。</div>
+</a>
+<a class="entry-item" href="狆.html">
+  <div class="noun">狆</div>
+  <div class="snippet">狆（ちん）是日本原生小型犬种，英文名Japanese Chin（日本狆），属玩赏犬。祖先源自中国西藏猎鹬犬，732年经由朝鲜半岛传入日本宫廷。在皇室和上流阶级中被视为神圣宠物，经过长期纯化繁殖成为固定品种。特征为方形体型、丝质长毛、扁平面部</div>
+</a>
+<a class="entry-item" href="猪口.html">
+  <div class="noun">猪口</div>
+  <div class="snippet">日本酒を飲むための小型の陶磁器製の杯。少量の酒をゆっくり味わうために用いられる。</div>
+</a>
+<a class="entry-item" href="猿股.html">
+  <div class="noun">猿股</div>
+  <div class="snippet">猿股（さるまた），日本传统男性下装，形似短裤或兜裆布的贴身衣物。 本章中猫以戏谑的口吻虚构了服装的进化史：第一个&quot;赤裸的人&quot;为了彰显自我、 与他人区分，花了十年时间发明了猿股，穿上后得意洋洋地在街上行走， 此人便是&quot;今日の車夫の先祖&quot;。猫以</div>
+</a>
+<a class="entry-item" href="猿轡.html">
+  <div class="noun">猿轡</div>
+  <div class="snippet">猿轡（さるぐつわ），日本传统拘束用具，塞入受刑者口中使其无法出声的堵嘴工具。&quot;猿轡&quot;的语源来自&quot;噛む轡&quot;（かむぐつわ），原指马嚼子（马衔铁）。后引申为强制塞入人口中的堵嘴布团或木栓。是日本时代剧、捕物帖中常见的道具，用于绑架、拷问等场景。作</div>
+</a>
+<a class="entry-item" href="玉人.html">
+  <div class="noun">玉人</div>
+  <div class="snippet">古代中国的一个词语，出自《周礼·考工记》，指专门雕琢玉器的工匠。文中苦沙弥的客人引用此词，称中国古代称磨玉的人为&quot;玉人&quot;，且身份低微，以此贬低寒月磨玻璃球的&quot;研究&quot;毫无价值。这个词后来也引申为容貌像玉一样美丽的人（美男子或美女），在唐诗中常</div>
+</a>
+<a class="entry-item" href="琉球塗.html">
+  <div class="noun">琉球塗</div>
+  <div class="snippet">琉球王国（今冲绳）传统漆器工艺，又称琉球漆器。14世纪受中国漆艺技法影响而兴起，作为琉球王国向中国、日本的贡品而发展。特色技法包括螺鈿（嵌夜光贝）、沈金（雕填入金粉）、堆錦（立体堆漆）以及独特的豚血下地（猪血打底）。1983年被指定为日本国</div>
+</a>
+<a class="entry-item" href="琥珀.html">
+  <div class="noun">琥珀</div>
+  <div class="snippet">古代松柏科植物树脂经数千万年石化形成的有机宝石，颜色以淡黄至黄褐色为主，轻质温润，摩擦生电，常包裹古代昆虫等内含物。</div>
+</a>
+<a class="entry-item" href="瑟.html">
+  <div class="noun">瑟</div>
+  <div class="snippet">瑟（しつ）是中国古代拨弦乐器，木制中空长方形琴体，标准为25弦（一说最初50弦），按五声音阶调律。传说由伏羲发明，黄帝因听50弦瑟音过于悲伤而破为25弦。西周时期已有记载，战国至汉代达到鼎盛，是宫廷雅乐的核心乐器之一。唐代以后渐衰，被筝取代</div>
+</a>
+<a class="entry-item" href="瓢簞.html">
+  <div class="noun">瓢簞</div>
+  <div class="snippet">ひょうたんの実を乾燥させて作った容器。日本では縁起物とされ、酒や薬の入れ物として使われた。</div>
+</a>
+<a class="entry-item" href="甘干し.html">
+  <div class="noun">甘干し</div>
+  <div class="snippet">即干柿（干し柿），将柿子去皮后吊挂晾晒制成的传统日式保存食品。因柿子在干燥过程中糖分浓缩、味道甘甜而得名。文中寒月吃的&quot;最后の甘干し&quot;指涩柿子晒成的甜柿干。</div>
+</a>
+<a class="entry-item" href="甲割.html">
+  <div class="noun">甲割</div>
+  <div class="snippet">日文读作かぶとわり(kabuwari)，又写作&quot;兜割&quot;，是一种日本古代武器。形似铁扇但功能不同，专门用来劈砍敌方头盔（兜）并在敌人目眩时予以打击。文中老人称其为与铁扇完全不同的武器，据称从楠正成时代（南北朝时期）就已使用。江户时代作为町方（</div>
+</a>
+<a class="entry-item" href="画工.html">
+  <div class="noun">画工</div>
+  <div class="snippet">日本历史上以绘画为职业的工匠或职人画家。奈良时代朝廷设画工司（属中务省），由画师统领画部进行绘画制作。与近现代的「画家」（艺术家）不同，画工更强调其作为技术工匠的身份。平安时代以后逐渐被「绘师」一词取代，江户时代的浮世绘师亦属此类。</div>
+</a>
+<a class="entry-item" href="番茶.html">
+  <div class="noun">番茶</div>
+  <div class="snippet">日本绿茶的一种，使用夏秋季采摘的较成熟茶叶或茶梗制成。价格低廉、涩味少、咖啡因含量低，是日本家庭日常饮用的大众茶。</div>
+</a>
+<a class="entry-item" href="畳.html">
+  <div class="noun">畳</div>
+  <div class="snippet">畳（たたみ）是日本传统地板铺设材料，以灯心草（いぐさ）编织表面、内部填充稻秸压制而成，中文常称&quot;榻榻米&quot;。奈良时代从中国传入，原为贵族铺坐的独立席具，室町时代发展为房间全面铺装样式。具有优良的调湿、保温、缓冲性能。尺寸有京间、江户间、团地间</div>
+</a>
+<a class="entry-item" href="癇癪玉.html">
+  <div class="noun">癇癪玉</div>
+  <div class="snippet">字面为&quot;暴躁球&quot;，一指摔在地上会响的小爆竹（摔炮）；二比喻人突然爆发的怒火。源自&quot;癇癪&quot;（暴躁脾气）+ &quot;玉&quot;（球）。文中用嚼碎的癇癪玉化作火焰比喻苦沙弥的暴怒。</div>
+</a>
+<a class="entry-item" href="白蘋紅蓼.html">
+  <div class="noun">白蘋紅蓼</div>
+  <div class="snippet">中国古典诗词中常对举出现的两种水边植物。白蘋为浅水性浮草开白花，红蓼为蓼科一年生草本开红花。两者组合象征秋日水边景物，常用于表达旅情、漂泊、隐逸之趣，色彩对比鲜明。</div>
+</a>
+<a class="entry-item" href="百日紅.html">
+  <div class="noun">百日紅</div>
+  <div class="snippet">日本名&quot;サルスベリ&quot;（猿滑），因树干光滑猿猴也无法攀爬而得名，汉字写作&quot;百日紅&quot;因其花期长达百日（6月-9月），开满红色花朵。中文名&quot;紫薇&quot;。原产中国，是日本庭院中常见的观赏树。在本章中发挥着重要的叙事作用：迷亭曾在寺院百日红花盛开时夸口要</div>
+</a>
+<a class="entry-item" href="真鍮.html">
+  <div class="noun">真鍮</div>
+  <div class="snippet">日文称&quot;真鍮（しんちゅう）&quot;，中文称黄铜，是铜与锌的合金。呈金黄色，具有良好的延展性和耐腐蚀性，广泛用于佛像、佛具、装饰品及工业材料。日本从庆长年间（1596-1615年）开始大量使用真鍮制作佛具和生活用品。中国早在宋代就掌握了用炉甘石（菱</div>
+</a>
+<a class="entry-item" href="石地蔵.html">
+  <div class="noun">石地蔵</div>
+  <div class="snippet">石で造られた地蔵菩薩像。日本では路傍や村はずれに多く見られ、旅人や子供の守護神として信仰される。 --- 以石材雕刻的地藏菩萨像。地藏菩萨在佛教中于释迦入灭后至弥勒出世前守护六道众生。日本路旁常见石地藏，被视为旅人、儿童守护神。&quot;石地蔵&quot;也</div>
+</a>
+<a class="entry-item" href="石灯籠.html">
+  <div class="noun">石灯籠</div>
+  <div class="snippet">日本庭园中的石制灯笼，起源于中国佛前供灯，经朝鲜半岛随佛教传入日本。最初用于寺院，安土桃山时代因茶道兴起而成为茶庭露地的景观装饰要素。基本结构包括宝珠、笠、火袋、中台、竿、基础六个部分。种类有春日灯笼、雪見灯籠、織部灯籠、徽軫灯籠等。已成为</div>
+</a>
+<a class="entry-item" href="石炭.html">
+  <div class="noun">石炭</div>
+  <div class="snippet">煤炭，矿物燃料。明治时代日本澡堂普遍以煤炭为燃料烧水。猫在澡堂后院看到堆积如山的煤炭，感叹人类从食米、食鱼发展到&quot;食煤&quot;的堕落。</div>
+</a>
+<a class="entry-item" href="石鹼.html">
+  <div class="noun">石鹼</div>
+  <div class="snippet">肥皂。&quot;石鹼&quot;为明治时期使用的汉字表记，后多写作&quot;石鹸&quot;（せっけん）。由日本学者从&quot;石&quot;（矿物）和&quot;鹼&quot;（碱）造出，指用于去污的碱性清洁剂。</div>
+</a>
+<a class="entry-item" href="硝子の球.html">
+  <div class="noun">硝子の球</div>
+  <div class="snippet">小说中寒月为其博士论文实验而制作的玻璃球体。寒月试图制造一个完全符合几何定义的理想球体，以替代青蛙眼球晶状体进行光学实验。然而完美球体在现实中不可能实现，他不断打磨却陷入恶性循环——修正一侧半径则另一侧变长，修正后整体又扭曲变形。从最初苹果</div>
+</a>
+<a class="entry-item" href="硝子窓.html">
+  <div class="noun">硝子窓</div>
+  <div class="snippet">玻璃窗。&quot;硝子&quot;（がらす）是日语中对玻璃的传统称呼，源自葡萄牙语&quot;vidro&quot;。文中指澡堂建筑上的玻璃窗户。</div>
+</a>
+<a class="entry-item" href="碁石.html">
+  <div class="noun">碁石</div>
+  <div class="snippet">围棋棋子。围棋（囲碁）是源自中国的传统棋盘游戏，在日本平安时代传入后深受贵族和文人喜爱。碁石通常为双凸透镜形状，黑白各180枚以上，材质有蛤贝制（白）和那智黑石制（黑）等高级品。</div>
+</a>
+<a class="entry-item" href="磬.html">
+  <div class="noun">磬</div>
+  <div class="snippet">磬（けい）是中国古代石制打击乐器，属于&quot;八音&quot;分类中的&quot;石&quot;类。以石或玉制成曲尺形，悬挂于架上以槌敲击发声。殷商时期已出现单体&quot;特磬&quot;，周代发展为大小多枚并列悬挂的&quot;编磬&quot;（如曾侯乙墓出土者）。用于宫廷雅乐、祭祀等庄严场合。字形源自古人对悬</div>
+</a>
+<a class="entry-item" href="空也餅.html">
+  <div class="noun">空也餅</div>
+  <div class="snippet">空也饼（Kūyaimochi），日本传统和菓子的一种，将糯米蒸熟后捣至半碎，包裹碎粒红豆馅而成的圆形麻糬。名称源于平安时代的僧侣&quot;空也上人&quot;。此外，东京银座有一家和菓子老铺名为&quot;空也&quot;（Kūya），创业于明治17年（1884年），以&quot;空也最</div>
+</a>
+<a class="entry-item" href="空気銃.html">
+  <div class="noun">空気銃</div>
+  <div class="snippet">空气枪（Air Gun），利用压缩空气或气体为动力发射弹丸的枪械，不使用火药。起源于15世纪的欧洲，18世纪曾作为军用武器（奥地利军队曾配备连发空气枪）。现代主要用于奥林匹克射击竞技、狩猎和休闲射击。在作品中，迷亭戏谑地建议苦沙弥去仲见世买</div>
+</a>
+<a class="entry-item" href="竃.html">
+  <div class="noun">竃</div>
+  <div class="snippet">灶（かまど，亦写作&quot;竈&quot;），日本传统使用木炭和薪柴的烹饪炉灶。 通常用土、砖石或陶器制成，上部架锅，以明火加热。 另有方言称呼&quot;へっつい&quot;（关西方言）和&quot;くど&quot;。 在日本文化中，灶不仅是家庭饮食的核心场所， 还被视为神明居所——&quot;灶神&quot;（か</div>
+</a>
+<a class="entry-item" href="立葵.html">
+  <div class="noun">立葵</div>
+  <div class="snippet">立葵（学名Alcea rosea），英文名Hollyhock，是锦葵科的草本植物。原产于中国华南地区，高可达2—3米，花期在春夏季（日本为6—8月）。花色丰富，有白、黄、粉、红、紫、黑等多种。花朵从茎的下方逐渐向上开放，在日本又称「梅雨葵」</div>
+</a>
+<a class="entry-item" href="竜文堂.html">
+  <div class="noun">竜文堂</div>
+  <div class="snippet">龙文堂，日本京都的著名铁器堂号，创始于江户时代后期，是日本最早制作铁瓶（铁壶）的工坊之一，位列&quot;京都铁瓶四大堂号&quot;之首。以脱蜡法（失蜡法）铸造闻名，每把铁壶都是独一无二的艺术品。龙文堂铁瓶以铜盖为特色，兼具茶道美学与实用价值。在作品中，猫以</div>
+</a>
+<a class="entry-item" href="竹刀.html">
+  <div class="noun">竹刀</div>
+  <div class="snippet">日本剑道（剣道）练习中使用的竹制模拟刀，由四片竹子组合而成，外包皮革刀镡。轻便安全，适合高强度的对练和比赛。竹刀在江户时代中期随着剑道护具的完善而普及，取代了真刀和木刀成为主要的练习武器。在本章中，迷亭回忆学生时代&quot;每晚拿着竹刀去寺院后面的</div>
+</a>
+<a class="entry-item" href="竹垣.html">
+  <div class="noun">竹垣</div>
+  <div class="snippet">竹を編んで作られた日本特有の垣根。庭園や茶庭などで空間を区切り、風雅な景観を演出する。</div>
+</a>
+<a class="entry-item" href="竹槍.html">
+  <div class="noun">竹槍</div>
+  <div class="snippet">日文读作&quot;たけやり&quot;，用竹子削尖制成的简易长矛。在日本历史上，竹枪是战国时代足轻（步兵）和江户时代农民起义（一揆）常用的简陋武器。作品中迷亭以&quot;竹枪二三百根&quot;比喻过时、脆弱的武力手段，讽刺那些试图以旧时代的暴力压制个性自由的顽固保守派，将其</div>
+</a>
+<a class="entry-item" href="笊蕎麦.html">
+  <div class="noun">笊蕎麦</div>
+  <div class="snippet">日本传统冷荞麦面料理，将煮好的荞麦面用冷水冲洗沥干后盛放在竹编笊篱（笊/ざる）上，配以切海苔，蘸取特制酱汁（つゆ）食用。与&quot;盛り蕎麦&quot;（もりそば）的区别在于是否撒海苔——笊蕎麦撒有海苔，而盛り蕎麦没有。起源于江户时代中期，某店铺将荞麦面盛于</div>
+</a>
+<a class="entry-item" href="第二読本.html">
+  <div class="noun">第二読本</div>
+  <div class="snippet">明治时期日本小学国语教育使用的国定教科书。1886年文部省导入教科书审阅制度后编纂，《寻常小学读本》国定教科书系列中的第二册，供二年级程度使用。1904年国定教科书制度确立后由文部省统一编纂。文中苦沙弥将英文课本《第二読本》中的课文当作&quot;名</div>
+</a>
+<a class="entry-item" href="筒袖.html">
+  <div class="noun">筒袖</div>
+  <div class="snippet">日本和服袖型的一种（tsutsusode），袖口呈筒状、狭窄收束，与振袖的宽大袖口相对。特点是便于活动，原为武家和职人的实用服装。明治时期被女学生的体操服采纳，与行灯袴搭配成为明治女学生的标志性装束。作品中迷亭赞叹女学生&quot;筒袖を穿いて鉄棒へ</div>
+</a>
+<a class="entry-item" href="箪笥.html">
+  <div class="noun">箪笥</div>
+  <div class="snippet">日式衣橱、衣柜，汉字写作&quot;箪笥&quot;，读作&quot;たんす&quot;。日本传统家具，用木材或竹材制成，带抽屉，用于收纳衣物、小物。是日本家庭必备的收纳家具。江户时代后期逐渐定型为现代样式，明治时代随着生活西化，箪笥的设计与功能也相应发展。作品中讽刺女主人不懂收</div>
+</a>
+<a class="entry-item" href="籠.html">
+  <div class="noun">籠</div>
+  <div class="snippet">日语指篮子、笼子等用竹、藤、草等编织的容器。日本竹编工艺历史悠久，从绳文时代的遗迹中即有发现。江户时代静冈的&quot;骏河竹千筋细工&quot;是著名的竹编传统工艺品。&quot;笼&quot;在《我是猫》中指将女童像货物一样装进去贩卖的竹筐，是明治时代对人口贩卖场景的描写。</div>
+</a>
+<a class="entry-item" href="糸織.html">
+  <div class="noun">糸織</div>
+  <div class="snippet">丝织品的通称，特指用茧丝织成的平纹或斜纹面料。日语&quot;糸織&quot;（いとおり）指丝线织成的布，质地上乘。明治时代日本丝织品是重要出口产业。在作品中女主人称被偷的羽织是&quot;糸織&quot;，且强调是河野叔母的遗物，质地不同于现在的产品，暗示明治时代丝织品质量的变</div>
+</a>
+<a class="entry-item" href="紋付.html">
+  <div class="noun">紋付</div>
+  <div class="snippet">日本男性正式礼服，即在黑色羽织和服上加家纹（纹章），搭配袴（裤裙），为第一礼装。源自江户武家社会，明治时期经太政官令定为官吏通常礼服，至今用于冠婚葬祭、毕业典礼等正式场合。</div>
+</a>
+<a class="entry-item" href="紋付羽織.html">
+  <div class="noun">紋付羽織</div>
+  <div class="snippet">日本男性传统礼服外套，在黑色羽织的左右胸前、两袖和背部五处缀有家族纹章（家纹），与袴搭配使用，为日本男性第一礼装。原为武家略礼装，明治时期通过服制改革确立为国民礼服，广泛用于冠婚葬祭等正式场合。</div>
+</a>
+<a class="entry-item" href="紬.html">
+  <div class="noun">紬</div>
+  <div class="snippet">日语读作&quot;つむぎ&quot;，用紬丝（野蚕丝或废茧丝纺成的粗丝）织成的平纹丝织物。比普通绢织物更厚实耐磨，风格质朴，是日本传统丝织品中的日常实用类别。因质地结实、价格适中，明治时期广泛用于制作日常和服。著名的紬产地有结城、大岛等。在作品中指主人的紬质</div>
+</a>
+<a class="entry-item" href="結城紬.html">
+  <div class="noun">結城紬</div>
+  <div class="snippet">日本茨城县结城市周边生产的传统高级绢织物，采用手工纺丝和腰机织造，以不施捻丝的独特工艺形成轻暖柔韧的质感。1956年被指定为重要无形文化财，2010年入选UNESCO无形文化遗产。</div>
+</a>
+<a class="entry-item" href="絵端書.html">
+  <div class="noun">絵端書</div>
+  <div class="snippet">印有图画或照片的明信片，日本于1900年开放民间制作后迅速流行，日俄战争期间大量用于慰问士兵，兼具通信和美术收藏功能。</div>
+</a>
+<a class="entry-item" href="綿入.html">
+  <div class="noun">綿入</div>
+  <div class="snippet">日本传统冬季防寒和服，在表里布料之间夹入真丝绵（绢绵）并加以绗缝固定。属于&quot;袷&quot;（有里布的和服）的一种加厚变体，比普通袷更加保暖，在寒冬时节穿着。江户时代至明治时代是庶民重要的防寒衣物。作品中苦沙弥先生被盗走所有衣物，前一天还穿着两件綿入，</div>
+</a>
+<a class="entry-item" href="縮緬.html">
+  <div class="noun">縮緬</div>
+  <div class="snippet">日本传统丝绸织物，表面有细密凹凸纹路（绉纹），由强捻纬线织造后精炼收缩而成。江户中期丹后地区创制，质地柔软温暖，是高级和服的代表性面料，广泛用于友禅染等染色工艺。</div>
+</a>
+<a class="entry-item" href="繻絆.html">
+  <div class="noun">繻絆</div>
+  <div class="snippet">日语&quot;襦袢&quot;（じゅばん）的汉字表记，即和服内衣。穿在长着物和肌襦袢之间，主要功能是防止汗渍和皮脂污染外衣，只有领口部分露在外衣外面作为装饰。语源来自葡萄牙语 gibão（短上衣）。明治时代随着和服西化改良而普及。在作品中指盗贼一并盗走的和服</div>
+</a>
+<a class="entry-item" href="置炬燵.html">
+  <div class="noun">置炬燵</div>
+  <div class="snippet">可直接放置在榻榻米或地板上的可移动式被炉（暖桌）。与之相对的是&quot;掘り炬燵&quot;（在地板挖凹槽的固定式）。起源可追溯到室町时代的围炉里，战后电气化使其在日本家庭中广泛普及，成为冬日家庭团圆的象征。</div>
+</a>
+<a class="entry-item" href="羊羹.html">
+  <div class="noun">羊羹</div>
+  <div class="snippet">日本最具代表性的传统和果子之一，原为中国古代用羊肉熬制的肉羹，镰仓时代随禅宗传入日本后，因僧侣禁肉食而改用小豆、寒天等植物性材料替代，经日本独自演变成为甜味点心。天正17年（1589年）和歌山&quot;骏河屋&quot;发明了加入寒天的炼羊羹制法，奠定了现代</div>
+</a>
+<a class="entry-item" href="羽子板.html">
+  <div class="noun">羽子板</div>
+  <div class="snippet">日本传统木板拍，用于正月游戏&quot;羽根突き&quot;（类似羽毛球）。室町时代从中国传入，原为驱邪仪式，江户时代演变为女子的游乐工具，并出现装饰精美的押绘羽子板。现代东京浅草寺每年12月举办&quot;羽子板市&quot;。</div>
+</a>
+<a class="entry-item" href="羽織.html">
+  <div class="noun">羽織</div>
+  <div class="snippet">日式传统外套，穿着在和服之上，长至腰臀或膝上。前开襟，用细带（羽织紐）系结。江户时代原为武士的正式外套，后普及至庶民。明治时代成为男性正式和服的重要组成部分，搭配纹付羽织袴则是最高的正式装束。在作品中盗贼将主人的羽织和腰带等一起用紬外褂包裹</div>
+</a>
+<a class="entry-item" href="聖書.html">
+  <div class="noun">聖書</div>
+  <div class="snippet">基督教经典，由旧约圣经（希伯来语写成，记录耶稣降生前的神启与以色列历史）和新约圣经（希腊语写成，记录耶稣生平与初代教会发展）两部分组成。旧约39卷（新教计数），新约27卷，合计66卷。被视为神所默示的信仰与生活规范，是全世界翻译语种最多、发</div>
+</a>
+<a class="entry-item" href="股引.html">
+  <div class="noun">股引</div>
+  <div class="snippet">日语读作&quot;ももひき&quot;，日本传统男性下装，形似紧身裤，从腰部包裹至脚踝。原为劳动用或武士的防具内衬，江户末期至明治时代成为庶民日常衣着，尤其用于防寒。在现代日本祭典活动中仍能看到。在作品中盗贼将股引系在脖子上，滑稽可笑。</div>
+</a>
+<a class="entry-item" href="膃肭臍.html">
+  <div class="noun">膃肭臍</div>
+  <div class="snippet">日语中海狗（北海狮/海狗）的名称，读音为&quot;オットセイ&quot;。汉字&quot;膃肭臍&quot;源自中药名&quot;腽肭脐&quot;（海狗鞭，即海狗的阴茎与睾丸，被视为强精壮阳药材），江户时代从中国传入日本后逐渐被当作动物本身的称呼。词源也可能受阿伊努语&quot;オンネㇷ゚&quot;（海中的大型动</div>
+</a>
+<a class="entry-item" href="自在鉤.html">
+  <div class="noun">自在鉤</div>
+  <div class="snippet">日本传统民居中悬挂于围炉里（いろり）或灶台上方的可调节式挂钩。由竹竿或铁链连接，通过一个称为&quot;猿&quot;（さる）的木制或金属制卡榫来调节高度，可上下移动以控制锅或铁壶与火源的距离，故称&quot;自在&quot;（可自由调节）。起源于室町时代，后成为日本传统厨房的核</div>
+</a>
+<a class="entry-item" href="自然薯.html">
+  <div class="noun">自然薯</div>
+  <div class="snippet">日本原产的野生山芋（Dioscorea japonica），属薯蓣科多年生蔓性植物。自縄文时代起即为日本人采食，是日本最古老的传统食材之一。与人工栽培的长芋不同，自然薯需在自然山林中生长，栽培困难，黏液丰富，多研磨成山药泥（とろろ）食用。在</div>
+</a>
+<a class="entry-item" href="艶書.html">
+  <div class="noun">艶書</div>
+  <div class="snippet">日语中指情书、恋文，即表达爱慕之情的书信。与一般的&quot;恋文&quot;相比，&quot;艶書&quot;带有更为艳美、风雅的情感色彩。在《我是猫》中，学生古井武右衛門等人以艳书恶作剧向金田家女儿寄送情书，引发退学危机。</div>
+</a>
+<a class="entry-item" href="花活.html">
+  <div class="noun">花活</div>
+  <div class="snippet">即&quot;花入れ&quot;（花器），日本插花（生花/华道）所使用的容器。与花材同样被视为作品的重要组成部分。日本花道有池坊、小原流、草月流等主要流派，花器材质包括陶器、瓷器、竹编等。</div>
+</a>
+<a class="entry-item" href="花道.html">
+  <div class="noun">花道</div>
+  <div class="snippet">花道（はなみち），日本传统歌舞伎舞台的重要组成部分， 指从舞台左侧（下手）贯穿观众席延伸到剧场后方的通道（通路）。 演员通过花道登场或退场，也可在花道中进行重要表演。 花道上的&quot;七三&quot;（距舞台七成位置）是演员表演&quot;见得&quot;（亮相）的重要定点。</div>
+</a>
+<a class="entry-item" href="茶筌.html">
+  <div class="noun">茶筌</div>
+  <div class="snippet">茶筌，亦写作「茶筅」，是日本茶道中用于点抹茶时搅拌茶汤的竹制工具，由细竹片束扎而成。同时「茶筅髷」也指一种将头发束成茶筅形状的日本传统发型，在战国至江户时代流行。小说中迷亭提到织田信长结婚时将头发梳成茶筅髷，用这个典故来调侃寒月的过时打扮和</div>
+</a>
+<a class="entry-item" href="草双紙.html">
+  <div class="noun">草双紙</div>
+  <div class="snippet">日本江户时代中期至明治初期流行的通俗木版插图小说，属于&quot;戯作&quot;的一种。以假名文字为主、图文并茂，主要面向妇女儿童读者。按封面颜色可分为赤本（童话）、黑本（武勇传）、青本（戏剧梗概）、黄表纸（成人讽刺滑稽）及合卷（长篇化）。代表作家有恋川春町</div>
+</a>
+<a class="entry-item" href="葛根湯.html">
+  <div class="noun">葛根湯</div>
+  <div class="snippet">葛根汤是张仲景《伤寒论》中的经典汉方方剂，由葛根、麻黄、桂枝、芍药、生姜、大枣、炙甘草七味生药组成。主治太阳病之项背强几几、无汗恶风等症。在日本汉方中，葛根汤是使用最广泛的方剂之一，被视为风寒感冒初期治疗的首选药。2021年日本国内出荷金额</div>
+</a>
+<a class="entry-item" href="蒔絵.html">
+  <div class="noun">蒔絵</div>
+  <div class="snippet">日本传统漆器装饰技法，在漆器表面涂漆后撒上金、银等金属粉描绘图案。&quot;蒔&quot;意为撒播。起源于奈良时代，平安时代形成&quot;研出蒔絵&quot;技法，江户时代达到全盛，代表匠人有尾形光琳、本阿弥光悦等。英语&quot;Japan&quot;一词曾兼指漆器，可见其国际影响力。技法分为</div>
+</a>
+<a class="entry-item" href="蒲鉾.html">
+  <div class="noun">蒲鉾</div>
+  <div class="snippet">日本传统鱼糜加工食品，将白身鱼捣碎调味后蒸制或烤制而成，平安时代末期已有文献记载，因最初形态似香蒲穗而得名，是正月御节料理中不可或缺的吉祥食材。</div>
+</a>
+<a class="entry-item" href="蒸籠.html">
+  <div class="noun">蒸籠</div>
+  <div class="snippet">日本传统竹制蒸笼（Seiro），通常以木框和芦苇编织的底部构成，置于锅上用于蒸制食材。在荞麦面文化中，&quot;蒸籠&quot;也指用于盛放荞麦面的小竹笼屉（此时写为&quot;せいろ&quot;），是盛り蕎麦中的标准容器。蒸笼起源于中国，经由朝鲜半岛传入日本，江户时代随荞麦面</div>
+</a>
+<a class="entry-item" href="蓆.html">
+  <div class="noun">蓆</div>
+  <div class="snippet">蓆（むしろ），日本传统编织敷物，用稻草（藁むしろ）、蔺草（藺むしろ）、竹等天然植物材料手工编织而成。历史可追溯至2000年前，《日本书纪》中已有记载。平安时代出现可折叠的&quot;畳&quot;（榻榻米），源自蓆的改良。蓆在传统日本生活中广泛用于铺地、晾晒谷</div>
+</a>
+<a class="entry-item" href="蕎麦湯.html">
+  <div class="noun">蕎麦湯</div>
+  <div class="snippet">日式荞麦面的煮面汤（sobayu），含有从荞麦面中溶出的蛋白质、芦丁、维生素等营养成分。日本关东地区有吃完冷荞麦面后将荞麦汤倒入剩余沾汁中饮用的习惯，既暖胃又体现了不浪费食材的饮食文化。作品中初さん被描述为仅靠荞麦汤维持二十一日，形容其刻苦</div>
+</a>
+<a class="entry-item" href="薩摩上布.html">
+  <div class="noun">薩摩上布</div>
+  <div class="snippet">薩摩上布（さつまじょうふ），日本鹿儿岛地区（旧萨摩国）生产的传统高级麻织物。上布指用苎麻（からむし）手工捻线织成的上等薄布，以轻、薄、透气性佳著称，是夏季和服的上等面料。萨摩上布以独特的缟纹（紺絣、白地絣）为特征。与冲绳的宫古上布、八重山上</div>
+</a>
+<a class="entry-item" href="薩摩下駄.html">
+  <div class="noun">薩摩下駄</div>
+  <div class="snippet">日本萨摩国（今鹿儿岛县）地区出产的传统木屐。下駄是日本传统木制 footwear，以木台和鼻緒构成。萨摩下駄带有萨摩地区的地方特色。</div>
+</a>
+<a class="entry-item" href="薩摩絣.html">
+  <div class="noun">薩摩絣</div>
+  <div class="snippet">日本传统纺织工艺之一，产于鹿儿岛县（旧萨摩藩）。用预先染色的棉线织出模糊花纹的絣织物，以蓝染白纹为特色。原为琉球特产，1609年岛津氏入侵琉球后技术传入萨摩，遂得名&quot;萨摩絣&quot;。</div>
+</a>
+<a class="entry-item" href="薩摩芋.html">
+  <div class="noun">薩摩芋</div>
+  <div class="snippet">薩摩芋（さつまいも）即甘薯/红薯，原产中美洲。1597年经中国传入琉球（冲绳），再由琉球传入萨摩藩（今鹿儿岛县），故称&quot;薩摩芋&quot;。江户时代享保大饥荒（1732年）后，儒者青木昆阳受德川吉宗之命成功推广栽培，成为重要的救荒作物。江户后期出现烧</div>
+</a>
+<a class="entry-item" href="藁で括った蒟蒻.html">
+  <div class="noun">藁で括った蒟蒻</div>
+  <div class="snippet">日本传统的蒟蒻（魔芋）保存方式：将制成的魔芋用稻草捆扎起来，既便于携带运输，稻草的清香也能渗入魔芋中增添风味。在江户时代的市集上常见此包装。小说中作为比喻，形容人像草捆魔芋一样滑溜、没有定见、圆滑世故却缺乏骨气的性格。</div>
+</a>
+<a class="entry-item" href="藤村の羊羹.html">
+  <div class="noun">藤村の羊羹</div>
+  <div class="snippet">日本东京本乡（东京大学附近）的老字号和果子名品，以藤紫色的羊羹著称。历史可追溯至丰臣秀吉时代，曾是御用果子。夏目漱石常光顾此店，作品中迷亭来访时毫不客气地抓起藤村羊羹大口吃，展现了这家店在明治文坛的名气。</div>
+</a>
+<a class="entry-item" href="虎皮.html">
+  <div class="noun">虎皮</div>
+  <div class="snippet">日语指老虎的皮毛（torakawa）。在日本禅宗文化中，&quot;虎皮&quot;（皋比/こうひ）象征讲席、师者的权威地位——高僧坐虎皮上说法。在《我是猫》中，猫以&quot;朝夕虎皮の前に侍べる&quot;（朝夕侍奉于老师虎皮座前）自居，表达了猫作为苦沙弥门下弟子的自傲感，同</div>
+</a>
+<a class="entry-item" href="蚤.html">
+  <div class="noun">蚤</div>
+  <div class="snippet">跳蚤，寄生性昆虫，体小而侧扁，深褐色，善跳跃。猫因运动出汗后皮毛潮湿，招来跳蚤叮咬而浑身刺痒，成为其后一系列行动的原因之一。</div>
+</a>
+<a class="entry-item" href="蝙蝠傘.html">
+  <div class="noun">蝙蝠傘</div>
+  <div class="snippet">即西洋伞，明治时期传入日本，因撑开时形似蝙蝠（こうもり）展翅而得名。金属骨架、黑色布料为其特征，与日式和伞（竹骨纸面）相对。福泽谕吉1860年访美时曾购入带回，为日本最早的西洋伞之一。</div>
+</a>
+<a class="entry-item" href="蝦蟇口.html">
+  <div class="noun">蝦蟇口</div>
+  <div class="snippet">金属制口金（合页式封口）的小钱袋/钱包。因其打开时形似蛤蟆（蝦蟇/がま）张口的形状而得名。江户时代至今一直使用的传统日式钱包形式，明治至昭和时期尤其普及。</div>
+</a>
+<a class="entry-item" href="蟬.html">
+  <div class="noun">蟬</div>
+  <div class="snippet">蟬（せみ），即蝉，日本夏季最具代表性的昆虫，深植于日本文学与美学之中。在俳句中属于夏季季语。蝉的生命短暂（成虫仅存活约三周），在日本文化中常与&quot;无常观&quot;相联系。松尾芭蕉的名句&quot;閑さや岩にしみ入る蝉の声&quot;广为人知。在《我是猫》中，猫继螳螂狩猎</div>
+</a>
+<a class="entry-item" href="蟷螂.html">
+  <div class="noun">蟷螂</div>
+  <div class="snippet">蟷螂（かまきり），即螳螂，日本常见的昆虫，秋季季语。在夏目漱石《我是猫》第七章中，猫详细描述了自己捕食螳螂的&quot;运动&quot;过程：从试探性地用爪子碰触、等待螳螂反击，到以&quot;七擒七纵&quot;的战术反复捉放，最终吃掉。猫将螳螂拟人化为&quot;蟷螂君&quot;，讽刺其看似威</div>
+</a>
+<a class="entry-item" href="行灯袴.html">
+  <div class="noun">行灯袴</div>
+  <div class="snippet">日文读作&quot;あんどんばかま&quot;，明治时代教育家下田歌子为女学生改良发明的一种和服下裳。外形似方形纸罩座灯（行灯）而得名，是一种无裆的筒状裙式袴，方便女性活动。与二尺袖（小振袖）搭配，配以西洋靴和缎带，成为明治大正时代女学生的标准装束。现代日本女</div>
+</a>
+<a class="entry-item" href="表格子.html">
+  <div class="noun">表格子</div>
+  <div class="snippet">日本传统建筑中的格子门（拉门/隔扇），由木条组成格状结构。作品中指玄关处的外层格子门，刑事巡査粗暴地打开它进入室内。</div>
+</a>
+<a class="entry-item" href="袂.html">
+  <div class="noun">袂</div>
+  <div class="snippet">和服袖子的下垂部分，即袖兜。日语读作&quot;たもと&quot;。和服袖口以下宽绰下垂的部分呈袋状，可以存放小物（如手帕、钱包等），因而&quot;袂&quot;也引申指&quot;袖中口袋&quot;。在作品中盗贼将朝日新闻的纸袋发现后&quot;ちょっと袂へ投げ込む&quot;，即随手塞进袖兜。</div>
+</a>
+<a class="entry-item" href="袴.html">
+  <div class="noun">袴</div>
+  <div class="snippet">日本传统和服的下裳，原指裤装，后也涵盖裙裤状服饰。起源可追溯至平安时代武家装束，正面五褶象征儒教五常（仁、义、礼、智、信）。明治时期教育家下田歌子发明女性用行灯袴，使之成为女学生的标准装束。现代多用于毕业典礼、弓道、神道仪式等正式场合。</div>
+</a>
+<a class="entry-item" href="袷.html">
+  <div class="noun">袷</div>
+  <div class="snippet">日本传统和服中一种有里衬的二重构造样式，表地与里地缝合为一整体。与&quot;单衣&quot;（无里衬，夏季用）相对，袷主要在春秋季至初冬穿着（一般为10月至次年5月）。是日本传统服饰文化中按季节区分的重要穿着形式。作品中苦沙弥因衣物被盗、仅剩袷可穿，暴露了他</div>
+</a>
+<a class="entry-item" href="襦袢.html">
+  <div class="noun">襦袢</div>
+  <div class="snippet">日本和服内穿的中衣，即和服的内衣。穿在肌肤与和服之间，用以防止汗渍和皮脂弄脏昂贵的外衣，同时起塑形作用。常见种类有长襦袢、半襦袢等。在《我是猫》中描写学生衣着时提及&quot;下には襯衣も襦袢もない&quot;。</div>
+</a>
+<a class="entry-item" href="読売新聞.html">
+  <div class="noun">読売新聞</div>
+  <div class="snippet">日本五大全国性报纸之一，1874年创刊，总部位于东京。发行量居世界首位，政治立场偏保守，属于中间偏右的全国纸。</div>
+</a>
+<a class="entry-item" href="請書.html">
+  <div class="noun">請書</div>
+  <div class="snippet">日文中指收据、书面确认书或承诺书。在领取物品时需要签署请书作为凭证。作品中刑事告知苦沙弥领回被盗物品时要提交请书（领收书）。</div>
+</a>
+<a class="entry-item" href="護謨管.html">
+  <div class="noun">護謨管</div>
+  <div class="snippet">护谟管（ゴムかん/ゴム管），即橡胶管、橡皮管。 &quot;護謨&quot;是荷兰语&quot;gom&quot;的音译当用汉字，意为橡胶。 该词在现代日语中通常写作片假名&quot;ゴム管&quot;。 明治时期（本作品创作年代）橡胶制品作为西方传入的新奇工业产品， 开始在日本社会中普及。作品中猫</div>
+</a>
+<a class="entry-item" href="踏切り.html">
+  <div class="noun">踏切り</div>
+  <div class="snippet">铁路道口、平交道。作品中圆觉寺前有一处铁路道口，发狂的理野陶然在铁轨上坐禅，试图让行驶而来的火车停下。此情节生动地展现了人物的精神异常状态。</div>
+</a>
+<a class="entry-item" href="軍鶏.html">
+  <div class="noun">軍鶏</div>
+  <div class="snippet">日语音读シャモ（shamo），源自泰国旧称「暹罗」（Siam）。江户初期从东南亚传入日本的斗鸡品种，经数百年培育形成大型、中型、小型等七品系，均被指定为日本天然纪念物。体态肌肉发达、嘴短有力、性情好斗。除斗鸡用途外，也作为食材用于军鸡锅等料</div>
+</a>
+<a class="entry-item" href="逆茂木.html">
+  <div class="noun">逆茂木</div>
+  <div class="snippet">日本传统防御设施，将树枝一端削尖后斜向埋入地面形成的障碍物，与&quot;乱杭&quot;同属拒马类设施。又称&quot;鹿砦（ろくさい）&quot;，英文称abatis。其尖锐枝条朝向敌人行进方向，有效阻止骑兵冲击和步兵突入。战国时代（如四万十川合战、姫路城防御）及江户时代城郭</div>
+</a>
+<a class="entry-item" href="酢味噌.html">
+  <div class="noun">酢味噌</div>
+  <div class="snippet">日文读作すみそ，将醋与味噌混合制成的日本传统调味料，属于&quot;合わせ調味料&quot;（混合调味料）的一种。兼具味噌的咸鲜醇厚与醋的清爽酸味，常用于醋拌凉菜（酢物）、拌菜和蘸酱。其形成大约在室町时代后期至江户时代初期，伴随怀石料理文化的发展而成熟，是日本</div>
+</a>
+<a class="entry-item" href="重箱.html">
+  <div class="noun">重箱</div>
+  <div class="snippet">漆器製の多層重ね弁当箱。主に正月の御節料理や花見など祝いの席で用いられ、福が重なる意味を持つ。</div>
+</a>
+<a class="entry-item" href="金とん.html">
+  <div class="noun">金とん</div>
+  <div class="snippet">即&quot;金粉&quot;或&quot;金粒&quot;，指细小的黄金碎片或金粉。作品中发狂的立町老梅曾提议&quot;到外面的水沟里去挖金粉&quot;，这是其精神失常的征兆之一，反映了他脱离现实的妄想。</div>
+</a>
+<a class="entry-item" href="金剛石.html">
+  <div class="noun">金剛石</div>
+  <div class="snippet">金刚石（Kongouseki），即钻石（diamond）的汉语名称。&quot;金刚&quot;意为极其坚硬（如佛教中的金刚杵般不可摧毁），&quot;石&quot;即矿物，合称&quot;最硬的石头&quot;。现代日语日常多用外来语&quot;ダイヤモンド&quot;，但在矿物学和工业领域仍正式使用&quot;金刚石&quot;一词（</div>
+</a>
+<a class="entry-item" href="金唐皮.html">
+  <div class="noun">金唐皮</div>
+  <div class="snippet">明治时期日本发展起来的装饰工艺，在皮革或和纸上施以金色压花（エンボス）加工，也称&quot;金唐革&quot;或&quot;金唐紙&quot;。最初仿制欧美进口的金唐革壁纸用于西式建筑内装，后形成日本独自的技法。一度失传，1983年由上田尚复原，2005年被指定为&quot;国家选定保存技</div>
+</a>
+<a class="entry-item" href="金時計.html">
+  <div class="noun">金時計</div>
+  <div class="snippet">金制怀表或金壳手表，明治时代作为西洋文明开化的象征和富裕阶层的身份标识。明治维新后，西洋钟表大量流入日本，金时计因价格高昂成为权势和财富的象征，只有政治家、财界人和上层知识分子才能佩戴。在小说中用来形容铃木藤三郎&quot;上流社会的风度&quot;——善于社</div>
+</a>
+<a class="entry-item" href="金盥.html">
+  <div class="noun">金盥</div>
+  <div class="snippet">金盥（かなだらい），日语的&quot;金属制洗脸盆&quot;。 由&quot;金&quot;（金属）+&quot;盥&quot;（盆、钵）组成。传统上多以 铜或黄铜（真鍮）打造，是日本旧式家庭、旅馆中 不可或缺的盥洗用具。既有实用性，其金属质感与 工艺造型也具备民艺品和古董的收藏价值。 现代社会中</div>
+</a>
+<a class="entry-item" href="金箔.html">
+  <div class="noun">金箔</div>
+  <div class="snippet">将黄金锤打延展而成的极薄金片，用于装饰工艺。作品中用以形容发狂者来信所用的红色信封上的金箔装饰。迷亭称之为&quot;金箔つきの狂人&quot;。</div>
+</a>
+<a class="entry-item" href="金米糖.html">
+  <div class="noun">金米糖</div>
+  <div class="snippet">日本传统砂糖菓子，呈星形，表面有突起小角。1546年由葡萄牙传教士传入，葡语&quot;confeito&quot;是其语源，京都绿寿庵清水为日本唯一金平糖专门店。</div>
+</a>
+<a class="entry-item" href="金釦.html">
+  <div class="noun">金釦</div>
+  <div class="snippet">金色纽扣，特指日本旧制男子学生制服（学ラン/詰襟）上的金属纽扣。明治15年（1882年）以海军士官军服为模型正式采用，象征精英身份与纪律。后成为日本男学生身份的象征。</div>
+</a>
+<a class="entry-item" href="金魚麩.html">
+  <div class="noun">金魚麩</div>
+  <div class="snippet">日本传统的金鱼饲料，用麸（小麦面筋）制成干燥颗粒，投入水中后会吸水膨胀变软，浮在水面供金鱼食用。明治时代金鱼饲养普及，金鱼麩是常见饲料。在《吾辈是猫》中用作比喻，形容人轻飘飘、没有内涵、随波逐流的性格特征。</div>
+</a>
+<a class="entry-item" href="鉄扇.html">
+  <div class="noun">鉄扇</div>
+  <div class="snippet">日本武士使用的一种铁制扇子武器（Tessen），字面意为&quot;铁扇&quot;。外侧扇骨由厚重的铁板制成，外观伪装成普通折扇，可在不允许携带刀剑的场所作为防身兵器携带。用途包括格挡刀剑、投掷攻击、以及在水中作为手蹼使用。战场上军官也用作指挥信号。使用铁扇</div>
+</a>
+<a class="entry-item" href="鉄棒.html">
+  <div class="noun">鉄棒</div>
+  <div class="snippet">体操器械中的单杠（tetsubou）。明治末期（1907年左右），日本文部省体操游戯调查委员会引入瑞典体操，作为其组成部分的&quot;鉄棒体操&quot;在东京高等师范学校附属中学等学校推行。作品中迷亭从二楼窗户观察女学生进行单杠练习，感叹她们的活力，并将其</div>
+</a>
+<a class="entry-item" href="鉄砲風呂.html">
+  <div class="noun">鉄砲風呂</div>
+  <div class="snippet">铁炮风吕（てっぽうぶろ），日本江户时代的一种浴缸样式。名称中的&quot;铁炮&quot;并非指武器，而是指浴缸内部安装的一根金属管（铁制的筒，形似铁炮），在这根管内直接生火加热水。与常见的&quot;五右卫门风吕&quot;（用铁锅直接烧水）不同，铁炮风吕是木制浴缸内嵌铁管的结</div>
+</a>
+<a class="entry-item" href="長火鉢.html">
+  <div class="noun">長火鉢</div>
+  <div class="snippet">日本传统取暖器具，为长方形箱式火盆。底部或侧面设有抽屉，一侧配有铜壶（どうこ）用于烧水保温。使用时在灰上燃炭取暖，亦可架五德煮物。木制为主，亦有陶制。江户初期开始普及，是明治时期日本家庭常见的冬季用具，兼具取暖与调理的实用功能。 --- 日</div>
+</a>
+<a class="entry-item" href="長煙管.html">
+  <div class="noun">長煙管</div>
+  <div class="snippet">日本传统吸烟用具「煙管（きせる）」的一种，管身较长。烟管由金属雁首（がんくび）、竹或木制的管（らお）、金属吸口（すいくち）三部分组成，用于吸食刻み煙草。16世纪由葡萄牙人传入日本，1872年纸卷烟上市前是日本唯一的吸烟方式。长烟管较普通烟管</div>
+</a>
+<a class="entry-item" href="阿倍川餅.html">
+  <div class="noun">阿倍川餅</div>
+  <div class="snippet">安倍川饼（あべかわもち），静冈县静冈市的传统乡土点心，以麻糬撒上黄豆粉和砂糖（或黑蜜）制成。名称源自流经静冈的安倍川。据传德川家康品尝后赐名，江户时代《东海道中膝栗毛》亦有记载，自古为东海道名物。文中金田富子小姐食用此饼，暗示其富家千金的身</div>
+</a>
+<a class="entry-item" href="障子.html">
+  <div class="noun">障子</div>
+  <div class="snippet">日本传统建筑中一种可拉式的糊纸木制窗门，以木框粘贴和纸制成，具有半透明特性，能将光线柔和地引入室内，体现日本阴翳美学。 --- 日本传统房屋中使用的推拉式糊纸木制门窗。木框上贴和纸，能柔和透过光线，兼具隔断、采光与装饰功能。是和室建筑中不可</div>
+</a>
+<a class="entry-item" href="隧道.html">
+  <div class="noun">隧道</div>
+  <div class="snippet">即隧道、隧洞（トンネル），指在山中或地下开凿的通路。日本近代隧道建设始于明治维新时期，伴随铁路和公路的现代化建设而发展。1870年代起，日本引进西方凿岩技术，陆续建成大量铁路隧道，成为近代化的标志性基础设施之一。小说中用作&quot;积极主义改造自然</div>
+</a>
+<a class="entry-item" href="雑煮.html">
+  <div class="noun">雑煮</div>
+  <div class="snippet">日本新年（正月）的传统年糕汤，起源于室町时代，将供奉年神的镜饼与蔬菜、鸡肉等一同煮制，各地汤底和年糕形状有显著差异，是日本正月最具代表性的乡土料理。 --- 日本新年（正月）的传统年糕汤料理，以镜饼（年糕）为主料，加入各类时蔬、鸡肉或鱼贝，</div>
+</a>
+<a class="entry-item" href="雪隠.html">
+  <div class="noun">雪隠</div>
+  <div class="snippet">便所（トイレ）の雅語。中国宋代の禅僧・雪竇重顕が霊隠寺で便所掃除をしながら悟った故事に由来し、禅宗を通じて日本に伝わった。茶道の世界でも用いられる古風な表現。 --- 日本对厕所的雅称，源自中国宋代禅宗典故（雪窦重显在灵隐寺任净头职务），江</div>
+</a>
+<a class="entry-item" href="青大将.html">
+  <div class="noun">青大将</div>
+  <div class="snippet">日本锦蛇（学名 Elaphe climacophora），日本特有的大型无毒蛇，全长可达2米。体色以褐色、青灰色为主。常见于山林、农田甚至人类住宅附近，以鼠类为食，被视为益蛇。日语汉字名&quot;青大将&quot;因其青灰色体色和威武的形态。在作品中用于比喻</div>
+</a>
+<a class="entry-item" href="青桐.html">
+  <div class="noun">青桐</div>
+  <div class="snippet">青桐（あおぎり），即梧桐，学名 Firmiana simplex，落叶乔木，原产于中国和日本。树皮青绿色光滑不裂，叶大呈心形掌状3-5裂。在中国文化中，梧桐是祥瑞之树——&quot;家有梧桐树，引来金凤凰&quot;，也是&quot;一叶知秋&quot;典故的来源。在《我是猫》中</div>
+</a>
+<a class="entry-item" href="青磁.html">
+  <div class="noun">青磁</div>
+  <div class="snippet">青瓷，胎体上施以含有铁分的青色釉药并在还原焰中烧成的陶瓷器总称。起源于中国，宋代龙泉窑青瓷达到顶峰。日本从室町时代大量进口中国青瓷作为日用器皿和茶道具，后于江户时代开始在国内各窑口仿制并发展出日本特色的青瓷。作品中&quot;京製の安青磁&quot;指京都烧制</div>
+</a>
+<a class="entry-item" href="青空文庫.html">
+  <div class="noun">青空文庫</div>
+  <div class="snippet">日本最大的免费电子图书馆，1997年由富田伦生等人创立。收录日本国内著作权已失效（公共领域）及著作权人许可的文学作品，约16,000部以上（2024年）。由志愿者进行文本输入和校对。</div>
+</a>
+<a class="entry-item" href="頭巾.html">
+  <div class="noun">頭巾</div>
+  <div class="snippet">日本传统的头部覆盖物，种类繁多，包括女性防寒用的&quot;御高祖頭巾&quot;（おこそずきん）、修验道山伏用的&quot;兜巾&quot;（ときん）、婚礼用&quot;角隠し&quot;等。此处指外套附带的兜帽。</div>
+</a>
+<a class="entry-item" href="風呂敷.html">
+  <div class="noun">風呂敷</div>
+  <div class="snippet">日本传统方形包裹布，起源可溯至奈良时代。室町时代因足利义满将军浴室中用于包裹衣物得名。江户时代随钱汤普及走入千家万户，商人以家纹印染其上兼具广告功能。现代因环保意识复兴，被誉为&quot;包裹万物的风吕敷&quot;。</div>
+</a>
+<a class="entry-item" href="餅.html">
+  <div class="noun">餅</div>
+  <div class="snippet">日本传统食品，由糯米加工制成，口感软糯黏韧。在日本常作为节日供品和庆典食物，新年时尤其常见，可烤食或煮食，是日本年菜雑煮的重要原料。与中文的&quot;饼&quot;含义不同。</div>
+</a>
+<a class="entry-item" href="饂飩.html">
+  <div class="noun">饂飩</div>
+  <div class="snippet">日本传统小麦粉面条（Udon），中文音译为&quot;乌冬面&quot;。面条粗而圆滑，通常直径在1.7毫米以上，口感柔软而有弹性。根据日本农林规格（JAS），圆面直径1.7mm以上、角面宽度1.7mm以上方被定义为饂飩。起源于奈良时代从中国传入的&quot;索饼&quot;和&quot;</div>
+</a>
+<a class="entry-item" href="香の物.html">
+  <div class="noun">香の物</div>
+  <div class="snippet">日本料理中对腌渍品（漬物）的雅称，源自腌渍过程中产生的香气，是日本传统饮食&quot;汁饭香&quot;（味噌汤、米饭、腌菜）三大构成之一，多用于正式场合或料亭菜单。</div>
+</a>
+<a class="entry-item" href="駕籠.html">
+  <div class="noun">駕籠</div>
+  <div class="snippet">日本江户时代至明治初期使用的人力抬行交通工具，类似中国的轿子。由两根长杠中间悬吊一个竹编或木制座厢，由两名或多名轿夫抬行。按使用者身份分为不同等级：最高级的将·大名用漆金豪华驾笼，庶民用的竹编驾笼则极为狭窄局促。明治维新后因人力车的普及而迅</div>
+</a>
+<a class="entry-item" href="高島田.html">
+  <div class="noun">高島田</div>
+  <div class="snippet">高島田（たかしまだ），日本传统女性发型&quot;島田髷&quot;的一种，特征是发髻根部高耸、造型优雅。江户时代为武家女性及富裕阶层未婚女性的正式发型，地位越高发根越高。现代主要作为花嫁发型（与白无垢搭配）使用。名称来源于江户时代的岛田（今静冈县）地区。作品</div>
+</a>
+<a class="entry-item" href="鬘.html">
+  <div class="noun">鬘</div>
+  <div class="snippet">鬘（かつら），日语中假发（wig）的统称。在日本的历史上，鬘的文化极为悠久：古代贵族（如平安时代的女性）使用称为&quot;垂发&quot;的长假发；江户时代歌舞伎役者使用精巧的&quot;鬘&quot;来塑造角色形象；传统婚礼中花嫁也可使用&quot;全鬘&quot;或&quot;半鬘&quot;来结成高島田等发型。</div>
+</a>
+<a class="entry-item" href="鮑貝.html">
+  <div class="noun">鮑貝</div>
+  <div class="snippet">鲍贝（あわびがい），即鲍鱼的外壳。 日本传统生活中，鲍鱼壳有丰富的用途：食用后的空壳可作 容器（盛放调味料、针线等小物），内壁珍珠层用于螺钿镶嵌工艺 （传统的漆器装饰技法）。此外在日本神道信仰中， 鲍贝被用于神事——如伊势神宫的祭典中在门楣</div>
+</a>
+<a class="entry-item" href="鮪.html">
+  <div class="noun">鮪</div>
+  <div class="snippet">マグロ。日本では江戸時代後期まで下等魚とされたが、明治以降に評価が高まった。現在は刺身や寿司ネタとして最も珍重される魚の一つ。作中では金田の食卓に登場する。</div>
+</a>
+<a class="entry-item" href="鰹節.html">
+  <div class="noun">鰹節</div>
+  <div class="snippet">日本传统保存食品，将鲣鱼（鰹）经煮熟、烟熏、干燥、霉菌发酵等多道工序加工而成，是世界上最坚硬的食物之一。削成薄片后即&quot;木鱼花&quot;（削り節），与昆布同熬可制出&quot;出汁&quot;（だし），是日本料理中&quot;旨味&quot;（鲜味）的核心来源。起源于奈良时代，江户时代纪州</div>
+</a>
+<a class="entry-item" href="鳶口.html">
+  <div class="noun">鳶口</div>
+  <div class="snippet">日本传统的工具兼消防器具，形状如其名，长柄前端装有铁制钩形刃，形似鸢（老鹰）的喙。江户时代由&quot;町火消&quot;（城镇消防队）广泛用于拆毁房屋以防火势蔓延，也用于建筑工地钩拉木材等作业。是鳶職（建筑高空作业者）的象征性工具。现代日本的传统消防表演中仍</div>
+</a>
+<a class="entry-item" href="鴛鴦歌.html">
+  <div class="noun">鴛鴦歌</div>
+  <div class="snippet">以鸳鸯（雌雄相伴不离的水鸟）为主题的情歌或诗篇。在东瀛文化中，鸳鸯是夫妻恩爱、忠贞不渝的象征。&quot;鴛鴦歌&quot;指赞美爱情或婚姻的诗歌作品。 --- 日文读作&quot;おしどりうた&quot;，以鸳鸯（おしどり）比喻恩爱夫妻或恋人的情歌。&quot;鸳鸯&quot;在日本文化中自古被视</div>
+</a>
+<a class="entry-item" href="麦藁帽子.html">
+  <div class="noun">麦藁帽子</div>
+  <div class="snippet">麦藁帽子（むぎわらぼうし），即麦秆草帽，用小麦秸秆编织而成的传统帽子。日本埼玉县春日部市自明治时期（1880年创业的田中帽子店为代表）开始大量生产，最初作为农帽和输欧商品。明治时代后期，麦秆草帽成为日本男性外出时的常见夏季帽饰，与西洋舶来的</div>
+</a>
+<a class="entry-item" href="麦飯.html">
+  <div class="noun">麦飯</div>
+  <div class="snippet">混入大麦的米饭。在日本禅宗寺院中，麦饭是典型的粗食，营养较为单一。作品中提到理野陶然在僧堂长期食用麦饭，导致营养不良引发腹膜炎而死亡。</div>
+</a>
+<a class="entry-item" href="麵棒.html">
+  <div class="noun">麵棒</div>
+  <div class="snippet">麵棒（めんぼう），即擀面杖，日式制面（手打荞麦面、乌冬面等）中用于将面团擀压成均匀薄片的木制工具。荞麦面（蕎麦切り）在16世纪末至17世纪初确立其现代形态，江户时代与荞麦文化一同发展，擀面杖也随之成为专业制面工具。在《我是猫》中，迷亭将巴拿</div>
+</a>
+<a class="entry-item" href="麵麭.html">
+  <div class="noun">麵麭</div>
+  <div class="snippet">日语中面包（パン）的罕见汉字表记（熟字训/当て字）。语源为葡萄牙语&quot;pão&quot;，1543年葡萄牙人将面包传入日本。明治时期曾有&quot;麺麭&quot;&quot;面包&quot;&quot;波牟&quot;等多种汉字表记尝试，后片假名&quot;パン&quot;成为主流。此词在现代日语中几乎不用，仅见于明治时期的文献</div>
+</a>
+<a class="entry-item" href="麻裏草履.html">
+  <div class="noun">麻裏草履</div>
+  <div class="snippet">日本传统草履的一种，鞋底使用麻绳编织，故名&quot;麻裏&quot;。起源于爱知县濑户地区，最初为坡道众多的地区劳动者所使用。昭和时代后鞋底材料逐渐转为自行车轮胎再生橡胶，是现代日式凉鞋的前身。</div>
+</a>
+<a class="entry-item" href="黒柿.html">
+  <div class="noun">黒柿</div>
+  <div class="snippet">日本三大铭木之首，指柿木（カキノキ）心材中因微生物作用形成黑色条纹或斑纹的罕见木材，出现概率约千分之一至万分之一。黑白相间的纹理如山水画般优美，尤以「孔雀模様」最为珍贵。自奈良时代即被珍视，正仓院宝物中亦有黑柿制品。多用于茶道具（茶枣、茶杓</div>
+</a>
+<a class="entry-item" href="黒縮緬.html">
+  <div class="noun">黒縮緬</div>
+  <div class="snippet">黒縮緬（くろちりめん）是日本传统丝绸织物&quot;缩缅&quot;中的黑色品种。缩缅的特征在于纬线使用强捻丝，经过精炼处理后使织物表面产生细密的凹凸纹理（缩皱），从而形成独特的光泽和立体感。黑缩缅因其深邃的黑色光泽和高级感，在明治时期被广泛用于礼装（如羽织、</div>
+</a>
+<a class="entry-item" href="黒繻子.html">
+  <div class="noun">黒繻子</div>
+  <div class="snippet">黑色绸缎织物。&quot;繻子&quot;（しゅす）是日语中缎子的名称，指经浮组织（经线浮在纬线上）的丝绸织品，表面光滑有光泽。黑色缎子质地厚重、光泽优雅，明治时代常被用于制作女性礼服用腰带。在作品中女主人描述被盗的腰带是&quot;黑绳子和丝绸的腹合せ带（黑缎和缩缅拼</div>
+</a>
+<a class="entry-item" href="黒装束.html">
+  <div class="noun">黒装束</div>
+  <div class="snippet">黑色的服装、黑衣。文中指代乌鸦全身漆黑的羽毛，将其拟人化为穿着黑色装束的武士或僧侣模样。含有轻蔑戏谑的语气。</div>
+</a>
+<a class="entry-item" href="黒足袋.html">
+  <div class="noun">黒足袋</div>
+  <div class="snippet">黑色足袋，日本传统分趾袜。足袋（たび）是日本穿木屐或草履时配套的袜子，大脚趾与其他四趾分开。黑色的足袋是明治时代普及的男性用正式足袋，常用于礼仪场合或制服搭配。在作品中女主人报告被盗物品中有一双黑色的足袋，价值二十七钱。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:09
+</footer>
+</body>
+</html>

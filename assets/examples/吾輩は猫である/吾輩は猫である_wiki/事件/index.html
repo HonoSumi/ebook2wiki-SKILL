@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>事件 · 吾輩は猫である</title>
+<style>
+:root {
+  --bg: #faf5f6;
+  --bg-card: #ffffff;
+  --bg-detail: #fefafb;
+  --text: #4a3548;
+  --text-secondary: #7a6578;
+  --text-muted: #aa95a8;
+  --heading: #3a2538;
+  --border: #e8d5de;
+  --accent: #b8727e;
+  --accent-hover: #c98a94;
+  --link: #a05a68;
+  --tag-bg: #f2e2e8;
+  --tag-text: #8a5068;
+  --divider: #e8d5de;
+  --shadow: 0 1px 3px rgba(74,53,72,0.06);
+  --shadow-hover: 0 3px 12px rgba(74,53,72,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "Hiragino Mincho Pro", serif;
+  --font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">事件 · 吾輩は猫である</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../吾輩は猫である_wiki.html">Home</a>
+<span>/</span>
+事件
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">48 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="オデュッセイア.html">
+  <div class="noun">オデュッセイア</div>
+  <div class="snippet">古希腊诗人荷马创作的史诗巨著，与《伊利亚特》并称为荷马史诗。全诗约12000行，记述特洛伊战争后英雄奥德修斯（オデュッセウス）十年漂泊返乡的冒险故事，包括遭遇独眼巨人、魔女喀耳刻、塞壬女妖等经典情节。在《吾輩は猫である》中，寒月在演讲中引用</div>
+</a>
+<a class="entry-item" href="クレオパトラの鼻.html">
+  <div class="noun">クレオパトラの鼻</div>
+  <div class="snippet">帕斯卡《思想录》中著名的历史偶然性典故：&quot;如果克利奥帕特拉的鼻子更短一些，整个世界的面貌就会改变。&quot;意指重大历史转折可能被微小的偶然事件所左右。作品中迷亭引用此典来论证不可轻视鼻子的大小，反击对金田夫人大鼻子的嘲笑。</div>
+</a>
+<a class="entry-item" href="ダムダム弾.html">
+  <div class="noun">ダムダム弾</div>
+  <div class="snippet">达姆弹（Dum-dum bullet），一种在人体内会膨胀扩张的子弹，因19世纪末由印度加尔各答附近的达姆兵工厂（Dum Dum Arsenal）量产而得名。其弹头金属被甲不完全包裹铅芯，或弹头开有空洞，击中人体后会像蘑菇一样扩张，造成极为</div>
+</a>
+<a class="entry-item" href="ハーキュリス.html">
+  <div class="noun">ハーキュリス</div>
+  <div class="snippet">ハーキュリス即赫拉克勒斯（Heracles，罗马名Hercules/ハーキュリス），希腊神话中最著名的英雄，主神宙斯与凡女阿尔克墨涅之子，以完成十二项不可能功业而闻名。在《我是猫》中，迷亭将当年反常的气候比作&quot;赫拉克勒斯之牛&quot;，并讲述赫拉克</div>
+</a>
+<a class="entry-item" href="バルチック艦隊.html">
+  <div class="noun">バルチック艦隊</div>
+  <div class="snippet">俄国波罗的海舰队（Baltic Fleet），日俄战争期间被派往远东增援的第二太平洋舰队。 1904年10月从波罗的海出发，历经7个多月、约18000海里的长途航行， 由罗日杰斯特文斯基中将指挥。航途中发生了著名的&quot;多格尔沙洲事件&quot; ——误</div>
+</a>
+<a class="entry-item" href="ベオウルフ.html">
+  <div class="noun">ベオウルフ</div>
+  <div class="snippet">古英语英雄史诗，创作于公元8世纪左右，作者不详，全诗3182行，是英语文学现存最古老的作品。故事分为两部分：第一部分讲述年轻英雄贝奥武夫前往丹麦，以赤手空拳击败怪物格伦德尔及其母亲；第二部分描写年老的贝奥武夫作为国王与火龙战斗并牺牲。作品以</div>
+</a>
+<a class="entry-item" href="ペンデニス.html">
+  <div class="noun">ペンデニス</div>
+  <div class="snippet">英国维多利亚时代作家威廉·梅克比斯·萨克雷（William Makepeace Thackeray）的长篇小说，全名《The History of Pendennis》（潘登尼斯），1848至1850年连载。作品以没落贵族青年亚瑟·潘登尼斯</div>
+</a>
+<a class="entry-item" href="ヴァルカン.html">
+  <div class="noun">ヴァルカン</div>
+  <div class="snippet">ヴァルカン（Vulcan，拉丁语Vulcānus），罗马神话中的火神与锻冶之神，对应希腊神话中的赫菲斯托斯（Hephaestus）。主神朱庇特与朱诺之子，因相貌丑陋且腿瘸而被逐出天界。他拥有卓越的锻造技艺，为诸神打造武器与神器，其锻冶炉被认</div>
+</a>
+<a class="entry-item" href="七擒七縦.html">
+  <div class="noun">七擒七縦</div>
+  <div class="snippet">七擒七纵，出自三国时期蜀汉丞相诸葛亮南征时七次擒获又七次释放孟获的典故。据《三国志》裴松之注引《汉晋春秋》，诸葛亮为求南方长治久安而非单纯征服，以七擒七纵的攻心战术使孟获最终心悦诚服，誓不再反。后世以此比喻善于运用策略使对方心服口服，是&quot;攻</div>
+</a>
+<a class="entry-item" href="丹波の笹山.html">
+  <div class="noun">丹波の笹山</div>
+  <div class="snippet">源自兵库县丹波篠山地区的民谣&quot;デカンショ節&quot;（德坎肖调）。歌词以&quot;丹波篠山山家の猿&quot;自嘲田舍人在大都市谋生。文中用来形容闯入庭院的学生肤色黝黑、体格健壮。</div>
+</a>
+<a class="entry-item" href="交番焼打.html">
+  <div class="noun">交番焼打</div>
+  <div class="snippet">指1905年（明治38年）9月发生的日比谷纵火事件（日比谷焼打事件）。日俄战争结束后，《朴茨茅斯条约》因未获得战争赔款引发国民极大不满，民众在日比谷公园召开反和约国民大会后暴动化，袭击并焚烧内务大臣官邸、国民新闻社以及约219处派出所（交番</div>
+</a>
+<a class="entry-item" href="人売り.html">
+  <div class="noun">人売り</div>
+  <div class="snippet">日语指人口贩卖者（hitouri）。明治初期日本存在贫困家庭将女儿卖给人口贩子的社会现象，这些女孩多被卖至海外（东南亚、中国、西伯利亚等地）从事性工作，被称为&quot;からゆきさん&quot;（南洋姐）。据统计至1911年在海外卖春的日本女性超过2万人。作品</div>
+</a>
+<a class="entry-item" href="仏国革命.html">
+  <div class="noun">仏国革命</div>
+  <div class="snippet">指1789年至1799年发生在法兰西王国的资产阶级革命，推翻了波旁王朝的君主专制统治，发表了《人权宣言》，建立了法兰西第一共和国。书中以法国大革命时期有人发明改良断头台（首きり器械）为例，类比最先制造镜子的人可能也造了孽。</div>
+</a>
+<a class="entry-item" href="代議政体.html">
+  <div class="noun">代議政体</div>
+  <div class="snippet">即代议制民主政体（representative government），国民通过选举代表组成议会来行使国家权力的政治制度。与直接民主相对，是现代民主国家的主要政体形式。日本在1889年颁布《大日本帝国宪法》后设立帝国议会（贵族院+众议院），</div>
+</a>
+<a class="entry-item" href="傷寒論.html">
+  <div class="noun">傷寒論</div>
+  <div class="snippet">全称《伤寒杂病论》，东汉末年&quot;医圣&quot;张仲景（约150-219年）所著的经典医书，与《黄帝内经》《神农本草经》《难经》并称中医四大经典。原书在战乱中散佚，后经晋代王叔和整理编次为《伤寒论》与《金匮要略》两部分。确立&quot;六经辨证&quot;与&quot;八纲辨证&quot;的</div>
+</a>
+<a class="entry-item" href="卒塔婆小町.html">
+  <div class="noun">卒塔婆小町</div>
+  <div class="snippet">能剧剧目，属四番目物，&quot;七小町&quot;之一。写老年沦落为乞丐的小野小町与高野山僧进行佛法问答，展现无常观与狂乱的深草少将怨灵附体故事。</div>
+</a>
+<a class="entry-item" href="吶喊.html">
+  <div class="noun">吶喊</div>
+  <div class="snippet">日语读作&quot;とっかん&quot;，指战斗时齐声呐喊、叫喊着突击敌阵的行为，即&quot;鬨の声（ときのこえ）&quot;。&quot;吶&quot;意为声音出不来的样子，与&quot;喊&quot;（大声叫）组合，表示一种威吓性的战吼。日本近代战争文学中常用此词描写冲锋场面。中文的&quot;吶喊&quot;含义较为宽泛，指大声叫</div>
+</a>
+<a class="entry-item" href="告朔の餼羊（こくさくのきよう）.html">
+  <div class="noun">告朔の餼羊（こくさくのきよう）</div>
+  <div class="snippet">出自《论语·八佾》的典故。古代天子每年冬季将次年历书颁赐诸侯，诸侯藏于祖庙，每月朔日以活羊祭祀，称告朔。春秋时鲁国君主已不亲临此礼，却仍杀羊供奉，徒具形式。孔子言尔爱其羊，我爱其礼，强调形式上保留的意义。后世比喻形式尚存而实质已失的事物。</div>
+</a>
+<a class="entry-item" href="呑舟の魚.html">
+  <div class="noun">呑舟の魚</div>
+  <div class="snippet">中国古代典故，出自《庄子·庚桑楚》《列子·杨朱》《史记·酷吏列传》等多部典籍，字面意为&quot;能吞下船的巨大鱼&quot;。比喻极其巨大的存在——既可指伟大的人物或贤者，也可指罪恶滔天的重犯（&quot;网漏吞舟之鱼&quot;指法网疏漏致大恶人逃脱）。《庄子》云&quot;吞舟之鱼，</div>
+</a>
+<a class="entry-item" href="塞翁の馬.html">
+  <div class="noun">塞翁の馬</div>
+  <div class="snippet">塞翁失马（saiou no uma），出自中国《淮南子·人间训》的寓言故事。讲述边塞老翁（塞翁）的马走失后带回良马，儿子骑马摔伤腿，却因此免于兵役得以保全性命。&quot;塞翁失马，焉知非福&quot;比喻祸福相互转化。日语中常用&quot;人間万事塞翁が馬&quot;（人间万事</div>
+</a>
+<a class="entry-item" href="天地開闢.html">
+  <div class="noun">天地開闢</div>
+  <div class="snippet">意为「开天辟地」，源自中国古代神话中盘古从混沌中分离天地、创造世界的创世故事。典出三国徐整《三五历纪》：「天地混沌如鸡子，盘古生其中，万八千岁，天地开辟」。后泛指有史以来从未有过的事件或事物的开端。</div>
+</a>
+<a class="entry-item" href="奉天.html">
+  <div class="noun">奉天</div>
+  <div class="snippet">奉天会战（Battle of Mukden，1905年2月20日—3月10日），日俄战争中最后也是规模最大的陆上决战。日军约25万人在大山岩元帅指挥下，对决俄军约37万人。日军通过迂回包抄战术迫使俄军总司令库罗帕特金下令撤退，日军于3月10</div>
+</a>
+<a class="entry-item" href="奔命.html">
+  <div class="noun">奔命</div>
+  <div class="snippet">源自古代汉语成语&quot;疲于奔命&quot;，出自《左传·成公七年》。春秋时期，楚国申公巫臣因族人被子重、子反杀害而怀恨在心，逃至吴国训练吴军，教其车战射法，唆使吴国连年袭击楚国边境，致使子重、子反一年之中奉命率军往返奔波七次之多，精疲力竭——&quot;余必使尔罢</div>
+</a>
+<a class="entry-item" href="寡人政治.html">
+  <div class="noun">寡人政治</div>
+  <div class="snippet">即寡头政治（oligarchy/autocracy），指极少数人掌握国家政权的政治体制。源自古希腊亚里士多德对政体的分类，与君主制、民主制相对。在《吾辈是猫》的哲学对话中，独仙用&quot;寡人政治→代议政体→……&quot;的递进来说明积极主义的局限——无论</div>
+</a>
+<a class="entry-item" href="巡査.html">
+  <div class="noun">巡査</div>
+  <div class="snippet">日本警察官的一种，相当于巡查/巡警。明治时代自1871年（明治4年）建立近代警察制度，1875年将&quot;逻卒&quot;改称&quot;巡查&quot;，后成为警察最基层的阶位。由被称为&quot;日本警察之父&quot;的川路利良主导建设，参照欧洲特别是法国模式。明治时期巡查身穿制服，配置于</div>
+</a>
+<a class="entry-item" href="建武時代.html">
+  <div class="noun">建武時代</div>
+  <div class="snippet">日本历史上的年号时代（1334-1336），即后醍醐天皇推翻镰仓幕府后实行天皇亲政的&quot;建武新政&quot;时期。后醍醐天皇效仿中国东汉光武帝&quot;建武&quot;年号，意图中兴皇室。但因政策偏袒公卿贵族、忽视武士利益，仅持续约三年便崩溃，随后足利尊氏建立室町幕府，</div>
+</a>
+<a class="entry-item" href="征露.html">
+  <div class="noun">征露</div>
+  <div class="snippet">日俄战争时期日本使用的历史用语，意为&quot;征讨露西亚（俄罗斯）&quot;，常用于军需品命名，如&quot;征露丸&quot;（即后来的正露丸），反映当时日本对俄的军事意识。</div>
+</a>
+<a class="entry-item" href="御維新前.html">
+  <div class="noun">御維新前</div>
+  <div class="snippet">指明治维新（1868年）之前的江户时代。日语&quot;御維新&quot;是对明治维新的敬称，&quot;御維新前&quot;即维新之前——江户幕府统制时期。明治维新是日本从封建幕藩体制向近代中央集权国家转型的重大历史变革，推行富国强兵、殖产兴业、文明开化三大政策。小说中以&quot;御维</div>
+</a>
+<a class="entry-item" href="忠臣蔵.html">
+  <div class="noun">忠臣蔵</div>
+  <div class="snippet">日本最著名的历史剧之一，改编自元禄年间（1701-1703年）赤穗事件——47名浪人为主君浅野长矩复仇后集体切腹的故事。原作为人形净琉璃《假名手本忠臣藏》，后成为歌舞伎经典剧目。</div>
+</a>
+<a class="entry-item" href="旗本.html">
+  <div class="noun">旗本</div>
+  <div class="snippet">旗本是江户幕府时期的一种武士身份，特指俸禄不满一万石但拥有谒见将军资格（御目见）的德川将军直属家臣。俗称「旗本八万骑」，实际人数约5000人。没有谒见资格的直属家臣称为御家人。按俸禄可分为大身旗本（5000石以上，担任重要职务）和一般旗本（</div>
+</a>
+<a class="entry-item" href="日英同盟.html">
+  <div class="noun">日英同盟</div>
+  <div class="snippet">日英同盟（Anglo-Japanese Alliance）是1902年1月30日由日本与英国在伦敦签署的军事同盟条约，有效期至1923年被四国公约取代。主要内容包括：一方与第三国交战时另一方保持中立；一方与两个以上国家交战时另一方提供军事援</div>
+</a>
+<a class="entry-item" href="日露戦争.html">
+  <div class="noun">日露戦争</div>
+  <div class="snippet">日俄战争（1904年—1905年），是日本帝国与俄罗斯帝国为争夺朝鲜半岛和中国东北地区控制权而爆发的战争。主战场在中国东北和周边海域。日本海军奇袭旅顺港后，经旅顺攻围战、奉天会战、日本海海战等战役取得决定性胜利。1905年9月签订《朴茨茅斯</div>
+</a>
+<a class="entry-item" href="明治三十八年.html">
+  <div class="noun">明治三十八年</div>
+  <div class="snippet">即公元1905年，夏目漱石《我是猫》的创作和连载时期。明治38年对日本来说是日俄战争（1904-1905）结束之年，也是日本近代化进程加速的时期。作品通过&quot;明治三十八年の今日こんな馬鹿な真似をして女の子を売ってあるくものもなし&quot;的表述，以明</div>
+</a>
+<a class="entry-item" href="沙河.html">
+  <div class="noun">沙河</div>
+  <div class="snippet">沙河会战（Battle of Shaho，1904年10月5日—17日），日俄战争中的大型陆战。发生于中国奉天以南沙河沿岸（今沈阳苏家屯区），俄军约21—22万人对决日军约12—17万人。日军在炮兵战术上占据优势，最终迫使俄军退守沙河北岸。</div>
+</a>
+<a class="entry-item" href="法科大学.html">
+  <div class="noun">法科大学</div>
+  <div class="snippet">明治时代日本大学中的法学部。东京帝国大学法科大学是当时最著名的法科大学之一，培养了大批司法官、行政官和实业家。明治时期法科大学是精英教育的重要组成部分，&quot;法科大学を卒業した&quot;被视为极高的学历。在作品中多々良三平&quot;法科大学を卒業して&quot;，表明其</div>
+</a>
+<a class="entry-item" href="洋行.html">
+  <div class="noun">洋行</div>
+  <div class="snippet">日本明治时期对海外渡航、尤其赴欧美留学和考察的称呼。明治政府为推行&quot;富国强兵&quot;政策，大量派遣官员和留学生赴欧美学习法律、军事、技术、医学等。洋行是日本近代化进程中知识精英吸收西方文明的重要途径，许多明治时期的思想家、政治家均有洋行经历。</div>
+</a>
+<a class="entry-item" href="滄桑の変.html">
+  <div class="noun">滄桑の変</div>
+  <div class="snippet">日语四字熟语，源自中国成语&quot;沧海桑田&quot;。典出东晋葛洪《神仙传·麻姑》中仙女麻姑所见&quot;东海三为桑田&quot;之语，原指沧海变为桑田的地质变迁，后比喻世事巨变、人世沧桑。书中老人感叹时代剧变时使用此语，与随后提到的&quot;将軍家&quot;&quot;御入国以来三百年&quot;形成对照</div>
+</a>
+<a class="entry-item" href="烏合の衆.html">
+  <div class="noun">烏合の衆</div>
+  <div class="snippet">乌合之众，成语。出自《后汉书》，比喻无组织、无纪律的一群人。&quot;烏&quot;字既指乌鸦，也暗合本段涉及的乌鸦群体。猫引用这句成语给自己壮胆。</div>
+</a>
+<a class="entry-item" href="珠磨り.html">
+  <div class="noun">珠磨り</div>
+  <div class="snippet">《我是猫》中角色寒月所热衷的活动，即&quot;打磨球体&quot;。寒月是一位理学研究者，沉溺于看似无实用价值的学术研究，珠磨り是其象征性行为，用来讽刺明治时期脱离现实的知识分子。</div>
+</a>
+<a class="entry-item" href="瓦解.html">
+  <div class="noun">瓦解</div>
+  <div class="snippet">原意为瓦片碎裂，比喻崩溃、分裂、解体。最早典籍用例出自西汉《淮南子·泰族训》，描述牧野之战中商纣王的军队&quot;瓦解而走&quot;。后演变为成语&quot;土崩瓦解&quot;。书中静冈来的老人在言谈中提到&quot;瓦解の折&quot;，是在指明治维新后旧幕府势力崩溃、自己在东京的家宅没落的</div>
+</a>
+<a class="entry-item" href="羅馬.html">
+  <div class="noun">羅馬</div>
+  <div class="snippet">羅馬（ローマ）是日语中&quot;Rome&quot;的汉字表记（当て字），源自中国语对Rome的音译。近代日语中通常用片假名「ローマ」表记，但在明治时期的文学作品中常见汉字表记「羅馬」。在夏目漱石的作品中，「羅馬全盛」指代古罗马帝国的鼎盛时期，借以讽刺明治时</div>
+</a>
+<a class="entry-item" href="臥薪甞胆.html">
+  <div class="noun">臥薪甞胆</div>
+  <div class="snippet">中国著名成语典故，出自春秋时期越王勾践的故事。勾践被吴王夫差打败后，睡在柴草上、每日尝苦胆以提醒自己不忘耻辱，最终励精图治灭吴称霸。比喻刻苦自励、发愤图强。书中缝田针作引用此成语表明自己为筹集校舍资金所下的苦功。</div>
+</a>
+<a class="entry-item" href="蛇足.html">
+  <div class="noun">蛇足</div>
+  <div class="snippet">中文成语&quot;画蛇添足&quot;的略称，典出《战国策·齐策二》。故事讲楚国有人祭祀后赏门客一壶酒，众人约定画地为蛇、先成者饮。一人先画成，左手持卮右手继续添画蛇足，结果被另一人夺酒：&quot;蛇固无足，子安能为之足？&quot;最终添足者失酒。比喻多此一举、做了多余无益</div>
+</a>
+<a class="entry-item" href="蛇飯.html">
+  <div class="noun">蛇飯</div>
+  <div class="snippet">蛇飯（じゃばん／へびめし），日本传说中的怪异料理。在《吾辈は猫である》中，迷亭讲述在越后国深山旅店中经历的&quot;蛇飯&quot;烹饪过程：将活蛇投入正在煮粥的锅中，蛇因受热从锅盖孔中探头，再由一家三口分别抓住蛇头猛拽，使蛇骨与蛇肉分离，蛇肉留在粥中。迷亭</div>
+</a>
+<a class="entry-item" href="遊弋.html">
+  <div class="noun">遊弋</div>
+  <div class="snippet">原为军事用语，指舰船在某一海域内巡航、巡逻警戒。出自中国南北朝时期的史书《南史·樊毅传》&quot;于白下游奕（弋）&quot;，清代文献亦记载英国军舰于闽浙洋面&quot;游弋&quot;。近代日语中沿用此词，用于描写舰队在海上巡逻警戒的军事行动，也可引申为自由游荡。在《我是猫</div>
+</a>
+<a class="entry-item" href="鄢陵の戦.html">
+  <div class="noun">鄢陵の戦</div>
+  <div class="snippet">春秋时期晋楚争霸的关键战役，发生于公元前575年，地点在今河南省鄢陵县。晋厉公率军迎战楚共王率领的楚郑联军。晋军采纳楚亡臣苗贲皇的建议，先攻楚左右军再包围王族亲兵，战斗中晋将吕锜射伤楚共王一目。最终楚军因司马子反醉酒误事而夜遁。此战是继城濮</div>
+</a>
+<a class="entry-item" href="鉱山部.html">
+  <div class="noun">鉱山部</div>
+  <div class="snippet">明治时代日本近代化过程中，矿山（矿业）产业受到政府高度重视，大型公司常设有矿山部门来经营管理矿山业务。日本在明治时期通过官营→払下（出售给民间）的方式推动了足尾铜山等大规模矿山开发，成为近代工业化的支柱之一。作品中三平毕业后在某公司的矿山部</div>
+</a>
+<a class="entry-item" href="長州征伐.html">
+  <div class="noun">長州征伐</div>
+  <div class="snippet">长州征讨，又称幕长战争、四境战争，是江户时代后期（幕末时期）江户幕府与长州藩之间爆发的两次大规模战事。第一次发生于1864年，因长州藩发动禁门之变而引发，长州藩屈服。第二次发生在1866年，长州藩在高杉晋作领导下实行西式军制改革并获胜，幕府</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:09
+</footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "羊皮纸",
+  "description": "古典羊皮纸暖黄风格，适合奇幻小说、历史小说、探险",
+  "colors": {
+    "--bg": "#f4e4c1",
+    "--bg-card": "#fef9ee",
+    "--bg-detail": "#fdf6e4",
+    "--text": "#3b2e1e",
+    "--text-secondary": "#6b5d4f",
+    "--text-muted": "#9b8d7f",
+    "--heading": "#2c1f0e",
+    "--border": "#d4c4a0",
+    "--accent": "#8b6914",
+    "--accent-hover": "#a67c18",
+    "--link": "#7d5a0b",
+    "--tag-bg": "#ecd9aa",
+    "--tag-text": "#5c3d0e",
+    "--divider": "#d4c4a0",
+    "--shadow": "0 1px 3px rgba(91,61,14,0.08)",
+    "--shadow-hover": "0 3px 12px rgba(91,61,14,0.12)"
+  },
+  "fonts": {
+    "--font-heading": "\"Noto Serif SC\", \"Source Han Serif SC\", Georgia, serif",
+    "--font-body": "\"Noto Serif SC\", \"Source Han Serif SC\", Georgia, serif",
+    "--font-mono": "\"Courier New\", monospace"
+  }
+}

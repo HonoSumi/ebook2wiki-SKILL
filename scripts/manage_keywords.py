@@ -199,7 +199,8 @@ def main():
         if "--from-file" in sys.argv:
             idx = sys.argv.index("--from-file")
             if idx + 1 < len(sys.argv):
-                input_keywords = read_keywords_from_file(sys.argv[idx + 1])
+                kw_file = sys.argv[idx + 1]
+                input_keywords = read_keywords_from_file(kw_file)
         else:
             print("错误: check 命令需要 --from-file 参数", file=sys.stderr)
             sys.exit(1)
@@ -219,12 +220,36 @@ def main():
         for kw in new_keywords:
             print(kw)
 
-        # --output 文件（即使为空也写出，便于 subagent 按文件存在性判断）
+        # --output 文件（即使为空也写出）
         if output_path:
             os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
             with open(output_path, "w", encoding="utf-8") as f:
                 for kw in new_keywords:
                     f.write(f"{kw}\n")
+
+        # 无新关键词时自动写空 JSON（从 _plan.json 获取 book_name）
+        tmp_dir = os.path.dirname(os.path.abspath(filepath))
+        if output_path and not new_keywords:
+            plan_path = os.path.join(tmp_dir, '_plan.json')
+            if os.path.exists(plan_path):
+                with open(plan_path, 'r', encoding='utf-8') as pf:
+                    plan = json.load(pf)
+                book_name = plan.get('book_name', '')
+                m = re.search(r'_(\d+)\.', os.path.basename(output_path))
+                if book_name and m:
+                    seq = int(m.group(1))
+                    json_path = os.path.join(tmp_dir, f"{book_name}_{seq}.json")
+                    with open(json_path, 'w', encoding='utf-8') as jf:
+                        json.dump([], jf)
+                    # 更新 _plan.json
+                    for c in plan.get('chunks', []):
+                        if c.get('seq') == seq:
+                            c['status'] = 'completed'
+                            c['keyword_count'] = 0
+                            break
+                    with open(plan_path, 'w', encoding='utf-8') as pf:
+                        json.dump(plan, pf, ensure_ascii=False, indent=2)
+                    print(f"AUTO_FINISH: 无新关键词，已写入空 JSON {json_path}")
 
     elif command == "filter":
         input_keywords = []

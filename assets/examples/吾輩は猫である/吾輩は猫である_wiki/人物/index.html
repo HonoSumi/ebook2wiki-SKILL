@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人物 · 吾輩は猫である</title>
+<style>
+:root {
+  --bg: #faf5f6;
+  --bg-card: #ffffff;
+  --bg-detail: #fefafb;
+  --text: #4a3548;
+  --text-secondary: #7a6578;
+  --text-muted: #aa95a8;
+  --heading: #3a2538;
+  --border: #e8d5de;
+  --accent: #b8727e;
+  --accent-hover: #c98a94;
+  --link: #a05a68;
+  --tag-bg: #f2e2e8;
+  --tag-text: #8a5068;
+  --divider: #e8d5de;
+  --shadow: 0 1px 3px rgba(74,53,72,0.06);
+  --shadow-hover: 0 3px 12px rgba(74,53,72,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "Hiragino Mincho Pro", serif;
+  --font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">人物 · 吾輩は猫である</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../吾輩は猫である_wiki.html">Home</a>
+<span>/</span>
+人物
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">199 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="Agnodice.html">
+  <div class="noun">Agnodice</div>
+  <div class="snippet">阿格诺迪斯（Agnodice），传说中公元前4世纪雅典的第一位女医生、女产科医师。据古罗马作家许癸努斯的《传说集》记载，当时雅典法律禁止女性行医，她女扮男装前往亚历山大城跟随赫罗菲洛斯学习医学。回雅典后因医术高超被嫉妒的男医生告上法庭，最终</div>
+</a>
+<a class="entry-item" href="Hierophilus.html">
+  <div class="noun">Hierophilus</div>
+  <div class="snippet">赫罗菲洛斯（Herophilos，约前335-前280），古希腊著名医学家，被称为&quot;解剖学之父&quot;。生于小亚细亚卡尔西顿，主要在亚历山大城活动。他是首位进行系统性人体解剖的学者，发现了十二指肠、前列腺，区分了运动神经和感觉神经，使用水钟测量脉</div>
+</a>
+<a class="entry-item" href="すん子.html">
+  <div class="noun">すん子</div>
+  <div class="snippet">《我是猫》中苦沙弥的次女，比姐姐とん子年幼。性格跟随姐姐，看到姐姐说话便模仿姐姐说同样的话。中文译本中常译为&quot;珍野静子&quot;或&quot;小静&quot;。姐妹俩在三平来访时的对话场景、以及模仿&quot;いやーだ&quot;的幼稚举动，展现了儿童的纯真可爱，也为作品增添了温馨的家庭</div>
+</a>
+<a class="entry-item" href="とん子.html">
+  <div class="noun">とん子</div>
+  <div class="snippet">《我是猫》中苦沙弥的长女，家中的活泼女孩。与妹妹すん子一起出场，性格较为主动。在三平来访时，とん子立刻想起&quot;御寿司&quot;的约定并当面催促。中文译本中常译为&quot;珍野斗子&quot;或&quot;小斗&quot;。与妹妹すん子一样，是作品中天真无邪的儿童角色，与大人世界的虚伪和复</div>
+</a>
+<a class="entry-item" href="アイソクラチス.html">
+  <div class="noun">アイソクラチス</div>
+  <div class="snippet">伊索克拉底（Isocrates，前436—前338），古希腊雅典著名演说家、修辞学教育家，被列为&quot;阿提卡十大演说家&quot;之一。创办修辞学校，培养大量演说家和政治家，强调演说与道德的结合。其教育思想对后世修辞学与古典教育影响深远。代表作有《斥智者</div>
+</a>
+<a class="entry-item" href="アキリス.html">
+  <div class="noun">アキリス</div>
+  <div class="snippet">古希腊神话中最伟大的英雄，特洛伊战争中希腊联军的最强战士，海洋女神忒提斯与英雄佩琉斯之子。荷马史诗《伊利亚特》的核心人物。出生时被母亲提着脚踵浸入冥河而获得刀枪不入之身，唯脚踵为致命弱点。因与统帅阿伽门农的争执而退出战斗，后因挚友帕特罗克洛</div>
+</a>
+<a class="entry-item" href="アリストートル.html">
+  <div class="noun">アリストートル</div>
+  <div class="snippet">亚里士多德（Aristotle，前384-前322），古希腊哲学家、科学家，柏拉图的学生、亚历山大大帝的老师。其著作涵盖物理学、形而上学、诗学、政治学、伦理学等多个领域，是西方哲学奠基人之一。</div>
+</a>
+<a class="entry-item" href="アレキサンダー.html">
+  <div class="noun">アレキサンダー</div>
+  <div class="snippet">亚历山大大帝（Alexander the Great，前356-前323），马其顿王国国王，世界古代史上著名的军事征服者。他统一希腊诸城邦，征服波斯帝国，兵抵印度河流域，建立了横跨欧亚非的庞大帝国。在小说中与拿破仑并列，被用作&quot;积极主义的局</div>
+</a>
+<a class="entry-item" href="アンドレア・デル・サルト.html">
+  <div class="noun">アンドレア・デル・サルト</div>
+  <div class="snippet">意大利文艺复兴盛期至后期的重要画家（1486-1530），生于佛罗伦萨。本名安德烈亚·达尼奥洛，&quot;德尔·萨尔托&quot;意为&quot;裁缝之子&quot;。融合了达芬奇的晕涂法与拉斐尔的和谐构图，以色彩丰富、技法精湛著称。代表作《哈比斯的圣母》《圣萨尔维的最后的晚餐</div>
+</a>
+<a class="entry-item" href="アーキミジス.html">
+  <div class="noun">アーキミジス</div>
+  <div class="snippet">古希腊数学家、物理学家及发明家阿基米德（Archimedes，约公元前287—前212年）的日语译名之一。&quot;アーキミジス&quot;源于希腊语&quot;Ἀρχιμήδης&quot;（Arkhimēdēs）的直接音译，与经由拉丁语传入的标准日语译名&quot;アルキメデス&quot;有所</div>
+</a>
+<a class="entry-item" href="アーサー・ジョーンス.html">
+  <div class="noun">アーサー・ジョーンス</div>
+  <div class="snippet">亨利·阿瑟·琼斯（Henry Arthur Jones，1851-1929），英国剧作家。代表作《银王》（The Silver King）、《说谎者》（The Liars）等，共创作60余部戏剧，擅长社会剧与情节剧。与王尔德、萧伯纳同时代。</div>
+</a>
+<a class="entry-item" href="イスキラス.html">
+  <div class="noun">イスキラス</div>
+  <div class="snippet">埃斯库罗斯（Aeschylus, 公元前525-456），古希腊三大悲剧诗人之一，被誉为&quot;悲剧之父&quot;。他首次在戏剧中引入第二位演员，使真正的戏剧对话成为可能。代表作包括《奥瑞斯提亚》三部曲（《阿伽门农》《奠酒人》《善好者》）、《被缚的普罗米</div>
+</a>
+<a class="entry-item" href="ウィルヒョウ.html">
+  <div class="noun">ウィルヒョウ</div>
+  <div class="snippet">鲁道夫·魏尔啸（Rudolf Virchow，1821-1902），德国病理学家、人类学家、政治家，被誉为&quot;病理学之父&quot;。1858年出版《细胞病理学》，提出&quot;Omnis cellula e cellula&quot;（一切细胞来自细胞）的命题，奠定了</div>
+</a>
+<a class="entry-item" href="ウェルテル.html">
+  <div class="noun">ウェルテル</div>
+  <div class="snippet">德国作家歌德（Goethe）书信体小说《少年维特的烦恼》（Die Leiden des jungen Werthers）中的主人公。维特因对已有未婚夫的绿蒂萌生无望的爱情而最终自杀，是欧洲浪漫主义文学中&quot;感伤多情的天才&quot;的典型形象。</div>
+</a>
+<a class="entry-item" href="エピクテタス.html">
+  <div class="noun">エピクテタス</div>
+  <div class="snippet">古罗马斯多亚派哲学家（约50—135年），出生于弗里吉亚的希拉波利斯，幼年为奴后在罗马学习哲学，于尼科波利斯创立学园。其哲学核心为二分法——区分可控与不可控之物，主张德行即幸福，对后世哲学和认知行为疗法有深远影响。</div>
+</a>
+<a class="entry-item" href="エリザベス女皇.html">
+  <div class="noun">エリザベス女皇</div>
+  <div class="snippet">英格兰都铎王朝女王伊丽莎白一世（Elizabeth I, 1533-1603），1558年至1603年在位。被称为「处女女王」，终身未婚。她统治时期是英格兰黄金时代，莎士比亚文学繁荣，击败西班牙无敌舰队确立海上霸权。与罗伯特·达德利（レスタ</div>
+</a>
+<a class="entry-item" href="エルリントン.html">
+  <div class="noun">エルリントン</div>
+  <div class="snippet">夏目漱石《吾辈は猫である》中迷亭提及的历史或军事人物。据迷亭所言，此人的部下因其大鼻子而给他起了&quot;鼻鼻&quot;（鼻々）的绰号。在讨论历史人物鼻子的话题中与查理曼大帝并列出现，具体所指人物因缺乏明确记载而有多种推测。</div>
+</a>
+<a class="entry-item" href="カーテル・ムル.html">
+  <div class="noun">カーテル・ムル</div>
+  <div class="snippet">德国作家E.T.A.霍夫曼（1776-1822）小说《公猫穆尔的人生观》（1819-1821）中的主人公猫。夏目漱石在《我是猫》最后一章提及此角色，暗示其作品可能受到霍夫曼的猫叙事视角影响。</div>
+</a>
+<a class="entry-item" href="カーライル.html">
+  <div class="noun">カーライル</div>
+  <div class="snippet">英国19世纪评论家、历史学家、哲学家，以英雄史观和&quot;英雄崇拜论&quot;著称，代表作《法国革命史》《衣裳哲学》《英雄与英雄崇拜》等，对英国思想界影响深远。</div>
+</a>
+<a class="entry-item" href="ギボン.html">
+  <div class="noun">ギボン</div>
+  <div class="snippet">爱德华·吉本，18世纪英国启蒙时代历史学家，代表作《罗马帝国衰亡史》共六卷，以理性主义立场分析罗马衰亡原因，被誉为西方史学经典。</div>
+</a>
+<a class="entry-item" href="クリシッパス.html">
+  <div class="noun">クリシッパス</div>
+  <div class="snippet">克律西波斯（Chrysippus of Soli，约前280—前207），古希腊斯多葛学派哲学家，斯多葛学派第三代领袖，被誉为&quot;斯多葛哲学的第二创建者&quot;。生于小亚细亚索利（今土耳其南部），后在雅典师从克莱安忒斯。他在逻辑学、认识论、伦理学和</div>
+</a>
+<a class="entry-item" href="ゲーレン.html">
+  <div class="noun">ゲーレン</div>
+  <div class="snippet">克劳狄乌斯·盖伦（Galen，129-约200/216年），古希腊-罗马医师、解剖学家、哲学家，小亚细亚帕加马（今土耳其贝尔加马）人。继希波克拉底之后古代医学的最权威人物，其医学理论统治西方医学长达1400余年。通过动物解剖发现神经、心脏瓣</div>
+</a>
+<a class="entry-item" href="コンノート殿下.html">
+  <div class="noun">コンノート殿下</div>
+  <div class="snippet">指英国王子阿瑟·弗雷德里克·帕特里克·阿尔伯特（Arthur Frederick Patrick Albert, 1883-1938），维多利亚女王之孙，初代康诺特公爵阿瑟王子的儿子。1906年曾作为日英同盟使节访问日本，向明治天皇授予嘉德</div>
+</a>
+<a class="entry-item" href="サントブーヴ.html">
+  <div class="noun">サントブーヴ</div>
+  <div class="snippet">夏尔·奥古斯坦·圣伯夫（Charles Augustin Sainte-Beuve，1804—1869），法国文学批评家，被誉为&quot;近代文艺批评之父&quot;。首创传记批评法（肖像批评），通过研究作家的生平、性格、心理来理解作品。代表作有《波尔-罗瓦</div>
+</a>
+<a class="entry-item" href="シモニジス.html">
+  <div class="noun">シモニジス</div>
+  <div class="snippet">西摩尼得斯（Simonides of Ceos，约前556—前468），古希腊抒情诗人、警句作者，出生于凯奥斯岛，被亚历山大里亚学者列入九大抒情诗人之列。以挽歌和墓志铭最为著名，为温泉关之战殉国斯巴达将士所作墓志铭举世传诵。作品庄重凝练，善</div>
+</a>
+<a class="entry-item" href="シャーレマン.html">
+  <div class="noun">シャーレマン</div>
+  <div class="snippet">查理曼大帝（Charlemagne，742-814），又称卡尔大帝，法兰克国王，中世纪欧洲的重要统治者，加洛林帝国建立者。其传记作者艾因哈德记载其鼻子略长。作品中迷亭在关于鼻子的讨论中询问铃木是否知道查理曼鼻子的形状。</div>
+</a>
+<a class="entry-item" href="ジェームス.html">
+  <div class="noun">ジェームス</div>
+  <div class="snippet">美国／英国小说家亨利·詹姆斯（Henry James，1843-1916），日文片假名&quot;ジェームス&quot;。以细腻的心理分析、&quot;意识中心&quot;叙事手法和复杂的文体著称，代表作《一位女士的画像》《鸽翼》《使节》。作品中迷亭将詹姆斯与梅瑞狄斯并列，作为个</div>
+</a>
+<a class="entry-item" href="スタンラン.html">
+  <div class="noun">スタンラン</div>
+  <div class="snippet">泰奥菲尔·斯坦伦（Théophile Steinlen, 1859-1923），瑞士出生的法国画家、版画家，以描绘猫的作品闻名于世。活跃于巴黎蒙马特，为著名的黑猫夜总会（Le Chat Noir）创作海报。著有猫画集《Des Chats: </div>
+</a>
+<a class="entry-item" href="スチーヴンソン.html">
+  <div class="noun">スチーヴンソン</div>
+  <div class="snippet">罗伯特·路易斯·史蒂文森（Robert Louis Stevenson, 1850-1894），苏格兰小说家、诗人、旅行作家，19世纪末新浪漫主义文学的代表。代表作有《金银岛》（1883）、《化身博士》（1886）、《绑架》（1886）等。</div>
+</a>
+<a class="entry-item" href="セネカ.html">
+  <div class="noun">セネカ</div>
+  <div class="snippet">塞内卡（Lucius Annaeus Seneca，约前4-65），古罗马斯多葛派哲学家、政治家、剧作家，曾任尼禄皇帝的导师。其哲学著作以道德哲学、伦理学为主，主张理性节制、顺应自然。</div>
+</a>
+<a class="entry-item" href="ゼームス.html">
+  <div class="noun">ゼームス</div>
+  <div class="snippet">即威廉·詹姆斯（William James，1842—1910），美国哲学家、心理学家，实用主义哲学创始人之一，现代心理学的奠基人。代表作《心理学原理》（The Principles of Psychology，1890）提出了&quot;意识流&quot;（</div>
+</a>
+<a class="entry-item" href="ゼームス教授.html">
+  <div class="noun">ゼームス教授</div>
+  <div class="snippet">ゼームス教授即威廉·詹姆斯（William James, 1842-1910），美国哲学家和心理学家，机能主义心理学创始人。&quot;ゼームス&quot;是James在明治时期的日文旧假名表记（现代写作&quot;ジェームズ&quot;）。詹姆斯提出的&quot;意识流&quot;（stream </div>
+</a>
+<a class="entry-item" href="ソクラチス.html">
+  <div class="noun">ソクラチス</div>
+  <div class="snippet">苏格拉底（Socrates，前469-前399），古希腊哲学家，西方哲学奠基人之一。他以&quot;苏格拉底式问答法&quot;著称，强调通过提问引导人们思考并发现真理。因腐蚀青年罪被雅典法庭判处死刑。</div>
+</a>
+<a class="entry-item" href="ソフォクリス.html">
+  <div class="noun">ソフォクリス</div>
+  <div class="snippet">索福克勒斯（Sophocles，约前496—前406），古希腊三大悲剧作家之一，生于雅典西北郊科罗诺斯。一生创作约123部剧本，现存7部完整悲剧，包括《俄狄浦斯王》《安提戈涅》《埃阿斯》等。首创引入第三位演员，使戏剧对话更加丰富。参加过约3</div>
+</a>
+<a class="entry-item" href="タマス・ナッシ.html">
+  <div class="noun">タマス・ナッシ</div>
+  <div class="snippet">托马斯·纳什（Thomas Nashe，1567-1601），英国伊丽莎白时代作家、讽刺文学家，剑桥大学毕业，属于&quot;大学才子&quot;团体。其代表作《不幸运的旅人》被认为是英国最早的流浪汉小说。</div>
+</a>
+<a class="entry-item" href="タークイン・ゼ・プラウド.html">
+  <div class="noun">タークイン・ゼ・プラウド</div>
+  <div class="snippet">英语Tarquin the Proud的音译，指罗马王政时代第七任末代国王卢基乌斯·塔奎尼乌斯·苏培布斯（Lucius Tarquinius Superbus，约前535年—前509年在位）。他以暴政闻名，最终因其子塞斯图斯强奸贵族妇女鲁克</div>
+</a>
+<a class="entry-item" href="ダイオジニス.html">
+  <div class="noun">ダイオジニス</div>
+  <div class="snippet">第欧根尼（Diogenes of Sinope，约前412-前323），古希腊犬儒学派哲学家，以极端简朴的生活方式和尖锐讽刺著称。传说他住在一个木桶里，曾提着灯笼在雅典街头寻找&quot;真正的人&quot;。</div>
+</a>
+<a class="entry-item" href="テレマコス.html">
+  <div class="noun">テレマコス</div>
+  <div class="snippet">希腊神话中的人物，奥德修斯（Odysseus）与佩涅洛佩（Penelope）的独子。在荷马史诗《奥德赛》中，父亲远征特洛伊期间，他由门托尔（雅典娜化身）抚养长大。青年时期受雅典娜指引，外出寻父，先后拜访皮洛斯的涅斯托尔和斯巴达的墨涅拉俄斯。</div>
+</a>
+<a class="entry-item" href="デモスセニス.html">
+  <div class="noun">デモスセニス</div>
+  <div class="snippet">德摩斯梯尼（Demosthenes，前384-前322），古希腊最著名的演说家、政治家。以《斥腓力演说》闻名，曾领导雅典抵抗马其顿国王腓力二世的扩张。</div>
+</a>
+<a class="entry-item" href="ドクトル・リチャード・ラッセル.html">
+  <div class="noun">ドクトル・リチャード・ラッセル</div>
+  <div class="snippet">理查德·拉塞尔博士（Richard Russell，1687—1759），18世纪英国医生， 海水疗法（thalassotherapy）的先驱。1750年出版拉丁文论文《De Tabe Glandulari》 （关于腺病及海水使用的论文），</div>
+</a>
+<a class="entry-item" href="ナッシ.html">
+  <div class="noun">ナッシ</div>
+  <div class="snippet">托马斯·纳什（Thomas Nashe）的简称。同&quot;タマス・ナッシ&quot;。16世纪英国伊丽莎白时代的讽刺文学作家，著有《不幸运的旅人》等作品。</div>
+</a>
+<a class="entry-item" href="ナポレオン.html">
+  <div class="noun">ナポレオン</div>
+  <div class="snippet">拿破仑·波拿巴（Napoleon Bonaparte，1769-1821），法国军事家、政治家，法兰西第一帝国皇帝。他通过一系列军事征服几乎统治了整个欧洲大陆，其法典和行政体系对后世影响深远。在《吾辈是猫》中，哲学者独仙以拿破仑为例，论证&quot;</div>
+</a>
+<a class="entry-item" href="ニュートン.html">
+  <div class="noun">ニュートン</div>
+  <div class="snippet">艾萨克·牛顿（1643—1727），英国物理学家、数学家、天文学家，近代科学革命的集大成者。1687年出版《自然哲学的数学原理》（《原理》），提出万有引力定律和三大运动定律，奠定了经典力学的基础。与莱布尼茨各自独立发明微积分，在光学领域发明</div>
+</a>
+<a class="entry-item" href="ニーチェ.html">
+  <div class="noun">ニーチェ</div>
+  <div class="snippet">弗里德里希·尼采（Friedrich Nietzsche，1844-1900），19世纪德国哲学家。24岁成为巴塞尔大学古典语文学教授。核心著作《查拉图斯特拉如是说》提出&quot;超人&quot;（Übermensch）、&quot;权力意志&quot;、&quot;永恒轮回&quot;等概念。以</div>
+</a>
+<a class="entry-item" href="ハリソン.html">
+  <div class="noun">ハリソン</div>
+  <div class="snippet">弗雷德里克·哈里森，英国历史学家、法律家、实证主义哲学家，著有历史小说《塞奥法诺：十世纪的十字军》（1904年）等多部作品。</div>
+</a>
+<a class="entry-item" href="バリー・ペーン.html">
+  <div class="noun">バリー・ペーン</div>
+  <div class="snippet">巴里·佩因（Barry Eric Odell Pain，1864—1928），英国作家、幽默文学与怪奇小说家。出生于剑桥，毕业于剑桥大学基督圣体学院，曾为《Punch》等杂志撰稿。以幽默小品闻名，同时也擅长怪奇小说和暗黑幻想故事，代表作品集</div>
+</a>
+<a class="entry-item" href="バルザック.html">
+  <div class="noun">バルザック</div>
+  <div class="snippet">法国19世纪现实主义文学大师，以《人间喜剧》系列小说闻名，包含91部作品、2400余登场人物，被誉为&quot;法国社会的百科全书&quot;，代表作有《高老头》《欧也妮·葛朗台》等。</div>
+</a>
+<a class="entry-item" href="パスカル.html">
+  <div class="noun">パスカル</div>
+  <div class="snippet">布莱兹·帕斯卡（Blaise Pascal，1623-1662），法国数学家、物理学家、哲学家。作品中迷亭引用其《思想录》中的名言&quot;克利奥帕特拉的鼻子&quot;，以此论证鼻子的大小可能改变历史进程，反驳对金田夫人大鼻子的嘲笑。</div>
+</a>
+<a class="entry-item" href="パラセルサス.html">
+  <div class="noun">パラセルサス</div>
+  <div class="snippet">菲利普斯·奥雷奥卢斯·特奥夫拉斯图斯·邦巴斯图斯·冯·霍恩海姆（1493/94-1541），通称帕拉塞尔苏斯（意为&quot;超越塞尔苏斯&quot;），瑞士-德意志裔医生、炼金术师，被誉为&quot;医学界的路德&quot;&quot;毒理学之父&quot;。他公开焚毁盖伦与阿维森纳的医学经典，以</div>
+</a>
+<a class="entry-item" href="ピサゴラス.html">
+  <div class="noun">ピサゴラス</div>
+  <div class="snippet">毕达哥拉斯（Pythagoras，约前570-前495），古希腊数学家、哲学家，以勾股定理闻名。他创立的毕达哥拉斯学派认为数是万物的本原，对后世数学和哲学产生了深远影响。</div>
+</a>
+<a class="entry-item" href="ブルヌチェル.html">
+  <div class="noun">ブルヌチェル</div>
+  <div class="snippet">费迪南·布吕纳介（Ferdinand Brunetière，1849—1906），法国文学批评家、文学史家。曾任《两世界杂志》（Revue des deux mondes）主编，主张以实证主义和历史主义方法研究文学史。在德雷福斯事件中站在反</div>
+</a>
+<a class="entry-item" href="プロータス.html">
+  <div class="noun">プロータス</div>
+  <div class="snippet">普劳图斯（Titus Maccius Plautus，约前254-前184），古罗马著名喜剧作家，其作品多改编自希腊新喜剧，以生动的对话和幽默的情节著称，代表作有《一坛金子》《孪生兄弟》等，对后世欧洲喜剧影响深远。</div>
+</a>
+<a class="entry-item" href="ヘクトー.html">
+  <div class="noun">ヘクトー</div>
+  <div class="snippet">古希腊神话中特洛伊王子，特洛伊王普里阿摩斯与赫卡柏的长子，特洛伊军总司令。在荷马史诗《伊利亚特》中，他是特洛伊方面最勇敢的英雄，被描绘为&quot;和平仁爱、思深虑远、大胆无畏&quot;的理想形象。与希腊英雄阿喀琉斯决战被杀，其遗体被阿喀琉斯用战车拖绕特洛伊</div>
+</a>
+<a class="entry-item" href="ヘロドトス.html">
+  <div class="noun">ヘロドトス</div>
+  <div class="snippet">古希腊历史学家，约公元前484-前425年，出生于小亚细亚的哈利卡纳苏斯（今土耳其博德鲁姆），被西塞罗誉为&quot;历史之父&quot;。代表作《历史》（《希腊波斯战争史》）是西方文学史上第一部完整流传的散文作品，内容涵盖波斯帝国的兴衰和希波战争。他在书中记</div>
+</a>
+<a class="entry-item" href="ヘンレー.html">
+  <div class="noun">ヘンレー</div>
+  <div class="snippet">威廉·欧内斯特·亨利（William Ernest Henley, 1849-1903），英国维多利亚时代诗人、批评家、编辑。代表作《Invictus》以&quot;我是我命运的主宰&quot;闻名，与史蒂文森为挚友。</div>
+</a>
+<a class="entry-item" href="ベーコン.html">
+  <div class="noun">ベーコン</div>
+  <div class="snippet">弗朗西斯·培根（Francis Bacon, 1561-1626），英国文艺复兴时期哲学家、散文家、科学家。经验论与归纳法创始人，名言&quot;知识就是力量&quot;（Knowledge is power）的作者。</div>
+</a>
+<a class="entry-item" href="ペネロペー.html">
+  <div class="noun">ペネロペー</div>
+  <div class="snippet">希腊神话中的人物，英雄奥德修斯（Odysseus）的妻子，忒勒马科斯（Telemachus）的母亲。在荷马史诗《奥德赛》中，丈夫远征特洛伊二十年未归，她以&quot;为公公织寿衣&quot;为由拖延众多求婚者的纠缠，白天织布、夜晚拆解，坚持等待丈夫归来。她以忠</div>
+</a>
+<a class="entry-item" href="ホーマー.html">
+  <div class="noun">ホーマー</div>
+  <div class="snippet">古希腊盲人诗人荷马（Homer，日文片假名&quot;ホーマー&quot;），传为史诗《伊利亚特》和《奥德赛》的作者。作品中迷亭将荷马笔下超人的英雄性格描写与尼采的超人哲学对比，认为荷马时代确实存在令人愉悦的英雄事迹，因此作品充满&quot;阳气的愉快感&quot;；而尼采时代已</div>
+</a>
+<a class="entry-item" href="ボー・ナッシ.html">
+  <div class="noun">ボー・ナッシ</div>
+  <div class="snippet">博·纳什（Richard &quot;Beau&quot; Nash，1674—1762），18世纪英国社交界名人， 巴斯（Bath）温泉胜地的典礼长（Master of Ceremonies）。 他出身威尔士斯旺西，曾在牛津大学就读，1705年来到巴斯后制定</div>
+</a>
+<a class="entry-item" href="マーカス・オーレリアス.html">
+  <div class="noun">マーカス・オーレリアス</div>
+  <div class="snippet">马可·奥勒留（Marcus Aurelius，121-180），罗马帝国五贤帝之一，斯多葛派哲学家，著有《沉思录》。在位期间经历多次战争和瘟疫，被认为是罗马最伟大的皇帝之一。</div>
+</a>
+<a class="entry-item" href="ミュッセ.html">
+  <div class="noun">ミュッセ</div>
+  <div class="snippet">阿尔弗雷德·德·缪塞（Alfred de Musset，1810-1857），法国浪漫主义诗人、小说家、剧作家。法国浪漫主义四大诗人之一，1833年与女作家乔治·桑相恋，这段经历深刻影响其创作。代表作有《世纪儿的忏悔》《四夜组诗》等，185</div>
+</a>
+<a class="entry-item" href="メレジス.html">
+  <div class="noun">メレジス</div>
+  <div class="snippet">英国维多利亚时代小说家、诗人乔治·梅瑞狄斯（George Meredith，1828-1909），日文片假名&quot;メレジス&quot;。以精彩对话、深刻心理描写和喜剧理论著称，代表作《利己主义者》（The Egoist）。他的内心独白手法被认为是意识流的</div>
+</a>
+<a class="entry-item" href="モンセン.html">
+  <div class="noun">モンセン</div>
+  <div class="snippet">特奥多尔·蒙森（Theodor Mommsen, 1817-1903），德国历史学家、法学家，古代罗马史研究的权威。代表作五卷本《罗马史》以严谨史料批判和生动叙述著称，将罗马历史去神话化。1902年获诺贝尔文学奖（历史写作领域罕见获奖者）。</div>
+</a>
+<a class="entry-item" href="ユーゴー.html">
+  <div class="noun">ユーゴー</div>
+  <div class="snippet">ヴィクトル・ユーゴー（Victor Hugo, 1802-1885），法国浪漫主义文学的代表作家，被譽为&quot;法国的莎士比亚&quot;。代表作有《巴黎圣母院》（1831）、《悲惨世界》（1862）、《海上劳工》（1866）等。他一生创作了26卷诗、20</div>
+</a>
+<a class="entry-item" href="ライプニッツ.html">
+  <div class="noun">ライプニッツ</div>
+  <div class="snippet">戈特弗里德·威廉·莱布尼茨（1646—1716），德国哲学家、数学家，与笛卡尔、斯宾诺莎并称17世纪三大理性主义哲学家。与牛顿各自独立创立微积分，其记法（∫、d等）沿用至今。倡导二进制、发明机械计算机。哲学上提出&quot;单子论&quot;（Monadolo</div>
+</a>
+<a class="entry-item" href="ラファエル.html">
+  <div class="noun">ラファエル</div>
+  <div class="snippet">拉斐尔·圣齐奥（Raffaello Sanzio，1483—1520），意大利文艺复兴盛期画家，与达·芬奇、米开朗基罗并称「文艺复兴三杰」。生于乌尔比诺，37岁早逝于罗马。代表作包括梵蒂冈宫壁画《雅典学院》、《西斯廷圣母》等，以构图和谐、人</div>
+</a>
+<a class="entry-item" href="レオナルド・ダ・ヴィンチ.html">
+  <div class="noun">レオナルド・ダ・ヴィンチ</div>
+  <div class="snippet">意大利文艺复兴时期的博学家，在绘画、解剖学、工程学等多个领域成就卓越，代表作《蒙娜丽莎》《最后的晚餐》为世界最著名的艺术品。</div>
+</a>
+<a class="entry-item" href="レスター伯.html">
+  <div class="noun">レスター伯</div>
+  <div class="snippet">罗伯特·达德利（Robert Dudley, 1532-1588），伊丽莎白一世所赐莱斯特伯爵（Earl of Leicester），是女王幼年以来的挚友和宠臣。是伊丽莎白一世最有可能的结婚对象之一，但最终未能成婚。1575年在凯尼尔沃思城</div>
+</a>
+<a class="entry-item" href="レンブラント.html">
+  <div class="noun">レンブラント</div>
+  <div class="snippet">伦勃朗·哈尔门松·范·莱因（Rembrandt van Rijn, 1606-1669），荷兰黄金时代最伟大的画家、巴洛克绘画巨匠。以明暗对照法（明暗法）著称，代表作有《夜巡》《杜尔博士的解剖学课》等。一生创作80余幅自画像，深刻记录了自己</div>
+</a>
+<a class="entry-item" href="ロード・ケルヴィン.html">
+  <div class="noun">ロード・ケルヴィン</div>
+  <div class="snippet">开尔文勋爵（Lord Kelvin，本名威廉·汤姆逊，William Thomson，1824—1907），英国著名数学物理学家、工程师。在热力学领域贡献卓著，提出了绝对温标（开尔文K），确立了热力学第二定律的开尔文表述，与焦耳合作发现焦耳</div>
+</a>
+<a class="entry-item" href="ワイスマン.html">
+  <div class="noun">ワイスマン</div>
+  <div class="snippet">奥古斯特·魏斯曼（August Weismann，1834-1914），德国进化生物学家，弗莱堡大学教授。提出&quot;种质学说&quot;（Germ Plasm Theory），主张遗传信息仅通过生殖细胞传递，体细胞变化不能遗传，即&quot;魏斯曼屏障&quot;。通过断尾</div>
+</a>
+<a class="entry-item" href="ヴァレリアス.html">
+  <div class="noun">ヴァレリアス</div>
+  <div class="snippet">瓦莱里乌斯·马克西穆斯（Valerius Maximus，活跃于公元1世纪），罗马作家、历史学家，著有《著名言行录》（Factorum et Dictorum Memorabilium），收录大量古希腊罗马的趣闻逸事和名人语录，是后世了解古</div>
+</a>
+<a class="entry-item" href="三介.html">
+  <div class="noun">三介</div>
+  <div class="snippet">江户时代钱汤（公共浴场）中工作的男性服务员。负责烧热水、为客人搓背、管理客人的私人木桶等。江户初期混浴风气盛行时钱汤中还设有&quot;汤女&quot;（女性服务员），幕府虽多次发布禁令但效果有限。&quot;三介&quot;的形象在川柳中亦多有吟咏，是江户庶民文化中极具特色的职</div>
+</a>
+<a class="entry-item" href="三助.html">
+  <div class="noun">三助</div>
+  <div class="snippet">日本江户时代在钱汤（公共浴场）工作的男性服务员。主要职责为烧热水、为客人搓洗身体、管理客人的个人木桶以及浴场的清扫。在江户后期，部分三助提供越界服务，成为幕府风纪整顿的对象。该职业是江户庶民文化中极具特色的下层职业形象，在川柳和滑稽本中多有</div>
+</a>
+<a class="entry-item" href="三毛子.html">
+  <div class="noun">三毛子</div>
+  <div class="snippet">《我是猫》中登场的雌猫，因毛色为三色（白、黑、茶）而得名&quot;三毛子&quot;。是附近一位二弦琴师傅所养的猫。主人公（无名猫）曾对她怀有爱慕之情，但三毛子后来因感冒去世。猫在作品第25章中回忆&quot;回顾起来，我吾辈也曾对三毛子朝思暮想&quot;，并将其作为恋爱是宇</div>
+</a>
+<a class="entry-item" href="上田敏.html">
+  <div class="noun">上田敏</div>
+  <div class="snippet">上田敏（1874—1916），日本诗人、评论家、翻译家，法国象征主义诗歌在日本的先驱介绍者。 东京帝国大学英文科毕业，师从小泉八云。1905年出版代表译诗集《海潮音》， 以流丽的七五调译法将波德莱尔、魏尔伦、马拉美等法国象征派诗人引入日本，</div>
+</a>
+<a class="entry-item" href="下女.html">
+  <div class="noun">下女</div>
+  <div class="snippet">日语中指女性佣人、女仆、女用人。江户时代至昭和初期，农村女性流入城市做住家女佣是普遍现象。下女从事扫除、炊事、洗衣等家务劳动，社会地位较低。在作品中，猫描写深夜家里的声音时提到了&quot;远处女佣的磨牙声&quot;，并由此展开一段讽刺——女佣坚决否认自己磨</div>
+</a>
+<a class="entry-item" href="中峯和尚.html">
+  <div class="noun">中峯和尚</div>
+  <div class="snippet">即中峰明本禅师（1263-1323），元代临济宗高僧，钱塘人。得法于高峰原妙，一生屡辞名山主席，在各地建&quot;幻住庵&quot;传法，被尊为&quot;江南古佛&quot;。与赵孟頫交谊深厚，高丽沈王曾亲谒求法。谥号&quot;普应国师&quot;。著有《天目中峰和尚广录》三十卷。文中老人引其</div>
+</a>
+<a class="entry-item" href="主人.html">
+  <div class="noun">主人</div>
+  <div class="snippet">夏目漱石《我是猫》中的主角，一位中学英语教师，姓&quot;苦沙弥&quot;（くしゃみ/Kushami，意为&quot;喷嚏&quot;），是猫的主人。性格固执、清高迂腐、不善社交，患有慢性胃弱。作品中通过与迷亭、铃木等友人的对话，展现出其不谙世事、容易较真的性格特点。名字&quot;苦</div>
+</a>
+<a class="entry-item" href="仏師.html">
+  <div class="noun">仏師</div>
+  <div class="snippet">日本传统中专门制作佛像的工匠或艺术家。起源于飞鸟时代，最初的佛师是来自中国和朝鲜的渡来人。平安时代定朝确立&quot;寄木造&quot;技法，镰仓时代运庆、快庆等&quot;庆派&quot;佛师达到写实雕刻的巅峰。佛师通常隶属于特定寺院或工房（佛所），其地位高于一般工匠，授予法桥</div>
+</a>
+<a class="entry-item" href="伊藤博文.html">
+  <div class="noun">伊藤博文</div>
+  <div class="snippet">日本近代政治家，长州藩出身，吉田松阴门下。历任初代内阁总理大臣、枢密院议长、贵族院议长、初代韩国统监。主导大日本帝国宪法的起草，被称为「明治宪法之父」。四次组阁，推动内閣制度、华族制度等近代国家建设。1909年在哈尔滨火车站被韩国独立运动家</div>
+</a>
+<a class="entry-item" href="八木独仙.html">
+  <div class="noun">八木独仙</div>
+  <div class="snippet">夏目漱石小说《我是猫》中登场的虚构人物，是一位哲学者、禅学空想家。他宣扬消极修养论，主张东洋式的精神修养，引用《不动智神妙录》和&quot;电光影里斩春风&quot;等禅语。迷亭讽刺他十年前就在说同样的内容，并讲述了他曾被老鼠咬鼻子、地震时跳楼等滑稽轶事。他是</div>
+</a>
+<a class="entry-item" href="刑事巡査.html">
+  <div class="noun">刑事巡査</div>
+  <div class="snippet">日本警视厅下属的刑事警察。作品中一名叫吉田虎藏的刑事巡査来到苦沙弥家，通知他前去日本堤分署领取被盗物品。主人公因家世背景（父亲曾任名主）而对警察表现出过度的卑躬屈膝态度。</div>
+</a>
+<a class="entry-item" href="初さん.html">
+  <div class="noun">初さん</div>
+  <div class="snippet">夏目漱石《我是猫》中提及的人物，是静冈吴服店伊势源的年轻伙计（丁稚）。二十四五岁，据说曾皈依云照律师，连续三七二十一日仅靠荞麦汤维持，因而脸色青白。与愁眉苦脸的番头甚兵卫相邻而坐，是作品中描写的明治吴服店人物群像之一。</div>
+</a>
+<a class="entry-item" href="勘左衛門.html">
+  <div class="noun">勘左衛門</div>
+  <div class="snippet">猫为三只乌鸦的头领取的名字。&quot;勘左衛門&quot;是日本江户时代常见的男性名字，带有戏谑、亲切的意味。此处猫借用了人间姓名来称呼乌鸦，赋予其人格化色彩。</div>
+</a>
+<a class="entry-item" href="古井武右衛門.html">
+  <div class="noun">古井武右衛門</div>
+  <div class="snippet">夏目漱石《我是猫》中登场的角色。苦沙弥先生所教中学的二年级学生，因卷入&quot;情书恶作剧事件&quot;而面临退学危机，前来找先生商量。头大、鼻子如蒜头，性格淳朴但鲁莽。</div>
+</a>
+<a class="entry-item" href="和唐内.html">
+  <div class="noun">和唐内</div>
+  <div class="snippet">近松门左卫门创作的人形净瑠璃《国姓爷合战》（1715年初演）的主人公，以明末清初的历史人物郑成功为原型。&quot;和唐内&quot;之名蕴含深意——&quot;和&quot;代表日本、&quot;唐&quot;代表中国、&quot;内&quot;（ない）谐音&quot;非&quot;，合意为&quot;非日非唐人&quot;，象征郑成功中日混血的身份。剧中</div>
+</a>
+<a class="entry-item" href="和尚.html">
+  <div class="noun">和尚</div>
+  <div class="snippet">佛教中对僧侣的尊称，原为梵文upadhyaya的意译，意为&quot;亲教师&quot;、&quot;力生&quot;。在日语中读作&quot;おしょう&quot;或&quot;かしょう&quot;，特指具备一定修为和地位的僧侣，也作为对佛教僧侣的一般性敬称。本文中指代禅宗公案中磨瓦的南岳怀让禅师。夏目漱石在文中以轻松</div>
+</a>
+<a class="entry-item" href="噺家.html">
+  <div class="noun">噺家</div>
+  <div class="snippet">落語を演じる芸人の古称。一人で複数の役を演じ分け、最後に落ちをつけて笑わせる日本の伝統話芸の担い手。</div>
+</a>
+<a class="entry-item" href="坂本竜馬.html">
+  <div class="noun">坂本竜馬</div>
+  <div class="snippet">日本幕末时期的维新政商、倒幕运动活动家，促成萨长同盟并提出&quot;船中八策&quot;国家构想，创立日本最早的有限公司龟山社中（海援队），被尊为日本近代化之父。</div>
+</a>
+<a class="entry-item" href="坊主.html">
+  <div class="noun">坊主</div>
+  <div class="snippet">日语中指佛教僧侣，也用于称呼光头之人。在澡堂场景中，一位身穿浅黄棉布和服、约七十岁的僧侣出现，向所有入浴的客人行礼致意、寒暄问暖，随后与带孩子的客人交谈并提及夜间的盗贼事件。此场景生动展现了江户时代以来钱汤作为一个社区社交场所的功能——僧侣</div>
+</a>
+<a class="entry-item" href="多々良.html">
+  <div class="noun">多々良</div>
+  <div class="snippet">夏目漱石《我是猫》中的登场人物，全名多々良三平（たたら さんぺい）。苦沙弥先生在中学任教时的学生，毕业后取得法学士学位，进入六つ井物産公司任职。出身唐津，操九州方言（ズーズー弁）。性格圆滑世故、追名逐利，代表明治时期新兴的实业家阶层。后攀附</div>
+</a>
+<a class="entry-item" href="多々良三平.html">
+  <div class="noun">多々良三平</div>
+  <div class="snippet">夏目漱石《我是猫》中登场的重要人物之一。原为苦沙弥家的书生，后毕业于法科大学，在某公司矿山部任职，是新兴实业家的代表。性格圆滑世故、善于社交，与大资本家金田之女结婚，最终导致猫溺死的啤酒就是由他带来。与苦沙弥、迷亭等清高迂腐的知识分子形成鲜</div>
+</a>
+<a class="entry-item" href="大燈国師.html">
+  <div class="noun">大燈国師</div>
+  <div class="snippet">临济宗禅僧宗峰妙超（1282-1337）的国师号，京都大德寺的开山祖师。播磨国（今兵库县）出身，师从南浦绍明（大应国师）获印可。1326年开山龙宝山大德寺，获后醍醐天皇赐&quot;兴禅大灯国师&quot;、花园上皇赐&quot;高照正灯国师&quot;号。其书法被誉为&quot;镰仓禅林</div>
+</a>
+<a class="entry-item" href="大町桂月.html">
+  <div class="noun">大町桂月</div>
+  <div class="snippet">日本明治至大正时期活跃的诗人、文学评论家、随笔家、纪行文作家（1869-1925）。本名大町芳卫，号桂月。土佐国（现高知县）出身，毕业于东京帝国大学国文科。进入博文馆后为《太阳》《文艺俱乐部》等杂志撰写评论，与高山樗牛齐名，被誉为硬派评论家</div>
+</a>
+<a class="entry-item" href="大隈伯.html">
+  <div class="noun">大隈伯</div>
+  <div class="snippet">大隈伯即大隈重信（1838-1922），日本第8任和第17任内阁总理大臣，早稻田大学创始人。出身于肥前藩（今佐贺县）武士家庭，明治维新的重要志士。担任大藏大辅期间主导货币制度改革和近代财政体系建立。1882年创立立宪改进党，推动政党政治发展</div>
+</a>
+<a class="entry-item" href="天然居士.html">
+  <div class="noun">天然居士</div>
+  <div class="snippet">夏目漱石的好友米山保三郎的居士号（佛教法号），由镰仓圆觉寺高僧今北洪川所赠。米山保三郎是漱石第一高等中学时期的同窗，醉心禅学，对漱石影响极大——曾促使漱石从建筑学转向文学，并引荐漱石至圆觉寺参禅。在《我是猫》中，主人公苦沙弥被描述为&quot;纯然た</div>
+</a>
+<a class="entry-item" href="天璋院.html">
+  <div class="noun">天璋院</div>
+  <div class="snippet">江户幕府第13代将军德川家定的正室，萨摩藩岛津家出身，本名篤姫（あつひめ）。幕末时期以江户城无血开城和德川宗家存续做出重要贡献，是幕末大奥的核心人物。 --- 江户幕府第13代将军德川家定的正室（御台所），本名笃姬（1836-1883），萨</div>
+</a>
+<a class="entry-item" href="天道公平.html">
+  <div class="noun">天道公平</div>
+  <div class="snippet">立町老梅发狂后自称的名字，意为&quot;天道公平&quot;。此人以天道之化身自居，认为世人皆迷、必须拯救，不断给友人寄送长信。有时也写作&quot;孔平&quot;。作品中体现了他患夸大妄想狂（自大狂）的状态。</div>
+</a>
+<a class="entry-item" href="夫子.html">
+  <div class="noun">夫子</div>
+  <div class="snippet">中国古代对男子的尊称，在《论语》中特指孔子，是孔门弟子对孔子最常见的敬称。&quot;夫子&quot;一词本义为古代对学者、老师的尊称，《论语·学而》中多处可见此称呼。后世&quot;孔夫子&quot;成为孔子的代名词，象征儒家思想的创始人与最高权威。在明治时代的知识分子语境中，</div>
+</a>
+<a class="entry-item" href="女媧氏.html">
+  <div class="noun">女媧氏</div>
+  <div class="snippet">女娲（女媧氏），中国上古神话中的创世女神、人类始祖。传说中她人首蛇身，以黄土造人、炼五色石补天、断鳌足以立四极、积芦灰以止洪水，并创立婚姻制度、发明笙簧等乐器。被尊为&quot;娲皇&quot;&quot;女希氏&quot;，位列三皇之一。在《我是猫》中，苦沙弥先生屡次驱赶落云馆</div>
+</a>
+<a class="entry-item" href="嫦娥.html">
+  <div class="noun">嫦娥</div>
+  <div class="snippet">中国古代神话中的月宫女神。传说她因偷食西王母的不死之药而飞升月宫。最早记载于战国《归藏》及西汉《淮南子》。唐代以后文人将其塑造为美丽孤寂的月神形象。</div>
+</a>
+<a class="entry-item" href="子規子.html">
+  <div class="noun">子規子</div>
+  <div class="snippet">正冈子规（1867-1902），日本明治时代著名俳人、歌人、散文家，近代俳句的改革者。本名正冈常规，俳号子规取自杜鹃啼血的典故。与夏目漱石是东京大学预备门时代的同级生和终生挚友，创办俳句杂志《杜鹃》，提出&quot;写生主义&quot;理论，被尊为日本近代俳句</div>
+</a>
+<a class="entry-item" href="孔子.html">
+  <div class="noun">孔子</div>
+  <div class="snippet">中国古代伟大的思想家、教育家，儒家学派创始人（公元前551-前479年）。名丘，字仲尼。其核心思想&quot;仁&quot;与&quot;礼&quot;对东亚文明产生了深远影响。作品中独仙以孔子为例，讨论&quot;英雄&quot;与&quot;时代&quot;的关系：在古代孔子独一无二因而能展现影响力；而现代&quot;人人都</div>
+</a>
+<a class="entry-item" href="孔明.html">
+  <div class="noun">孔明</div>
+  <div class="snippet">孔明（こうめい），即诸葛亮（181—234），字孔明，号卧龙，三国时期蜀汉丞相。琅琊阳都（今山东沂南）人。辅佐刘备建立蜀汉，提出&quot;隆中对&quot;，促成孙刘联盟赢得赤壁之战，后受托孤之重任，平定南中、五次北伐中原。著有《出师表》《诫子书》等名篇，被</div>
+</a>
+<a class="entry-item" href="孟子.html">
+  <div class="noun">孟子</div>
+  <div class="snippet">孟子（约前372-前289），名轲，字子舆，战国时期儒家代表人物，被尊为&quot;亚圣&quot;。提出性善论，主张人皆有&quot;四端之心&quot;（恻隐、羞恶、辞让、是非），倡导仁政王道。著有《孟子》七篇，与《论语》《大学》《中庸》合称&quot;四书&quot;。其&quot;求放心&quot;之说主张学问</div>
+</a>
+<a class="entry-item" href="安井息軒.html">
+  <div class="noun">安井息軒</div>
+  <div class="snippet">日本江户后期至明治初期的儒学家、考证学家，被誉为江户考证学之集大成者，在江户开设私塾&quot;三计塾&quot;培养两千余门生，著有《毛诗辑疏》《左传辑释》等。</div>
+</a>
+<a class="entry-item" href="富子.html">
+  <div class="noun">富子</div>
+  <div class="snippet">夏目漱石《我是猫》中的人物，大资本家金田家的独生女，小说中多称「金田の娘」。她的婚事是推动作品剧情发展的核心事件之一。金田家看中苦沙弥的朋友、理学士水岛寒月，欲将富子嫁给他，由此引发了一系列风波——金田夫人亲自拜访苦沙弥家打探寒月消息，遭到</div>
+</a>
+<a class="entry-item" href="富子嬢.html">
+  <div class="noun">富子嬢</div>
+  <div class="snippet">金田富子，金田家的千金小姐，作品中登场的重要配角。 在作品中她曾由父亲金田先生安排与寒月相亲，但寒月并未接受。 东风创作的新体诗集《世の人に似ずあえかに見え給う》扉页上写着&quot;富子嬢に捧ぐ&quot;， 将此诗集献给富子，遭迷亭调侃&quot;若是我，会在&#x27;富子</div>
+</a>
+<a class="entry-item" href="寒月.html">
+  <div class="noun">寒月</div>
+  <div class="snippet">夏目漱石《吾輩は猫である》中的重要配角，全名水島寒月（みずしま かんげつ），理学士（物理学者），是苦沙弥的学生兼朋友。性格古板认真、一丝不苟，研究课题奇特古怪（如橡树果硬度、上吊力学等）。他在小说中曾在理学协会发表题为&quot;首縊りの力学&quot;的演讲</div>
+</a>
+<a class="entry-item" href="小文吾.html">
+  <div class="noun">小文吾</div>
+  <div class="snippet">犬田小文吾（いぬた こぶんご），原作中为犬村小文吾（いぬむら しょうぶんご），《南总里见八犬传》中的八犬士之一，持有&quot;悌&quot;之明珠，臀部有牡丹形痣，以力大无穷著称的豪杰。</div>
+</a>
+<a class="entry-item" href="小泉八雲.html">
+  <div class="noun">小泉八雲</div>
+  <div class="snippet">小泉八云（1850—1904），原名拉夫卡迪奥·赫恩（Lafcadio Hearn），生于希腊莱夫卡达岛，1896年归化日本，取日本名&quot;小泉八雲&quot;。他是日本近代最重要的外国裔作家之一，以《怪谈》（Kwaidan）闻名于世，被誉为日本怪谈文学</div>
+</a>
+<a class="entry-item" href="小町.html">
+  <div class="noun">小町</div>
+  <div class="snippet">指小野小町（おののこまち），日本平安时代初期的女流歌人，六歌仙及三十六歌仙中唯一的女性。以绝代美女著称，在日本常与杨贵妃、克娄巴特拉并称&quot;世界三大美人&quot;。&quot;小町&quot;后来成为美女的代名词（如&quot;小町娘&quot;）。其和歌以哀婉缠绵为特色，《小仓百人一首》</div>
+</a>
+<a class="entry-item" href="小督の局.html">
+  <div class="noun">小督の局</div>
+  <div class="snippet">平安时代末期的宫中女官，中纳言藤原成范之女。因容貌美丽被高仓天皇宠爱，但遭平清盛忌惮而被强迫离开天皇，隐居嵯峨野。中秋名月之夜，天皇命源仲国以琴音为线索在嵯峨野寻得她的下落，成为著名的古典逸话。此故事被收入能乐《小督》等作品。</div>
+</a>
+<a class="entry-item" href="屈原.html">
+  <div class="noun">屈原</div>
+  <div class="snippet">战国时期楚国诗人、政治家，中国历史上第一位伟大的爱国诗人，浪漫主义文学的奠基人。名平，字原。著有《离骚》《九歌》《天问》等。因政治理想破灭，投汨罗江自尽，其忌日演变为端午节。</div>
+</a>
+<a class="entry-item" href="山陽.html">
+  <div class="noun">山陽</div>
+  <div class="snippet">赖山阳（1781-1832），江户时代后期的历史学家、儒学家、汉诗人。大坂出生，广岛藩儒学者赖春水之子。代表作《日本外史》（22卷）以汉文纪传体叙述源平至德川幕府的武家兴衰，贯穿尊王斥霸思想，被攘夷志士奉为思想指南，吉田松阴等人深受其影响。</div>
+</a>
+<a class="entry-item" href="岩崎男爵.html">
+  <div class="noun">岩崎男爵</div>
+  <div class="snippet">三菱財閥の創業家・岩崎家の男爵位を持つ者。岩崎弥之助（弥太郎の弟）が初代男爵で、後に伯爵に昇爵。</div>
+</a>
+<a class="entry-item" href="岩見重太郎.html">
+  <div class="noun">岩見重太郎</div>
+  <div class="snippet">安土桃山时代至江户初期的传奇剑客，本名薄田兼相（すすきだ かねすけ），官位为隼人正。曾是小早川隆景家臣，后仕于丰臣秀吉。在1614年大坂冬之阵中因醉酒失守博劳渊砦，被嘲为&quot;橙武者&quot;。翌年大坂夏之阵道明寺之战中，持三尺三寸大太刀决死奋战，壮烈</div>
+</a>
+<a class="entry-item" href="左氏.html">
+  <div class="noun">左氏</div>
+  <div class="snippet">即左丘明，春秋末期鲁国史官，相传为《左传》（《春秋左氏传》）的作者。《左传》是中国第一部详细的编年体史书，记载了鲁隐公元年（前722年）至鲁悼公十四年（前453年）共259年的历史，是儒家十三经之一。其叙事文笔简练而精彩，长于描写战争和外交</div>
+</a>
+<a class="entry-item" href="左甚五郎.html">
+  <div class="noun">左甚五郎</div>
+  <div class="snippet">江户时代初期传说中的木工雕刻名匠，以神社佛阁的建筑装饰雕刻闻名。其生平不详，生卒年未明，但日本各地流传着关于他作品&quot;注入生命&quot;的传说（如雕刻的龙夜里飞走）。最著名的传世作品是日光东照宫的&quot;眠猫&quot;（但作者是否确为左甚五郎存疑）。其姓氏&quot;左&quot;（</div>
+</a>
+<a class="entry-item" href="帰天斎正一.html">
+  <div class="noun">帰天斎正一</div>
+  <div class="snippet">帰天斎正一（きてんさい しょういち），日本明治时代的西洋魔术师，本名波済菊太郎（はざ きくたろう）。明治初年赴欧学习西洋魔术，回国后成为日本引进西洋舞台魔术的先驱人物之一。与松旭斎天一等同为日本近代魔术史上的早期开拓者。在《我是猫》中，女主</div>
+</a>
+<a class="entry-item" href="平の宗盛.html">
+  <div class="noun">平の宗盛</div>
+  <div class="snippet">日本平安时代末期的武将，平氏政权末代首领。平清盛嫡子，在其兄平重盛去世后继承平家。1181年清盛病逝后正式掌权，但缺乏政治手腕，在源平合战中屡战屡败。1185年坛之浦之战平家惨败，其投海未遂被俘，后在押送途中被斩首。作品中的&quot;平の宗盛にて候</div>
+</a>
+<a class="entry-item" href="弘法大師.html">
+  <div class="noun">弘法大師</div>
+  <div class="snippet">日本真言宗开祖空海（774—835）的谥号，921年由醍醐天皇追赐。空海于804年入唐，在长安青龙寺从惠果阿阇梨受密教付法，归国后创立真言宗（东密），以高野山金刚峰寺为根本道场。在日本俗语中「大师」一词往往专指弘法大师。其著作《文镜秘府论》</div>
+</a>
+<a class="entry-item" href="張世尊.html">
+  <div class="noun">張世尊</div>
+  <div class="snippet">清末的中国魔术师/奇术师，全名张世尊，在明治时期的日本以&quot;清国奇术师&quot;之名广为人知。其表演以穿越狭小空间的&quot;缩骨术&quot;等杂技闻名，在日本巡演期间受到瞩目。夏目漱石在《我是猫》中引用其名，比喻四目栅栏的方孔极其狭小，就连以身体柔软著称的张世尊也</div>
+</a>
+<a class="entry-item" href="張飛.html">
+  <div class="noun">張飛</div>
+  <div class="snippet">中国三国时期蜀汉名将，字益德（一作翼德），涿郡人。与关羽并称&quot;万人敌&quot;。正史《三国志》载其于长坂坡率二十骑断后，据水断桥，瞋目横矛大喝&quot;身是张益德也，可来共决死&quot;，使曹军无人敢近。《三国演义》中其形象更为夸张—大喝一声使夏侯杰惊死。后为部下</div>
+</a>
+<a class="entry-item" href="御三.html">
+  <div class="noun">御三</div>
+  <div class="snippet">《我是猫》中登场的女佣（下女），在苦沙弥家帮工。 名字&quot;御三&quot;（O-san）是日本传统的女性称呼。 作品中描写她脸颊红润、刚从澡堂回来的模样， 以及她笨手笨脚关门、缺乏心计的性格， 被猫评价为&quot;山出し&quot;（乡下人，缺心眼）。 在猫夜间捕鼠时，</div>
+</a>
+<a class="entry-item" href="御夏.html">
+  <div class="noun">御夏</div>
+  <div class="snippet">夏目漱石小说《我是猫》中登场的人物，是迷亭在静冈老家的女性亲属（一说为迷亭伯父牧山翁家的女佣或侍女）。作品中苦沙弥向其求婚，她以&quot;静冈有西瓜也有医生，但没有一夜做成的媳妇&quot;为由委婉拒绝。</div>
+</a>
+<a class="entry-item" href="志乃.html">
+  <div class="noun">志乃</div>
+  <div class="snippet">犬塚信乃（いぬづか しの），《南总里见八犬传》中的八犬士之一，持有&quot;孝&quot;之明珠，右臂有牡丹形痣，佩有名刀村雨丸。在作品中常作为八犬士的代表人物出现。</div>
+</a>
+<a class="entry-item" href="恵比寿（えびす）.html">
+  <div class="noun">恵比寿（えびす）</div>
+  <div class="snippet">日本七福神之一，也是唯一一位日本本土起源的福神。原为渔民的海洋守护神，后演变为商业之神和财神。形象为头戴乌帽、身穿狩衣、右手持钓竿、左手抱大鲷鱼。每年1月有著名的十日戎祭典。</div>
+</a>
+<a class="entry-item" href="扁鵲.html">
+  <div class="noun">扁鵲</div>
+  <div class="snippet">中国春秋战国时期（约公元前407-前310年）的传奇名医，本名秦越人，渤海郡鄚（今河北省任丘市）人。被誉为&quot;医祖&quot;，位列中国五大名医之首。据《史记·扁鹊仓公列传》记载，扁鹊得长桑君秘传后能隔墙视人五脏，精通四诊法（望闻问切），虢国太子&quot;起死</div>
+</a>
+<a class="entry-item" href="折助.html">
+  <div class="noun">折助</div>
+  <div class="snippet">日本江户时代武家宅邸中服役的下级男仆（下男），又称&quot;小者&quot;。负责杂役、跑腿等各类粗活，是武士家中身份最低的男性用人。明治维新后，这一阶层随着武家制度的解体而消失。在《我是猫》中，苦沙弥家的女主人将落云馆学生粗鄙的口语（おめえ、知らねえ）比作</div>
+</a>
+<a class="entry-item" href="摂津大掾.html">
+  <div class="noun">摂津大掾</div>
+  <div class="snippet">竹本摂津大掾（1836-1917），幕末至明治时期活跃的义太夫节（净琉璃）太夫。本名不详，是竹本义太夫系的传人，继承了&quot;摂津大掾&quot;的称号。&quot;掾&quot;是日本授予艺术家的荣誉官位称号。他在明治时期致力于义太夫节的传承与普及，著有《义太夫之心得》（1</div>
+</a>
+<a class="entry-item" href="方丈.html">
+  <div class="noun">方丈</div>
+  <div class="snippet">寺院の住職（住持）の尊称。もとは一丈四方の部屋（方丈室）を指し、維摩経に登場する維摩詰の居室に由来。転じて寺院の最高責任者を意味するようになった。</div>
+</a>
+<a class="entry-item" href="日蓮.html">
+  <div class="noun">日蓮</div>
+  <div class="snippet">日本镰仓时代（1222-1282）的佛教僧侣，日莲宗（法华宗）的创始人。专奉《法华经》，主张唱念&quot;南无妙法莲华经&quot;即可得救，曾因激烈批判其他宗派而遭多次迫害与流放。其法系衍生出创价学会等现代宗教团体。书中用来比喻敢吃河豚之人的勇气如日莲化身</div>
+</a>
+<a class="entry-item" href="曲亭馬琴.html">
+  <div class="noun">曲亭馬琴</div>
+  <div class="snippet">江户时代后期的日本作家，本名滝沢興邦（たきざわ おきくに），1767-1848年。他是日本最早的职业作家之一，代表作《南総里見八犬伝》（全98卷106册，历时28年完成）是日本古典文学史上最长的作品，也是江户时代的超级畅销书。另有《椿説弓張</div>
+</a>
+<a class="entry-item" href="曹操.html">
+  <div class="noun">曹操</div>
+  <div class="snippet">东汉末年杰出的政治家、军事家、文学家（155—220年），字孟德，沛国谯县人。在东汉末年的乱世中&quot;挟天子以令诸侯&quot;，统一北方，官至魏王。曹丕建立曹魏后追尊为魏武帝。他推行屯田制、唯才是举，奠定了曹魏政权的基础。精兵法、善诗文，开创了建安文学</div>
+</a>
+<a class="entry-item" href="曾呂崎.html">
+  <div class="noun">曾呂崎</div>
+  <div class="snippet">夏目漱石《我是猫》中提到的角色，是主人公苦沙弥、迷亭、铃木在学生时代的同窗好友。小说中已故去，被描述为&quot;头脑很好但做饭最差的人&quot;，其煮饭总是烧焦、常以生豆腐为菜肴。曾吕崎死后，三人边吃羊羹边回忆与其共度的学生时代，话题透露出其出身于寺院的背</div>
+</a>
+<a class="entry-item" href="木菴.html">
+  <div class="noun">木菴</div>
+  <div class="snippet">木菴（1611-1684），即木庵性瑫，明末清初中国福建出身的高僧，日本黄檗宗第二祖。13岁出家，师从隐元隆琦，1655年东渡日本，1664年继任京都黄檗山万福寺住持。在江户创建瑞圣寺，奠定关东黄檗宗基础。与隐元隆琦、即非如一并称&quot;黄檗三笔</div>
+</a>
+<a class="entry-item" href="東郷大将.html">
+  <div class="noun">東郷大将</div>
+  <div class="snippet">东乡平八郎（1848—1934），日本海军元帅、侯爵，萨摩藩出身。日俄战争中担任联合舰队司令长官，在对马海峡海战中全歼俄国波罗的海舰队，被誉为&quot;东方纳尔逊&quot;。在日本被视为&quot;军神&quot;，与陆军大将乃木希典并列。在《我是猫》中，猫为了实践&quot;庸猫必须</div>
+</a>
+<a class="entry-item" href="東風.html">
+  <div class="noun">東風</div>
+  <div class="snippet">夏目漱石《我是猫》中的登场人物，自称&quot;新体诗人&quot;，常以浪漫夸张的诗歌语言表达情感。是苦沙弥（主人公）家中往来知识分子之一，常被迷亭等人调侃戏弄。原型有说法指向漱石友人、诗人大家楠绪子。</div>
+</a>
+<a class="entry-item" href="柳宗元.html">
+  <div class="noun">柳宗元</div>
+  <div class="snippet">唐代文学家、哲学家，字子厚。与韩愈共同倡导古文运动，位列&quot;唐宋八大家&quot;。代表作有《永州八记》《江雪》《捕蛇者说》等，被尊为中国山水游记之祖。</div>
+</a>
+<a class="entry-item" href="桂月.html">
+  <div class="noun">桂月</div>
+  <div class="snippet">大町桂月（おおまち けいげつ，1869—1925），日本明治至大正时期的诗人、评论家、随笔家。本名大町芳卫，出生于土佐国高知（今高知县）。毕业于东京帝国大学文科大学国文科，在校期间即以能文善写著称。毕业后进入博文馆，为《太阳》《文艺俱乐部》</div>
+</a>
+<a class="entry-item" href="桃川如燕.html">
+  <div class="noun">桃川如燕</div>
+  <div class="snippet">江户后期至明治初期的讲谈师（1832—1898），本名杉浦要助，以猫为主题的讲谈作品《猫怪传》著称，别号&quot;猫如燕&quot;，对明治时期的讲谈艺术影响深远。</div>
+</a>
+<a class="entry-item" href="楠正成.html">
+  <div class="noun">楠正成</div>
+  <div class="snippet">即楠木正成（くすのき まさしげ，约1294-1336），日本南北朝时代的武将。响应后醍醐天皇倒幕，以游击战闻名，与源义经、真田信繁并称日本三大悲剧英雄。凑川之战中战死，留下&quot;七生报国&quot;的遗言。明治时代追赠正一位，被尊为军神。文中老人提到甲割</div>
+</a>
+<a class="entry-item" href="榊原健吉.html">
+  <div class="noun">榊原健吉</div>
+  <div class="snippet">榊原键吉（1830—1894），江户末期至明治初期的剑客，直心影流男谷派剑术大师。 生于江户麻布广尾，13岁入门男谷信友道场。曾任幕府讲武所剑术教授， 在将军德川家茂面前比武获胜并成为其个人教练。明治维新后组织&quot;击剑会&quot;， 以剑术兴行维持武</div>
+</a>
+<a class="entry-item" href="比丘尼.html">
+  <div class="noun">比丘尼</div>
+  <div class="snippet">仏教の女性出家僧侶。梵語Bhikṣuṇīの音写。具足戒を受けた女性修行者を指し、比丘（男性僧）とともに出家二衆を構成する。作中では猫の聴覚の鋭さを例える比喩として登場。</div>
+</a>
+<a class="entry-item" href="水島.html">
+  <div class="noun">水島</div>
+  <div class="snippet">水島寒月。理学士で苦沙弥の学生兼友人。金田家から娘の結婚相手として目されるが、苦沙弥や迷亭の反対により縁談は流れ、故郷で黒い妻を娶り博士の夢も果たせなかった明治知識人の典型。</div>
+</a>
+<a class="entry-item" href="水島寒月.html">
+  <div class="noun">水島寒月</div>
+  <div class="snippet">夏目漱石《吾辈は猫である》中的人物。苦沙弥（主人）最喜爱的门生，理学士，钻研物理学。以独特的博士论文题目闻名。金田家选中的女婿候选人，金田夫人提出以博士称号作为结婚条件。其原型被认为是物理学家寺田寅彦，曾以&quot;尺八的音响学研究&quot;取得博士学位。</div>
+</a>
+<a class="entry-item" href="沢菴禅師.html">
+  <div class="noun">沢菴禅師</div>
+  <div class="snippet">即泽庵宗彭（たくあん そうほう，1573-1645），日本江户初期临济宗禅僧，但马国出石人。曾因&quot;紫衣事件&quot;被流放出羽，后获德川家光归依，开创品川东海寺。为剑豪柳生宗矩撰写《不动智神妙录》《太阿记》等禅武著作，倡导剑禅一致。精通书画茶道，泽</div>
+</a>
+<a class="entry-item" href="泉鏡花.html">
+  <div class="noun">泉鏡花</div>
+  <div class="snippet">泉镜花（1873—1939），本名泉镜太郎，日本近代浪漫主义与幻想文学的代表作家。石川县金泽市出身，师从尾崎红叶。代表作有《外科室》《高野圣》《妇系图》《歌行灯》《天守物语》等。其文风绚烂幽玄，擅长描写超现实、梦幻与现实交织的世界。芥川龙之</div>
+</a>
+<a class="entry-item" href="泥棒.html">
+  <div class="noun">泥棒</div>
+  <div class="snippet">闯入苦沙弥家偷走山芋等物品的小偷。后再次出现，与刑事巡査一同前来。主人误将穿戴体面的小偷认作刑事，闹出笑话。作品借小偷与刑事的对比，讽刺了主人公以貌取人和盲目敬畏权力的性格。</div>
+</a>
+<a class="entry-item" href="浅田宗伯.html">
+  <div class="noun">浅田宗伯</div>
+  <div class="snippet">浅田宗伯（1815-1894），名惟常，号栗园，日本江户末期至明治初期的汉方医学巨匠，被誉为&quot;日本最后的汉方医大师&quot;。信浓国（长野县）出身，曾任幕府将军德川家茂的侍医和明治天皇的侍医。曾以汉方治愈法国驻日公使罗歇的腰背剧痛，获拿破仑三世赠予</div>
+</a>
+<a class="entry-item" href="浜田平助.html">
+  <div class="noun">浜田平助</div>
+  <div class="snippet">夏目漱石《我是猫》中提到的角色。苦沙弥先生学校的学生，与古井武右衛門同伙，策划了向金田家女儿寄送情书的恶作剧，由他起草情书内容并鼓动古井武右衛門出借姓名。</div>
+</a>
+<a class="entry-item" href="烏金の長範先生.html">
+  <div class="noun">烏金の長範先生</div>
+  <div class="snippet">《我是猫》中出现的讽刺性虚构人名。&quot;烏金&quot;（うきん/うごん）与&quot;長範&quot;（ちょうはん）组合而成，是作者夏目漱石虚构的保守派旧学者的形象。书中迷亭将依托&quot;御威光&quot;或&quot;竹枪&quot;等旧时代力量强行压制他人的人，讽刺为&quot;乌金的长范先生之类时代落伍的顽固者</div>
+</a>
+<a class="entry-item" href="無覚禅師.html">
+  <div class="noun">無覚禅師</div>
+  <div class="snippet">即无学祖元（むがく そげん，1226-1286），南宋末禅僧，后东渡日本，为镰仓圆觉寺开山，敕谥&quot;佛光国师&quot;。元代兵乱时，元兵以刀架颈逼其起身，他泰然吟出&quot;电光影里斩春风&quot;的著名禅偈，元兵畏服而退。文中迷亭说无觉禅师那句&quot;电光&quot;（指电光影里</div>
+</a>
+<a class="entry-item" href="熊坂長範.html">
+  <div class="noun">熊坂長範</div>
+  <div class="snippet">日本平安时代末期（约12世纪）传说中的著名盗贼。传说他企图抢劫前往奥州的金商吉次一行，但被随行的牛若丸（即后来的源义经）击败。该故事收入《义经记》，成为能乐（谣曲《熊坂》）、歌舞伎、浮世绘等传统艺术的常见题材。文中以熊坂长范比喻蛮横不讲理的</div>
+</a>
+<a class="entry-item" href="牧山翁.html">
+  <div class="noun">牧山翁</div>
+  <div class="snippet">牧山翁，夏目漱石《我是猫》中迷亭的伯父。迷亭在金田夫人面前谎称自己是牧山男爵的侄子。被揭穿后讲述的真实伯父形象十分滑稽：静冈在住的汉学者，67岁，头上仍留着丁髻，常携铁扇，认为人睡四小时即足。曾为参加祝捷会而写信让迷亭代购山高帽和福乐克外套</div>
+</a>
+<a class="entry-item" href="狩野法眼元信.html">
+  <div class="noun">狩野法眼元信</div>
+  <div class="snippet">狩野元信（1476-1559），日本室町后期画家，狩野派创始人狩野正信之子。开创&quot;和汉融合&quot;画风，融合水墨画与大和绘技法，奠定狩野派基础。获僧位&quot;法眼&quot;，故称&quot;古法眼&quot;。代表作有大德寺大仙院《四季花鸟图襖绘》等。</div>
+</a>
+<a class="entry-item" href="独仙.html">
+  <div class="noun">独仙</div>
+  <div class="snippet">夏目漱石《吾辈是猫》中登场的人物，一位沉溺于禅学与空理空论的&quot;哲学者&quot;。他宣扬&quot;大彻大悟&quot;和&quot;心之修行&quot;，但被迷亭等人认为其理论害人不浅——受其影响的人先后发狂。独仙代表了当时日本知识界中逃避现实的东洋消极哲学。</div>
+</a>
+<a class="entry-item" href="独逸皇帝.html">
+  <div class="noun">独逸皇帝</div>
+  <div class="snippet">指德意志第二帝国皇帝威廉二世（Wilhelm II，1859-1941），1888年至1918年在位。他以标志性的向上翘起的胡须（髯）闻名，并热衷于军事扩张和世界政策。书中主人公想模仿威廉二世蓄养向上翘起的胡须，体现其对威严形象的向往。</div>
+</a>
+<a class="entry-item" href="珍野苦沙弥.html">
+  <div class="noun">珍野苦沙弥</div>
+  <div class="snippet">夏目漱石《吾輩は猫である》中的人类主人公，姓珍野（ちんの），名苦沙弥（くしゃみ），在文明中学担任英语入门教师。他患有胃病但食量很大，兴趣广泛（俳句、谣曲、弓术、小提琴等）但无一精通，自命清高、愤世嫉俗，尤其讨厌资本家。他是猫的主人，也是小说</div>
+</a>
+<a class="entry-item" href="甘木.html">
+  <div class="noun">甘木</div>
+  <div class="snippet">甘木先生，夏目漱石《我是猫》中登场的医生角色，主人公苦沙弥先生（猫的主人、中学英语教师）的家庭医生。性格温和沉稳，总是笑眯眯的。曾为苦沙弥诊病、尝试催眠术（失败），也曾应请求给猫看病。他还曾出诊为苦沙弥治疗恶寒头晕，但因到得太晚导致苦沙弥错</div>
+</a>
+<a class="entry-item" href="甚兵衛.html">
+  <div class="noun">甚兵衛</div>
+  <div class="snippet">夏目漱石《我是猫》中提及的人物，是静冈吴服店伊势源的番头（掌柜）。作品中描写他坐在账房处，脸色如&quot;母亲三天前去世&quot;般愁苦。这一形象与旁边脸色苍白的年轻学徒初さん形成对比，展现了明治时期吴服店的内部人物生态。</div>
+</a>
+<a class="entry-item" href="禅坊主.html">
+  <div class="noun">禅坊主</div>
+  <div class="snippet">指禅宗的僧侣。作品中迷亭表达了对禅僧和&quot;悟道&quot;之人的厌恶，认为禅僧往往同时具有&quot;坏心眼&quot;（わる意地），与俗世之人的&quot;贪吃&quot;（食意地）并发后更加不可救药。</div>
+</a>
+<a class="entry-item" href="空海.html">
+  <div class="noun">空海</div>
+  <div class="snippet">日本平安时代高僧，774年生于赞岐国（今香川县），俗名佐伯真鱼。804年随遣唐使入唐，师从长安青龙寺惠果阿阇梨学习密教，归国后创立真言宗。谥号弘法大师。与嵯峨天皇、橘逸势并称「平安三笔」，书法代表作《风信帖》为国宝。著有《辩显密二教论》《十</div>
+</a>
+<a class="entry-item" href="織田信長.html">
+  <div class="noun">織田信長</div>
+  <div class="snippet">织田信长（1534年—1582年），日本战国时代著名武将，「战国三杰」之首。幼名吉法师。1560年以少胜多击败今川义元而一战成名，后拥立足利义昭上洛，推行「天下布武」政策，以兵农分离、乐市乐座等革新措施推进统一大业。大量使用火绳枪革新了战争</div>
+</a>
+<a class="entry-item" href="老梅.html">
+  <div class="noun">老梅</div>
+  <div class="snippet">夏目漱石《我是猫》中的配角人物，全名立町老梅，是苦沙弥和迷亭的旧相识。性格贪吃，被朋友戏称为&quot;猪仙&quot;（猪の仙人）。后来精神失常，自称&quot;天道公平&quot;（亦写为&quot;孔平&quot;），以&quot;替天行道、普度众生&quot;为己任。曾给苦沙弥寄去用清国红色信封写就的长信，内容</div>
+</a>
+<a class="entry-item" href="苦沙弥.html">
+  <div class="noun">苦沙弥</div>
+  <div class="snippet">夏目漱石《我是猫》的主人公。全名珍野苦沙弥（ちんのくしゃみ），是一位中学英语教师，也是叙述者&quot;猫&quot;的主人。性格顽固迂腐、自命清高、安于贫困，患有胃病。对文人雅士敬重，对资本家等现实势力不屑一顾。一般认为苦沙弥身上有夏目漱石本人的影子。</div>
+</a>
+<a class="entry-item" href="苦沙弥先生.html">
+  <div class="noun">苦沙弥先生</div>
+  <div class="snippet">夏目漱石《我是猫》中的核心人类角色，全名珍野苦沙弥（ちんの くしゃみ），职业为中学英语教师，是叙述者&quot;吾辈&quot;（猫）的主人。他自命清高、迂腐固执、安于清贫，与资本家金田夫妇形成鲜明对照。小说围绕他的家庭生活与社交圈子展开，通过他的视角讽刺明治</div>
+</a>
+<a class="entry-item" href="蓮生坊.html">
+  <div class="noun">蓮生坊</div>
+  <div class="snippet">即熊谷直实（くまがい なおざね，1141-1207）出家后的法名。原是平安末期至镰仓初期的武将，在一之谷之战中讨伐了平敦盛，后感无常而出家，师从法然上人修习净土宗。文中提到&quot;京都黑谷的参拜者受取莲生坊的太刀&quot;的场景，莲生坊即在此语境中出现。</div>
+</a>
+<a class="entry-item" href="西行.html">
+  <div class="noun">西行</div>
+  <div class="snippet">日本平安时代末期至镰仓时代初期的著名歌僧。原名佐藤义清，23岁出家为僧，法号西行。一生游历各地创作和歌，以咏花自然之作著称。猫以此人讽刺乌鸦不解风雅。</div>
+</a>
+<a class="entry-item" href="西郷隆盛.html">
+  <div class="noun">西郷隆盛</div>
+  <div class="snippet">日本明治维新时期最重要的政治家、军事家之一，被称为&quot;最后的武士&quot;。因领导倒幕运动与西南战争而闻名。东京上野公园有其著名铜像。猫引用&quot;乌鸦在西乡隆盛铜像上拉屎&quot;来比喻乌鸦不懂敬畏。</div>
+</a>
+<a class="entry-item" href="親鸞.html">
+  <div class="noun">親鸞</div>
+  <div class="snippet">日本镰仓时代（1173-1263）的佛教僧侣，净土真宗的开山祖师。初于比叡山学习天台宗，后师从法然专修念佛，因遭迫害被流放越后。主张绝对他力、恶人正机说，允许僧人娶妻食肉，对日本佛教世俗化影响深远。书中用来比喻敢吃海鼠之人的胆识可与高僧媲美</div>
+</a>
+<a class="entry-item" href="観音様.html">
+  <div class="noun">観音様</div>
+  <div class="snippet">观世音菩萨（梵语Avalokiteśvara）的日本称呼，意为&quot;观察世间音声、救度众生苦难&quot;的菩萨。佛教中以其大慈大悲、千处祈求千处应而著称。日本的观音信仰始于飞鸟时代（592-710年），圣德太子建立法隆寺供奉救世观音。日本有&quot;百观音巡礼</div>
+</a>
+<a class="entry-item" href="貴婦人.html">
+  <div class="noun">貴婦人</div>
+  <div class="snippet">貴婦人（きふじん），指上流社会有身份的已婚女性，即淑女（lady）。 本章中猫讲述了英国设计学校开校式的轶事：当地的贵妇人们认为 &quot;人間は服装の動物である。皮を着た猿の子分ではない&quot;—— 不穿衣服就是丧失了人的本体，沦为兽类。她们拒绝与&quot;獣</div>
+</a>
+<a class="entry-item" href="越智東風.html">
+  <div class="noun">越智東風</div>
+  <div class="snippet">夏目漱石《我是猫》中的登场人物，是一位诗人兼戏剧表演爱好者。属于苦沙弥友人中的&quot;附庸风雅&quot;类型。作品中提到他在高轮泉岳寺用德语与德国夫妇交谈最终陷入窘境的趣事。叙述者猫讽刺地评价他十年后才会意识到自己胡乱献诗有多么可笑。</div>
+</a>
+<a class="entry-item" href="車夫.html">
+  <div class="noun">車夫</div>
+  <div class="snippet">人力車を引く職業。明治時代に人力車の普及とともに増加し、没落した武士などが従事した底辺労働。作中では金田が苦沙弥のもとへビールを届けさせる遣いとして登場。</div>
+</a>
+<a class="entry-item" href="車屋の黒.html">
+  <div class="noun">車屋の黒</div>
+  <div class="snippet">《我是猫》中住在人力车夫家的健壮黑猫。&quot;车屋&quot;指人力车夫，&quot;黑&quot;因其毛色得名。性格粗犷豪放，与主人公猫（敏感的教师家的猫）形成鲜明对比。初次见面时充满敌意，后逐渐成为知己。中文译本常译为&quot;老黑&quot;或&quot;阿黑&quot;。文中猫以车屋の黒遭遇天秤棒为例说明</div>
+</a>
+<a class="entry-item" href="迷亭.html">
+  <div class="noun">迷亭</div>
+  <div class="snippet">夏目漱石《吾輩は猫である》中的重要角色，身份为美学家，是主人公苦沙弥的挚友。他性格开朗、机智幽默、玩世不恭，以胡编乱造、信口开河为乐，常编造名人名言和虚构故事捉弄他人。他是苦沙弥家客厅知识分子聚谈会的核心人物，与苦沙弥、寒月等人一起高谈阔论</div>
+</a>
+<a class="entry-item" href="送籍.html">
+  <div class="noun">送籍</div>
+  <div class="snippet">东风在聊天中提到的虚构诗人朋友，是夏目漱石在作品中对自己姓名的谐音自嘲。 &quot;送籍&quot;（そうせき）与&quot;漱石&quot;（そうせき／Sōseki）读音完全相同。 据东风描述，送籍作了一首名为《一夜》的短篇小说，&quot;谁读了都糊里糊涂摸不着头脑&quot;， 连作者本人被</div>
+</a>
+<a class="entry-item" href="逸民.html">
+  <div class="noun">逸民</div>
+  <div class="snippet">源自中国古典（《论语·微子》）的词汇，指超凡脱俗、隐居不仕的人，即隐士、逸士。日本借用此词指代隐遁世俗、超然物外之人。在夏目漱石作品中，逸民用来形容那些虽身处世间却超脱世俗的知识分子——他们既非完全出世，也未完全入世，而是处于一种独特的边缘</div>
+</a>
+<a class="entry-item" href="邵康節.html">
+  <div class="noun">邵康節</div>
+  <div class="snippet">即邵雍（1011-1077），字尧夫，谥号康节，北宋著名哲学家，为&quot;北宋五子&quot;之一。创立&quot;先天象数学&quot;，以《皇极经世》构建宏大的历史哲学体系，用元会运世推演宇宙变化。主张&quot;以物观物&quot;的客观认知方法，倡导&quot;学不至于乐，不可谓之学&quot;的快乐哲学，</div>
+</a>
+<a class="entry-item" href="金田.html">
+  <div class="noun">金田</div>
+  <div class="snippet">夏目漱石《我是猫》中的登场人物，大资本家，靠高利贷起家。信奉&quot;三缺&quot;哲学——缺义理、缺人情、缺廉耻，即金钱至上。住豪华西洋馆，与苦沙弥的破旧居所形成鲜明对比。因妻子被苦沙弥冷待而怀恨在心，用金钱手段对苦沙弥进行报复。是作品中拜金主义的象征、</div>
+</a>
+<a class="entry-item" href="金田の娘.html">
+  <div class="noun">金田の娘</div>
+  <div class="snippet">夏目漱石《吾辈は猫である》中的人物，大资本家金田的独生女，本名富子。被迷亭讽刺为&quot;活动支票&quot;。金田夫妇希望将她嫁给水岛寒月，并开出了必须获得博士学位的条件。作品中铃木藤十郎前来传达金田家的意向，称该女子对寒月有意。</div>
+</a>
+<a class="entry-item" href="金田の細君.html">
+  <div class="noun">金田の細君</div>
+  <div class="snippet">夏目漱石《吾辈は猫である》中的人物。大资本家金田的妻子，以异常巨大的鼻子为标志性特征，被迷亭等人戏称为&quot;鼻子夫人&quot;。她曾亲自拜访苦沙弥打听寒月的情况，但由于迷亭在场捣乱未能达成目的，后委托铃木藤十郎再次前往。她的鼻子被迷亭用作俳体诗的创作题</div>
+</a>
+<a class="entry-item" href="金田夫人.html">
+  <div class="noun">金田夫人</div>
+  <div class="snippet">夏目漱石《我是猫》中的登场人物，大资本家金田之妻。因拥有极其巨大的鼻子而被叙述者猫戏称为&quot;鼻子（鼻子）&quot;。猫以夸张讽刺的笔法描写其鼻子犹如&quot;偷了别人的鼻子安在自己脸上&quot;。她的巨鼻与金田的塌鼻形成滑稽对比。为女儿富子的婚事奔忙，是推动作品中知</div>
+</a>
+<a class="entry-item" href="鈴木.html">
+  <div class="noun">鈴木</div>
+  <div class="snippet">鈴木藤十郎。苦沙弥の旧友で、金田の片腕として働く説客。世渡り上手で拝金主義的な性格を持ち、金田の依頼で苦沙弥を説得しようとする中間的な小資本家の代表人物。 --- 夏目漱石《我是猫》中的配角，苦沙弥的学生时代同窗，后来成为实业家（商人）。性</div>
+</a>
+<a class="entry-item" href="鈴木藤十郎.html">
+  <div class="noun">鈴木藤十郎</div>
+  <div class="snippet">夏目漱石《我是猫》中的登场人物。苦沙弥先生的旧友，后成为实业家金田的得力助手（&quot;股肱&quot;）。性格圆滑世故、唯利是图，信奉&quot;极乐主义&quot;和&quot;三缺术&quot;（缺义理、缺人情、缺廉耻），替金田监视苦沙弥的一举一动。作为旧学友，铃木代表明治时期被拜金主义腐蚀</div>
+</a>
+<a class="entry-item" href="鉄枴仙人.html">
+  <div class="noun">鉄枴仙人</div>
+  <div class="snippet">即铁拐李（李铁拐），中国道教八仙之首。传说原为美男子，修行时元神出窍拜访太上老君，归来发现肉身被弟子误烧，只得借瘸腿乞丐的尸体还魂，从此形貌丑陋、拄铁拐、背药葫芦。在八仙中象征「贫」与「男」。文中迷亭被比作铁拐仙人观斗鸡，喻其饶有兴致地旁观</div>
+</a>
+<a class="entry-item" href="阿倍川の富子.html">
+  <div class="noun">阿倍川の富子</div>
+  <div class="snippet">《我是猫》中大资本家金田的女儿。&quot;阿倍川&quot;指静冈县的安倍川，以安倍川饼（一种撒有黄豆粉和糖的年糕）闻名。富子因特别喜爱安倍川饼，故被称作&quot;阿倍川的富子&quot;。在作品中，她是金田家婚事风波的核心人物：金田夫妇希望她嫁给理学士寒月，但寒月最终在老家</div>
+</a>
+<a class="entry-item" href="雪江.html">
+  <div class="noun">雪江</div>
+  <div class="snippet">夏目漱石《我是猫》中登场的角色。苦沙弥先生的侄女，女学生。在第10章中出场，曾为来访的学生古井武右衛門端茶，并以小笠原流礼法动作奉茶后忍俊不禁，展现出少女的活泼与聪慧。</div>
+</a>
+<a class="entry-item" href="雲助.html">
+  <div class="noun">雲助</div>
+  <div class="snippet">日本江户时代在宿场町和街道上从事搬运与运输的下层劳动者。主要工作包括抬轿子（驾笼かき）、搬运旅客行李、协助渡河等。因其&quot;如云般来去无踪&quot;而得名。常被视为无赖、粗暴之徒聚集的群体，亦成为无赖汉的代名词。明治以降随着交通方式的近代化逐渐消失。在</div>
+</a>
+<a class="entry-item" href="雲照律師.html">
+  <div class="noun">雲照律師</div>
+  <div class="snippet">渡边云照（1827-1909），日本明治时期真言宗僧侣，戒律主义倡导者。出生于出云国（今岛根县），师从慈云（饮光）学习华严、天台、密教。明治年间致力于戒律复兴，创立十善会，发行《十善宝窟》刊物。1881年设立&quot;总学&quot;，后发展为种子院大学。《</div>
+</a>
+<a class="entry-item" href="韓退之.html">
+  <div class="noun">韓退之</div>
+  <div class="snippet">唐代文学家韩愈，字退之。河南河阳人，世称韩昌黎。古文运动的领袖，唐宋八大家之首。代表作《师说》《原道》《祭十二郎文》等。苏轼评其&quot;文起八代之衰&quot;。</div>
+</a>
+<a class="entry-item" href="馬子.html">
+  <div class="noun">馬子</div>
+  <div class="snippet">日本江户时代以马匹承载货物和乘客的运输业者，亦称&quot;馬方&quot;或&quot;馬借&quot;。江户幕府在五街道的驿站（宿場）设置&quot;傳馬問屋&quot;，配备马匹和人夫，以接力方式运送人员和物资，形成维持全国交通命脉的&quot;傳馬制度&quot;。马子这一职业随着大八车（货运大板车）的出现而衰</div>
+</a>
+<a class="entry-item" href="馬琴.html">
+  <div class="noun">馬琴</div>
+  <div class="snippet">曲亭马琴（1767—1848），本名泷泽兴邦，日本江户时代后期的读本作家，被誉为日本第一位职业作家。代表作《南总里见八犬传》耗时28年完成，晚年失明后由儿媳阿路口述代笔完成全篇。其作品以劝善惩恶、儒教道德为核心思想。</div>
+</a>
+<a class="entry-item" href="馬鹿竹.html">
+  <div class="noun">馬鹿竹</div>
+  <div class="snippet">夏目漱石『吾輩は猫である』に登場する町内の馬鹿と呼ばれる男のあだ名。素直な了見で物事を処理する人物として描かれる。 --- 夏目漱石《我是猫》中出现的用语，由&quot;馬鹿&quot;（愚蠢）与&quot;竹&quot;（正直如竹）构成，意为&quot;直率单纯到近乎愚直&quot;。文中雪江以此</div>
+</a>
+<a class="entry-item" href="高浜虚子.html">
+  <div class="noun">高浜虚子</div>
+  <div class="snippet">高滨虚子（1874—1959），日本著名俳人、小说家，本名高滨清。 出生于爱媛县松山市，经同窗河东碧梧桐介绍拜正冈子规为师学习俳句。 1897年起主编俳句杂志《杜鹃》（ホトトギス），将其发展为重要的综合文艺杂志， 夏目漱石亦曾向该刊投稿。他</div>
+</a>
+<a class="entry-item" href="鼻子.html">
+  <div class="noun">鼻子</div>
+  <div class="snippet">鼻子（Hanako/Biko），《我是猫》中登场人物，是资本家金田夫人派来苦沙弥家打探消息的女使者。鼻子奇大，被迷亭等人刻薄嘲笑为&quot;鼻が顔の中央に陣取って乙に構えている&quot;。她以寒月友人的名义来访，实际目的是刺探寒月的情况，同时又要求对方对自</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:09
+</footer>
+</body>
+</html>

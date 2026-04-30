@@ -1,0 +1,2957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To Kill a Mocking Bird · 知识百科</title>
+<style>
+:root {
+  --bg: #f4e4c1;
+  --bg-card: #fef9ee;
+  --bg-detail: #fdf6e4;
+  --text: #3b2e1e;
+  --text-secondary: #6b5d4f;
+  --text-muted: #9b8d7f;
+  --heading: #2c1f0e;
+  --border: #d4c4a0;
+  --accent: #8b6914;
+  --accent-hover: #a67c18;
+  --link: #7d5a0b;
+  --tag-bg: #ecd9aa;
+  --tag-text: #5c3d0e;
+  --divider: #d4c4a0;
+  --shadow: 0 1px 3px rgba(91,61,14,0.08);
+  --shadow-hover: 0 3px 12px rgba(91,61,14,0.12);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+.site-header .subtitle{display:block;}
+.view-toggle-btn{font-family:inherit;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">To Kill a Mocking Bird · 知识百科</div>
+  <div class="subtitle">To Kill a Mocking Bird Knowledge Wiki</div>
+</header>
+
+<main class="container">
+<div class="view-toggle-bar">
+  <button class="view-toggle-btn active" id="btn-cat-view" onclick="switchView('cat')">📂 分类视图</button>
+  <button class="view-toggle-btn" id="btn-flat-view" onclick="switchView('flat')">📋 列表视图</button>
+</div>
+<p style="margin-bottom:0.5rem;color:var(--text-secondary)">
+  知识库包含 <strong>542</strong> 个条目，
+  分布在 <strong>6</strong> 个分类中。
+</p>
+<div class="category-grid" id="cat-view">
+<a class="category-card" href="To Kill a Mocking Bird_wiki/人物/index.html">
+  <h3>人物</h3>
+  <div class="count">93 个条目</div>
+  <div class="preview">Adolf Hitler、Alexandra Finch、Andrew Jackson、Arthur Radley……</div>
+</a>
+<a class="category-card" href="To Kill a Mocking Bird_wiki/地点/index.html">
+  <h3>地点</h3>
+  <div class="count">52 个条目</div>
+  <div class="preview">5th Judicial Circuit Court、Alabama、Alabama Territory、Arlington House……</div>
+</a>
+<a class="category-card" href="To Kill a Mocking Bird_wiki/物件/index.html">
+  <h3>物件</h3>
+  <div class="count">120 个条目</div>
+  <div class="preview">Air-rifle、ambrosia、asafoetida、barbed wire……</div>
+</a>
+<a class="category-card" href="To Kill a Mocking Bird_wiki/事件/index.html">
+  <h3>事件</h3>
+  <div class="count">49 个条目</div>
+  <div class="preview">1856 courthouse fire、1935、Appomattox、Atticus Finch&#x27;s closing argument……</div>
+</a>
+<a class="category-card" href="To Kill a Mocking Bird_wiki/概念/index.html">
+  <h3>概念</h3>
+  <div class="count">218 个条目</div>
+  <div class="preview">acquittal、Ad Astra Per Aspera、African Methodist Episcopal Church、age of consent Alabama……</div>
+</a>
+<a class="category-card" href="To Kill a Mocking Bird_wiki/习俗/index.html">
+  <h3>习俗</h3>
+  <div class="count">10 个条目</div>
+  <div class="preview">blind man&#x27;s buff、closed communion、foot washing、foot-washing……</div>
+</a>
+</div>
+<div class="flat-list view-hidden" id="flat-view">
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/1856 courthouse fire.html">
+  <span class="noun">1856 courthouse fire</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">1856年法院火灾是小说《杀死一只知更鸟》中虚构的历史事件——梅科姆县原法院被烧毁，仅剩下南面希腊复兴立柱。新的法院在这些立柱周围重建。这一虚构事件具有深刻的象征意义：幸存下来的立柱象征着美国南方根深蒂固的种族偏见（“too heavy f</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/1935.html">
+  <span class="noun">1935</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">1935年是小说故事发生的时间，也是美国大萧条（1929-1941）期间的关键年份。这一年罗斯福总统签署了《社会保障法》和《瓦格纳法案》，启动了第二轮&quot;新政&quot;（第二新政）。小说中梅科姆县的贫困——尤厄尔家族的处境、汤姆·罗宾逊一家以及整个社</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/5th Judicial Circuit Court.html">
+  <span class="noun">5th Judicial Circuit Court</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">小说中审判Tom Robinson的法院正式名称，Scout在思考是去听Dolphus Raymond说话还是回到法庭时提及。基于Harper Lee家乡阿拉巴马州Monroeville的真实Monroe County Courthouse</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/acquittal.html">
+  <span class="noun">acquittal</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">无罪释放——汤姆·罗宾逊最终未被无罪释放，但一名坎宁安家族的陪审员最初强烈主张无罪释放。阿提克斯说，如果陪审团中有两名坎宁安家族的人，就会导致悬案陪审团（hung jury），无法定罪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Ad Astra Per Aspera.html">
+  <span class="noun">Ad Astra Per Aspera</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">拉丁语短语，意为&quot;历经艰辛，抵达星辰&quot;或&quot;逆境通向星辰&quot;。它是堪萨斯州的官方格言，源自罗马诗人维吉尔的《埃涅阿斯纪》。在小说中，梅里韦瑟太太将她的梅科姆县文艺汇演命名为Maycomb County: Ad Astra Per Aspera，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Adolf Hitler.html">
+  <span class="noun">Adolf Hitler</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">纳粹德国元首，第二次世界大战的发动者，推行极端反犹主义政策，系统性地迫害并屠杀了约六百万犹太人，史称大屠杀。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/African Methodist Episcopal Church.html">
+  <span class="noun">African Methodist Episcopal Church</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">非洲裔卫理公会（AME Church），1816年在费城正式成立的美国最古老的独立黑人新教教派，由前奴隶理查德·艾伦（Richard Allen）创立，源于1787年圣乔治卫理公会教堂的种族隔离事件。该教派采用主教制（Episcopal）治</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/age of consent Alabama.html">
+  <span class="noun">age of consent Alabama</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">1930年代阿拉巴马州的法定同意年龄为16岁。根据1923年阿拉巴马法典第5411条，与12岁以上16岁以下女孩发生性关系属于犯罪，可判处2至10年监禁。小说中杰姆错误地认为同意年龄是18岁，并据此推断梅耶拉19岁已超出保护范围。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Air-rifle.html">
+  <span class="noun">Air-rifle</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">气步枪（Air-rifle），也称气枪（air gun），是一种利用压缩空气或其他气体（而非火药等化学反应）作为动力发射弹丸的枪械。气步枪通常发射哑铃形铅弹（pellet）或圆形BB弹，枪管带有膛线以提高精度。根据动力来源可分为：弹簧活塞式</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Alabama.html">
+  <span class="noun">Alabama</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">阿拉巴马州，美国东南部的一个州，首府蒙哥马利，1819年成为第22个州。是美国民权运动的重要舞台，也是《杀死一只知更鸟》的故事发生地。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Alabama Territory.html">
+  <span class="noun">Alabama Territory</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">阿拉巴马领地是1817年3月3日美国国会从密西西比领地东部分设组建的一个合并建制领地。首任（也是唯一一任）领地总督为威廉·怀亚特·比布（William Wyatt Bibb），首府设在St. Stephens。领地人口因&quot;阿拉巴马热&quot;（Al</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Alexandra Finch.html">
+  <span class="noun">Alexandra Finch</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">全名亚历山德拉·芬奇·汉考克，阿提克斯的姐姐，斯库特和杰姆的姑妈。她代表旧南方的传统保守价值观，注重家族名望和社会地位。她在审判期间来到芬奇家，试图给斯库特提供&quot;女性影响&quot;，与阿提克斯的平等主义理念形成鲜明对比。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/all men are created equal.html">
+  <span class="noun">all men are created equal</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;人人生而平等&quot;是《美国独立宣言》（1776年）中最著名的语句，源于启蒙思想家约翰·洛克的自然权利哲学。阿提克斯在结案陈词中引用这句话并非简单地重复，而是通过重新诠释来挑战陪审团——他承认人们在才能、财富和机会上并不平等，但强调法庭应该是&quot;</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/ambrosia.html">
+  <span class="noun">ambrosia</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国南部传统的圣诞水果沙拉/甜点，起源于19世纪60年代。最早的食谱记载于1867年的《Dixie Cookery》烹饪书中，最初仅由新鲜椰子丝、切片橙子和糖三种原料层叠而成。其名称源自希腊罗马神话中众神的食物&quot;ambrosia&quot;。随着佛罗</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Andrew Jackson.html">
+  <span class="noun">Andrew Jackson</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">安德鲁·杰克逊（1767–1845），美国第7任总统（1829–1837），美国民主党创始人之一。以强硬的政治风格和民粹主义立场闻名，曾主导《印第安人迁移法案》，迫使东南部原住民西迁，导致&quot;眼泪之路&quot;悲剧。他在美国历史上是一位极具争议性的政</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/apothecary.html">
+  <span class="noun">apothecary</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">药剂师的历史称谓，一词源自古希腊语apotheca（仓库）。在中世纪和近代欧洲，apothecary与医生和外科医生是三个独立的医疗行业，分别负责配药、诊断和手术。在现代药学发展之前，apothecary不仅配制和销售药品，还在基层社区承担</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/appeal.html">
+  <span class="noun">appeal</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">诉讼当事人请求上级法院审查并可能改变下级法院裁决的法律程序。上诉人须证明初审法院存在法律错误。上诉法院不审理新证据或新证人，仅基于初审记录进行法律审查。可能的结果包括维持原判、撤销原判、发回重审或修改判决。汤姆·罗宾逊的案件正在等待上诉法院</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Appomattox.html">
+  <span class="noun">Appomattox</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">美国南北战争末期，南军总司令罗伯特·李将军于1865年4月9日在弗吉尼亚州的阿波马托克斯法院大楼向联邦军总司令格兰特将军投降的历史性事件。这一投降标志着美国内战的实际终结。在小说中，艾弗里先生用&quot;自从阿波马托克斯以来&quot;来形容梅科姆县已经很久</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Arlington House.html">
+  <span class="noun">Arlington House</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">阿灵顿庄园（又称卡斯蒂斯-李庄园）是美国弗吉尼亚州阿灵顿国家公墓内的一座希腊复兴风格历史建筑，位于波托马克河对岸与华盛顿特区相望。该建筑由乔治·华盛顿的继孙乔治·华盛顿·帕克·卡斯蒂斯于1802-1818年间建造，是美国第一座神庙式住宅。南</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Arthur Radley.html">
+  <span class="noun">Arthur Radley</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">亚瑟·拉德利，绰号&quot;布&quot;(Boo)，小说中的隐居邻居和核心象征人物之一。因少年时期与同伴惹上法律麻烦后被父亲囚禁在家中长达15年以上，镇上人对他充满迷信式的恐惧。实际上他是一个善良、温柔、孩子气的人，通过树洞秘密向杰姆和斯库特赠送礼物（口香</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/asafoetida.html">
+  <span class="noun">asafoetida</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">阿魏，一种从伞形科植物 Ferula asafoetida 的根茎中提取的树脂胶，主要产于伊朗、阿富汗和印度。具有强烈的硫磺气味（生闻刺鼻，烹饪后变香），在印度菜中广泛用作调味料和药用香料，传统医学中用于治疗消化不良、胀气、哮喘和神经系统疾</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Atticus definition of trash.html">
+  <span class="noun">Atticus definition of trash</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯对&quot;垃圾&quot;的定义——阿提克斯告诉杰姆，一个人不论多富有或出身多高贵，只要他利用白人的特权欺骗黑人，他就是&quot;垃圾&quot;。这是以道德品质而非社会阶层来定义人的价值。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Atticus Finch.html">
+  <span class="noun">Atticus Finch</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">阿提克斯·芬奇，斯考特和杰姆的父亲，梅科姆镇的律师，小说中的道德核心人物。他受命为被诬告强奸白人女性的黑人汤姆·罗宾逊辩护，以其正直、智慧和同理心著称，是美国文学史上最受尊敬的虚构人物之一。人物原型是哈珀·李的父亲阿马萨·科尔曼·李。 --</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Atticus Finch non-violence.html">
+  <span class="noun">Atticus Finch non-violence</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯·芬奇的非暴力哲学——真正的勇气不在于持枪的力量，而在于明知会失败仍然坚持做正确的事。他在被鲍勃·尤厄尔吐口水后冷静擦脸走开，拒绝携带枪支，认为枪在身边会引诱别人开枪打你。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Atticus Finch's closing argument.html">
+  <span class="noun">Atticus Finch&#x27;s closing argument</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">Atticus Finch在Tom Robinson审判中发表的结案陈词，是美国文学中最著名的法庭演讲之一。他论证缺乏医学证据、物理上不可能性、证人矛盾，并呼吁陪审团超越种族偏见实现司法公正。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Atticus Finch's cross-examination technique.html">
+  <span class="noun">Atticus Finch&#x27;s cross-examination technique</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯·芬奇在汤姆·鲁宾逊案中展现了精湛的交叉询问技巧。他始终保持冷静、尊重但有策略性：通过分步提问建立逻辑链条，让证人自相矛盾；利用实物展示（让鲍勃·尤厄尔签名展示其为左撇子、让汤姆站立展示残疾手臂）；突出缺失证据（无人叫医生）；以温和</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Atticus unbuttons his vest and coat.html">
+  <span class="noun">Atticus unbuttons his vest and coat</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">Atticus发表结案陈词前做了一个前所未有的举动——解开马甲、解开领口、松开领带、脱下外套。对Scout和Jem来说如同看到父亲赤裸。象征着他卸下职业盔甲以真实的人的身份与陪审团对话。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Atticus wasn't a thunderer.html">
+  <span class="noun">Atticus wasn&#x27;t a thunderer</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Scout观察到Atticus向陪审团陈词时风格冷静克制不咄咄逼人。「thunderer」指声音洪亮气势汹汹试图用音量压倒陪审团的律师。Atticus的反常规风格体现了他的自信——相信事实本身的力量不需要虚张声势。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Atticus's closing argument.html">
+  <span class="noun">Atticus&#x27;s closing argument</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">阿提克斯·芬奇在汤姆·罗宾逊案中的结案陈词，是美国文学史上最著名的法庭演讲之一。他运用逻各斯（缺乏医学证据、汤姆的左手残疾）、精神气质（个人诚信）和悲情（上帝之名）的修辞策略，指出控方&quot;没有一丝一毫的医学证据&quot;，揭露&quot;所有黑人都撒谎&quot;的邪恶</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Atticus's lonely walk.html">
+  <span class="noun">Atticus&#x27;s lonely walk</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">审判结束后阿提克斯·芬奇独自沿法庭中央过道走向南出口的场景。他将文件收进公文包、扣好、与法庭记录员和吉尔默先生简短交谈后，没有走平常的出口，而是快速穿过中间过道抄近路回家。斯库特从包厢注视父亲的头顶一路移动到门口，他始终没有抬头。楼上有色人</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Auburn.html">
+  <span class="noun">Auburn</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">指奥本大学（Auburn University），美国阿拉巴马州的一所公立赠地研究型大学。1856年特许成立，最初名为东阿拉巴马男子学院，1872年成为阿拉巴马州第一所赠地大学，先后更名为阿拉巴马农工学院和阿拉巴马理工学院，1960年正式定</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Aunt Alexandra.html">
+  <span class="noun">Aunt Alexandra</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">阿提克斯·芬奇的姐姐，杰姆和斯考特的姑姑，代表南方传统淑女观念。她来到芬奇家试图给斯考特提供&quot;女性影响&quot;，与阿提克斯的宽容教育方式形成鲜明对比。 --- 全名亚历山德拉·芬奇·汉考克，阿提克斯·芬奇的姐姐，居住于芬奇庄园种植园。她传统保守，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Aunt Alexandra's values.html">
+  <span class="noun">Aunt Alexandra&#x27;s values</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">亚历山德拉姑姑的核心价值观包括：家族血统至上、严格的社会等级观念、传统南方淑女身份、注重社会声誉。她认为一个人的价值由其家族历史决定，坚信芬奇家族是梅科姆最高贵的家族。她搬到芬奇家是为了给斯库特提供&quot;女性影响&quot;，试图将她塑造成符合传统规范的</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/B. B. Underwood.html">
+  <span class="noun">B. B. Underwood</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">B.B.安德伍德是《梅科姆论坛报》的老板、编辑、出版商兼印刷工。他是个矛盾的复杂人物:一方面公开歧视黑人，另一方面却在关键时保护阿提克斯(第15章在办公室窗口架起猎枪保护监狱前的阿提克斯)。汤姆死后，他撰写了尖锐的社论，将汤姆之死比作猎人和</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/background.html">
+  <span class="noun">background</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">在第23章中，杰姆和斯库特探讨了亚历山德拉姑姑所说的&quot;背景&quot;（background）的真正含义。杰姆认为背景不是指家族有多古老，而是指一个家族从事读写活动的时间长短。他推测芬奇家族在埃及时期可能有人学会了象形文字，然后代代相传，使芬奇家得以</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/bantam.html">
+  <span class="noun">bantam</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">矮脚鸡，体型很小的鸡品种，通常为标准鸡的四分之一到五分之一。常比喻身材矮小却好斗逞强的人。文中用来形容Bob Ewell像一只虚张声势的小公鸡一样走向证人席。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Baptists.html">
+  <span class="noun">Baptists</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">浸信会（Baptists）是新教基督教的一个主要宗派，起源于17世纪英国的清教徒分离主义运动。其最显著的教义特征是&quot;信徒洗礼&quot;——只有个人公开宣告信仰耶稣基督的人才能受洗，通常采用全身浸入水中的方式。浸信会强调圣经的最高权威、地方教会自治、</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/barbed wire.html">
+  <span class="noun">barbed wire</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">带刺铁丝网是一种在铁丝上带有锋利尖刺的 fencing 材料，由Joseph Glidden于1874年获得关键专利。它在美国西部的开发中起到了革命性作用，提供了廉价耐用的围栏解决方案，取代了稀缺的木石材料，结束了自由放牧的&quot;开放牧场&quot;时代</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Barker's Eddy.html">
+  <span class="noun">Barker&#x27;s Eddy</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">小说中虚构的一个河湾游泳地，位于梅科姆镇外的Meridian高速公路附近。eddy（回流区）指溪流中障碍物下游形成的水潭，孩子们常去那里游泳。杰姆在这里教迪尔游泳。斯库特在第3章曾威胁说要跳进Barker&#x27;s Eddy淹死自己让卡尔珀尼亚后</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Baton twirling.html">
+  <span class="noun">Baton twirling</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种结合体操、舞蹈和杂技的表演艺术和竞技运动，表演者旋转、抛接金属指挥棒。现代发展于1930年代的美国，最初与军乐队鼓手长传统相关，现已发展为世界性体育项目。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Battlements.html">
+  <span class="noun">Battlements</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">城齿（又称垛口或雉堞）是城堡和防御工事顶部的一种防御性建筑特征，由交替的实心部分（merlon，城齿）和缺口（crenel，射孔）组成。守军可通过缺口射箭，利用实心部分掩护。后来也成为装饰性建筑元素。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/beadle.html">
+  <span class="noun">beadle</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">历史上英国教区中的低级官员，担任教堂执事、秩序维护者、济贫法执行代理等职务。起源于古英语bydel（传令官），后逐渐演变为教区的传令员和执法者，负责维持教堂秩序、驱赶流浪者、扣押流浪牲畜等。在狄更斯《雾都孤儿》中， pompous的班布尔先</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Bert court reporter.html">
+  <span class="noun">Bert court reporter</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">伯特是梅科姆县法庭的速记员/书记员，负责记录庭审过程。在等待陪审团裁决期间，他靠着椅背双脚搭在桌上不停地抽烟。这是一个非常次要的角色。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/beyond all reasonable doubt.html">
+  <span class="noun">beyond all reasonable doubt</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">「排除一切合理怀疑」是英美法系中刑事案件的证明标准，要求检方举证使陪审团确信被告有罪且无合理怀疑。Atticus在结案陈词中用此标准指出控方未能履行举证责任。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/biblical patience.html">
+  <span class="noun">biblical patience</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">斯库特描述在法庭二楼就座的黑人观众展现出&quot;圣经般的耐心&quot;（biblical patience），静静等待陪审团裁决。这一描写暗示黑人社区长期忍受不公正的坚忍品质，与基督教信仰中的忍耐美德相呼应。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Big Mules.html">
+  <span class="noun">Big Mules</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国阿拉巴马州政治史上的专有名词，指以伯明翰钢铁业和工业巨头为代表的经济精英阶层。1926年由州长竞选人比布·格雷夫斯首创，后由民粹派州长&quot;大吉姆&quot;福尔松推广，用以抨击主宰州政的工业与种植园利益联盟。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Bird dog.html">
+  <span class="noun">Bird dog</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">猎鸟犬（Bird dog），也称枪猎犬（gun dog或gundog），是经过专门训练用于协助猎人在狩猎过程中寻找、惊起、指示和/或拾回猎鸟的猎犬品种。猎鸟犬主要通过追踪空气中的气味来工作，分为三种主要类型：（1）指示犬（Pointing </div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Birmingham.html">
+  <span class="noun">Birmingham</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">伯明翰是美国亚拉巴马州最大的城市，成立于1871年重建时期，以英国工业城市伯明翰命名，意图打造南方的钢铁工业中心。因附近富藏铁矿、煤矿和石灰岩三种炼钢原料而飞速发展，绰号&quot;魔法之城&quot;和&quot;南方匹兹堡&quot;。大萧条时期遭受重创，后在民权运动中成为关</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Birmingham Alabama.html">
+  <span class="noun">Birmingham Alabama</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">阿拉巴马州最大城市，在小说第24章中被Mrs. Merriweather提及，作为Eleanor Roosevelt试图与黑人同坐的地点。伯明翰在20世纪60年代民权运动中成为关键战场，哈珀·李通过这一引用映射了当时南方种族隔离的尖锐现实。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Blackstone's Commentaries.html">
+  <span class="noun">Blackstone&#x27;s Commentaries</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">全称《英国法释义》（Commentaries on the Laws of England），是英国法学家威廉·布莱克斯通（Sir William Blackstone）于1765–1769年间出版的四卷本法学巨著，首次以系统化的方式向非专</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/blind man's buff.html">
+  <span class="noun">blind man&#x27;s buff</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">一种传统儿童游戏，一名玩家被蒙住眼睛后试图抓住其他玩家。该游戏历史悠久，可追溯至古希腊时期（称为&quot;铜蚊&quot;游戏），在欧洲中世纪已十分流行，在莎士比亚的《李尔王》等文学作品中均有提及。英语中&quot;buff&quot;一词在古法语中意为轻推或拍打，指蒙眼者摸索</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/bloodhounds.html">
+  <span class="noun">bloodhounds</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">寻血猎犬，以其卓越的嗅觉追踪能力著称的犬种。在美国南方历史中，寻血猎犬曾被用于追踪逃跑的奴隶，成为种族压迫的工具。小说中，赫克·塔特警长调用县里的寻血猎犬追踪恶作剧的孩子们，但猎犬只是跑到房子后面对着地窖门嚎叫，暴露了家具被藏在地窖里的真相</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/bluejay.html">
+  <span class="noun">bluejay</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">蓝松鸦在小说中是反舌鸟的对比象征，代表攻击性、偏见和恶意的力量。 阿提克斯说：&quot;想打多少蓝松鸦随你的便&quot;，意味着蓝松鸦是可以消灭的目标。 蓝松鸦好斗、吵闹、欺负其他鸟类，对应小说中像Bob Ewell这样的恶人——他们无端攻击无辜者。 在第</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Bob Ewell.html">
+  <span class="noun">Bob Ewell</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">Robert E. Lee &quot;Bob&quot; Ewell，小说的主要反派，梅科姆镇最底层的白人。酗酒成性，将政府救济金挥霍在威士忌上，长期虐待女儿Mayella。因诬告Tom Robinson强奸并在败诉后实施报复，最终在试图杀害Jem和Scou</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Bob Ewell abuse suspicion.html">
+  <span class="noun">Bob Ewell abuse suspicion</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">在交叉询问中，阿提克斯·芬奇通过证据和逻辑推理暗示梅耶拉·尤厄尔身上的伤实际上是其父亲鲍勃·尤厄尔所致。鲍勃是左撇子，而梅耶拉的伤集中在右侧面部，汤姆·鲁宾逊的左臂残疾使他无法造成这些伤害。阿提克斯直接质问梅耶拉&quot;是你父亲打了你吗？&quot;，但梅</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Bob Ewell's threats.html">
+  <span class="noun">Bob Ewell&#x27;s threats</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">鲍勃·尤厄尔在汤姆·罗宾逊死后公开威胁说干掉一个，还剩两个左右。这句话通过斯蒂芬妮·克劳福德小姐传遍全镇。一个指已死的汤姆·罗宾逊，两个普遍被认为是指阿提克斯·芬奇或斯库特和杰姆。杰姆要求斯库特不要告诉阿提克斯，认为尤厄尔不过是说大话。这一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/bob-white.html">
+  <span class="noun">bob-white</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">北美鹑（Northern Bobwhite，学名 Colinus virginianus），一种原产于北美洲的地栖鸟类，因其标志性的口哨声听起来像&quot;bob-white&quot;而得名。它是美国东部唯一本土鹑类物种，常见于农田边缘和林地，是重要的狩猎</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Boo Radley.html">
+  <span class="noun">Boo Radley</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">亚瑟·拉德利（Arthur Radley），芬奇家的隐居邻居，因少年时期惹事被父亲关在家中长达15年以上。镇上流传着许多关于他的可怕谣言，孩子们视他为怪物，但他实际上是个善良温柔的人，暗中给孩子们留下小礼物，并在小说结尾救了杰姆和斯各特的命</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/bootlegger.html">
+  <span class="noun">bootlegger</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">指非法制造、分销或销售违禁商品（尤其是酒精饮料）的人。该词源自1880年代美国中西部，当时人们将酒瓶藏在高筒靴(boot)的顶部与印第安人进行违禁交易。在美国禁酒时期(1920–1933)，私酒贩子通过加拿大和墨西哥边境走私、伪造医用处方、</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Boston.html">
+  <span class="noun">Boston</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">波士顿，美国马萨诸塞州首府和最大城市，新英格兰地区的文化、教育和经济中心。1630年由清教徒建立，是美国最古老的城市之一。美国独立战争的多起关键事件（波士顿倾茶事件、波士顿大屠杀、列克星敦和康科德战役）均发生在该地区，因此被称为&quot;自由摇篮&quot;</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Braxton Bragg.html">
+  <span class="noun">Braxton Bragg</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">布拉克斯顿·布拉格（1817–1876），美国南北战争期间南方邦联军的将领，曾指挥田纳西军团，以争议性的军事指挥风格著称。小说中，布拉克斯顿·布拉格·安德伍德（Mr. Underwood）的名字即来源于这位邦联将领。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Braxton Underwood.html">
+  <span class="noun">Braxton Underwood</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">布拉克斯顿·布拉格·安德伍德，梅科姆论坛报的老板、编辑和唯一撰稿人。他以邦联将军布拉克斯顿·布拉格命名。他公开表示&quot;鄙视黑人&quot;，但当私刑团伙来到监狱时，他却架起猎枪保护阿提克斯和汤姆。汤姆死后，他在报纸上发表社论，将汤姆的死亡比作&quot;猎人和儿</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/bread line.html">
+  <span class="noun">bread line</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">bread line（领面包队伍）指大萧条时期失业者排队领取慈善机构或施粥所免费食物（通常是面包或汤）的长队。到1932年，美国约1300万人失业（占劳动力的25%），仅纽约市每日就有约85000人靠面包队维生。该词后来进入日常用语，&quot;on</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Breakin' the colored balcony.html">
+  <span class="noun">Breakin&#x27; the colored balcony</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">指梅科姆法院审判期间有色人种观众被限制在隔离 balcony 的种族隔离制度。斯库特、杰姆和迪尔在审判时受到雷弗伦德·赛克斯的邀请坐在这 balcony 上，成为唯一选择与黑人社区坐在一起的白人。斯黛芬妮小姐用讽刺的语气询问孩子们是否&quot;打破</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/breastworks.html">
+  <span class="noun">breastworks</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">Breastwork（胸墙）是一种临时性的野战防御工事，通常用泥土、沙袋或可获得的材料匆忙构筑，高度约至成人胸部（4-5英尺），使防守者可以站立射击并在胸墙后获得掩护。与永久性的石砌城防工事不同，胸墙强调快速建造和临时性。在第一次世界大战中</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Brigadier General Joe Wheeler.html">
+  <span class="noun">Brigadier General Joe Wheeler</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国历史人物（1836-1906），全名约瑟夫·惠勒（Joseph Wheeler），昵称&quot;战斗乔&quot;。南北战争期间是南方邦联骑兵将领，以勇猛善战著称，参与约200场战斗，三次负伤，十六次坐骑被击毙。战后曾任八届阿拉巴马州联邦众议员。1898</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/broken watch and chain.html">
+  <span class="noun">broken watch and chain</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">坏掉的怀表和表链，布·拉德利留在树洞中的最后一批礼物之一，附有一把小铝刀。阿提克斯说如果表还能走的话值十美元。杰姆曾试图修好它，并像父亲一样把表链挂在身上。这是布留给孩子们最私人的物品之一，象征着他将自己珍视的童年记忆分享给两个孩子的愿望。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Brown's Mule.html">
+  <span class="noun">Brown&#x27;s Mule</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">R.J.雷诺兹烟草公司（R.J. Reynolds Tobacco Company）于1901年推出的一种嚼烟（chewing tobacco）品牌。布朗骡子嚼烟是雷诺兹公司最早的品牌之一，在北卡罗来纳州温斯顿-塞勒姆生产，商标至今仍维持注</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Calomel.html">
+  <span class="noun">Calomel</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">甘汞（Calomel，化学名氯化亚汞，Hg₂Cl₂）是一种白色粉末状的汞化合物，自16世纪起被广泛用作泻药和杀菌剂，尤其在美国19世纪的&quot;英雄医学&quot;实践中大量使用。本杰明·拉什（Benjamin Rush）等著名医生曾推崇其疗效。然而甘汞毒</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Calpurnia.html">
+  <span class="noun">Calpurnia</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">芬奇家的黑人女管家和厨师，在斯考特母亲去世后充当了母亲般的角色，负责照顾杰姆和斯考特的日常生活与教育。阿提克斯视她为家人而非仆人，坚决维护她。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Calpurnia's house.html">
+  <span class="noun">Calpurnia&#x27;s house</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">卡尔珀尼亚的家是斯库特一直好奇想去拜访的地方。这代表了斯库特对跨种族理解和卡尔珀尼亚个人生活的真诚好奇心——她想了解这个抚养她长大的黑人女性在芬奇家之外的真实生活。亚历山德拉姑姑对此坚决反对，反映了当时严格的种族隔离社会规范。斯库特后来确实</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/camellia.html">
+  <span class="noun">camellia</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">山茶属（Camellia）是山茶科（Theaceae）下的一个常绿灌木或小乔木属，由林奈以耶稣会植物学家乔治·约瑟夫·卡梅尔（Georg Joseph Kamel）命名。该属原产于东亚和南亚，从喜马拉雅山脉向东延伸至日本和印度尼西亚。已知物</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Camisole.html">
+  <span class="noun">Camisole</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">女性无袖贴身内衣或外穿吊带衫，通常由丝绸、棉、尼龙等轻质面料制成，配细肩带。起源于维多利亚时代作为束胸衣的遮盖物，现已演变为兼具内衣和外穿功能的时尚单品。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/capital cases.html">
+  <span class="noun">capital cases</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">指被告若被判有罪可能面临死刑的刑事案件。在英美法系中，死刑案件适用特殊程序，包括强制性的律师辩护权、独立的量刑听证程序以及自动上诉审查。Powell v. Alabama（1932）确立了死刑案件中贫穷被告有权获得有效律师协助的宪法原则。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/capital offense.html">
+  <span class="noun">capital offense</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">可判处死刑的犯罪行为。&quot;capital&quot;一词源自拉丁语caput（头），历史上指斩首。在1930年代的阿拉巴马州，谋杀和强奸均为死罪。美国最高法院在Furman v. Georgia（1972）和Gregg v. Georgia（1976）</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/carnal knowledge.html">
+  <span class="noun">carnal knowledge</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">源自拉丁语 carnalis（肉体的），指性交行为，通常要求至少存在某种程度的插入。它是许多性犯罪（包括强奸、猥亵儿童、法定强奸）的必要法律构成要件。在美国法典中定义为阴茎与阴部或肛门的接触，包括任何轻微的插入。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/case is as simple as black and white.html">
+  <span class="noun">case is as simple as black and white</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Atticus的经典双关语。字面上指案件事实清楚明了(Tom无罪)，同时也暗指种族对立。讽刺的是陪审团正是从「黑白」种族角度而非事实角度做出判决。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Caste system.html">
+  <span class="noun">Caste system</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">种姓制度/等级制度——一种封闭的社会分层体系，地位由出生决定（先赋地位），终身不变。特征是内婚制、世袭职业、不同等级间的交往限制。在小说中，梅科姆镇存在一种非正式但根深蒂固的家族等级体系。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/castile soap.html">
+  <span class="noun">castile soap</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">卡斯蒂利亚肥皂，一种以纯橄榄油为基底制成的硬质白皂，起源于西班牙卡斯蒂利亚（Castile）地区。其源头可追溯至古叙利亚阿勒颇的橄榄油月桂皂，随十字军传入欧洲后在西班牙地区改良——使用当地橄榄油和苏打灰代替动物油脂和月桂油，成为历史上第一种</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/catawba worms.html">
+  <span class="noun">catawba worms</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国南部民间对梓蚕蛾幼虫的俗称（实为毛虫而非虫），因栖息于梓树（Catalpa tree）而得名。在美国南方被珍视为钓鲶鱼的极佳饵料，其坚韧的皮和特殊气味使其在水中极具吸引力。南方家庭常种植梓树作为天然的饵料来源。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/caterpillar cocoon metaphor.html">
+  <span class="noun">caterpillar cocoon metaphor</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">杰姆用来形容自己失去童真的比喻。他将自己受庇护的童年比作安全的茧，而汤姆·罗宾逊案的不公判决迫使他破茧而出，直面成人世界的种族歧视与不公。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/cellar.html">
+  <span class="noun">cellar</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">地窖，房屋地下的储藏空间。在美国南方，完整的地下室并不常见，因为气候较温和、霜冻线较浅；但一些房屋有用于储存根茎类蔬菜的&quot;根菜地窖&quot;。小说中巴伯姐妹的房子拥有梅科姆唯一的地窖，孩子们将她们所有的家具搬进地窖藏匿，猎犬找到地窖门时狂吠不止。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/cement patch.html">
+  <span class="noun">cement patch</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">水泥补丁，内森·拉德利封堵橡树树洞时填入的水泥。当杰姆和斯库特准备给树洞的主人写感谢信时，发现树洞已被水泥填满。内森谎称树生病了需要填补，但阿提克斯检验后告诉杰姆树很健康。树洞的水泥补丁象征着布与外界联系的被切断，也是杰姆成长中的失望时刻—</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Champertous connivance.html">
+  <span class="noun">Champertous connivance</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">包揽诉讼性质的串通——&quot;Champerty&quot;（包揽诉讼）是普通法中的一项古老原则，指与诉讼无关的第三方出资支持他人诉讼，并约定从胜诉所得中分取利益的行为。&quot;Champertous connivance&quot;（包揽串通）则指诉讼双方暗中勾结、合谋</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/change of venue.html">
+  <span class="noun">change of venue</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法律术语，指将案件的审判地点从一个司法管辖区转移到另一个司法管辖区。在小说第15章中，林克·迪斯建议将汤姆·罗宾逊的审判移至其他城镇，以寻求更公正的陪审团。但泰特警长认为此举意义不大，因为南方各城镇都普遍存在种族偏见，改变地点无法改变审判结</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Changeling.html">
+  <span class="noun">Changeling</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">调换儿——欧洲民间传说中，被精灵、仙女或妖精偷偷替换的人类婴儿。妖精留下自己的后代（通常是丑陋、多病或难以抚养的）代替被掳走的人类孩子。该传说在古代被用来解释猝死、发育障碍、精神疾病等不明医学现象。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/changelings.html">
+  <span class="noun">changelings</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">欧洲民间传说中超自然生物（如精灵、妖精、巨魔）偷走人类婴儿后留下的替代品，可能是妖精的孩子或被施了魔法的木头。这种传说在古代欧洲常用于解释残疾、疾病或发育异常的儿童，在凯尔特、日耳曼和斯堪的纳维亚等地区均有不同版本。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Charles Baker Harris.html">
+  <span class="noun">Charles Baker Harris</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">迪尔的全名，即查尔斯·贝克·哈里斯。杰姆和斯考特的暑假玩伴，一个富有想象力、爱夸大其词的小男孩，暑假从梅里迪安来到梅科姆镇与姑妈同住。他是作品中最具童真和道德敏感性的角色之一。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Charles Lamb.html">
+  <span class="noun">Charles Lamb</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">查尔斯·兰姆（1775–1834），英国散文家、文学评论家，以笔名&quot;伊利亚&quot;发表的个人随笔系列闻名。他与姐姐玛丽·兰姆合著了《莎士比亚故事集》，成为流传至今的儿童文学经典。兰姆的随笔以幽默温情、自传性和个人风格著称，被文学史家称为英国文学中</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/charlotte.html">
+  <span class="noun">charlotte</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">夏洛特甜点（Charlotte Russe），一种源自法国的经典冷冻甜点，在20世纪30年代的美国南方非常流行。由手指饼干或蛋糕条围边，填入巴伐利亚奶油（whipped cream慕斯加吉利丁定型），通常冷藏过夜后食用。在小说中，卡尔珀尼亚</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/cheatin' a colored man is ten times worse than cheatin' a white man.html">
+  <span class="noun">cheatin&#x27; a colored man is ten times worse than cheatin&#x27; a white man</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Scout转述Atticus的教诲——欺骗黑人比欺骗白人恶劣十倍。因为社会已对黑人极不公，利用特权剥削本就处于劣势的人更加道德败坏，体现了Atticus的道德教育和种族正义观。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Chester County.html">
+  <span class="noun">Chester County</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">《杀死一只知更鸟》中的虚构县名，恩菲尔德监狱农场所在县，位于梅科姆县70英里外。此县在现实中并不存在于阿拉巴马州——阿拉巴马州有67个县，但没有切斯特县。哈珀·李使用虚构地名来构建小说的地理框架。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/chewing gum.html">
+  <span class="noun">chewing gum</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">口香糖，布·拉德利在树洞中为芬奇孩子们留下的第一批礼物之一。斯库特首先发现了两块包在锡纸里的箭牌双薄荷口香糖，后来在树洞中又出现一整包口香糖。当她第一次吃下时，杰姆担心有毒逼她吐掉。这些平凡的小礼物体现了布对孩子们的友善和渴望交流的心意，与</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/chicken wire costume.html">
+  <span class="noun">chicken wire costume</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">铁丝网服装，指用六边形铁丝网制作骨架再覆以布料的戏剧服装制作工艺。铁丝网轻便、柔韧且价格低廉，是剧院服装制作中用于塑造大型立体造型的常见材料，源自爱德华时代女帽制作中的金属丝框架技术。小说中斯库特的火腿costume就是用鸡笼铁丝网弯成火腿</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/chiffarobe.html">
+  <span class="noun">chiffarobe</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种组合家具，集衣柜（wardrobe）与抽屉柜（chest of drawers）于一体，源于美式英语词汇chiffonier（小抽屉柜）与wardrobe（衣柜）的合成。20世纪初通过西尔斯（Sears）商品目录推广，在美国南方尤为常见</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/chinaberry.html">
+  <span class="noun">chinaberry</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种原产亚洲的楝科植物（学名 Melia azedarach），又称苦楝、印度楝。其果实中的硬核种子被干燥抛光后用于制作念珠，在亚洲寺庙宗教仪式中使用。该树通过殖民贸易传入美国南部，曾广泛种植作为观赏树木，是美国南方乡村景观中具有代表性的树</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/choose friends vs family.html">
+  <span class="noun">choose friends vs family</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">这是杰姆在反驳亚历山德拉姑姑的阶级偏见时引用的阿提克斯的教诲。核心思想是：你可以自由选择朋友，但无法选择家人；否认家人只会让自己显得愚蠢。这句话体现了阿提克斯教导孩子的价值观——友谊建立在个人选择而非社会阶层之上，而家人无论贫富贵贱仍然是家</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Christmas baskets.html">
+  <span class="noun">Christmas baskets</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">圣诞篮子是大萧条时期梅科姆的教堂在圣诞节送给尤厄尔家的救济品。镇上人虽出于义务给予物资救济，但同时以&quot;背过脸去&quot;的态度对待他们。圣诞篮子与救济金形成了尤厄尔家生活的矛盾写照——社会在物质上怜悯他们，却在社交上抛弃他们。这与自力更生的坎宁安家</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/chronic ground-itch.html">
+  <span class="noun">chronic ground-itch</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">慢性钩虫感染，钩虫幼虫长期存在于肠道吸血导致的持续性寄生虫病，表现为贫血、乏力、发育迟缓。Ewell家孩子们因常年赤脚在垃圾场和肮脏环境中活动而反复感染。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/circuit court.html">
+  <span class="noun">circuit court</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">巡回法院，一种在多个地点开庭的法院。美国联邦层面指13个中级上诉法院（巡回上诉法院）；许多州也设有作为一审法院的巡回法院。名称源于法官骑马沿固定路线巡回审理的历史传统。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Circuit solicitor.html">
+  <span class="noun">Circuit solicitor</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国南卡罗来纳州对首席检察官的特定称谓，相当于其他州的地区检察官（District Attorney）。南卡罗来纳州划分为16个司法巡回区，每个巡回区选举一名巡回检察官，负责在本巡回区内的巡回法院中代表州政府提起刑事公诉。 --- 巡回公诉</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/circumstantial evidence.html">
+  <span class="noun">circumstantial evidence</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">间接证据，指不能直接证明主要事实，但通过推理可以从已知事实推断出待证事实的证据。阿提克斯在结案陈词中运用间接证据的逻辑——指出梅耶拉·尤厄尔是被一个主要使用左手的人殴打的，而汤姆·罗宾逊的左手是残疾的，从而暗示鲍勃·尤厄尔才是施暴者。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Clanton Alabama.html">
+  <span class="noun">Clanton Alabama</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">阿拉巴马州克莱顿市，奇尔顿县县治，位于该州中部。1868年由阿尔弗雷德·贝克建立，最初称为&quot;鹅塘&quot;，1870年沿路易斯维尔和纳什维尔铁路规划，1873年正式建市。以美墨战争和内战邦联准将詹姆斯·霍尔特·克兰顿命名。以桃子产业闻名，现产阿拉巴</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/closed communion.html">
+  <span class="noun">closed communion</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">基督教中的一种圣餐领受制度，指仅限本教会或本宗派的合格成员参与圣餐（圣体圣事）。与之相对的是开放圣餐（open communion），即允许所有基督徒领受。罗马天主教、东正教以及部分路德宗和浸信会宗派实行此制度，其神学依据在于圣餐象征着教义</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/closing argument.html">
+  <span class="noun">closing argument</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法庭辩论中的结案陈词，是律师在审判最后阶段向陪审团或法官所做的总结性陈述，旨在概括证据、阐述法律观点并说服裁决者作出有利于己方的判决。阿提克斯·芬奇的结案陈词是美国文学史上最著名的法庭演讲之一。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Coca-Cola.html">
+  <span class="noun">Coca-Cola</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">多尔夫斯·雷蒙德先生纸袋中实际装有的饮料，而非镇民们以为的威士忌。迪尔喝了一口后发现只是可乐，这揭示了雷蒙德假装酗酒的秘密。可乐在此象征了表象与现实的巨大差距。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/code-switching.html">
+  <span class="noun">code-switching</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">语码转换，指在多语或多方言环境中，说话者根据不同的社交场合、听者身份或语境，主动在不同的语言或语言变体之间切换的现象。在语言学中，它被认为是一种正常的、自然的双语交际行为，而非语言能力不足的表现。在本章中，卡尔珀尼亚在白人家庭和黑人教堂使用</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/collard.html">
+  <span class="noun">collard</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国南方烹饪中的标志性绿叶蔬菜，属于羽衣甘蓝类（Brassica oleracea），是灵魂料理（soul food）的核心食材之一。起源于地中海地区，经由西非烹饪传统传入美国南方，通常与烟熏猪肉一同慢炖至软烂。在美国南方文化中，新年时食用</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/collards.html">
+  <span class="noun">collards</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">羽衣甘蓝的一种，美国南方饮食文化中的标志性蔬菜，在非洲裔美国人烹饪传统中具有深厚历史根基。通常与熏肉或火腿一起慢煮至软烂，搭配玉米面包食用。在新年传统中与黑眼豌豆一起食用，象征财富和好运。其耐寒易生长的特性被视作非裔美国人坚韧精神的象征。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Colored (segregation era).html">
+  <span class="noun">Colored (segregation era)</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国种族隔离时代（吉姆·克劳时期，约1877-1960年代）用于指代非裔美国人的种族分类术语。该词出现在隔离设施标识上，如&quot;有色人种&quot;饮水处、卫生间、候车室和座位区。如今该词因与种族隔离制度关联而被视为冒犯性用语，已由&quot;Black&quot;或&quot;Af</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Colored balcony.html">
+  <span class="noun">Colored balcony</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县法院二楼的有色人种专用座位区，像一个环绕三面墙的二层走廊。在种族隔离的吉姆·克劳时代，黑人观众只能在这上面观看庭审。当斯库特、杰姆和迪尔在一楼找不到座位时，赛克斯牧师带他们到 balcony，四名黑人观众主动让出前排座位。孩子们坐在</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Colored News.html">
+  <span class="noun">Colored News</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《梅科姆论坛报》中刊登黑人社区新闻的专栏。汤姆·罗宾逊的死讯在该专栏中有一条简短的讣告，但同时安德伍德也在报纸上发表了社论。这反映了20世纪30年代美国南方报纸的种族隔离现实——黑人的新闻被归入独立且通常不平等的专栏。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Confederate general.html">
+  <span class="noun">Confederate general</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国南北战争期间（1861–1865）效忠于南方邦联（Confederate States of America）的军事将领。他们指挥邦联军队对抗联邦政府军，代表人物包括罗伯特·E·李、斯通沃尔·杰克逊等。小说中阿提克斯评论以邦联将领命名会</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/congenital disorder.html">
+  <span class="noun">congenital disorder</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">先天性疾病（又称出生缺陷），指出生前或出生时即已存在的身体结构、功能或代谢异常，可由遗传因素、母体感染、药物或环境因素引起。文中用于描述Ewell家族普遍存在的健康问题。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/contempt of court.html">
+  <span class="noun">contempt of court</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">蔑视法庭是指故意不遵守法院命令、对法官或法庭表现出公开不尊重、或者以行为妨碍司法公正的违法行为，分为民事蔑视（强制履行法院命令）和刑事蔑视（惩罚性，维护法庭尊严）两类。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/cootie.html">
+  <span class="noun">cootie</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国儿童文化中一种虚构的&quot;传染病&quot;概念，属于民间儿童传说（childlore）的一部分。该词最早起源于一战期间英军士兵对虱子的俚语称呼，战后演变为儿童之间的排斥用语和追逐游戏。通常认为&quot;cooties&quot;通过身体接触传播，典型场景是男孩声称女</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/cooties.html">
+  <span class="noun">cooties</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">北美儿童文化中的俚语，指一种假想的高度传染性&quot;病菌&quot;，儿童之间以此相互标记和排斥，是常见的社交排斥游戏。该词起源于第一次世界大战期间士兵对体虱的称呼，战后由退伍军人传入民间，1950年代后在儿童文化中演变为性别隔离的虚构传染病概念，男孩称女</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/corncribs.html">
+  <span class="noun">corncribs</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">Corncrib（玉米仓）是一种传统农用通风式谷仓，专门用于储存和干燥带穗玉米。其墙壁通常由木条或金属网制成，留有缝隙以促进空气流通，底部架空以防范啮齿动物。这种建筑最早由美洲原住民使用，后被欧洲殖民者采纳。20世纪中期以后，随着联合收割机</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Cornwall.html">
+  <span class="noun">Cornwall</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">康沃尔，英格兰西南端的一个郡，位于大西洋与英吉利海峡之间的半岛上。历史上属于凯尔特民族地区之一，拥有独特的凯尔特语言（康沃尔语）和文化传统，被认定为凯尔特六国之一。以锡矿开采和康沃尔菜肉馅饼闻名于世。其文化身份与英格兰其他地区有明显差异。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/corroborating evidence.html">
+  <span class="noun">corroborating evidence</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">佐证，指能够强化、补充或确认已有证据的补充性证据，必须独立于其所支持的证言。在英美法系中，某些案件（如同案犯证词、部分性犯罪案件）法律要求必须有佐证才能定罪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/cotton.html">
+  <span class="noun">cotton</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">棉花是梅科姆县大萧条时期的经济基础。汤姆·罗宾逊为林克·迪斯先生摘棉花为生。棉花经济的崩溃导致了南方普遍的贫困，而棉花价格与私刑数量的直接关联揭示了种族暴力的经济根源。芬奇庄园曾是自给自足的棉花种植园，体现了奴隶制遗留问题。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Cotton gin injury.html">
+  <span class="noun">Cotton gin injury</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">轧棉机是导致汤姆·鲁宾逊左臂终身残疾的机器。据赛克斯牧师透露，汤姆小时候在杜尔弗斯·雷蒙德先生的轧棉机上发生了事故，手臂被卷入机器，肌肉与骨骼完全撕裂，几乎失血致死。这次事故使得汤姆的左臂比右臂短一英尺且完全无用，成为审判中阿提克斯证明汤姆</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Cotton Tom Heflin.html">
+  <span class="noun">Cotton Tom Heflin</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">詹姆斯·托马斯·&quot;棉花汤姆&quot;·赫夫林（James Thomas &quot;Cotton Tom&quot; Heflin，1869–1951），美国民主党政治家，曾任亚拉巴马州联邦众议员（1904–1920）和联邦参议员（1920–1931）。他因积极维护棉</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/cotton wagon.html">
+  <span class="noun">cotton wagon</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">棉花马车，19世纪美国南部用于运输棉花的马拉货车。通常车身长而高，两端倾斜，由5-6匹马牵引，覆盖帆布或棉布遮篷。棉花从田间采摘后被装上这种马车，运往轧棉厂或火车站，是前工业化时代南方棉花经济的标志性运输工具。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/county jail.html">
+  <span class="noun">county jail</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县监狱，位于镇广场西北角，介于廷达尔五金店和梅科姆论坛报社之间。小说描述它是一座&quot;迷你哥特式玩笑&quot;建筑，一单元格宽、两单元格高，带有城垛和飞扶壁。在汤姆·罗宾逊审判前夕，泰特警长将汤姆转移至此，阿提克斯坐在监狱门口彻夜守护，防止私刑暴</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Court as great levelers.html">
+  <span class="noun">Court as great levelers</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯·芬奇在结案陈词中提出的核心理念——法院是伟大的平等器，它能使穷人与洛克菲勒平等、愚者与爱因斯坦平等、无知者与大学校长平等。这是美国司法制度理想主义的经典表达，认为法庭是消除社会不平等的最后堡垒。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/court reporter.html">
+  <span class="noun">court reporter</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法庭记录员（又称速记员），是负责在庭审、听证会、宣誓作证等法律程序中逐字记录所有口头陈述的专业人员。他们使用速记机或语音书写技术，以每分钟225词以上的速度记录，随后制作经认证的正式笔录，成为案件记录的一部分。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Courtroom.html">
+  <span class="noun">Courtroom</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县法庭是审判汤姆·罗宾逊的场所，位于法院大楼二楼。这是一个维多利亚式建筑，陪审团坐在左侧长窗下，证人席在右侧。有色人种只能坐在&quot;有色人种专区&quot;——沿三面墙如阳台般的楼座。审判日整个梅科姆镇几乎全员到齐，气氛既紧张又几乎像节日般喧闹。法</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/courtroom atmosphere.html">
+  <span class="noun">courtroom atmosphere</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">本章中法庭氛围极度紧张寂静，如同&quot;二月的寒冷清晨，知更鸟静默无声&quot;。斯库特将其比作等待某种不可避免的可怕事情发生。法庭内座无虚席却鸦雀无声，偶尔有婴儿哭泣或孩子跑出，但大人们静坐如教堂中。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/courtroom balcony segregation.html">
+  <span class="noun">courtroom balcony segregation</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆法庭实行种族隔离，黑人观众只能坐在二楼&quot;有色人种专用&quot;（Colored）的 balcony 区域。斯库特、杰姆和迪尔由雷弗伦德·赛克斯带领坐在这里。这一布局象征吉姆·克劳法下法律场所内的种族隔离制度，与法庭&quot;法律面前人人平等&quot;的理念形</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Cousin Joshua.html">
+  <span class="noun">Cousin Joshua</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">全名 Joshua S. St. Clair，是阿提克斯·芬奇的远房表亲。他曾就读于西瓦尼大学（Sewanee），后精神失常，试图用一把老式燧发手枪射杀大学校长，结果枪炸伤了自己的手，被长期关押，后成为一名下水道检查员。姑姑亚历山德拉试图将</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/crackling bread.html">
+  <span class="noun">crackling bread</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国南部的一种传统玉米面包，将猪油渣（cracklings）揉入玉米面糊中烤制而成。起源于美国原住民的玉米饮食文化，后与欧洲殖民者的猪肉饮食传统融合，成为美国南部乡村家庭一种节俭而富有地方特色的主食。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Creek Nation.html">
+  <span class="noun">Creek Nation</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">克里克民族（Muscogee Creek Nation），自称为Este Mvskokvlke，是美国联邦政府承认的印第安原住民部落，源自历史悠久的克里克联盟。该联盟由多个操马斯科吉语的族群组成，曾占据现今乔治亚州、阿拉巴马州、佛罗里达州和</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/cripples killing sin.html">
+  <span class="noun">cripples killing sin</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">安德伍德社论的核心观点:杀害残疾人是一种罪恶，无论他们是站立、坐着还是逃跑。汤姆·罗宾逊的左臂是残疾的(童年被轧棉机夹伤)，使他无法翻越监狱围栏。安德伍德将汤姆的死比作猎人和孩子残忍地屠杀鸣禽，直接呼应了小说中杀死一只知更鸟是罪恶的核心隐喻</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/cross-examination.html">
+  <span class="noun">cross-examination</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">交叉询问，是英美法系庭审中，一方律师对对方传唤的证人进行的质询程序。与直接询问不同，交叉询问允许使用诱导性问题，旨在检验证人证词的真实性、揭露矛盾或质疑证人可信度。被法学家Wigmore誉为&quot;迄今为止为发现真相而发明的最伟大的法律引擎&quot;。 </div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/CSA pistol.html">
+  <span class="noun">CSA pistol</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国南北战争时期邦联军队使用的手枪，由于南方钢铁短缺，多为黄铜框架。著名型号包括斯皮勒伯尔、利奇里格登等厂生产的左轮手枪，是珍贵的历史文物。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Cunningham connection.html">
+  <span class="noun">Cunningham connection</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">坎宁安家族关联——陪审团中那名主张无罪的成员是沃尔特·坎宁安的&quot;双重堂表亲&quot;。阿提克斯没有（像他可以做的那样）将他从陪审团中剔除，因为直觉告诉他，自监狱事件后坎宁安家族对芬奇家怀有尊重。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Cunningham family.html">
+  <span class="noun">Cunningham family</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">坎宁安家族是梅科姆县的贫穷但骄傲的农民家族。他们以极度的自立和诚实著称，拒绝接受任何无法回报的施舍。这个家族的核心价值观是尊严和感恩——一旦赢得他们的尊重，他们会全力支持你。家族成员包括老沃尔特·坎宁安（Walter Cunningham </div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Cunningham on jury.html">
+  <span class="noun">Cunningham on jury</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">坎宁安家族成员担任陪审员——阿提克斯透露陪审团中有一名坎宁安家族的亲戚（来自老萨勒姆），他最初坚决主张无罪释放汤姆·罗宾逊，经过长时间的拉锯才被迫妥协。这是阿提克斯看到的希望曙光。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Cunninghams.html">
+  <span class="noun">Cunninghams</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">坎宁安家族是梅科姆县北部的贫穷白人家族，居住在Old Sarum地区，以务农为生。大萧条对他们的打击最为严重。他们最突出的特征是极度的自尊和自立——绝不接受无法偿还的施舍。沃尔特·坎宁安用坚果、木柴等实物支付阿提克斯的律师费。他们虽有种族偏</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Current Events.html">
+  <span class="noun">Current Events</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">学校课堂中的时事分享活动，学生需寻找新闻剪报并在课堂上进行报告，目的在于培养学生对现实世界的关注和表达能力。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Current Events period.html">
+  <span class="noun">Current Events period</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">时事分享课，斯库特所在三年级班级每周一次的课堂活动。每个学生需从报纸上剪下一篇新闻，理解内容后在班上口头讲述。该活动旨在培养学生的站姿仪态、语言表达能力、记忆力和团队归属感。在本章中，塞西尔·雅各布斯在课上提到了希特勒迫害犹太人的新闻，而斯</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Cutex Natural.html">
+  <span class="noun">Cutex Natural</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">成立于1911年的美国指甲油品牌，由Northam Warren Company创立，1917年推出了第一款液体指甲油（源自汽车漆配方）。Natural（自然色）是该品牌的经典色号，是一种淡粉色或米色的低调指甲油，符合1930年代推崇的自然</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/deaf-mute.html">
+  <span class="noun">deaf-mute</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">聋哑人（deaf-mute）是一个历史上用于描述既聋又无法说话的人的术语，源自法语sourd-muet。该词现已被认为过时且具有冒犯性，现代通用术语为&quot;deaf&quot;（聋人），大写D表示文化身份认同。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/death penalty.html">
+  <span class="noun">death penalty</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">死刑，即国家依法剥夺犯罪人生命的刑罚。阿拉巴马州于1927年3月1日从绞刑改为电椅处决，其电椅被称为&quot;Yellow Mama&quot;（黄色妈妈），因被漆成亮黄色而得名。在1930年代，阿拉巴马州执行的死刑中绝大多数为黑人男性，强奸、抢劫和纵火均可</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Democracy.html">
+  <span class="noun">Democracy</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种以人民主权为核心的政治制度，公民通过直接或间接方式参与决策。盖茨小姐在黑板上写下DEMOCRACY并让学生齐声朗读WE ARE A DEMOCRACY。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/dewberry tarts.html">
+  <span class="noun">dewberry tarts</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">露莓塔，一种美国南方传统甜点。露莓（dewberry）是一种与黑莓近似的野生浆果，比黑莓更酸更多汁，在南方初夏成熟。将新鲜露莓加糖填入酥皮塔壳中烤制而成。在小说中，作为传道会茶会的点心之一，展现了南方家庭聚会的精致饮食传统和卡尔珀尼亚出色的</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Dewey Decimal System.html">
+  <span class="noun">Dewey Decimal System</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">由美国图书馆员梅尔维尔·杜威（Melvil Dewey）于1873年发明、1876年首次出版的图书馆图书分类体系，将人类知识分为10个基本大类（000-999），以十进制数字标记每本书的学科归属。它是全球最广泛使用的图书馆分类法之一，被至少</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Dictatorship.html">
+  <span class="noun">Dictatorship</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种政治体制，权力集中于单个独裁者或小集团手中，缺乏政治多元化和自由公正选举，公民自由受到压制。盖茨小姐在课堂上将它与民主制度进行对比。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Dill.html">
+  <span class="noun">Dill</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">查尔斯·贝克·&quot;迪尔&quot;·哈里斯，杰姆和斯考特的暑假玩伴，来自密西西比州梅里迪安，住在姑妈雷切尔·哈弗福德家。他是个想象力丰富、爱讲故事的小男孩，对布·拉德利充满好奇，敏感而富有同情心。人物原型是哈珀·李的童年好友杜鲁门·卡波特。 --- 查</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Dill Harris.html">
+  <span class="noun">Dill Harris</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">全名查尔斯·贝克·哈里斯，斯库特和杰姆的暑期玩伴，来自密西西比州梅里迪安。他比斯库特大一年级但个子更矮，拥有一头雪白的头发和丰富的想象力，常激发孩子们对怪人拉德利的种种探险。他的角色原型是哈珀·李的童年好友杜鲁门·卡波特。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Dill Harris clown.html">
+  <span class="noun">Dill Harris clown</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊案审判后，迪尔表示长大后要当小丑。他想要成为新型小丑，站在马戏团中央嘲笑世人，以此作为面对不公世界的心理防御机制。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Dill's moral sensitivity.html">
+  <span class="noun">Dill&#x27;s moral sensitivity</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">迪尔在汤姆·鲁宾逊审判期间表现出的强烈道德敏感性和纯真的正义感。当吉尔默先生以种族歧视的方式盘问汤姆时，迪尔无法忍受而哭泣。这体现了儿童未被社会偏见腐蚀的天然道德感，与成年人的麻木形成对比。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Disorderly conduct.html">
+  <span class="noun">Disorderly conduct</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">汤姆·罗宾逊过去曾被判犯有&quot;妨害治安行为&quot;罪——他在与另一名男子的斗殴中卷入，对方试图用刀砍他。他因此被判处30天监禁（因无力支付罚款）。阿提克斯主动在法庭上提起此事，以展示汤姆的诚实——他没什么可隐瞒的。但控方吉尔默先生利用这一点暗示汤姆</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/distaff side.html">
+  <span class="noun">distaff side</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;distaff side&quot;是古语表达，指女性的方面或女性的家族分支。&quot;distaff&quot;原指纺纱杆（纺纱工具），因纺纱传统上是女性的工作，故用该词代指女性。阿提克斯在结案陈词中使用这个词来指代华盛顿行政当局中的女性成员，带有一种老派的讽刺意</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/divinity.html">
+  <span class="noun">divinity</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种源自美国南部的牛轧糖状甜品，以打发蛋清、玉米糖浆和糖制成，口感轻盈如棉花糖与蛋白霜的结合，常加入美洲山核桃。因对湿度极为敏感而难以制作成功，在美国南方常作为圣诞节等节庆的传统手工糖果。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Dixie.html">
+  <span class="noun">Dixie</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国南北战争时期南部邦联的非正式国歌，由北方俄亥俄州作曲家丹尼尔·埃米特于1859年为纽约的黑人游唱剧团创作的歌曲。1860年后被南方分离主义者采用，在杰斐逊·戴维斯就职典礼上演奏，成为南方邦联文化的标志性曲目。&quot;迪克西&quot;同时也是美国南部各</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Dixie Howell.html">
+  <span class="noun">Dixie Howell</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">米勒德·弗莱明&quot;迪克西&quot;豪厄尔（Millard Fleming &quot;Dixie&quot; Howell，1912年11月24日—1971年3月2日），美国大学橄榄球传奇运动员，司职半卫/四分卫。他出生于阿拉巴马州哈特福德，1932至1934年效力于阿</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Dog-trot house.html">
+  <span class="noun">Dog-trot house</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国南部传统民居风格，由两间木屋在共同屋顶下连接而成，中间留有开放式穿堂（dog-trot hall）。这种设计利用伯努利原理形成被动降温效果，相当于早期&quot;天然空调&quot;，盛行于19世纪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Dolphus Raymond.html">
+  <span class="noun">Dolphus Raymond</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">多尔夫斯·雷蒙德是梅科姆县一位富裕的白人，来自古老的名门望族。他选择与黑人女性同居并育有混血孩子，这在种族隔离的南方是深恶痛绝的行为。他假装酒鬼（实际喝的是可口可乐），给镇上人一个可以接受的借口来解释他的生活方式。他代表了在歧视社会中通过妥</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/double first cousin.html">
+  <span class="noun">double first cousin</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">双重第一代表亲是一种亲缘关系术语，指两个人同时通过父亲和母亲两边都有亲缘关系。具体来说，当两姐妹分别嫁给两兄弟时，她们的孩子就是双重第一代表亲——他们同时继承了两边的祖父母基因。在小说的上下文中，这是阿提克斯对陪审团中一位坚持无罪的坎宁安家</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Dracula.html">
+  <span class="noun">Dracula</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">布莱姆·斯托克1897年创作的哥特式恐怖小说，讲述吸血鬼德古拉伯爵从特兰西瓦尼亚前往伦敦传播诅咒的故事。该小说是吸血鬼文学中最具影响力的作品之一，塑造了现代流行文化中吸血鬼的经典形象，被改编为数百部电影、电视剧和舞台作品。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/dump.html">
+  <span class="noun">dump</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆镇垃圾场，Ewell家的住所位于其后。他们从垃圾堆中捡拾可用物品，房屋用铁皮和压平的锡罐拼凑而成，庭院里堆满了从垃圾场捡来的杂物。垃圾场的位置象征着Ewell家在梅科姆社会中的最低地位。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/ear trumpet.html">
+  <span class="noun">ear trumpet</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">耳喇叭，19世纪至20世纪初使用的机械助听装置，呈漏斗状，通过收集声波并将其导入耳道来放大声音。它无电子放大功能，最大增益约30分贝。耳喇叭通常由镀镍银、象牙、铜或锡制成，著名的使用者包括贝多芬。弗鲁蒂小姐使用了一个巨大的耳喇叭。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Edgar Rice Burroughs.html">
+  <span class="noun">Edgar Rice Burroughs</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国小说家（1875-1950），以创作《人猿泰山》和《火星公主》等科幻冒险作品而闻名。他塑造的泰山成为20世纪最具影响力的虚构人物之一，作品被翻译成56种以上语言，销量数千万册。他也是最早将角色进行跨媒体商业开发的作家之一。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Eleanor Roosevelt.html">
+  <span class="noun">Eleanor Roosevelt</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国前第一夫人（富兰克林·罗斯福总统之妻），以民权和社会正义Activism著称。在第24章中Mrs. Merriweather批评她&quot;完全疯了&quot;，因为她来到阿拉巴马州伯明翰试图与黑人坐在一起。这一引用体现了南方白人至上主义者对罗斯福夫人支</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Elmer Davis.html">
+  <span class="noun">Elmer Davis</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国著名新闻广播员和作家，二战期间担任美国战时情报局局长，以其每晚五分钟的CBS新闻广播赢得1250万听众，以诚实报道和反麦卡锡主义立场著称。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Enfield Prison Farm.html">
+  <span class="noun">Enfield Prison Farm</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">《杀死一只知更鸟》中的虚构监狱农场，位于切斯特县，距离梅科姆镇约70英里。汤姆·罗宾逊被定罪后被关押于此等待上诉。在第24章中，汤姆在此试图越狱时被警卫射杀17枪。其家人不被允许探视。此监狱反映了吉姆·克劳时代南方的监狱农场制度。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/entailment.html">
+  <span class="noun">entailment</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">英国普通法中的一种财产继承制度（又称限定继承/fee tail），指土地或不动产只能 由特定直系后代继承，不得出售、转让或遗赠给继承人之外的人。这一制度始于1285年 的《威斯敏斯特第二法案》，旨在保持家族地产的完整不分割。持有者仅拥有终身</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Equal rights for all, special privileges for none.html">
+  <span class="noun">Equal rights for all, special privileges for none</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一句经典政治格言，通常被归于托马斯·杰斐逊(但无确凿证据)，实际起源于1820年代末的杰克逊民主党时期，后被民粹主义运动复兴，主张法律面前人人平等，无人享有特殊待遇。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Equity (law).html">
+  <span class="noun">Equity (law)</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">衡平法，英美法系中与普通法并列的重要法律体系，起源于14世纪英国的御前大臣（大法官）法院。当普通法的严格适用会导致不公正时，衡平法基于公平和良知原则提供补救，如特定履行、禁令等衡平法救济。1873-1875年英国司法法令后，普通法与衡平法法</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Estelle.html">
+  <span class="noun">Estelle</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇上旅馆的女主人，在汤姆·罗宾逊审判后向芬奇家送去了面包卷以示对阿提克斯的支持。她是梅科姆镇黑人社区和白人支持者通过食物表达感激之情的众多人物之一，体现了南方小镇的社区温情。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Ewell home life.html">
+  <span class="noun">Ewell home life</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Ewell一家的家庭生活状况——住在镇垃圾场后面的破旧小木屋里，依靠政府救济金勉强维生，水源取自垃圾场边的泉水，孩子们赤脚、常年生病、缺乏教育，家庭环境肮脏混乱，父亲酗酒且有暴力倾向。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Ewells.html">
+  <span class="noun">Ewells</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">尤厄尔家族是梅科姆县社会的最底层白人家庭，被阿提克斯形容为&quot;三代以来都是梅科姆的耻辱&quot;。他们住在镇垃圾场后面的一间破旧木屋里，院子里堆满了废品，孩子们在垃圾堆中寻找食物。家长鲍勃·尤厄尔是个酒鬼，把救济金全部用来买酒，还性侵自己的女儿梅耶拉</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Extrajudicial punishment.html">
+  <span class="noun">Extrajudicial punishment</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法外惩罚，指未经法庭或司法程序审判即对 alleged crime 实施的惩罚。通常由国家行为体或得到国家默许的群体执行，违反正当程序和基本人权原则。在法律上，法外行为和判决被视为绝对无效。私刑是其最典型的表现形式之一。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/fair play not marked White Only.html">
+  <span class="noun">fair play not marked White Only</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">莫迪小姐这句话是对种族隔离和双重正义标准的直接批判。她指出公平竞争不应只限于白人，公正审判应适用于所有人。这是小说主题——反对种族不公的集中体现，也是莫迪对亚历山德拉的安慰和教导。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Finch women.html">
+  <span class="noun">Finch women</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">亚历山德拉姑姑口中的&quot;芬奇家的女人&quot;代表了她对南方淑女和家族声誉的传统观念。她认为芬奇家的女人应当举止优雅、注重社会身份、只与&quot;合适&quot;的人交往，并且要维护家族名誉。这与斯库特的男孩气性格和自由天性形成鲜明对比，也是亚历山德拉试图改造斯库特、</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Finch's Landing.html">
+  <span class="noun">Finch&#x27;s Landing</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">芬奇庄园，是哈珀·李小说《杀死一只知更鸟》中芬奇家族的祖宅庄园，位于亚拉巴马河畔，由斯库特的祖先西蒙·芬奇在19世纪初建立。阿提克斯·芬奇在此长大，后离家前往蒙哥马利学习法律，其兄杰克前往波士顿学医，妹妹亚历山德拉则留守庄园。该地象征着芬奇</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Finches in Egypt.html">
+  <span class="noun">Finches in Egypt</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">这是杰姆在第23章中提出的幽默理论。为了解释芬奇家族为何拥有&quot;背景&quot;（指长期识字传统），杰姆开玩笑说芬奇家族的历史可能追溯到古埃及——那时有一位芬奇祖先学会了象形文字，然后教给了他的儿子。这个&quot;芬奇家在埃及&quot;的玩笑既展现了杰姆早期的古埃及兴</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/First Purchase African M.E. Church.html">
+  <span class="noun">First Purchase African M.E. Church</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">小说《杀死一只知更鸟》中梅科姆镇的黑人教堂，位于镇南界线外的Quarters区域，是一座油漆剥落的木结构建筑，因由获得自由的奴隶用第一笔收入购买建造而得名&quot;First Purchase&quot;（第一次购买），是镇上唯一带有尖顶和钟的教堂。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/First Purchase African Methodist Episcopal Church.html">
+  <span class="noun">First Purchase African Methodist Episcopal Church</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;首次购置非洲 Methodist Episcopal 教堂&quot;是哈珀·李小说《杀死一只知更鸟》中虚构的教堂名称。命名含义深刻：&quot;First Purchase&quot;指解放后的非裔美国人用获得自由后的第一笔集体收入购买的第一块产业，即这座教堂建筑；</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/First Purchase Church.html">
+  <span class="noun">First Purchase Church</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">全称 First Purchase African M.E. Church（第一购买非洲卫理公会教堂），位于梅科姆镇外的黑人聚居区&quot;The Quarters&quot;。该教堂以解放后的奴隶用第一笔收入购买而得名，条件简陋破旧，没有钱买赞美诗集，大多</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/flagpole.html">
+  <span class="noun">flagpole</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">指1920年代至1930年代初在美国风靡一时的「旗杆静坐」耐力热潮（flagpole sitting），由曾为水手的特技演员阿尔文·&quot;沉船&quot;·凯利（Alvin &quot;Shipwreck&quot; Kelly）在1924年引发。参与者爬上旗杆顶端的小平台</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Flintlock.html">
+  <span class="noun">Flintlock</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">燧发枪——17世纪至19世纪中期主导的火器点火机构。原理是燧石撞击钢制击砧产生火花，引燃火药池中的底火药，火焰通过传火孔点燃枪管中的主装药。燧发手枪在小说中被卡什·圣克莱尔（Cousin Joshua）使用但因炸膛而失效。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/flivver.html">
+  <span class="noun">flivver</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">20世纪初美国俚语，指廉价、破旧的小汽车，尤指福特T型车（Ford Model T）的绰号。该词约1905-1910年间进入美国俚语，最初泛指任何廉价或劣质物品，1914年后与福特T型车紧密关联。后逐渐被jalopy一词取代，成为汽车文化早</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Flying buttresses.html">
+  <span class="noun">Flying buttresses</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">飞扶壁是哥特式建筑中典型的 masonry 结构，由一段倾斜的半拱从墙体上部&quot;飞越&quot;至远处的扶壁柱，将拱顶的侧推力传递到外部支撑。这项革命性工程技术使得教堂可以建得更高、墙面可以开大面积彩色玻璃窗，被誉为&quot;哥特式的精髓&quot;。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/foot washing.html">
+  <span class="noun">foot washing</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">洗脚礼是基督教中的一项宗教仪式，源于《约翰福音》第13章中耶稣在最后的晚餐上为门徒洗脚并命令他们效仿的记载。许多基督教派别（如天主教在濯足节、门诺派、再洗礼派、基督复临安息日会等）将其作为谦卑和服务的象征来实践。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/foot-washing.html">
+  <span class="noun">foot-washing</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">基督教中的一种宗教仪式，源于耶稣在最后的晚餐中为十二门徒洗脚（《约翰福音》13:1-15）的典故。该仪式象征谦卑、服务与洁净，在历史上是古近东地区常见的待客习俗。如今，罗马天主教在濯足节（圣周四）举行此仪式，东正教、路德宗、圣公会以及再洗礼</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/football water buckets.html">
+  <span class="noun">football water buckets</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">橄榄球水桶搬运工，杰姆在中学时的差事。由于他刚上中学（七年级），身材瘦小，不能真正参加校队比赛，只能负责为球员搬运水桶。杰姆对此充满热情，几乎每天下午都练到天黑才回家。他还按照教练的建议拼命吃香蕉牛奶增重，梦想在两年后能真正上场打球。这个细</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/footlights.html">
+  <span class="noun">footlights</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">放置在舞台前沿地板上的一排照明灯，用于照亮演员下半身并柔化顶光产生的阴影。源于17世纪英国舞台上的油灯，最初被称为&quot;floats&quot;，19世纪改用煤气灯，19世纪末引入白炽电灯。在现代剧场中，脚灯通常嵌入舞台地板内，是镜框式舞台（prosce</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/forefathers wisdom.html">
+  <span class="noun">forefathers wisdom</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">祖先的智慧——斯各特在听到女性被禁止担任陪审员后，想象了杜博斯夫人在轮椅上敲拐杖要求发言的场景，随后暗想&quot;也许我们的祖先是明智的&quot;，这反映了她自身性别偏见的盲点，与她对种族正义的敏感形成对比。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/fountain pen.html">
+  <span class="noun">fountain pen</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">钢笔（自来水笔），是一种内置储墨装置的书写工具，通过毛细作用将墨水引导至笔尖。1884年美国人Lewis Waterman发明了首支实用型钢笔，解决了墨水流量和气压平衡问题。在20世纪中期圆珠笔普及之前，钢笔是主要的日常书写工具。小说中At</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/four kinds of folks.html">
+  <span class="noun">four kinds of folks</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">这是杰姆在汤姆·罗宾逊审判后形成的社会阶层理论。他将梅科姆镇的人分为四类：第一类是&quot;普通人&quot;，如芬奇家和邻居们；第二类是住在林中的坎宁安家（贫穷但有尊严的农民）；第三类是住在垃圾场边的尤厄尔家（底层的白人垃圾）；第四类是黑人，处于社会最底层</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Frances Barber.html">
+  <span class="noun">Frances Barber</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">弗朗西丝·巴伯，昵称&quot;弗鲁蒂&quot;（Frutti），梅科姆镇的老处女之一，与姐姐莎拉同住。她使用巨大的耳喇叭来辅助听力，杰姆将其比作维克多留声机的喇叭。恶作剧发生后，她坚称自己能辨认出梅科姆人的声音，声称那晚在客厅里没有梅科姆口音，从而支持了外</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Franklin stove.html">
+  <span class="noun">Franklin stove</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">本杰明·富兰克林于1742年发明的铸铁取暖炉，最初称为&quot;宾夕法尼亚壁炉&quot;。其设计包含后挡板以改善空气流动，使热量向四周辐射，比传统壁炉更高效节能、产烟更少。富兰克林拒绝申请专利，将设计无偿贡献给公众。该炉具是美国家庭取暖史上的重要发明，体现</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Garden of Gethsemane.html">
+  <span class="noun">Garden of Gethsemane</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">客西马尼园，位于耶路撒冷橄榄山脚下、汲沦溪对岸的一个花园，在基督教传统中被认为是耶稣在受难前夜祷告并被犹大出卖的地点。其名源自亚兰语&quot;油榨&quot;，因该地曾设有橄榄榨油设施。园内现存多棵古橄榄树，部分经碳-14测定树龄超过900年。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/gavel.html">
+  <span class="noun">gavel</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">小木槌，法官或会议主席使用的仪式性工具，用于敲击以维持秩序、宣布裁决或表示会议开始/结束。在美国法庭中广泛使用，象征司法权威。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/geranium.html">
+  <span class="noun">geranium</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">天竺葵（学名Pelargonium），实际指牻牛儿苗科天竺葵属植物，原产南非，作为观赏花卉广泛栽培。虽然在日常用语中常被称为&quot;geranium&quot;，但植物学上真正的老鹳草属（Geranium）与天竺葵属（Pelargonium）是两个不同的属</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/God-fearing.html">
+  <span class="noun">God-fearing</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;敬畏上帝的&quot;一词描述那些虔诚信仰宗教、努力遵循道德规则生活的人。该词在圣经中出现多次，核心含义是对上帝的敬畏与尊崇（而非恐惧）。阿提克斯用这个词来形容鲍勃·尤厄尔——一个&quot;敬畏上帝的、坚忍不拔的、受人尊敬的白人&quot;——带有明显的反讽意味，因</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/governor commutation.html">
+  <span class="noun">governor commutation</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">州长运用行政赦免权将法院判处的刑罚减轻为较轻刑罚的行为。减刑不同于赦免——减刑不推翻定罪本身，仅改变刑罚。在阿拉巴马州，州长有权对死刑判决进行减刑（如减为终身监禁）。阿提克斯提到州长可能为汤姆减刑，但希望渺茫。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Grace Merriweather.html">
+  <span class="noun">Grace Merriweather</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇最虔诚的教会女士，传道会的核心成员。斯库特形容她为&quot;Maycomb最虔诚的女士&quot;。在第24章的传道会茶会上，她主导了关于Mrunas部落的传教报告，言语中充满对远方&quot;异教徒&quot;的同情，但随即抱怨自家黑人女佣Sophy&quot;闷闷不乐&quot;，并间</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/gratitude and respect Cunninghams.html">
+  <span class="noun">gratitude and respect Cunninghams</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯对坎宁安家族的深刻理解：一旦你赢得他们的尊重，他们会毫无保留地支持你。尽管沃尔特·坎宁安曾参与针对汤姆·罗宾逊的私刑暴民团伙，但经过斯库特在监狱外的天真对话后，他对芬奇家产生了新的尊重。这种尊重甚至延伸到了陪审团——一位坎宁安亲戚成</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Great Depression.html">
+  <span class="noun">Great Depression</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">1929年华尔街股灾后席卷全球的经济大萧条，在小说中构成故事的经济背景（1933-1935年）。梅科姆镇居民普遍贫困，Cunningham家以实物支付律师费，Ewell家住垃圾场旁。Mrs. Merriweather提到她留着女佣Sophy</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Greek Revival architecture.html">
+  <span class="noun">Greek Revival architecture</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">希腊复兴建筑是一种源于18世纪中期的新古典主义建筑风格，复兴了古希腊建筑的形式与风格，特别是希腊神庙的外观。其典型特征包括：大型立柱（多立克柱式或爱奥尼柱式）、山形墙门廊、对称立面、白色或浅色外观、低坡度屋顶等。该风格在19世纪早期至中期在</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/ground-itch.html">
+  <span class="noun">ground-itch</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">地面痒疹（ground itch），又称露水痒疹（dew itch），是钩虫幼虫钻入人体皮肤时引起的局部炎症和瘙痒。在20世纪初的美国南方极为普遍，因贫困人口赤脚行走在被污染的土地上而感染。小说中用此细节展现Ewell家的极度贫困。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Group Dynamics.html">
+  <span class="noun">Group Dynamics</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">由社会心理学家库尔特·勒温（Kurt Lewin）开创的研究领域，指社会群体内部成员之间相互作用的行为模式、态度和心理过程，包括群体形成、领导风格、群体凝聚力、从众行为、群体决策等。该概念后被广泛应用于教育、组织管理和心理治疗等领域。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/guilty verdict.html">
+  <span class="noun">guilty verdict</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊被判定犯有强奸梅耶拉·尤厄尔罪的全过程。泰勒法官向陪审团逐一举手表决，重复说着&quot;有罪…有罪…有罪…&quot;。斯库特看到杰姆的手因紧抓包厢栏杆而发白，肩膀随着每一次&quot;有罪&quot;抽搐。汤姆随后被判处死刑（当时阿拉巴马州强奸罪为死罪），阿提克斯</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/haints.html">
+  <span class="noun">haints</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国南方民间传说中的鬼魂或幽灵，源自Gullah Geechee文化。 &quot;haint&quot;是&quot;haunt&quot;（闹鬼）的南方方言变体，通常指带有恶意的超自然存在。 在南方民俗中，人们会将门廊天花板涂成浅蓝色（称为&quot;Haint Blue&quot;）来驱赶这些</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/Halloween.html">
+  <span class="noun">Halloween</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">万圣节是第28章的核心背景设定，也是全书高潮发生的时间点。 在这个无月的漆黑夜晚，斯考特和杰姆步行去学校参加万圣节表演， 之后在回家途中遭遇Bob Ewell的袭击。 万圣节的传统（黑暗、鬼怪、恐惧）与章节氛围完美融合—— 孩子们曾经害怕布</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Halloween pageant.html">
+  <span class="noun">Halloween pageant</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">万圣节文艺汇演，20世纪30年代美国学校与社区的一种传统活动。当时万圣节逐渐从无组织的恶作剧之夜转变为有组织的社区庆典，由学校和市民俱乐部主办，包括化装游行、比赛、篝火和戏剧表演。小说中梅科姆镇的万圣节汇演正是在这种背景下为约束孩子们的恶作</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/ham costume.html">
+  <span class="noun">ham costume</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">斯库特在万圣节文艺汇演中穿的火腿costume，由当地女裁缝克林肖太太用铁丝网和棕色布料制作而成。这个火腿形状的服装几乎垂到斯库特的膝盖，上面留有两个窥视孔。它虽让斯库特感到尴尬，却在回家路上意外地救了她的命——鲍勃·尤厄尔的刀刺在铁丝网上</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/handful of people with background.html">
+  <span class="noun">handful of people with background</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">莫迪小姐重新定义了&quot;背景&quot;一词。亚历山德拉姑妈一直强调家族血统和社会地位，而莫迪指出真正的&quot;背景&quot;不是家族名望，而是道德品格——相信公平、公正和平等。这是小说中关于何为真正贵族的深刻反思。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Harper Lee.html">
+  <span class="noun">Harper Lee</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">哈珀·李（1926–2016），美国女作家，以小说《杀死一只知更鸟》（To Kill a Mockingbird，1960年）闻名于世。这部小说获1961年普利策小说奖，被翻译成40多种语言，成为美国文学经典和美国中学必读作品。她的童年好友</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/hatchet.html">
+  <span class="noun">hatchet</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">短柄斧是梅耶拉给汤姆用来劈开旧衣柜（chiffarobe）的工具。汤姆用斧头无偿帮助梅耶拉劈柴，拒绝了她的五分钱报酬。这个细节展示了汤姆善良无私的&quot;知更鸟&quot;品质，与尤厄尔家诬告他的暴力罪名形成鲜明对比，也证实了汤姆之前曾在春天帮助过梅耶拉。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/he caught me and choked me and took advantage of me.html">
+  <span class="noun">he caught me and choked me and took advantage of me</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">Mayella在法庭上指控Tom Robinson的证词原话——&quot;他抓住我、掐我、占有了我&quot;。Atticus利用这句话审查证词矛盾：如果Tom掐了Mayella的脖子就无法同时殴打她的右脸，而且Tom的左手因事故残废，根本不能用双手掐人，从</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Hearts of Love hairdressing.html">
+  <span class="noun">Hearts of Love hairdressing</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">20世纪早期美国黑人社区中使用的一种发油（hair pomade）品牌，出现于《杀死一只知更鸟》第12章中卡尔珀尼亚带斯库特和杰姆去黑人教堂时描写的场景，是哈珀·李用来营造教堂氛围的真实时代产品之一。该品牌已极为罕见，但作为历史文献中保存的</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Heck Tate.html">
+  <span class="noun">Heck Tate</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">赫克托·&quot;赫克&quot;·泰特，梅科姆县的警长。他身材高大瘦削，穿着靴子和伐木夹克。在小说中他负责将汤姆·罗宾逊转移到县监狱，并在疯狗事件中请阿提克斯开枪。在小说结尾，他决定隐瞒布·拉德利杀死鲍勃·尤厄尔的真相，称曝光布的行为&quot;就像杀死一只知更鸟一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Helen Robinson.html">
+  <span class="noun">Helen Robinson</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">海伦·罗宾逊是汤姆·罗宾逊的妻子，育有三个孩子。汤姆被指控后她找不到工作，后来汤姆的前雇主林克·迪斯给她提供了工作。汤姆死后，鲍勃·尤厄尔经常骚扰她。她代表了种族不公对无辜家庭的连带伤害。 --- 海伦·罗宾逊是汤姆·罗宾逊的妻子，与汤姆育</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Henry W. Grady.html">
+  <span class="noun">Henry W. Grady</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">亨利·伍德芬·格雷迪（1850-1889），美国记者、演说家，佐治亚人，内战后&quot;新南方&quot;运动的代表人物。他主张南方工业化与南北和解，但同时维护白人至上主义和黑人的从属地位。在小说中，阿提克斯让杰姆阅读格雷迪的演说词作为教育内容，这也成为一些</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/hieroglyphic.html">
+  <span class="noun">hieroglyphic</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">象形文字（hieroglyphic）是杰姆关于&quot;背景&quot;理论中的关键元素。他推测芬奇家某位在埃及的祖先学会了&quot;一两个象形文字&quot;，这一家传的识字能力代代延续，形成了芬奇家的&quot;背景&quot;。这不仅是一个幽默的类比（象形文字是世界上最古老的文字形式之一）</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/hoe.html">
+  <span class="noun">hoe</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">锄头是汤姆·罗宾逊在春天帮梅耶拉劈衣柜时随身携带的农具。汤姆回忆说当时是&quot;锄地时节&quot;（choppin&#x27; time），他带着锄头路过尤厄尔家时被梅耶拉叫进去帮忙。这个细节强化了汤姆作为一个勤劳诚实的农场工人的形象，并帮助确立了他第一次帮助梅耶</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/holy-roller.html">
+  <span class="noun">holy-roller</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">对19世纪卫斯理圣洁运动和五旬节派基督徒的贬称，指那些在礼拜中因被圣灵充满而跳舞、颤抖、喊叫甚至在地板上打滚的信徒，后逐渐被一些信徒自豪地接纳。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/hoo-dooing.html">
+  <span class="noun">hoo-dooing</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">美国南方非裔美国人的民间魔法与灵性传统，又称 hoodoo、conjure 或 rootwork，融合了中非和西非的宗教元素、基督教象征以及北美本土植物知识。信徒通过符袋、草药、蜡烛、十字路口仪式等方式进行祈福、保护或施加影响。在小说中，S</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/hookah.html">
+  <span class="noun">hookah</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">起源于16世纪印度莫卧儿帝国的水烟管，通过水容器过滤烟雾。后传入波斯和奥斯曼帝国，成为中东及南亚地区重要的社交和文化象征，常见于咖啡馆等社交场所。其名称在各地有所不同（shisha、nargile、arghile等）。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/hookworms.html">
+  <span class="noun">hookworms</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种肠道寄生虫感染，由钩虫幼虫穿透皮肤（通常通过赤脚接触被污染的土壤）引起， 会导致严重贫血、疲劳、发育迟缓和认知障碍。20世纪初，钩虫病在美国南部农村极为 普遍，约750万人感染，与贫困、缺乏卫生设施和赤脚行走密切相关。该病曾被称作 &quot;懒</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Hoover cart.html">
+  <span class="noun">Hoover cart</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">大萧条时期的一种自制交通工具，将汽车的发动机和车窗拆除，后轮连接成推车状，用马或骡子牵引。因民众将经济困境归咎于时任总统赫伯特·胡佛（Herbert Hoover）而得名，象征着大萧条时代的普遍贫困。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Hoover carts.html">
+  <span class="noun">Hoover carts</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">大萧条时期美国农村出现的简易畜力车，由拆除发动机的汽车底盘改装而成，用骡子或马牵引。因时任总统赫伯特·胡佛被民众认为应对经济危机负责而得名，反映了当时农村的贫困和民众的政治不满情绪。加拿大类似车辆被称为&quot;Bennett buggy&quot;（以总理</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Horace Gilmer.html">
+  <span class="noun">Horace Gilmer</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">霍勒斯·吉尔默是汤姆·鲁宾逊案中的控方检察官，代表阿拉巴马州提起诉讼。与阿提克斯对所有证人保持尊重的态度形成鲜明对比的是，吉尔默在交叉询问汤姆时表现出明显的轻蔑和敌意。迪尔·哈里斯对他的态度感到极度不适，以至于哭着离开法庭。斯科特观察到阿提</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/horn-rimmed glasses.html">
+  <span class="noun">horn-rimmed glasses</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">角质框架眼镜（Horn-rimmed glasses）是一种以厚重、醒目的镜框为特征的眼镜样式。最初的角质框架眼镜确实使用动物角或玳瑁壳制成，但后来多采用厚塑料模仿这些材质。该风格由喜剧演员哈罗德·劳埃德（Harold Lloyd）在191</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Hot Steams.html">
+  <span class="noun">Hot Steams</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国南方民间传说中的一种鬼魂或灵体，指无法进入天堂的灵魂，只能在偏僻道路上徘徊游荡。据传如果行人穿越一个Hot Steam，死后也会变成同样的游魂，并在夜间吸取他人的呼吸。小说中杰姆告诉迪尔，遇到Hot Steam时可以念诵咒语&quot;Angel</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/House of Commons.html">
+  <span class="noun">House of Commons</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">英国议会的下议院，是英国两院制议会中经选举产生且权力更大的议院，由650名议员（MPs）组成，任期最长五年。它起源于13世纪，英王爱德华一世召开&quot;模范议会&quot;时，各郡骑士和市镇代表首次被召集。与上议院（贵族院）不同，下议院议员由选民直选产生，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Hoyt's Cologne.html">
+  <span class="noun">Hoyt&#x27;s Cologne</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">E.W.霍伊特公司（E.W. Hoyt &amp; Co.）约1868年在马萨诸塞州洛厄尔推出的一款古龙水品牌，最初名为Hoyt&#x27;s German Cologne。创始人伊莱·韦特·霍伊特（Eli Waite Hoyt）从药剂师起家，通过全国杂志广</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/hung jury.html">
+  <span class="noun">hung jury</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">悬而未决的陪审团（hung jury）是指陪审团无法达成一致裁决而陷入僵局的情况。在第23章中，阿提克斯透露如果暴民中有两位坎宁安家族的人，陪审团将会陷入僵局（hung jury），无法定罪汤姆·罗宾逊。实际上确实有一位坎宁安家族成员是唯一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Hypocrisy.html">
+  <span class="noun">Hypocrisy</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">《杀死一只知更鸟》的核心主题之一，尤其体现在宗教和社会层面。传教士茶会上的女士们自称虔诚基督徒，为远方异教徒捐款，却对本镇黑人充满歧视和恐惧。Scout以孩子天真的视角敏锐地察觉到这种矛盾，为读者揭露了梅科姆社会道德虚饰下的种族偏见。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/In the name of God, believe him.html">
+  <span class="noun">In the name of God, believe him</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯在结案陈词结束后转身离开陪审团时几乎自言自语的一句话。斯库特没有听清，杰姆以为他说的是&quot;以上帝之名，相信他&quot;。这句话比公开的陈词更加私人化，更像是一个祈祷或恳求，表达了阿提克斯对陪审团能相信汤姆·罗宾逊证词的绝望希望。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/In the name of God, do your duty.html">
+  <span class="noun">In the name of God, do your duty</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯·芬奇在结案陈词的最后一句公开呼吁，他恳请陪审团以上帝之名履行其职责，超越种族偏见，根据证据做出公正裁决。这既是宗教性呼吁，也是道德命令，在南方圣经地带具有极强的说服力。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Indian-head pennies.html">
+  <span class="noun">Indian-head pennies</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">印第安头便士，美国1859至1909年间发行的一美分硬币，正面为戴羽毛头饰的印第安女性侧面头像。在小说中，布·拉德利将这些硬币（一枚1900年、一枚1906年）装在小天鹅绒盒子里，放在树洞中作为给杰姆和斯库特的礼物。杰姆视其为幸运币。这些礼</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Indian-heads.html">
+  <span class="noun">Indian-heads</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">指美国历史上发行的印第安头分币（Indian Head cent），1859年至1909年间由美国铸币局铸造，面值一美分。由费城铸币厂首席雕刻师詹姆斯·巴顿·朗埃克设计，正面图案为一位戴着羽毛头饰的女性形象（象征&quot;自由&quot;），背面最初为月桂花</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/It ain't right.html">
+  <span class="noun">It ain&#x27;t right</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">杰姆·芬奇在汤姆·罗宾逊被判有罪后反复对父亲说的话，表达了他对不公正判决的愤怒和深深的幻灭感。阿提克斯平静地回答&quot;不，儿子，这不对。&quot;这个简短对话标志着杰姆童年天真的彻底丧失——他曾坚信正义必胜，却首次面对系统性的种族不公。此后杰姆变得沉默</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Ivanhoe.html">
+  <span class="noun">Ivanhoe</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《艾凡赫》（Ivanhoe: A Romance）是沃尔特·斯科特（Walter Scott）于1819年出版的经典历史小说，是其&quot;威弗利小说&quot;系列之一。故事设定在1194年的英格兰，围绕撒克逊骑士威尔弗雷德·艾凡赫展开，涉及狮心王理查、罗</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/J. Grimes Everett.html">
+  <span class="noun">J. Grimes Everett</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">小说中一位被提及但从未出场的传教士角色，在梅科姆县的传道会茶会上被讨论。他在非洲的Mruna部落从事传教工作，被梅里韦瑟太太描绘为圣洁勇敢的人物。哈珀·李通过这个角色揭露了梅科姆白人女性的虚伪——她们对远在非洲的黑人表达深切关怀，却对自己社</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/J.P. court.html">
+  <span class="noun">J.P. court</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">治安法庭（Justice of the Peace court）的缩写，是美国司法体系中最基层、最非正式的法庭，负责处理小额民事纠纷、交通案件和初步听证。阿提克斯在结案陈词中将其与美国最高法院对比，说明所有法院无论级别高低都应该是平等的场所</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Jamaica.html">
+  <span class="noun">Jamaica</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">牙买加，加勒比海第三大岛国，位于古巴以南。原为泰诺（阿拉瓦克）印第安人居住地，1494年哥伦布抵达后成为西班牙殖民地，1655年被英国占领，1962年独立。以雷鬼音乐、博布·马利、蓝山咖啡、朗姆酒和短跑运动闻名于世。其座右铭为&quot;出多门，归一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Jem Finch.html">
+  <span class="noun">Jem Finch</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">Scout的哥哥，全名Jeremy Atticus Finch，故事开始时约10岁，到结束时13岁。他是一个敏感、有强烈正义感的少年，崇拜父亲Atticus。Tom Robinson审判的不公结果使他深受打击，标志着他从童年天真到认清世间不</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Jem's chest hair.html">
+  <span class="noun">Jem&#x27;s chest hair</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">在与亚历山德拉姑姑发生冲突后，杰姆将哭泣的斯库特带到卧室安慰她。为了让她开心起来，他害羞地解开衬衫，展示自己胸前刚刚长出的汗毛——这是他进入青春期的迹象。他还宣布自己明年要参加足球队，并告诉斯库特&quot;别让姑姑惹你生气&quot;。这一场景既标志了杰姆身</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Jem's psychical research.html">
+  <span class="noun">Jem&#x27;s psychical research</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">杰姆曾短暂对心灵研究（psychical research）产生兴趣，他告诉斯库特如果足够多人集中意念于同一件事（比如在树林中点燃一棵树），那棵树就会自行燃烧。斯库特在等待中一度想请楼下所有人集中意念让汤姆·罗宾逊获得自由，但转念认为大家和</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Jew's Harp.html">
+  <span class="noun">Jew&#x27;s Harp</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">Jew&#x27;s Harp（犹太竖琴/口簧琴）是一种古老的弹拨体鸣乐器，被认为是人类最古老的乐器之一。演奏时将其置于唇间，用手指拨动簧片，通过口腔形状变化调节音高。该乐器起源于亚洲，在4世纪的中国绘画中已有出现，后传入欧洲并在中世纪广泛流行。其英</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Jim Crow.html">
+  <span class="noun">Jim Crow</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">吉姆·克劳法是指美国南方各州在1870年代至1960年代实施的种族隔离和歧视性法律体系，旨在剥夺非裔美国人的公民权利。这一名称源自19世纪一档黑人模仿秀中的种族主义角色。在本章中，阿提克斯的结案陈词所挑战的正是这一制度所植根的种族主义假设—</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Jitney Jungle.html">
+  <span class="noun">Jitney Jungle</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国南部历史悠久的连锁超市品牌，1919年由Holman兄弟和McCarty在密西西比州杰克逊市创立。采用自助式现金交易模式，名称源自俚语jitney（五分镍币）和jungle（丛林），寓意五分钱逛平价丛林。1999年破产，2000年被Wi</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/John Taylor.html">
+  <span class="noun">John Taylor</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">约翰·泰勒法官——梅科姆县法院的主审法官，头发花白、面色红润，表面随和不拘小节（常在法庭上嚼雪茄、剔指甲、看似打瞌睡），实则精明公正。他特意指定阿提克斯为汤姆·罗宾逊辩护，给汤姆最好的机会。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/John Wesley.html">
+  <span class="noun">John Wesley</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">约翰·卫斯理（1703–1791），英国圣公会牧师、基督教神学家，卫理公会（循道宗）的创始人。1738年在伦敦奥尔德斯盖特街经历个人皈依体验（&quot;心里觉得异样温暖&quot;），随后开始户外布道，毕生骑马旅行约25万英里，布道超过4万次。他建立的教会组</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Judge John Taylor.html">
+  <span class="noun">Judge John Taylor</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">《杀死一只知更鸟》中 Maycomb 县的主审法官，外貌为白发、面色微红、和蔼可亲。他表面上看似漫不经心（常在法庭上打瞌睡或修指甲），实则精明敏锐，掌控法庭秩序。他特意指派 Atticus Finch 为 Tom Robinson 辩护，以</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Judge Taylor.html">
+  <span class="noun">Judge Taylor</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">John Taylor法官，梅科姆县法院年迈的主审法官，主持Tom Robinson审判。表面上一副昏昏欲睡的样子，实则极为警觉老练。他特意指派Atticus Finch为Tom Robinson辩护，以确保被告能得到尽可能公正的审判，是小</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/jury charge.html">
+  <span class="noun">jury charge</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法官泰勒在陪审团退庭前对陪审团进行法律指示，解释他们在裁决时应如何适用法律。在小说中，雷弗伦德·赛克斯描述泰勒法官的指示为&quot;相当公正&quot;，他向陪审团说明如果相信某些证据就应作出某种裁决。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/jury conviction.html">
+  <span class="noun">jury conviction</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">汤姆·罗宾逊案中全白人陪审团的有罪裁定。尽管阿提克斯·芬奇以无可辩驳的证据（汤姆左臂残疾、无医学证据、证人矛盾）证明了汤姆的无辜，陪审团仍因种族偏见判定其有罪。斯库特回忆起父亲的教诲——定罪的陪审团从不看被告——当陪审员们入场时无人正视汤姆</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/jury deliberation.html">
+  <span class="noun">jury deliberation</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">陪审团在听取所有证据和结案陈词后退庭商议裁决。本章中陪审团已商议约30分钟，实际从下午一直持续到晚上11点后才返回。杰姆坚信胜诉，但雷弗伦德·赛克斯告诫他从未见过陪审团做出对黑人有利的裁决。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/jury secrecy and fear.html">
+  <span class="noun">jury secrecy and fear</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">陪审团保密义务与恐惧——阿提克斯解释为什么梅科姆居民不愿担任陪审员：一是缺乏兴趣，二是害怕报复，三是不愿公开表态。他以林克·迪斯先生为例，说明经济利益让人规避陪审义务。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Jury system.html">
+  <span class="noun">Jury system</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯在结案陈词中为陪审团制度辩护，称其是&quot;活生生的现实&quot;而非理想。他认为法院的健全取决于陪审团，而陪审团的健全取决于其组成人员，表达了普通公民参与司法的重要性。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/jury system in Maycomb.html">
+  <span class="noun">jury system in Maycomb</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆县的陪审团制度——阿提克斯向杰姆和斯各特解释，陪审团由当地白人男性组成，但由于种族偏见、恐惧和经济利益考量，公民普遍逃避陪审义务，导致司法公正难以实现。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/jury trial.html">
+  <span class="noun">jury trial</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">由陪审团担任事实认定者的审判制度，法官负责法律问题。美国宪法第六修正案保障刑事案件的陪审团审判权，第七修正案保留民事案件的此项权利。在《杀死一只知更鸟》中，杰姆因对陪审团裁决汤姆有罪感到愤怒，主张废除陪审团制度。阿提克斯则主张通过改变法律来</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/jury verdict.html">
+  <span class="noun">jury verdict</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">陪审团裁决——汤姆·罗宾逊案的陪审团经过约四到六小时商议后作出了有罪裁决。虽然结果仍是定罪，但比通常只需几分钟就定罪的情况已经算是一个进步。斯各特从陪审员不敢直视汤姆就知道结果。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Justice of the Peace court.html">
+  <span class="noun">Justice of the Peace court</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">治安法庭，美国最低级别的法院，由治安法官主持。在阿提克斯的演讲中与J.P. court同义，指代最基层的司法机构。阿提克斯用它来强调即使是最不起眼的法庭也具有平等对待所有人的神圣职责，与高高在上的最高法院形成对照。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Ku Klux Klan.html">
+  <span class="noun">Ku Klux Klan</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">三K党，美国历史上最具臭名昭著的种族主义恐怖组织。成立于1865年，由南方邦联退伍军人在田纳西州普拉斯基创建，旨在通过暴力恐吓手段推翻重建时期政策、恢复白人至上主义。1920年代达到鼎盛时期，成员超过400万，目标扩展至天主教徒、犹太人、移</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/kudzu.html">
+  <span class="noun">kudzu</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">葛藤（学名 Pueraria montana var. lobata），原产于东亚的多年生藤本植物，1876年作为观赏植物引入美国后在美国南部疯狂蔓延，被称为&quot;吞噬南方的藤蔓&quot;。其生长速度可达每天30厘米，能覆盖并窒息原生植被，对美国南部生</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/L & N Railroad.html">
+  <span class="noun">L &amp; N Railroad</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">路易斯维尔和纳什维尔铁路（Louisville and Nashville Railroad），美国东南部的一级铁路公司，1850年由肯塔基州特许成立，1859年建成连接肯塔基州路易斯维尔与田纳西州纳什维尔的线路。在内战期间因跨越南北双方控</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Ladies' Law.html">
+  <span class="noun">Ladies&#x27; Law</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">亚拉巴马州一项历史法律，禁止在女性面前使用 abusive（辱骂性）、insulting（侮辱性）或 obscene（猥亵性）语言，违者可处以最高 200 美元罚款及/或最高六个月的监禁。在小说中，Link Deas 威胁 Bob Ewel</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Lane cake.html">
+  <span class="noun">Lane cake</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国南方传统多层白色蛋糕，由阿拉巴马州的Emma Rylander Lane于1890年代发明，因此得名。蛋糕以波本威士忌浸泡的葡萄干、山核桃、椰子和蛋奶馅层层夹心，表面覆盖白色糖霜。Lane cake在2016年被正式指定为阿拉巴马州官方</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/left-handedness.html">
+  <span class="noun">left-handedness</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">左利手（sinistrality），指在执行书写、绘画等精细运动任务时优先使用左手的行为倾向。约占总人口10-13%，男性略多于女性。受遗传基因（如LRRTM1）和产前环境影响。在《杀死一只知更鸟》中，Bob Ewell的左撇子身份成为关键</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Let the dead bury the dead.html">
+  <span class="noun">Let the dead bury the dead</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">出自《圣经·马太福音》8:22的典故。耶稣对一位说要先回去埋葬父亲的门徒说：&quot;任凭死人埋葬他们的死人，你跟从我吧。&quot;此处的&quot;死人&quot;有两层含义：前者指灵性上死去的人（未信神的人），后者指肉体上死亡的人。耶稣以此强调跟随主的紧迫性，不可因任何世</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Let this cup pass from you.html">
+  <span class="noun">Let this cup pass from you</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">出自《圣经·马太福音》26:39，耶稣在客西马尼园被捕前夜向天父祈祷时所说的话：&quot;我父啊，倘若可行，求你叫这杯离开我；然而，不要照我的意思，只要照你的意思。&quot;这里的&quot;杯&quot;是旧约中常见的隐喻，代表上帝的愤怒、审判和苦难。这句话体现了耶稣完全顺</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/lightning rod.html">
+  <span class="noun">lightning rod</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">避雷针（又称接闪器），本杰明·富兰克林于1752年发明的防雷装置。其原理是在建筑物最高点安装尖头金属杆，通过导线将雷电流安全引入大地，从而保护建筑物免受雷击起火或结构损坏。富兰克林因此获得1753年英国皇家学会科普利奖章，该发明被视为启蒙时</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/limestone.html">
+  <span class="noun">limestone</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">石灰岩是一种碳酸盐沉积岩，主要由方解石（碳酸钙，CaCO₃）组成，约占地球上所有沉积岩的20-25%。通常形成于温暖的浅海环境中，由海洋生物的壳和骨骼堆积而成。石灰岩遇稀盐酸会剧烈起泡，是其重要的野外鉴定特征。在建筑和工业中有广泛用途，如生</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/lined-out hymnody.html">
+  <span class="noun">lined-out hymnody</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种基督教圣歌演唱方式，由领唱者逐行朗诵或吟唱赞美诗的每一句歌词，然后会众以应和的方式跟唱。这种被称为&quot;Dr. Watts&quot;的演唱方式在非裔美国人教会中尤为盛行，融合了西非音乐元素——应答模式、切分节奏和蓝调音符，成为美国黑人灵歌、福音音乐</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Lining out.html">
+  <span class="noun">Lining out</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">即&quot;逐行领唱&quot;或&quot;诗行领唱&quot;，是一种无伴奏赞美诗演唱方式：领唱者（clerk 或 precentor）吟唱或诵读每一行赞美诗，会众随后重复或应答演唱。此方式起源于17世纪英国，因当时识字率低且书籍昂贵。被非洲裔美国人吸收后，与非洲音乐传统中</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Link Deas.html">
+  <span class="noun">Link Deas</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">林克·迪斯先生，梅科姆的一位地主和生意人，汤姆·罗宾逊的雇主。他连续八年雇用汤姆，并多次公开为汤姆的品行作证。在审判中他因当庭发言被泰勒法官赶出法庭。审判后，当鲍勃·尤厄尔骚扰汤姆的遗孀海伦时，他出面制止。他是小说中少数愿意公开支持黑人的白</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Linotype.html">
+  <span class="noun">Linotype</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">莱诺整行铸排机，19世纪末由德裔美国发明家奥特马尔·默根塔勒（Ottmar Mergenthaler）于1884年发明的革命性排版机器。它能通过键盘操作一次性铸造整行铅字（称为slug），极大提升了印刷效率，使报纸和书籍出版速度大幅提高。L</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Live oak.html">
+  <span class="noun">Live oak</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">南方活橡树（Quercus virginiana），原产于美国东南部的一种常绿橡树，是&quot;旧南方&quot;的标志性树种。以其庞大的体型、伸展的枝干和历史意义著称。木材密度高、耐腐蚀，历史上被广泛用于舰船建造。常见于美国南方的公共广场和种植园。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/live oaks.html">
+  <span class="noun">live oaks</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">指美国南部的标志性常绿橡树（学名：Quercus virginiana），俗称南方活橡树。其树冠宽阔舒展，枝干上常挂满西班牙苔藓，是美国南方景观的典型象征。木质极其坚硬耐腐，历史上曾用于建造海军舰船（如美国宪法号「老铁甲」）。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/livery stable.html">
+  <span class="noun">livery stable</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">马车出租行，19世纪美国城镇中提供马匹寄养、马车出租、马匹买卖等服务的商业场所，相当于现代的汽车租赁公司加停车场。客户可按日、周、月寄养马匹，或租用马车、轻便车。小说中孩子们将轻便车放到马车出租行车顶上是他们万圣节恶作剧的常见方式之一。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Lord Melbourne.html">
+  <span class="noun">Lord Melbourne</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">威廉·兰姆（William Lamb），第二代墨尔本子爵（1779-1848），英国辉格党政治家，曾两次担任英国首相（1834年、1835-1841年）。他以担任年轻维多利亚女王的导师和首席政治顾问而闻名，与女王关系极为密切，几乎每天花数小</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Lorenzo Dow.html">
+  <span class="noun">Lorenzo Dow</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国著名的巡回传教士和福音派布道家（1777-1834），以其古怪的外表（长发、乱须、破衣）和戏剧化的布道风格闻名，绰号&quot;疯洛伦佐&quot;。他曾三次赴爱尔兰和英格兰布道，将帐篷布道会引入英国。其自传《洛伦佐·道的生平、旅行、劳作与著作》曾是全美仅</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Lydia E. Pinkham.html">
+  <span class="noun">Lydia E. Pinkham</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">莉迪亚·E·平卡姆（1819-1883），美国专利药制造商。她于1873年在自家厨房创制了&quot;莉迪亚·平卡姆蔬菜复合物&quot;，主打治疗&quot;女性不适&quot;（如痛经、更年期症状），含15-22%酒精。她的肖像成为美国广告史上最著名的形象之一，是19世纪末专</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/lye soap.html">
+  <span class="noun">lye soap</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">使用碱液（通常由木灰浸出制成）与动物脂肪或植物油混合，通过皂化反应制成的传统手工肥皂。其制作历史可追溯至约四千年前的古巴比伦。在殖民地时期和拓荒时代的美国，碱液肥皂是家庭日常必需品，用于洗衣、洗澡和清洁等多种用途。因其强碱性具有杀菌和去污能</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Lynching.html">
+  <span class="noun">Lynching</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">私刑，指一群人未经法律程序私自处决（通常为处死）被指控犯罪者的暴力行为。在美国南方重建时期至20世纪中期，私刑被广泛用作针对非裔美国人的种族恐怖手段，据统计1882年至1968年间有超过4700起记录在案的私刑事件。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/lynching mob.html">
+  <span class="noun">lynching mob</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">私刑暴徒，指一群人在法律程序之外对涉嫌犯罪者实施集体处决（通常为绞刑或火刑）的暴力行为。在美国历史上，这种现象在重建时期后尤为猖獗，成为种族恐怖主义的手段，专门针对非裔美国人。小说中，沃尔特·坎宁安参与的暴徒正是试图对汤姆·罗宾逊实施私刑。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Mad dog.html">
+  <span class="noun">Mad dog</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;疯狗&quot;（Mad dog）是狂犬病（rabies）的通俗历史用语，指感染狂犬病毒后出现神经症状的犬只。狂犬病是一种致命的病毒性人畜共患病，主要通过患病动物的唾液传播（通常经由咬伤）。历史上，&quot;mad dog&quot;一词可追溯至公元前18世纪的巴比</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Mandrake.html">
+  <span class="noun">Mandrake</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">曼德拉草（Mandragora officinarum），茄科多年生草本植物，原产地中海地区。其根部分叉、形似人形，因而围绕着丰富的民间传说：拔出时发出致命尖叫、可用于催情/麻醉/巫术。含有托烷生物碱（莨菪碱、东莨菪碱），历史上被用作麻醉剂</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Mardi Gras.html">
+  <span class="noun">Mardi Gras</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">法语意为&quot;肥美的星期二&quot;，又称狂欢节或忏悔星期二，是基督教大斋期（四旬期）前一天的盛大庆祝活动，起源于古罗马的农神节和牧神节传统。在美国，最早的组织化狂欢节庆祝活动于1703年在阿拉巴马州莫比尔举行，新奥尔良的庆祝活动始于1718年建城后，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Marksmanship.html">
+  <span class="noun">Marksmanship</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">枪法（Marksmanship）指使用枪械等投射武器精确命中目标的技术和艺术。该词1823年首次出现在英语中，由marksman（神枪手）加后缀-ship构成。历史上，射击比赛可追溯到15世纪的巴伐利亚。小说中阿提克斯·芬奇（Atticus</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Maxwell Green.html">
+  <span class="noun">Maxwell Green</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇新来的律师，通常接手法院指定的案件。在汤姆·罗宾逊案中，按理应由他担任辩护律师，但泰勒法官特意指定了阿提克斯·芬奇。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb.html">
+  <span class="noun">Maycomb</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">哈珀·李小说《杀死一只知更鸟》中虚构的阿拉巴马州小镇，以作者的家乡门罗维尔（Monroeville, Alabama）为原型。小说设定在经济大萧条时期，Maycomb被描绘为一个保守、种族隔离、社会等级分明的南方乡村小镇，街道尘土飞扬，日常</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb Alabama.html">
+  <span class="noun">Maycomb Alabama</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">哈珀·李创作的虚构小镇，是《杀死一只知更鸟》的主要故事背景。其原型是作者的家乡Monroeville, Alabama。小说中描绘它为一座&quot;疲惫的老城&quot;，经济萧条，种族隔离森严，社会阶层分明。镇上有著名的Radley Place、法院大楼和</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Maycomb Alabama Methodist Episcopal Church South.html">
+  <span class="noun">Maycomb Alabama Methodist Episcopal Church South</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆县的白人卫理公会在第二十四章中，梅里韦瑟太太声称&quot;梅科姆阿拉巴马南部分立卫理公会教堂的女士们百分之百支持&quot;J. Grimes Everett在非洲的传教工作。小说通过这座教堂与卡尔珀尼亚参加的第一购买非洲卫理公会教堂形成鲜明对比，揭露</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Maycomb Amanuensis Club.html">
+  <span class="noun">Maycomb Amanuensis Club</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆笔录俱乐部是哈珀·李小说《杀死一只知更鸟》中虚构的一个社交俱乐部。&quot;Amanuensis&quot;源自拉丁语，意为&quot;听写员&quot;或&quot;抄写员&quot;（即秘书）。Aunt Alexandra在搬到Finch家后加入该俱乐部并担任秘书，这体现了她迅速融入梅科</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb balcony.html">
+  <span class="noun">Maycomb balcony</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县法院内的&quot;有色人种 balcony&quot;，沿三面墙延伸，黑人观众只能在此观看审判。这一物理隔离体现了吉姆·克劳法下的种族隔离制度。斯库特和杰姆在此观看审判，黑人观众在阿蒂克斯离场时全体起立致敬。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb County.html">
+  <span class="noun">Maycomb County</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县是哈珀·李在《杀死一只知更鸟》中虚构的阿拉巴马州南部的一个县，县治为同名小镇梅科姆。该县名是对作者家乡Monroe县（阿拉巴马州门罗维尔所在地）的戏仿。小说故事发生在大萧条时期（约1933-1935年），梅科姆被描绘成一个与世隔绝、</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb County Courthouse.html">
+  <span class="noun">Maycomb County Courthouse</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县法院是哈珀·李小说《杀死一只知更鸟》中虚构的核心地点，汤姆·罗宾逊的审判在此进行。该法院的建筑融合了多种风格——南面是原建筑1856年火灾后幸存下来的希腊复兴立柱，主体是早期维多利亚风格，顶部有一个19世纪的大型钟楼。这种不协调的建</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb County Courthouse balcony.html">
+  <span class="noun">Maycomb County Courthouse balcony</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县法院内的隔离座位区即「有色人种 balcony」，沿法庭三面墙壁延伸。审判期间黑人观众只能在此就座。Scout、Jem和Dill由Reverend Sykes带领在此观看审判，获得了观察审判的独特视角。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Maycomb County pageant.html">
+  <span class="noun">Maycomb County pageant</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">梅科姆县万圣节文艺汇演，由梅里韦瑟太太创作并担任旁白，题为Maycomb County: Ad Astra Per Aspera。孩子们扮成县里的农产品：塞西尔·雅各布斯扮成奶牛、艾格尼丝·布恩扮成青豆角、斯库特扮成火腿。当梅里韦瑟太太喊&quot;</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Maycomb County social hierarchy.html">
+  <span class="noun">Maycomb County social hierarchy</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆县的严格社会等级制度是本书核心主题之一。这个体系分为四个层级：(1) 白人中产/上层阶级——有教养、有财产者如芬奇家；(2) 贫穷但有尊严的白人农民——如坎宁安家；(3) 白人垃圾底层——如尤厄尔家，依赖救济金、懒惰堕落；(4) 黑人</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb Drugstore.html">
+  <span class="noun">Maycomb Drugstore</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆镇（Maycomb）的一家本地药店，是镇上商业区的一部分。小说中斯库特和杰姆在镇上行走时曾看到农民在此橱窗前研究灌肠袋。这家药店与西蒙·芬奇（Simon Finch）作为药剂师的家世背景相呼应，是哈珀·李描绘南方小镇生活的重要场景元素</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Maycomb Halloween.html">
+  <span class="noun">Maycomb Halloween</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">梅科姆镇的万圣节传统。在小说中，万圣节原本是孩子们自由搞恶作剧的夜晚，没有任何组织活动。直到前一年孩子们将巴伯姐妹家所有家具藏入地窖的恶作剧太过分，成年人才决定组织有监管的万圣节庆典，包括在高中礼堂举办文艺汇演和游戏活动。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb jail.html">
+  <span class="noun">Maycomb jail</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆县监狱，小说中的虚构地点，被描述为一座微型哥特式建筑，仅一个牢房宽、两个牢房高，配有城齿和飞扶壁。在汤姆·罗宾逊审判前夕，阿提克斯·芬奇坐在监狱门口保护汤姆，阻止了私刑暴徒。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Maycomb Junction.html">
+  <span class="noun">Maycomb Junction</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆枢纽站，小说中虚构的火车站/铁路枢纽，位于艾伯特县（毗邻梅科姆县的虚构县），是前往梅科姆镇的主要交通站点。人物在此乘火车抵达或离开，再从该站坐出租车往返梅科姆镇（约14英里路程）。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Maycomb Tribune.html">
+  <span class="noun">Maycomb Tribune</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">梅科姆镇的本地报纸，由布拉克斯顿·安德伍德拥有和经营。报社位于法院广场的西北角，紧邻监狱。在小说中，它最重要的作用是刊登了安德伍德关于汤姆·罗宾逊之死的社论，谴责杀害残疾人的行为，将其比作&quot;无谓地屠杀鸣禽&quot;。安德伍德还在监狱暴民事件中从报社</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mayella Ewell.html">
+  <span class="noun">Mayella Ewell</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">Mayella Violet Ewell，19岁半，Bob Ewell的长女，在家中顶替已故母亲的角色照顾年幼的弟妹，因诬告Tom Robinson强奸而引发核心审判。她是贫困、孤独和家庭暴力的受害者，同时又因虚假指控成为加害者，被Scou</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mayella Ewell age.html">
+  <span class="noun">Mayella Ewell age</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅耶拉·尤厄尔是鲍勃·尤厄尔的长女，在小说中年龄为19岁半。她是汤姆·罗宾逊案的原告，指控汤姆强奸她。杰姆在本章中讨论她的年龄，认为她已超过阿拉巴马州的法定同意年龄，因此如果是自愿的就不构成强奸。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Mayella Ewell's cross-examination.html">
+  <span class="noun">Mayella Ewell&#x27;s cross-examination</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">梅耶拉·尤厄尔在汤姆·鲁宾逊案中作为控方证人接受阿提克斯·芬奇的交叉询问。阿提克斯以礼貌但尖锐的方式发问，逐步揭露她证词中的矛盾：她无法解释其他孩子为何没听到呼救声，无法解释汤姆的残疾与她的伤势如何匹配，最后阿提克斯直接质问是否是她父亲鲍勃</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Mayella Ewell's scream.html">
+  <span class="noun">Mayella Ewell&#x27;s scream</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">梅耶拉·尤厄尔的尖叫是小说的转折点。斯库特意识到，从梅耶拉开口尖叫指控汤姆·罗宾逊强奸的那一刻起，汤姆就已经是个死人了。在吉姆·克劳法时代的南方，无论证据如何，一个黑人男子的命运在一位白人妇女提出指控的那一刻就已经决定了。这一叫声象征了种族</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Mennonites.html">
+  <span class="noun">Mennonites</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">门诺派是基督教中的一个再洗礼派分支，以门诺·西蒙斯命名，主张成人洗礼、和平主义、非暴力抵抗和简朴生活，历史上曾因拒绝婴儿洗礼而遭受迫害。门诺派教徒分散在全球87个国家，以非洲和北美人口最为集中。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Meridian.html">
+  <span class="noun">Meridian</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">美国密西西比州东部城市，是《杀死一只知更鸟》中角色迪尔（Dill Harris）的家乡。迪尔每年暑假到梅科姆县与姑姑同住，开学后返回梅里迪安。该城市在小说中作为迪尔&quot;外来者&quot;身份背景的一部分，反映了美国南方小城镇之间的地理关系。历史上梅里迪</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Meridian highway.html">
+  <span class="noun">Meridian highway</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">小说中连接梅里迪安（Meridian, Mississippi）与虚构的梅科姆县（Maycomb, Alabama）的公路。这条公路在小说中出现多次：迪尔从梅里迪安乘火车到梅科姆中转站后沿着这条路搭便车或步行前往梅科姆；Barker&#x27;s E</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Meridian Mississippi.html">
+  <span class="noun">Meridian Mississippi</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">密西西比州梅里迪安，美国密西西比州东部劳德代尔县县城，是该州第八大城市。19世纪因铁路交汇而兴起，曾是密西西比州最大城市（1890-1930年）。在小说中是迪尔的家乡。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Merlin.html">
+  <span class="noun">Merlin</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">亚瑟王传说中的传奇魔法师和先知，最早出现在12世纪杰弗里·蒙茅斯的《不列颠诸王史》中。梅林被描绘为拥有预言能力和魔法力量的智者，担任亚瑟王的导师和顾问。他是西方文化中经典魔法师形象的原型，对后世文学中的巫师角色产生了深远影响。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Methodists.html">
+  <span class="noun">Methodists</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">卫理公会（又称循道宗），基督教新教的主要教派之一，18世纪由约翰·卫斯理在英国牛津大学发起。得名于其创始人和追随者&quot;循规蹈矩&quot;的灵修方式。强调因信称义、个人得救的确据和基督徒的完全成圣。在美国发展尤为迅速，曾成为19世纪美国最大的新教教派。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Miscegenation.html">
+  <span class="noun">Miscegenation</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">异族通婚（miscegenation）一词源自拉丁语miscere（混合）和genus（种族），指不同种族之间的婚姻、同居或性关系。该词于1863年由反对废奴运动的民主党报纸记者杜撰，作为政治骗局的一部分，以煽动白人对种族混合的恐惧。历史上</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Misdemeanor.html">
+  <span class="noun">Misdemeanor</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">轻罪，在普通法系中指比重罪（felony）轻微但比违规（infraction）严重的犯罪行为。通常可处以罚款和/或不超过一年的县监狱监禁。在本章中，Tom Robinson此前因扰乱治安行为（disorderly conduct）被判轻罪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Frutti Barber.html">
+  <span class="noun">Miss Frutti Barber</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">原名弗朗西丝·巴伯（Frances Barber），昵称Frutti，是梅科姆镇的老处女之一，与姐姐图蒂·巴伯同住。她不欲错过任何事物，使用一个巨大的耳喇叭（杰姆称之为&quot;狗牌维克多牌留声机的喇叭&quot;）。前一年万圣节恶作剧中，孩子们将她们家所有</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Gates.html">
+  <span class="noun">Miss Gates</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">斯库特三年级的女老师，在课堂上教授民主与反犹迫害的知识，但在私下却表现出对梅科姆镇黑人的种族偏见，是小说中伪善与双重标准的典型代表。 --- 盖茨小姐是斯库特的三年级老师，首次出现在第26章。她在课堂上义正词严地谴责希特勒迫害犹太人，告诉学</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Maudie.html">
+  <span class="noun">Miss Maudie</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">莫迪·阿特金森小姐是芬奇家的邻居，一位丧偶的园丁和烘焙爱好者，也是斯库特和杰姆的慈爱长辈。她是小说中的道德指南针之一，被视为阿提克斯的女性对应人物——善良、独立、直言不讳、富有正义感。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Maudie Atkinson.html">
+  <span class="noun">Miss Maudie Atkinson</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">芬奇家的邻居，一位寡妇，热爱园艺，是斯库特和杰姆的代理母亲形象。她睿智、善良、有正义感，被视作女性版的阿蒂克斯·芬奇。她说过&quot;杀死知更鸟是犯罪&quot;的名言，也是唯一不参与关于布·拉德利流言蜚语的人。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Rachel.html">
+  <span class="noun">Miss Rachel</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">全名雷切尔·哈弗福德小姐，迪尔·哈里斯的姑妈，芬奇家的隔壁邻居。迪尔每年暑假来梅科姆镇时就住在她家。她性格焦虑、喜欢八卦、有早上喝威士忌的习惯，但对迪尔关怀备至。当迪尔从家中逃跑藏在斯库特床下时，她严厉训斥但也允许他留下。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Rachel Haverford.html">
+  <span class="noun">Miss Rachel Haverford</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">雷切尔·哈弗福德小姐，迪尔的姑妈，住在芬奇家隔壁。她是一个爱闲聊的中老年妇女，对迪尔既关爱又严格。她不赞同阿提克斯为汤姆·罗宾逊辩护，代表了梅科姆镇中常见的种族偏见态度。有小狗和饮酒的习惯。 --- 迪尔的姨妈，斯库特家的邻居，独自居住在梅</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Stephanie Crawford.html">
+  <span class="noun">Miss Stephanie Crawford</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇的老处女，芬奇家的邻居，是镇上出了名的长舌妇和流言传播者。她喜欢传播关于布·拉德利的夸张故事，包括声称布在夜里偷看她窗户。在审判后的第二天早上，她急于打听孩子们在有色人种balcony上的情况，并带着恶意问他们是否因为父亲败诉而感到</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Miss Tutti Barber.html">
+  <span class="noun">Miss Tutti Barber</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">原名莎拉·巴伯（Sarah Barber），昵称Tutti，是梅科姆镇的两位老处女姐妹之一。她和妹妹弗鲁蒂来自阿拉巴马州克莱顿，是共和党人，在镇上被视为有&quot;北方佬作风&quot;。图蒂耳聋但拒绝承认，生活在一片寂静中。前一年的万圣节之夜，孩子们的恶作</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Missionary circle.html">
+  <span class="noun">Missionary circle</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">20世纪30年代美国南方教会妇女的定期聚会组织，以海外传教募捐和社区慈善为名义，但也成为白人女性社交和展示道德优越感的场合。在小说中，亚历山德拉姑姑主办的传道会茶会表面讨论非洲Mrunas部落的传教工作，实则暴露了白人中产阶级妇女的虚伪——</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Missionary Society.html">
+  <span class="noun">Missionary Society</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">梅科姆镇白人女性组成的传教士团体（也称Missionary Circle），定期在成员家中聚会。第24章中在Aunt Alexandra家中举行茶会，表面上讨论支持J. Grimes Everett在非洲向姆鲁纳人传教的事工，实际上暴露了这</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Mississippi Territory.html">
+  <span class="noun">Mississippi Territory</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">美国历史上一个建制合并领土，存在于1798年至1817年。1795年西班牙根据《圣洛伦索条约》将此地割让给美国，最初涵盖今密西西比州和亚拉巴马州的南部区域。1817年西部以密西西比州身份加入联邦，东部成为亚拉巴马领地。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Mobile.html">
+  <span class="noun">Mobile</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">莫比尔，美国亚拉巴马州最古老的城市（1702年建城），也是该州唯一的海港城市，位于莫比尔湾畔。历史上先后由法国、英国和西班牙统治，是墨西哥湾沿岸仅次于新奥尔良的重要港口。美国第一个有组织狂欢节（Mardi Gras）庆祝活动即起源于莫比尔。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Mobile Press.html">
+  <span class="noun">Mobile Press</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《莫比尔新闻报》（Mobile Press）是美国亚拉巴马州莫比尔市的一份报纸，由拉尔夫·钱德勒（Ralph B. Chandler）等投资者于1929年创办，旨在与当时的《莫比尔纪事报》（Mobile Register）竞争。1932年因</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Mobile Register.html">
+  <span class="noun">Mobile Register</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">阿拉巴马州历史最悠久的报纸，创刊于1813年，最初名为Mobile Gazette。该报在小说中作为阿提克斯日常阅读的报纸出现，反映了芬奇家典型的中产阶级生活方式和南方小镇的文化氛围。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/mockingbird.html">
+  <span class="noun">mockingbird</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">小说的核心象征，代表无辜和善良。 知更鸟不会伤害任何事物，只为人类歌唱。 阿提克斯对孩子们说&quot;杀死一只知更鸟是犯罪&quot;，莫迪小姐解释原因： 知更鸟不破坏花园，不在玉米仓筑巢，只是用心歌唱。 在小说中，汤姆·鲁滨逊和布·拉德利是两只&quot;知更鸟&quot;—</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Model T Ford.html">
+  <span class="noun">Model T Ford</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">福特T型车是福特汽车公司于1908年至1927年间生产的汽车，被认为是第一款 affordable automobile，革命性地采用了流水线装配，大幅降低了成本，让普通美国人也能买得起汽车，被誉为&quot;把美国装上轮子&quot;的车型。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/molasses.html">
+  <span class="noun">molasses</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种粘稠的糖浆状食品，是甘蔗或甜菜制糖过程中的副产物。在美国南方烹饪中有着悠久的历史，是殖民地时期和南北战争前南方家庭的主要甜味剂，常用于制作姜饼、烤豆、烧烤酱和朗姆酒。根据熬煮次数不同分为浅色糖蜜和深色黑糖蜜（blackstrap mol</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Monkey-puzzle.html">
+  <span class="noun">Monkey-puzzle</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">智利南洋杉（Araucaria araucana），又称猴谜树，是一种常绿针叶树，原产于智利南部和阿根廷西部安第斯山脉。其枝条坚硬、叶片尖锐呈鳞片状紧密排列，维多利亚时代得名&quot;猴谜树&quot;，寓意猴子也难以攀爬。被IUCN列为濒危物种，在智利被宣</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Montgomery.html">
+  <span class="noun">Montgomery</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">蒙哥马利，美国亚拉巴马州首府，位于亚拉巴马河畔。1846年成为州首府。美国内战期间曾任美利坚联盟国（南方邦联）的第一个首都（1861年），杰斐逊·戴维斯在此宣誓就任邦联总统。20世纪50年代，蒙哥马利巴士抵制运动（1955–1956）在此爆</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Montgomery Advertiser.html">
+  <span class="noun">Montgomery Advertiser</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">阿拉巴马州蒙哥马利市一家历史悠久的日报，创刊于1829年，原名The Planter&#x27;s Gazette，1833年更名为Montgomery Advertiser，是阿拉巴马州最大的报纸之一，曾获普利策奖，也是美国南部历史最悠久的报纸之一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Montgomery, Alabama.html">
+  <span class="noun">Montgomery, Alabama</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">蒙哥马利是美国阿拉巴马州的首府和第三大城市，位于该州中南部。该城于1819年建市，1846年取代塔斯卡卢萨成为州首府。1861年曾短暂作为美利坚联盟国（南方邦联）的首都。20世纪中期，蒙哥马利是美国民权运动的核心地点——1955年罗莎·帕克</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Morphine.html">
+  <span class="noun">Morphine</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">吗啡，一种从鸦片中提取的强效麻醉性镇痛药，主要作用于中枢神经系统的阿片受体以阻断疼痛信号，具有高度成瘾性。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Morphine addiction.html">
+  <span class="noun">Morphine addiction</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">吗啡成瘾，指对吗啡产生生理和心理依赖的状态，表现为耐受性增加、戒断症状（焦虑、失眠、呕吐等）以及难以自控的药物渴求。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/morphodite.html">
+  <span class="noun">morphodite</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">斯考特对&quot;hermaphrodite&quot;（雌雄同体者）的幼稚误读，她用它作为侮辱杰姆的骂人话。这个词反映了斯考特的童真和她对成人语言的一知半解，在小说中也是幽默元素。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mr. Dolphus Raymond.html">
+  <span class="noun">Mr. Dolphus Raymond</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇的富有的白人，来自古老的望族，因与黑人同居并育有混血子女而被社会排斥。他假装酗酒，让镇上人有一个借口来解释他的生活方式，实际上他喝的是可乐而非威士忌。象征了外表与现实的对比，以及社会偏见的荒谬。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Mr. Dolphus Raymond's cotton gin.html">
+  <span class="noun">Mr. Dolphus Raymond&#x27;s cotton gin</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">杜尔弗斯·雷蒙德先生是梅科姆县一位富有的白人地主，他与黑人女性同居并育有混血子女。他名下的轧棉机是汤姆·鲁滨逊童年受伤的事故地点。小说中他假装酗酒（实际纸袋里装的是可乐），为镇上的人提供一个可以理解他另类生活方式的借口。他与孩子们分享秘密，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mr. Gilmer.html">
+  <span class="noun">Mr. Gilmer</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">Horace Gilmer，梅科姆县的控方律师（solicitor），在Tom Robinson审判中代表州政府起诉。他是个秃顶、四十至六十岁之间的中年白人男性，虽然与Atticus有友好的职业关系，但在交叉询问Tom Robinson时表</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mr. Jingle.html">
+  <span class="noun">Mr. Jingle</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">查尔斯·狄更斯首部小说《匹克威克外传》（The Pickwick Papers）中的虚构角色，全名阿尔弗雷德·金格尔（Alfred Jingle）。他是一个快言快语、巧舌如簧的流浪骗子和巡回演员，以其碎片化、断断续续的独特说话方式著称。在《</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mr. Link Deas.html">
+  <span class="noun">Mr. Link Deas</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">林克·迪斯先生是梅科姆县的地主和商店老板，汤姆·罗宾逊的雇主。在审判中当吉尔默准备交叉质询汤姆时，他忍不住站起来公开为汤姆的品行作证，称汤姆为他工作八年从未出过问题。尽管被泰勒法官赶出法庭，他的行为体现了道德勇气。汤姆死后，他雇用了汤姆的遗</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mr. Underwood.html">
+  <span class="noun">Mr. Underwood</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">全名布拉克斯顿·布拉格·安德伍德，梅科姆镇地方报纸《梅科姆论坛》的老板、编辑和印刷工。他性格尖刻、愤世嫉俗，公开持有种族偏见，但在汤姆·罗宾逊的审判中，他在监狱对面用猎枪暗中保护阿提克斯。在汤姆死后，他撰写社论将汤姆的死比作&quot;无辜鸣鸟的屠杀</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mrs. Farrow.html">
+  <span class="noun">Mrs. Farrow</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇&quot;第二虔诚的女士&quot;，身材健壮，眼睛淡色，小脚，有着灰色紧密卷发。她说话前习惯发出轻柔的咝声。在传教士茶会上，她附和Mrs. Merriweather，抱怨教育黑人和让他们成为基督徒是&quot;打不赢的仗&quot;，暗示黑人威胁镇上女士的安全。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mrs. Grace Merriweather.html">
+  <span class="noun">Mrs. Grace Merriweather</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆县最&quot;虔诚&quot;的白人女性，丈夫是Mr. Merriweather。她在第二十四章的传道会茶会上主导了关于Mrunas部落和传教士J. Grimes Everett的讨论。她对自己的黑人女佣Sophy和整个黑人社区充满蔑视，在汤姆·罗宾逊</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mrs. Henry Lafayette Dubose.html">
+  <span class="noun">Mrs. Henry Lafayette Dubose</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">亨利·拉斐特·杜博斯太太，芬奇家以北两户的一位年迈寡妇。她以暴躁刻薄的性格闻名，整天坐在前门走廊的轮椅上向路过的孩子（尤其是芬奇家的孩子们）吼叫辱骂，曾因阿提克斯为汤姆·罗宾逊辩护而攻击他。杰姆曾因受她侮辱而愤怒捣毁了她的山茶花丛。作为惩罚</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Mrs. Merriweather.html">
+  <span class="noun">Mrs. Merriweather</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅科姆镇&quot;最虔诚的女士&quot;，传教士圈的核心成员，典型的伪善人物。她一边哀叹非洲&quot;姆鲁纳人&quot;的苦难并捐款传教，一边对自己家中的黑人女佣Sophy充满蔑视和种族歧视，甚至在Atticus家中一边吃他的食物一边批评他为Tom Robinson辩护。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Mrunas.html">
+  <span class="noun">Mrunas</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">哈珀·李在小说中虚构的一个非洲部落。由传教士J·格里姆斯·埃弗雷特在梅科姆的传道会上介绍，被描述为&quot;愚昧落后&quot;的族群。这个虚构的部落具有重要的主题意义——梅科姆的白人女士们对遥远的非洲部落表现出极大的同情和关心，却对身边黑人社区遭受的不公视</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Multiracial.html">
+  <span class="noun">Multiracial</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">多族裔（Multiracial）指具有两个或以上种族血统的人。在美国历史上，多族裔人群长期面临“一滴血原则”的社会压力，被迫归入单一种族类别。2000年美国人口普查首次允许公民“勾选所有适用项”，正式承认多族裔身份。杰姆在小说中描述的“他们</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Nathan Radley.html">
+  <span class="noun">Nathan Radley</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">内森·拉德利，布·拉德利的哥哥。在老拉德利先生去世后从彭萨科拉回来接管拉德利宅院。他继承了父亲的做法，将布继续关在屋内，与外界隔绝。他曾在夜间向潜入院子的孩子们开枪警告，最突出的行为是用水泥封死了橡树上的树洞——布与孩子们唯一的联络通道，谎</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/National Recovery Act.html">
+  <span class="noun">National Recovery Act</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国《国家工业复兴法案》（NIRA），1933年由富兰克林·罗斯福总统签署，是&quot;新政&quot;的核心立法之一。该法案设立了国家复兴管理局（NRA），通过行业公平竞争法规来稳定经济、减少失业、设定最低工资和最高工时。1935年被最高法院在&quot;谢克特家禽</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Nazi Germany.html">
+  <span class="noun">Nazi Germany</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">指1933年1月30日至1945年5月8日期间由阿道夫·希特勒领导的纳粹政权，也称第三帝国，实行极权统治，发动第二次世界大战，实施大屠杀，最终被同盟国击败。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Nearer My God to Thee.html">
+  <span class="noun">Nearer My God to Thee</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《与主更亲近》，19世纪著名基督教赞美诗，由英国诗人莎拉·弗劳尔·亚当斯（Sarah Flower Adams）于1841年作词。歌词灵感源自《圣经·创世纪》第28章中雅各梦见天梯的故事。该赞美诗最著名的关联事件是1912年泰坦尼克号沉没时</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/negligee.html">
+  <span class="noun">negligee</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">女用薄纱睡衣/晨袍（源自法语neglige，意为&quot;随意/疏忽&quot;），一种轻薄透明的女性就寝服装，通常由丝绸、尼龙等薄纱制成，饰有蕾丝、缎带。18世纪起源于法国，最初指宽松的日常便服，20世纪30年代后演变为性感内衣的代名词。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Negro.html">
+  <span class="noun">Negro</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">英语中历史上用于指代非洲裔黑人的术语，源自西班牙语和葡萄牙语的negro（黑色）。从18世纪到20世纪60年代，该词（常以大写形式Negro出现）被视为标准且礼貌的称呼，被杜波依斯、马库斯·加维、马丁·路德·金等黑人领袖广泛使用。但在民权运</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Nehi Cola.html">
+  <span class="noun">Nehi Cola</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">Nehi是一种水果味碳酸软饮料品牌，1924年由克罗德·哈彻在美国乔治亚州哥伦布市推出，名称是&quot;knee-high&quot;的双关语，指其高瓶身设计。该品牌曾是Nehi公司的主打产品，现归Keurig Dr Pepper所有，主要在美国南方销售。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/nigger.html">
+  <span class="noun">nigger</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">英语中极具冒犯性的种族歧视用语，源自拉丁语 niger（黑色），最初在16世纪进入英语时是中性词，与 negro 同义。到了19世纪中期已完全沦为贬义种族蔑称，被认为是英语中最具攻击性的侮辱性词汇之一。该词在美国种族隔离和民权运动历史上承载</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/nigger-lover.html">
+  <span class="noun">nigger-lover</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国历史上用来贬损那些被认为对黑人过于友好或支持黑人权利的白人的种族侮辱性称呼。该词起源于19世纪，最初用于攻击废奴主义者，后来在吉姆·克劳法时期及民权运动时期被广泛使用，用以污名化那些主张种族平等的白人。在《杀死一只知更鸟》的语境中，这个</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/nine old men.html">
+  <span class="noun">nine old men</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">指1930年代美国最高法院的九位大法官（多数年逾七旬），这一称呼因记者德鲁·皮尔森和罗伯特·艾伦1936年的畅销书而流行。当时这些大法官多次裁定罗斯福新政立法违宪，导致罗斯福在1937年提出&quot;法院改组计划&quot;（court-packing pl</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/nineteen-year-old.html">
+  <span class="noun">nineteen-year-old</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">19岁，Mayella Ewell在审判时的年龄。Atticus在交叉询问中指出，一个19岁的年轻女孩理应有朋友，从而揭示了Mayella极度孤独、与社会隔绝的悲惨处境。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/no iota of medical evidence.html">
+  <span class="noun">no iota of medical evidence</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Atticus指出控方没有提供任何医学证据证明强奸罪行的发生。这是他的辩论策略核心，强调控方完全依赖两个证人的证词而这些证词在交叉询问中已被严重质疑。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Nome just a lady.html">
+  <span class="noun">Nome just a lady</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">斯库特·芬奇在第二十四章中的经典回应。当斯特凡妮·克劳福德小姐问她长大后是否想当律师时，斯库特在莫迪小姐的鼓励下回答&quot;Nome, just a lady&quot;（不，只是个淑女）。这句话标志着斯库特性别认同和成长的重要转折——她开始接受自己的女性</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Nova Scotia.html">
+  <span class="noun">Nova Scotia</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">加拿大东南部的一个省份，拉丁语意为&quot;新苏格兰&quot;。首府为哈利法克斯。早期是法国殖民地阿卡迪亚（Acadia）的一部分，1713年通过《乌得勒支条约》转归英国。1755-1764年间发生了大规模驱逐阿卡迪亚人的事件（Le Grand Déran</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/November 21st.html">
+  <span class="noun">November 21st</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">11月21日是汤姆·罗宾逊被指控强奸梅耶拉·尤厄尔的当晚日期，是整部小说情节的核心锚点。根据各方证词，这一晚发生了所谓的犯罪事件：鲍勃·尤厄尔声称透过窗户看到汤姆侵犯梅耶拉，而汤姆则作证说梅耶拉主动亲吻他后被鲍勃发现。阿提克斯利用这一天的证</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Nuremberg Laws.html">
+  <span class="noun">Nuremberg Laws</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">1935年9月15日在纽伦堡纳粹党代会上通过的反犹法律，包括《帝国公民法》(剥夺犹太人的德国公民权)和《保护德国血统和德国荣誉法》(禁止犹太人与非犹太人通婚)，为大屠杀奠定了法律基础。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/O.K. Cafe.html">
+  <span class="noun">O.K. Cafe</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">梅科姆镇广场北侧的一家简朴餐馆，在镇上被视为不太体面的场所。杜博斯太太曾用&quot;你将来会在O.K. Cafe端盘子&quot;来侮辱斯库特，暗示她缺乏淑女风范和前途。该地点象征着梅科姆镇的社会阶层分化。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Octagon soap.html">
+  <span class="noun">Octagon soap</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">高露洁公司（Colgate &amp; Co.）于1887年推出的一种洗衣皂品牌，是美国历史上最早注册的肥皂商标之一（1888年注册）。该产品是一种碱性皂（lye soap），主要用于洗衣，以棕色粗条包装销售，曾通过优惠券和赠品计划进行广泛营销。商</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/old courthouse clock.html">
+  <span class="noun">old courthouse clock</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆老法院钟楼的大钟在晚上8点敲响八次，声音震耳欲聋。当它敲响11下时，斯库特已疲惫不堪。这座钟象征着时间的缓慢流逝和等待裁决的煎熬，其拟人化的描写&quot;承受了前奏的拉力&quot;反映了整个法庭的紧张情绪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/old dresser.html">
+  <span class="noun">old dresser</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">旧衣柜（chiffarobe/chifforobe），一种集挂衣空间和抽屉柜于一体的组合家具。Mayella声称她叫Tom Robinson来劈碎这件旧衣柜当柴火，这是Tom出现在Ewell家院子的借口，也是案件的关键物证。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Old Family.html">
+  <span class="noun">Old Family</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;古老家族&quot;（Old Family）是亚历山德拉姑姑坚守的南方旧贵族观念——她认为家族的血统和谱系决定了一个人的社会地位和价值。尽管芬奇家在经济上并不富裕（&quot;not a dime to our names&quot;），但亚历山德拉仍然以家族历史悠久</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Old Sarum.html">
+  <span class="noun">Old Sarum</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">英格兰威尔特郡的一座古老山堡遗址，位于索尔兹伯里以北约两英里。此地自铁器时代就有人类居住，诺曼征服后建有城堡和大教堂，1086年《末日审判书》可能在此呈交给征服者威廉。13世纪因教堂迁往新址而逐渐废弃。尽管几乎无人居住，Old Sarum </div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Old Testament.html">
+  <span class="noun">Old Testament</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">基督教圣经的第一部分，继承自希伯来圣经（塔纳赫），共39卷（新教）。主要包括律法书（摩西五经）、先知书和圣文集三大类，内容涵盖从创世记到公元前5世纪的犹太民族历史、律法、诗歌和预言。基督教称其为旧约，与新约相对，其正典在公元1世纪前后基本定</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Oliver Optic.html">
+  <span class="noun">Oliver Optic</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国作家威廉·泰勒·亚当斯（William Taylor Adams，1822-1897）的笔名，以创作青少年冒险小说系列而闻名。他曾担任教师和校长，后成为全职作家，创作了超过125本书籍和1000余篇故事，代表作包括《船俱乐部》系列和《蓝</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/On Jordan's Stormy Banks.html">
+  <span class="noun">On Jordan&#x27;s Stormy Banks</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一首经典的基督教赞美诗，由英国浸信会牧师塞缪尔·斯坦内特(Samuel Stennett, 1727–1795)创作，1787年首次出版。歌词以圣经中以色列人渡过约旦河进入迦南应许之地的故事为隐喻，象征信徒从尘世走向天国的旅程。该诗在美国边</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/one kind of folks.html">
+  <span class="noun">one kind of folks</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">这是斯库特在第23章中提出的朴素平等主义观点。在杰姆描述了梅科姆的四类人社会等级后，斯库特简洁有力地反驳道：世上只有一种人——人。她认为沃尔特·坎宁安并不比任何人差，只是因家庭需要而错过学习机会。斯库特的天真纯洁使她看不到（或拒绝接受）成人</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/One Man's Family.html">
+  <span class="noun">One Man&#x27;s Family</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">美国一部经典广播连续剧，由Carlton E. Morse创作，1932年4月29日至1959年4月24日在NBC播出，共3256集，是美国无线电广播史上播出时间最长的连续剧之一。节目以旧金山海崖社区为背景，讲述Barbour家族的日常生活</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/One-drop rule.html">
+  <span class="noun">One-drop rule</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">“一滴血原则”是美国历史上一种种族分类的社会和法律原则，规定任何有至少一位非洲裔黑人祖先的人（即拥有“一滴黑人血统”）即被视为黑人。这一原则是“血统低吸”（hypodescent）的典型例子，即在种族混合的后代中自动将其归入社会地位较低的群</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/opossum.html">
+  <span class="noun">opossum</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">弗吉尼亚负鼠（Didelphis virginiana）是北美洲唯一的有袋类动物，体型与家猫相仿，以长而裸露的尾巴、白色的面部和尖吻为特征。它们是夜行性杂食动物，以&quot;装死&quot;（playing possum）的行为闻名，遇到威胁时会进入强直性休</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/our kind of folks.html">
+  <span class="noun">our kind of folks</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">这是亚历山德拉姑姑用来表达社会阶层区分的核心短语。她承认坎宁安家族是&quot;好人&quot;（good folks），但坚称他们不是&quot;我们这类人&quot;（our kind of folks），反映了旧南方贵族对家族血统和社会地位的执着。这种分类体系基于家族历史、</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/pageant.html">
+  <span class="noun">pageant</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">梅科姆镇学校举办的万圣节表演，名为Maycomb County: Ad Astra Per Aspera （拉丁语：历经艰辛，抵达星空），由Mrs. Grace Merriweather编写。 表演展示了梅科姆县的历史和农产品，学生们扮演各</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Papa drank it up.html">
+  <span class="noun">Papa drank it up</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">指Bob Ewell将政府发放的救济金用于买酒喝而非养活家人。Atticus通过交叉询问在陪审团面前揭示了这一事实，展现了Ewell作为父亲的极端不负责任。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/papoose.html">
+  <span class="noun">papoose</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">源自纳拉甘西特语(阿尔冈昆语系)对&quot;婴儿&quot;的称呼，早期殖民者误将其指代北美原住民使用的婴儿背板(cradleboard)。这是一种将婴儿紧紧包裹并固定在扁平木板上的传统携带方式，可以背在背上、靠在身边或挂在马鞍上。现代语境中也指软结构的婴儿</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/patent leather.html">
+  <span class="noun">patent leather</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">漆皮，一种表面具有高光泽涂层的皮革。1818年美国发明家塞思·博伊登（Seth Boyden）在新泽西纽瓦克通过逆向工程复制了德国制造的漆皮工艺，使用亚麻籽油基清漆涂层，并于1819年开始商业化生产。现代漆皮多采用聚氨酯（PU）涂层工艺，广</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/pay the bill.html">
+  <span class="noun">pay the bill</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">付出代价——阿提克斯预言，白人社会对黑人的长期压迫和不公&quot;正在累积&quot;，总有一天社会将为此付出代价。他希望这一天不要发生在孩子们的时代，体现了对种族冲突爆发的预见。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/peace bond.html">
+  <span class="noun">peace bond</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种法院命令的保证书，要求个人支付保证金以保证其&quot;维持和平&quot;并避免某些行为（如接近受威胁者）。这是预防性而非惩罚性的法律手段，违反条件则没收保证金。源于英国普通法中的&quot;预防性正义&quot;概念。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/pecan.html">
+  <span class="noun">pecan</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">山核桃是拉德利家山核桃树结出的果实。在小说中，孩子们因为恐惧和迷信而不敢吃这些掉在校园里的核桃。这个意象象征着毫无根据的恐惧——一个社区对未知者的非理性排斥，这与后来导致汤姆·罗宾逊定罪的社会偏见形成呼应。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/pecan trees.html">
+  <span class="noun">pecan trees</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">拉德利家的山核桃树。拉德利家的山核桃树将果实摇落到校园里，但由于镇上对布·拉德利的迷信和恐惧，孩子们不敢吃这些山核桃。这个细节象征着梅科姆社区毫无根据的恐惧和偏见——人们宁愿相信谣言也不愿相信理性。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Pensacola.html">
+  <span class="noun">Pensacola</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">美国佛罗里达州西北部的一座港口城市，濒临墨西哥湾，因其历史上先后悬挂西班牙、法国、英国、美国和美利坚联盟国五面旗帜而被称为&quot;五旗之城&quot;。1559年西班牙探险家建立欧洲定居点，早于圣奥古斯丁（1565年）和詹姆斯敦（1607年），是今美国大陆</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Perjury.html">
+  <span class="noun">Perjury</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">伪证罪，指在宣誓后故意就实质性事实作出虚假陈述的犯罪行为。构成要件包括：陈述虚假、宣誓后作出、明知虚假、且陈述对案件具有实质性影响。在本章中，Tom Robinson坚称Mayella Ewell的指控不实，但表述为&quot;她心里弄错了&quot;而非直接</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/perpetual colds.html">
+  <span class="noun">perpetual colds</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">常年感冒，指Ewell家年幼的孩子们因营养不良、缺乏衣物和恶劣的居住环境而持续患感冒，反映了极端贫困对儿童健康的影响。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/persecution.html">
+  <span class="noun">persecution</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">基于种族、宗教、政治信仰或身份而对个人或群体施加的残忍和不公正待遇，包括歧视、驱逐、财产剥夺、监禁乃至屠杀等行为。 --- 迫害是《杀死一只知更鸟》的核心主题之一，在第26章得到突出表现。盖茨小姐在课堂上告诉学生美国不迫害任何人——这个词本</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/persecution of Jews.html">
+  <span class="noun">persecution of Jews</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">纳粹德国针对犹太人的系统性迫害，从1933年的法律歧视开始，逐步升级至纽伦堡法律剥夺公民权、水晶之夜暴力打砸、最后发展为最终解决方案——在死亡集中营进行工业化的种族灭绝。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Philadelphia.html">
+  <span class="noun">Philadelphia</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">费城，美国宾夕法尼亚州最大城市，1682年由贵格会领袖威廉·潘建立。在美国独立战争期间具有核心历史地位：独立宣言和美国宪法均在此签署和制定。1790至1800年曾担任美国临时首都。费城被称为美国&quot;独立摇篮&quot;，自由钟和独立宫是美国国家象征。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/philippic.html">
+  <span class="noun">philippic</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">philippic（猛烈抨击/谩骂性演说）源自古希腊演说家狄摩西尼（Demosthenes）在公元前351年起针对马其顿国王腓力二世（Philip II of Macedon）发表的一系列谴责性演说（希腊语&quot;philippikoi logo</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Pickled pigs' knuckles.html">
+  <span class="noun">Pickled pigs&#x27; knuckles</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种美国南方传统腌制食品，将猪膝关节（即火腿肘子部位）用醋、盐和香料腌制而成。在小说中，这是梅科姆镇的黑人居民送给阿提克斯的众多食物之一，阿提克斯看到后开玩笑说想知道亚历山德拉姑妈是否会允许他在餐厅里吃这东西。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/pink cotton penitentiary.html">
+  <span class="noun">pink cotton penitentiary</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">斯考特用来比喻被迫穿上裙子、服从女性规范时的感受的隐喻。&quot;粉红棉布&quot;代表女性化的服饰，&quot;监狱&quot;代表束缚感和压迫感，生动表达了斯考特对社会性别期望的抗拒。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Poor Will.html">
+  <span class="noun">Poor Will</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">哈珀·李在第28章中使用的拟声词，指反舌鸟模仿三声夜鹰 （Eastern Whip-poor-will）的叫声。 三声夜鹰的鸣叫听起来像&quot;whip-poor-WILL&quot;，Lee简化为&quot;Poor Will&quot;。 在美国民间传说中，三声夜鹰的叫声</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Popular Mechanics.html">
+  <span class="noun">Popular Mechanics</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国著名大众科技杂志，由亨利·哈文·温莎于1902年1月11日在芝加哥创刊。最初为16页的周刊，后改为月刊。杂志以通俗易懂的语言解释科学技术原理为宗旨，涵盖汽车、DIY、科学、技术、家居等领域。自1958年起由赫斯特集团拥有。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/pot liquor.html">
+  <span class="noun">pot liquor</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">Pot liquor（也拼作potlikker）是美国南方传统烹饪术语，指煮绿叶蔬菜（如羽衣甘蓝、芥菜、芜菁叶）或豆类后剩下的富含营养的汤汁。通常用盐、胡椒和熏猪肉（如火腿骨）调味，传统吃法是用玉米面包蘸着吃。在小说中，杰姆提到阿提克斯&quot;比</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/poundcake.html">
+  <span class="noun">poundcake</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种传统的英式重油蛋糕，得名于其原始配方中使用各一磅（pound）的面粉、黄油、鸡蛋和糖。最早见于1747年汉娜·格拉斯（Hannah Glasse）的烹饪书《The Art of Cookery》，后传入法国成为&quot;Quatre-Quart</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Prejudice.html">
+  <span class="noun">Prejudice</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">基于片面或错误概括而对某个群体或个人产生的负面态度，包含情感、行为和认知三个层面。盖茨小姐在课堂上是这样定义的：迫害来自有偏见的人。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/pretending to drink whiskey.html">
+  <span class="noun">pretending to drink whiskey</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">多尔夫斯·雷蒙德先生假装酗酒的行为。他随身携带一个装可乐的棕色纸袋，故意做出醉酒的样子，让镇上人相信他是一个被威士忌控制的可怜虫，以此解释为何他与黑人同居。这一伪装揭示了梅科姆社会偏见的深度——人们宁愿相信他是个酒鬼，也不愿接受他自愿选择跨</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/prison camp escape.html">
+  <span class="noun">prison camp escape</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊被关押在恩菲尔德监狱农场（Enfield Prison Farm），在一次放风期间他突然冲向围栏试图翻越逃跑，被狱警开枪打死。阿提克斯推测汤姆已经对白人主导的司法体系彻底绝望，宁可冒死一搏。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/probate judge.html">
+  <span class="noun">probate judge</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">主管遗嘱认证法院（probate court）的法官，负责处理遗产继承、遗嘱认证、未成年人监护、精神病人收容等法律事务。在美国各州，probate judge通常是选举产生的县级官员，除司法职能外还承担颁发结婚证、监督选举、管理出生证明等行</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Prohibition.html">
+  <span class="noun">Prohibition</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">美国禁酒时期（1920-1933）是指美国通过宪法第十八修正案和沃尔斯特德法案在全国范围内禁止酒精饮料的生产、运输和销售的历史时期。该政策导致有组织犯罪猖獗，最终被第二十一修正案废除，是美国历史上唯一被废除的宪法修正案。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Proof of the pudding.html">
+  <span class="noun">Proof of the pudding</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">英文谚语&quot;Proof of the pudding is in the eating&quot;（布丁好不好，吃了才知道）的简称，意为事物的真正价值只能通过实际检验来证明。语中&quot;proof&quot;取古义&quot;测试&quot;（如proofreader校对者检查测试稿）。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/prosecutor.html">
+  <span class="noun">prosecutor</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">吉尔默先生是梅科姆县的公诉律师，在汤姆·鲁宾逊案中担任控方。他以带有种族偏见的傲慢态度盘问汤姆，称其为&quot;boy&quot;，并利用陪审团对黑人的偏见获取定罪。他与阿蒂克斯·芬奇形成鲜明对比，代表了司法系统中根深蒂固的种族主义。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Providence.html">
+  <span class="noun">Providence</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Providence（天意/神意/天道）是基督教神学中的一个核心概念，指上帝对其所造世界的持续眷顾、保守和引导。该词源自拉丁语 providentia（预见）。神意论认为，上帝不仅创造了世界，还主动维系、指引并安排万物走向其预定目的，涉及保</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Rabies.html">
+  <span class="noun">Rabies</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">狂犬病是一种由狂犬病病毒（Lyssavirus属）引起的急性病毒性脑脊髓炎，几乎100%致命。病毒通过感染动物的唾液传播，通常经由咬伤进入人体。潜伏期通常为30-90天，一旦出现临床症状（如恐水症、畏风、狂躁、麻痹），死亡率接近100%。全</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/racial injustice in courtroom.html">
+  <span class="noun">racial injustice in courtroom</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法庭中的种族不公正——阿提克斯直言不讳地告诉杰姆，在南方法庭上，白人的话永远压倒黑人的话，这是无法回避的生活现实，体现了司法体系中的系统性种族歧视。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Racial prejudice.html">
+  <span class="noun">Racial prejudice</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">种族偏见，指基于种族或民族而对某一群体及其成员持有的负面态度、信念和判断。它是态度的层面，区别于歧视（行为的层面）。在小说中，这种偏见贯穿整个审判过程，陪审团因种族原因而非证据不足判定Tom Robinson有罪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Radley Place.html">
+  <span class="noun">Radley Place</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">拉德利宅院，梅科姆镇上芬奇家以南三户处的一座阴森破败的老房子。小说中描述为石板灰色、屋顶盖着朽烂的木瓦、院子杂草丛生（长满约翰逊草和烟草草），宅前有一棵大橡树。这座宅院是布·拉德利隐居的地方，由于镇上流传的各种恐怖传说，成为斯库特和杰姆童年</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/rape law Alabama.html">
+  <span class="noun">rape law Alabama</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">小说中杰姆阐述了他对阿拉巴马州强奸法的理解——如果女方同意就不算强奸，女方必须年满18岁（即法定同意年龄）。实际上1930年代阿拉巴马的法定同意年龄为16岁。小说中汤姆·罗宾逊被控强奸白人女性梅耶拉·尤厄尔，这一指控深受当时斯科茨伯勒男孩案</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/rape statute.html">
+  <span class="noun">rape statute</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">1930年代阿拉巴马州的强奸法规定，量刑由陪审团裁量，范围为十年监禁至死刑。该法律在纸面上是种族中立的，但在吉姆·克劳法体系下，黑人男性被指控强奸白人女性几乎必然导致死刑。著名的斯科茨伯勒案（1931）即源于此法律背景，并导致了Powell</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/rattlesnake.html">
+  <span class="noun">rattlesnake</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">响尾蛇（Crotalus属），美洲特有的剧毒蝮蛇，以其尾端由角质环组成的响器著称。遇险时尾部快速震动发出警示声。体长从50厘米到超过150厘米不等，具有颊窝（热感应器官）和血循毒液。小说中出现在雷切尔小姐讲述的轶事中。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/re-elect.html">
+  <span class="noun">re-elect</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">连任，指阿提克斯·芬奇在汤姆·罗宾逊案后无对手竞选连任州议会议员。这是小说中一个值得玩味的细节——尽管镇上很多人对他为黑人辩护感到不满，但没有人提出候选人挑战他的席位。斯库特对此感到困惑，最终归结为&quot;人们就是很古怪&quot;。这种看似矛盾的现象体现</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/reasonable doubt.html">
+  <span class="noun">reasonable doubt</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">合理怀疑是刑事案件中的最高证明标准，要求检方证明被告有罪至&quot;排除合理怀疑&quot;的程度。如果陪审团对被告的罪行存在合理怀疑，则必须宣判无罪。这一标准源于美国宪法第五修正案的正当程序条款，体现了&quot;宁可放纵一千个罪犯，也不可冤枉一个无辜者&quot;的法治原则</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Reconstruction era.html">
+  <span class="noun">Reconstruction era</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">重建时期（1865-1877），美国内战后联邦政府试图重新统一南北、解决近400万新获自由的非裔美国人地位问题的历史阶段。包括总统重建与激进重建两个阶段，通过了第十三、十四、十五修正案，最终因1877年妥协而结束。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Redbug.html">
+  <span class="noun">Redbug</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">红虫/恙螨——蛛形纲恙螨科（Trombiculidae）幼虫的俗称。体型极小（0.2-0.4毫米），呈橙红色。叮咬时并非吸血，而是注入消化酶溶解皮肤组织形成取食管（stylostome），吸取液化组织。叮咬引起剧烈瘙痒。在美国南部地区常见于</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Reform school.html">
+  <span class="noun">Reform school</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">针对青少年的教养机构，19世纪至20世纪中期在美国盛行。最初源于1825年纽约第一家少年庇护所，强调职业训练和道德改造，区别于成人监狱，但后期因虐待问题备受批评，自1970年代起逐步被社区矫正替代。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/relativity.html">
+  <span class="noun">relativity</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">爱因斯坦创立的革命性物理学理论体系，包含狭义相对论（1905年）和广义相对论（1915年），彻底改变了人类对时空、质量、能量和引力的理解。核心思想包括：光速恒定、时间膨胀、质能等价（E=mc²），以及引力是时空弯曲的几何效应而非传统意义上的</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/relief check.html">
+  <span class="noun">relief check</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">救济金支票，指大萧条时期美国政府通过新政项目向贫困家庭发放的福利金。在小说中，Ewell家的救济金支票远不足以养活全家，而且Bob Ewell有强烈嫌疑将其挥霍在酗酒上。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/relief checks.html">
+  <span class="noun">relief checks</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">救济支票，指美国大萧条时期（1930年代）罗斯福新政下联邦政府向贫困家庭发放的现金救助。主要由联邦紧急救济署（FERA, 1933年成立）管理，资金拨付给各州后直接发给符合条件的家庭，以维持基本生活。在小说故事发生的1930年代阿拉巴马州，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/respectable Negro.html">
+  <span class="noun">respectable Negro</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;体面的黑人&quot;是斯库特在汤姆·罗宾逊作证时使用的表述，反映了她成长中的道德意识与无意识的种族偏见之间的矛盾。在梅科姆的种族主义社会中，一个&quot;体面的黑人&quot;意味着顺从、勤劳、不惹事。讽刺的是，汤姆的体面反而成了他的罪过——因为他对白人女性表示同</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Reverend Sykes.html">
+  <span class="noun">Reverend Sykes</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">赛克斯牧师是卡尔珀尼亚所在教堂（第一购买非洲卫理公会教堂）的牧师。在汤姆·鲁宾逊审判期间，他在拥挤的法庭中为杰姆、斯科特和迪尔在&quot;有色人种 balcony&quot;找到了座位，四名黑人市民甚至让出了前排座位。他在审判中为孩子们解释汤姆的伤情，并在阿</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Rice Christians.html">
+  <span class="noun">Rice Christians</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;Rice Christian&quot;（米饭基督徒）是一个贬义术语，指那些为了获得食物、医疗或其他物质利益而正式皈依基督教的人，而非出于真正的宗教信仰。该词起源于殖民时期，尤其在19世纪印度饥荒期间被广泛使用，描述因贫困而投靠传教站寻求救济的底层</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/rigid and time-honored code.html">
+  <span class="noun">rigid and time-honored code</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯在结案陈词中使用的表述，指南方社会中不成文的种族—性道德准则，严格禁止白人与黑人之间的跨种族接触。梅耶拉·尤厄尔正是违反了这一准则——她吻了一个黑人——然后试图通过诬告汤姆·罗宾逊来掩盖自己的&quot;罪行&quot;。阿提克斯一针见血地指出，她并没</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/roly-poly.html">
+  <span class="noun">roly-poly</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种小型陆生甲壳动物（Armadillidium vulgare，俗称球鼠妇/西瓜虫），属于等足目卷甲虫科。它不是昆虫，而是与虾、蟹亲缘关系更近的甲壳动物。当受到惊扰时，它会将身体卷成一个紧密的灰球（conglobation），因此得名&quot;r</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Rose Aylmer.html">
+  <span class="noun">Rose Aylmer</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">英国贵族女性（1779-1800），本名 Rose Whitworth Aylmer，诗人 Walter Savage Landor 著名悼亡诗《Rose Aylmer》的主人公。她与 Landor 在威尔士相识并建立深厚感情，但因家族反对</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Rose Bowl.html">
+  <span class="noun">Rose Bowl</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">玫瑰碗，美国历史最悠久的大学橄榄球碗赛，始于1902年，每年1月1日在加州帕萨迪纳的玫瑰碗体育场举行，被称为所有碗赛之祖。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Rosetta Stone.html">
+  <span class="noun">Rosetta Stone</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">1799年在埃及罗塞塔镇发现的一块古埃及石碑，刻有同一份祭司诏书的三种文字版本（古埃及象形文字、世俗体文字和古希腊文）。这块石碑成为破译古埃及象形文字的关键钥匙，由法国学者商博良于1822年成功解读，从而开创了现代埃及学。在小说中，斯库特用</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Rover Boys.html">
+  <span class="noun">Rover Boys</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国作家爱德华·斯特拉特迈耶（Edward Stratemeyer）以笔名阿瑟·M·温菲尔德创作的系列少年冒险小说，全称为《罗弗兄弟少年美国系列》（The Rover Boys Series for Young Americans）。该系列</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/run-of-the-mill man.html">
+  <span class="noun">run-of-the-mill man</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Dolphus Raymond对Scout说「你爸爸不是普通人」，认识到Atticus不同于Maycomb其他白人——他具备道德正直、勇气和对所有人的平等尊重，强调了Atticus作为小说道德核心的独特地位。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/rusty medal.html">
+  <span class="noun">rusty medal</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">生锈的奖牌，布·拉德利留在树洞中的礼物之一，是一枚拼写比赛奖牌，可能来自布自己的童年时代。这枚奖牌暗示布曾经是一个正常、聪明的孩子，在被迫与社会隔绝之前也曾取得过学业成就。它是将布从&quot;鬼怪&quot;还原为有血有肉的人的重要物件，揭示了隐藏在外界谣言</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/same in the courtroom as he is on the public streets.html">
+  <span class="noun">same in the courtroom as he is on the public streets</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">莫迪·阿特金森小姐用来描述阿蒂克斯·芬奇的名言，强调他无论在法庭上、家中还是在大街上都保持着前后一致的品格和正直。这凸显了阿蒂克斯的真实性和道德完整性——他从不虚伪，在任何场合都是同一个人。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Sarah Barber.html">
+  <span class="noun">Sarah Barber</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">莎拉·巴伯，昵称&quot;图蒂&quot;（Tutti），梅科姆镇的老处女之一，与妹妹弗朗西丝同住。她是共和党人，1911年从克莱顿迁至梅科姆，生活方式被当地人视为&quot;北方佬作风&quot;。她耳聋但否认这一事实。前一年的万圣节之夜，她家所有家具被孩子们藏入地窖，她坚信</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Scout Finch.html">
+  <span class="noun">Scout Finch</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">小说的叙述者和主角，全名Jean Louise Finch，故事开始时约6岁，结束时9岁。她是一个聪明、早熟、不爱红装的假小子，具有强烈的正义感和同理心，通过观察父亲Atticus Finch为Tom Robinson辩护的过程，经历了从天</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/scrip stamps.html">
+  <span class="noun">scrip stamps</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">大萧条时期在美国广泛使用的替代货币或信用凭证。当银行大量倒闭、官方货币短缺时， 地方政府、企业和慈善机构发行scrip（临时凭证）供穷人兑换基本生活物资。其中 &quot;stamp scrip&quot;是一种特殊形式，要求使用者定期粘贴邮票以保持其有效，以</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Scuppernong.html">
+  <span class="noun">Scuppernong</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国东南部原生的一种马斯卡丁葡萄品种，果皮呈青铜色/绿色，比普通葡萄大而圆。名称源自北卡罗来纳州的斯库珀农河，是北卡罗来纳州的官方州果，历史上用于酿酒和制果酱。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/scuppernongs.html">
+  <span class="noun">scuppernongs</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种原产于美国东南部的青铜色麝香葡萄品种，属于圆叶葡萄（Vitis rotundifolia）的一种。其名称源自北卡罗来纳州的斯卡珀农河，而河名又来自阿尔冈昆语系词汇。斯卡珀农葡萄在美国南部文化中具有重要地位，北卡罗来纳州将其定为州果。早在</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Seckatary Hawkins.html">
+  <span class="noun">Seckatary Hawkins</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国作家罗伯特·弗朗克·舒尔克斯（Robert Franc Schulkers, 1890–1972）的笔名，出生于肯塔基州卡温顿。他以这一笔名创作了11部儿童冒险推理小说，故事最初于1918年起以连载形式发表在《辛辛那提问讯报》上，持续连</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Second Battle of the Marne.html">
+  <span class="noun">Second Battle of the Marne</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">第一次世界大战西线的重要战役，发生于1918年7月15日至8月6日，是德军最后一次大规模进攻。协约国军队在法国元帅福煦的指挥下成功发起反攻，德军被迫撤退。此役标志着德军战略进攻的终结，协约国随后展开百日攻势，最终导致同年11月德国的投降和一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/secret courts of men's hearts.html">
+  <span class="noun">secret courts of men&#x27;s hearts</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">人心的秘密法庭是斯库特在第25章中的反思性叙述，指代人们内心深处根深蒂固的种族偏见——这种偏见是任何法庭证据或法律辩论都无法克服的。公共法庭是阿提克斯所说的使穷人与洛克菲勒平起平坐的人类机构，而人心的秘密法庭则是基于种族偏见的隐蔽内心审判。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/seventeen bullet holes.html">
+  <span class="noun">seventeen bullet holes</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">阿提克斯描述汤姆·罗宾逊被枪杀时身中17弹，强调狱警使用了过度武力，凸显了种族主义暴力之残酷。这一细节也揭示了汤姆即使只有一只手臂能用，狱警仍然对他开了17枪。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/shadow of a beginning.html">
+  <span class="noun">shadow of a beginning</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">开始的曙光——阿提克斯用这个隐喻表达谨慎的希望：陪审团花了几个小时才作出有罪裁决（而非通常的几分钟），说明有些人至少在认真权衡证据，这是种族态度可能开始改变的一线希望。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/shadow of a doubt.html">
+  <span class="noun">shadow of a doubt</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种比&quot;排除合理怀疑&quot;更高的证明标准，要求消除一切可能的怀疑（包括不合理的怀疑）。在阿提克斯的用法中，他主张被告应有权享有&quot;怀疑的阴影&quot;——即使只有最微小的可能性，也应认定其无辜。这并非刑事审判的实际法律标准，实际标准为&quot;排除合理怀疑&quot;（b</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Shadrach.html">
+  <span class="noun">Shadrach</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">圣经《但以理书》中的人物，原名哈拿尼雅（Hananiah），是被掳到巴比伦的犹太贵族之一。他与米煞、亚伯尼歌因拒绝跪拜尼布甲尼撒王所立的金像而被扔进烈焰火窑，但因神的保护在火中毫发无损。这一故事是信仰坚贞的经典象征。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Sheriff.html">
+  <span class="noun">Sheriff</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">警长（Sheriff）是美国县级行政区的最高执法长官，这一职位源自英国的&quot;shire-reeve&quot;（郡守）传统，已有逾千年历史。美国的警长通常由县级选民直接选举产生，任期各州不同（通常为4年），直接对选民负责，独立于县级其他管理机构。警长的</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Sherlock Holmes.html">
+  <span class="noun">Sherlock Holmes</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">英国作家阿瑟·柯南·道尔（Sir Arthur Conan Doyle）创作的虚构侦探角色，首次出现于1887年小说《血字的研究》。以卓越的观察力、演绎推理和 forensic science 著称，居住在伦敦贝克街221B。被吉尼斯世界纪</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/shinny.html">
+  <span class="noun">shinny</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">美国南部俚语，指非法酿造的烈性酒（moonshine/私酿威士忌），源自&quot;moonshine&quot;的变体或缩略形式。在禁酒令时期（1920-1933）及之后，该词在美国阿巴拉契亚地区和南部乡村广泛使用，意指家庭私酿的高纯度烈酒。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/shorthand.html">
+  <span class="noun">shorthand</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">速记法，一种使用符号或缩写快速记录口语的书写系统，起源于古罗马的泰罗速记法。19世纪后Pitman和Gregg两大体系广泛用于法庭记录、秘书工作和新闻采访。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/shotgun house.html">
+  <span class="noun">shotgun house</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">猎枪屋是一种窄长的矩形住宅，通常宽度不超过3.5米，房间呈直线排列，前后门对齐，没有走廊。这种建筑风格源于西非，经由海地传入美国新奥尔良，在南北战争后至1920年代成为美国南部最流行的住宅样式。其名称的由来有两种说法：一是如果所有门都打开，</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/simple hell people give other people.html">
+  <span class="noun">simple hell people give other people</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">Dolphus Raymond对Scout和Dill说的关于种族偏见的著名台词，指出白人给黑人带来的苦难往往是「不经思考」的，反映了小说中种族偏见的无意识性和根深蒂固性。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Sinkfield's Tavern.html">
+  <span class="noun">Sinkfield&#x27;s Tavern</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">辛克菲尔德酒馆是《杀死一只知更鸟》中虚构的梅科姆镇发源地。据Scout讲述，在早期历史中，一个名叫Sinkfield的人在两条猪径交汇处开设了该地区唯一的酒馆。当州长派遣的测量队前来确定县政府所在地时，Sinkfield将他们灌醉，诱使他们</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Sir Walter Scott.html">
+  <span class="noun">Sir Walter Scott</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">苏格兰著名小说家、诗人和历史小说体裁的奠基人。其代表作《艾凡赫》（Ivanhoe）被杰姆在该章节中朗读给杜博斯太太听。 --- 19世纪初苏格兰小说家、诗人，被誉为历史小说之父。代表作包括《艾凡赫》《威弗利》《湖上夫人》等，对后世文学影响深</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/sit-down strike.html">
+  <span class="noun">sit-down strike</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">静坐罢工（sit-down strike）是工人占据工作场所、静坐不走的一种罢工形式，旨在阻止雇主雇佣破坏罢工者（工贼）或搬走生产设备。1930年代美国大萧条时期，该策略被广泛使用，最著名的是1936-37年密歇根州弗林特市通用汽车工厂的静</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/slop jar.html">
+  <span class="noun">slop jar</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">污水罐（也称chamber pot或combinet）是一种在室内管道普及前使用的带盖容器，用于收集夜间或室内产生的废水（洗脸、刷牙后的脏水）甚至排泄物。通常比chamber pot更高，带有把手和盖子，材质多为陶瓷、搪瓷金属（granit</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/smocking.html">
+  <span class="noun">smocking</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种传统的刺绣工艺，通过在布料上缝制规则的褶皱图案来使服装具有弹性，并形成装饰性花纹。起源于中世纪英格兰，最初用于农工和牧羊人的工作服（smock），后广泛应用于儿童服装和女性服饰。在弹性材料发明之前，smocking是服装中实现伸缩功能的</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/Snipe hunt.html">
+  <span class="noun">Snipe hunt</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">恶作剧式愚人差事，指哄骗新手在夜晚外出捕捉一种虚构的鹬鸟，使其空手而归、被独自留在黑暗中的传统整蛊游戏。源自19世纪北美民间传统，常见于美国夏令营和童军活动中，现已成为无意义徒劳任务的习语。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Snow-on-the-Mountain.html">
+  <span class="noun">Snow-on-the-Mountain</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种山茶花品种，学名 Camellia sasanqua &#x27;Snow on the Mountain&#x27;（日文名 Mine-no-yuki，意为峰顶之雪），开纯白色重瓣花朵，盛花期如白雪覆枝。 --- Snow-on-the-Mountain</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/soap dolls.html">
+  <span class="noun">soap dolls</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">肥皂雕像，布·拉德利用肥皂雕刻的两个小人像——一个男孩和一个穿裙子的女孩，酷似杰姆和斯库特。这是他在树洞中留给孩子们的最为个人化、最感人的礼物，证明他一直在默默观察着这两个孩子，并且具备雕刻艺术才能。斯库特最初被吓到（以为是巫毒），但后来理</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/social class Maycomb.html">
+  <span class="noun">social class Maycomb</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">梅科姆镇的社会等级制度是小说核心主题之一。杰姆将镇上的人分为四类：普通人家（芬奇家等）、坎宁安家那样的农民、尤厄尔家那样的垃圾白人，以及黑人。在这种等级中，种族凌驾于经济地位之上——即使最穷的白人也比所有黑人社会地位高。阿提克斯教导孩子以个</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Sophy.html">
+  <span class="noun">Sophy</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">梅里韦瑟太太的黑人女佣。在第二十四章的传道会茶会上，梅里韦瑟太太抱怨Sophy在汤姆·罗宾逊审判后&quot;闷闷不乐&quot;，破坏了她的心情。梅里韦瑟太太教训Sophy&quot;要做基督徒&quot;，而Sophy恭顺地回答&quot;耶稣从不发牢骚&quot;。这段对话是小说中最尖锐的虚伪</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/spite fence.html">
+  <span class="noun">spite fence</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">一种恶意建造的栅栏或类似结构，其唯一或主要目的是为了骚扰、伤害或激怒相邻的邻居，而对建造者本人没有任何合理或有益的用途。美国多个州有专门的法律将其界定为&quot;私人妨害&quot;(private nuisance)，受害邻居可向法院申请拆除令或索赔。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Spittoon.html">
+  <span class="noun">Spittoon</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">痰盂（又称吐壶），金属或陶瓷制成的容器，供嚼烟草者吐痰用。在美国南方旧式法庭中常见。小说中泰勒法官在休庭后返回审判席，从背心口袋取出雪茄，咬掉一端，精准地将残端吐入痰盂，发出响亮的水声。迪尔见状低声评论&quot;我打赌他当年扔纸团肯定很厉害&quot;。这一</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/spring.html">
+  <span class="noun">spring</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">泉水，位于垃圾场一端，是Ewell全家的饮用水和生活用水来源。他们家需要用桶从泉水处打水运回家，周围区域被他们清理保持无垃圾。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/square deal in courtroom.html">
+  <span class="noun">square deal in courtroom</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">法庭中的公平对待——阿提克斯认为法庭本应是无论何种肤色的人都能得到公平对待的唯一地方，但现实是人们把怨恨带进了陪审团席。这体现了司法理想与现实之间的巨大落差。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/state industrial school.html">
+  <span class="noun">state industrial school</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">19世纪末至20世纪美国为少年犯设立的改造学校，也称为教养院（reform school）。基于&quot;国家作为父母&quot;（parens patriae）的法律原则，旨在通过劳动训练和纪律教育改造失足青少年，而非单纯惩罚。实际操作中，这些学校条件参差</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/state legislature.html">
+  <span class="noun">state legislature</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">州议会，阿提克斯·芬奇在亚拉巴马州议会担任议员。在小说中，斯库特提到尽管阿提克斯为汤姆·罗宾逊辩护而备受争议和批评，镇上人仍然一如既往地无对手竞选将他连任到州议会。这个细节揭示了梅科姆社区复杂的社会态度——一方面不赞同阿提克斯为黑人辩护，另</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Stoner's Boy.html">
+  <span class="noun">Stoner&#x27;s Boy</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">《The Gray Ghost》系列中的角色，一个身着灰色服装的神秘少年强盗，最终被揭示并非真正的恶人。在《杀死一只知更鸟》结尾，斯库特将他与布·拉德利类比，表达&quot;当最终了解一个人时，他其实是个好人&quot;的主题。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/strip poker.html">
+  <span class="noun">strip poker</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">传统扑克的一种派对变体，玩家在输掉一局后需要脱掉身上的衣物作为惩罚。据考证该玩法可能起源于19世纪美国新奥尔良的妓院，术语最早可靠记载于1916年。常见规则是以五张抽牌（five-card draw）进行，赌注为衣物而非金钱，一旦脱下便不可</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/stumphole whiskey.html">
+  <span class="noun">stumphole whiskey</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国阿巴拉契亚山区俚语，指非法私酿的威士忌（moonshine），因蒸馏器常藏匿于密林中挖空的大树桩（stump hole）内而得名。这种未经陈化的玉米威士忌酒精度极高，通常清澈透明，在美国禁酒令时期及之前的南方乡村地区广泛流行，是当地重要</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/subpoena.html">
+  <span class="noun">subpoena</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">传票是政府机构（通常是法院）签发的一种法律文书，强制证人出庭作证或提交证据，违者将受到处罚。该词源自拉丁语&quot;sub poena&quot;，意为&quot;在处罚之下&quot;，分为两种类型：出庭作证令（subpoena ad testificandum）和提交物证令</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/sunflower bird.html">
+  <span class="noun">sunflower bird</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">哈珀·李在第28章中使用的诗意名称，并非真实存在的鸟类物种， 而是反舌鸟模仿的一种叫声。该叫声被描述为&quot;shrill kee, kee&quot;， 可能指代某种小型鸣禽的高音调叫声。 评论家认为这是反舌鸟曲目中明亮、欢快的部分， 与后面蓝松鸦的暴躁</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Supreme Court of the United States.html">
+  <span class="noun">Supreme Court of the United States</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国联邦最高法院，美国司法体系的最高机构。在阿提克斯的结案陈词中，他将其与&quot;最卑微的治安法庭&quot;并列，用以论证无论法庭级别高低，都应当是&quot;伟大的平等器&quot;，所有人在法庭面前生而平等。这一修辞手法强调了司法平等的普世理想。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/swamp.html">
+  <span class="noun">swamp</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">沼泽地，Bob Ewell经常前往酗酒数日的地方。他在沼泽中饮酒数天后回到家时常常病倒，进一步证明了其酗酒恶习和对家庭的忽视。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Sweetly Sings the Donkey.html">
+  <span class="noun">Sweetly Sings the Donkey</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一首来源不详的英美传统民谣/轮唱曲，歌词模仿驴叫(Hee Haw)，是儿童和童子军营火晚会的经典歌曲。在小说中被视为粗俗的乡村文化符号。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Tangee Natural.html">
+  <span class="noun">Tangee Natural</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">20世纪20至40年代风靡美国的经典口红品牌，由药剂师George W. Luft于1920年左右创立，品牌名源自&quot;tangerine&quot;（橘子）。其标志性特点是&quot;变色配方&quot;：口红在管中呈橘色，涂抹后根据个人肤色变成玫瑰红，创造出自然效果。1</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/tapeworm.html">
+  <span class="noun">tapeworm</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">绦虫（tapeworm）是一种扁平的、带状寄生蠕虫，寄生于包括人类在内的动物肠道内。它通过头节附着在肠壁上吸收宿主消化后的营养物质。人类感染绦虫主要通过食用未煮熟的受污染肉类（牛肉、猪肉或鱼肉）。常见治疗药物为吡喹酮（Praziquante</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Tarzan.html">
+  <span class="noun">Tarzan</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">埃德加·赖斯·巴勒斯创作的虚构角色，原名约翰·克莱顿，是英国贵族后代，在非洲丛林中由猿类抚养长大。泰山首次出现于1912年的《人猿泰山》，随后成为全球文化偶像，被改编为数十部电影、电视剧、漫画和广播节目，是流行文化史上最具辨识度的角色之一。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Tarzan and the Ant Men.html">
+  <span class="noun">Tarzan and the Ant Men</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国作家埃德加·赖斯·巴勒斯创作的泰山系列小说中的第十部，1924年首次在杂志上连载后出版单行本。故事讲述泰山驾驶飞机坠毁在一道巨大的荆棘丛林之后，发现了一个名为米努尼的国度，那里的居民身高仅18英寸，被称为&quot;蚁人&quot;。泰山被蚁人的科学家缩小</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/testimony.html">
+  <span class="noun">testimony</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">证词是证人在法庭上经宣誓或郑重承诺后口头或书面提供的证据，用于帮助法官或陪审团认定案件事实。分为直接询问和交叉询问两个阶段。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/the Battle of Hastings.html">
+  <span class="noun">the Battle of Hastings</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">黑斯廷斯战役，1066年10月14日发生在英格兰东萨塞克斯的决定性战役，是诺曼征服英格兰的关键一役。诺曼底公爵威廉击败了英格兰国王哈罗德二世，随后加冕为英格兰国王。这场战役彻底改变了英格兰的历史进程，诺曼法语成为宫廷语言，封建制度被引入英格</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/the Creeks.html">
+  <span class="noun">the Creeks</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">克里克人，即马斯科吉人（Muscogee），北美原住民部族联盟，原居住于美国东南部（今亚拉巴马州、佐治亚州等地）。在美国历史上被纳入&quot;五个文明部落&quot;之列。1813–1814年的克里克战争（红棍战争）中，克里克人被安德鲁·杰克逊将军击败，被迫</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/the Dewey Decimal System.html">
+  <span class="noun">the Dewey Decimal System</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">由美国图书馆学家梅尔维尔·杜威于1876年创立的图书分类体系，将人类知识分为十大类（000-999），每类以三位数字表示，可通过小数无限扩展。该体系以相对位置取代固定书架位置，使读者能按主题浏览藏书，至今仍被全球广泛使用。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/The Gray Ghost.html">
+  <span class="noun">The Gray Ghost</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国作家罗伯特·F·舒尔克斯（Robert F. Schulkers）以笔名 Seckatary Hawkins 创作的一部儿童冒险推理小说，是&quot;Seckatary Hawkins&quot;系列中的一部，最初于1926年出版。故事围绕神秘人物&quot;灰影</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/The Grit Paper.html">
+  <span class="noun">The Grit Paper</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《GRIT》是一份创刊于1882年美国宾夕法尼亚州威廉斯波特的家庭报纸，以刊登&#x27;好消息&#x27;著称，主要面向农村和小镇读者，是当时许多乡村学校学生获取阅读材料的重要来源。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/The Light of the World (painting).html">
+  <span class="noun">The Light of the World (painting)</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《世界之光》是英国拉斐尔前派画家威廉·霍尔曼·亨特（William Holman Hunt）于1851-1854年间创作的 allegorical 油画，描绘耶稣手持灯笼敲击一扇长满杂草、久未开启的门，寓意《启示录》3:20&quot;看哪，我站在门</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/The Maycomb Tribune.html">
+  <span class="noun">The Maycomb Tribune</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《梅科姆论坛报》是梅科姆镇唯一的报纸，由B.B.安德伍德独自拥有和经营。斯库特描述安德伍德对任何组织都没兴趣，除了《梅科姆论坛报》。他在排字机旁工作，偶尔从一加仑樱桃酒壶里喝上一口。第25章中，该报刊登了安德伍德为汤姆·罗宾逊之死撰写的社论</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/The Mobile Register.html">
+  <span class="noun">The Mobile Register</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国阿拉巴马州莫比尔市历史最悠久的报纸，创刊于1813年，是阿拉巴马州连续出版时间最长的报纸。该报在19世纪是州内重要的政治发声平台，亦是《杀死一只知更鸟》中阿提克斯·芬奇每日阅读的报纸。2023年2月26日停止印刷版，全面转向数字出版。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/The Montgomery Advertiser.html">
+  <span class="noun">The Montgomery Advertiser</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">《蒙哥马利广告报》是阿拉巴马州首府蒙哥马利的真实报纸，创刊于1829年，是该州最古老的报纸。在小说中，梅科姆镇的人认为安德伍德的社论写得富有诗意，足以被《蒙哥马利广告报》转载，暗示了社论的高质量。哈珀·李生长于阿拉巴马州门罗维尔，对该报十分</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/The Quarters.html">
+  <span class="noun">The Quarters</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">The Quarters 是美国南方特有的历史称谓，起源于种植园时代黑奴的居住区，后延续至吉姆·克劳时代，指代种族隔离制度下黑人聚居的社区。小说中亚历山德拉姑妈用它指代梅科姆镇的黑人社区，暗示消息会在那里迅速传开。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/the Rosetta Stone.html">
+  <span class="noun">the Rosetta Stone</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">古埃及的一块花岗闪长岩石碑残片，刻有公元前196年埃及祭司颁布的同一份诏书的三种文字版本（埃及象形文字、埃及世俗体文字和古希腊文）。1799年被拿破仑远征军在埃及罗塞塔镇附近发现，后入藏大英博物馆。该石碑的破译让学者得以首次成功解读古埃及象</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/The Rover Boys.html">
+  <span class="noun">The Rover Boys</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国作家爱德华·斯特拉特迈耶以笔名阿瑟·M·温菲尔德创作的青少年小说系列，全称为《美国青年漫游兄弟系列》。该系列共30卷，出版于1899年至1926年，讲述了罗弗三兄弟的冒险故事。它是斯特拉特迈耶的第一个系列作品，为后来的《哈迪男孩》《南希</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/third grade.html">
+  <span class="noun">third grade</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">三年级，斯库特在小说后半部分就读的年级。进入三年级后，斯库特和杰姆的学校生活有了很大不同——她只能早晨和杰姆一起步行上学，吃饭时才能见到他。斯库特的三年级老师是盖茨小姐（Miss Gates），班级活动包括每周的时事分享课。这个阶段标志着斯</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Thomas Jefferson.html">
+  <span class="noun">Thomas Jefferson</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">托马斯·杰斐逊（1743-1826），美国第三任总统，《独立宣言》主要起草人。他在《独立宣言》中写下了&quot;人人生而平等&quot;的著名宣言，这句话被阿提克斯在结案陈词中引用，用以挑战法庭上基于种族的双重标准。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/thoroughbred.html">
+  <span class="noun">thoroughbred</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">纯血马是一种以赛马性能著称的马品种，起源于17-18世纪的英格兰，由本地母马与从阿拉伯、巴巴里和土库曼引进的公马杂交培育而成。所有现代纯血马的血统都可追溯至三匹著名的种公马：拜尔利土耳其、达利阿拉伯和高多芬阿拉伯。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Three-Fingered Fred.html">
+  <span class="noun">Three-Fingered Fred</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">《The Gray Ghost》系列中的角色，一个与斯通纳男孩和灰影有关的麻烦制造者，属于Seckatary Hawkins冒险故事中的人物。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Time magazine.html">
+  <span class="noun">Time magazine</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">美国最具影响力的新闻周刊之一，由布里顿·哈登（Briton Hadden）和亨利·卢斯（Henry Luce）于1923年创办，是世界上第一份每周新闻杂志。以红色边框封面、简洁的专题报道以及年度「时代年度风云人物」（Person of th</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/title dispute.html">
+  <span class="noun">title dispute</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">产权纠纷，指两方或多方对同一不动产的所有权归属产生争议的法律纠纷。通常通过确权之诉（quiet title action）解决。文中Atticus处理强奸案时镇定自若，仿佛在处理一桩平淡无奇的产权纠纷。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Tom Robinson.html">
+  <span class="noun">Tom Robinson</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">汤姆·罗宾逊，一位善良勤劳的黑人工人，被诬告强奸白人女子梅耶拉·尤厄尔。他左臂因童年事故而残废，但这反而成为证明他无罪的关键证据——因为梅耶拉脸上的伤是左撇子所为。尽管阿提克斯证明了事实真相，全白人陪审团仍判他有罪。他在试图越狱时被狱警开枪</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Tom Robinson case.html">
+  <span class="noun">Tom Robinson case</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊案是小说核心事件，黑人汤姆被诬告强奸白人女子梅耶拉·尤厄尔。尽管阿提克斯证明了汤姆的无辜（汤姆的左臂残疾，不可能造成受害者的伤），全白人陪审团仍判他有罪，深刻揭示了种族主义对司法系统的腐蚀。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Tom Robinson trial.html">
+  <span class="noun">Tom Robinson trial</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">小说的核心事件——Tom Robinson被错误指控强奸白人女性Mayella Ewell。尽管Atticus证明Tom的左臂残疾使其无法实施犯罪且证据指向Bob Ewell，全白人陪审团仍判定Tom有罪，揭示了梅科姆深刻的种族偏见和司法不</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Tom Robinson trial aftermath.html">
+  <span class="noun">Tom Robinson trial aftermath</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊案判决后的连锁反应：杰姆童真破灭；黑人社区送来食物表达感激；莫迪小姐称此为一小步进步；鲍勃·尤厄尔当众侮辱并威胁阿提克斯；阿提克斯解释司法体系中的种族不平等。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Tom Robinson's appeal.html">
+  <span class="noun">Tom Robinson&#x27;s appeal</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊被判有罪后，阿提克斯计划提起上诉的法律程序。阿提克斯告诉杰姆和斯库特，他们有很大的胜诉机会，因为初审存在法律错误。汤姆在上诉审理前被转移到恩菲尔德监狱农场，最终在试图越狱时被狱警射杀。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Tom Robinson's crippled arm.html">
+  <span class="noun">Tom Robinson&#x27;s crippled arm</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">汤姆·鲁宾逊的左臂因童年时在轧棉机事故中严重受伤，比右臂短了整整一英尺，肌肉全部撕裂，左手萎缩无力，完全无法使用。这一身体残疾成为审判中证明他无罪的關鍵物证——他根本不可能用左手扼住梅耶拉的脖子或击打她右侧面部。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Tom Robinson's death.html">
+  <span class="noun">Tom Robinson&#x27;s death</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊在被错误定罪后，关押在恩菲尔德监狱农场，试图越狱时被狱警枪杀，身中17枪身亡。这一事件是小说的高潮之一，象征着种族不公对无辜者的毁灭。 --- 汤姆·罗宾逊在被错误定罪后，被送往恩菲尔德监狱农场等待判决。在放风期间，他试图翻越围</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Tom Robinson's disability.html">
+  <span class="noun">Tom Robinson&#x27;s disability</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">汤姆·罗宾逊的左臂在童年时被轧棉机夹伤，导致肌肉从骨头上撕裂，左臂比右臂短约12英寸且完全残废。这一身体缺陷是案件的关键证据——因为梅耶拉的伤在脸的右侧，说明攻击者是左撇子，而汤姆的左臂根本无法发力。这一证据有力地证明汤姆不可能实施强奸，真</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/Tom Robinson's jury.html">
+  <span class="noun">Tom Robinson&#x27;s jury</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">汤姆·罗宾逊案由全白人男性陪审团审理。在第23章中，阿提克斯向孩子们透露了陪审团内幕：有一位坎宁安家族成员是唯一主张无罪释放的陪审员，使得陪审团拖延了很长时间才达成有罪判决。阿提克斯说，如果暴民中有两位坎宁安家的人，就会导致悬而未决的陪审团</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Tom Robinson's wife.html">
+  <span class="noun">Tom Robinson&#x27;s wife</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">汤姆·罗宾逊的妻子海伦（Helen Robinson），小说中的次要角色。汤姆被诬告强奸梅耶拉·尤厄尔后，海伦因丈夫的罪名而找不到工作。第一购买教堂为她募捐，白人农场主林克·迪斯雇佣了她。汤姆死后，鲍勃·尤厄尔在她上班路上骚扰恐吓她。在第二</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Tom Swift.html">
+  <span class="noun">Tom Swift</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">斯特拉特迈耶图书工作室创作的青少年科幻冒险小说系列中的天才发明家主角。该系列始于1910年，共出版超过100卷，全球销量超过3000万册。斯威夫特的许多虚构发明预测了后来的真实技术（如电动步枪启发了泰瑟枪）。该系列还衍生出&quot;汤姆·斯威夫特式</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Tootsie Roll.html">
+  <span class="noun">Tootsie Roll</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">一种经典的美国巧克力糖果，由奥地利犹太移民里奥·赫什菲尔德（Leo Hirschfeld）于1907年发明，以女儿克拉拉·&quot;Tootsie&quot;·赫什菲尔德命名，是美国最早的单片包装便士糖。在第23章中，杰姆在安抚哭泣的妹妹斯库特时，从口袋里掏</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/习俗/Touch football.html">
+  <span class="noun">Touch football</span>
+  <span class="cat-tag">习俗</span>
+  <div class="snippet">触身式橄榄球（Touch football）是美式橄榄球的一种变体，其核心规则是用单手或双手触碰持球者身体来代替擒抱（tackling）以终止进攻。这是一种有限接触性运动，通常用于休闲娱乐场合，所需装备极少，受伤风险低。该运动可以2至11人</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/truant officer.html">
+  <span class="noun">truant officer</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">美国公立学校系统中负责调查和处理学生无故缺勤（逃学）的专职人员，也称出勤官（attendance officer）。该角色起源于19世纪末各州通过强制义务教育法之后，最初具有执法权，可上门查找逃学学生并将其带回学校。20世纪初，在进步主义教</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Tuscaloosa.html">
+  <span class="noun">Tuscaloosa</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">美国阿拉巴马州西部城市，以乔克托族酋长Tuskaloosa命名，意为&quot;黑武士&quot;。该城于1819年建市，1826至1846年间曾为阿拉巴马州首府。1831年成立的阿拉巴马大学位于该市。在内战期间，联邦军队烧毁了大学大部分建筑。1960年代民权</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Uncle Natchell.html">
+  <span class="noun">Uncle Natchell</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">智利天然硝酸钠肥料的卡通吉祥物形象，出现在1930-40年代的报纸连环画式广告中。小查克·利特尔错把这种广告当做时事新闻在课堂上朗读。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/union suit.html">
+  <span class="noun">union suit</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">19世纪末至20世纪初流行的一种连体式内衣，覆盖躯干、手臂和腿部，通常由红色法兰绒制成。前襟从上到下有一排纽扣，臀部处有可开合的后裆盖以便如厕。最初作为女性服装改革的产物（替代紧身胸衣），后成为男性劳动阶层的标准穿着。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/unmitigated temerity.html">
+  <span class="noun">unmitigated temerity</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">&quot;unmitigated&quot;意为&quot;完全的、十足的&quot;，&quot;temerity&quot;意为&quot;鲁莽、大胆&quot;；两词合意为&quot;十足的大胆/放肆&quot;。这是阿提克斯在结案陈词中使用的辛辣反讽——汤姆·罗宾逊仅仅因为&quot;同情&quot;一位白人妇女，在当时的南方种族社会就被视为犯下了</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Verdict.html">
+  <span class="noun">Verdict</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">在《杀死一只知更鸟》中，汤姆·罗宾逊案的陪审团经过约六小时商议（对当时梅科姆镇而言异常漫长），最终裁定汤姆有罪。这是该县历史上陪审团首次在涉及黑人的案件中花费如此长时间——其中一名坎宁安家族成员坚持要求无罪释放，但最终未能改变结果。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Victor Appleton.html">
+  <span class="noun">Victor Appleton</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">美国斯特拉特迈耶图书工作室为《汤姆·斯威夫特》系列青少年科幻冒险小说所使用的集体笔名。该笔名下出版了超过100卷作品，全球销量超过3000万册。实际创作者包括霍华德·加里斯等多位代笔作家，是集体笔名制度在通俗文学领域的著名案例。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Victorian architecture.html">
+  <span class="noun">Victorian architecture</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">维多利亚建筑是英国维多利亚女王统治时期（1837-1901年）流行的多种装饰性复兴建筑风格的总称。它不是单一风格，而是涵盖哥特复兴式、意大利式、第二帝国式、安妮女王式等多种子风格。主要特征包括：繁复的装饰（“姜饼”木雕）、陡峭复杂的屋顶线、</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Victorian privy.html">
+  <span class="noun">Victorian privy</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">维多利亚式户外厕所（privy），是19世纪维多利亚时期典型的卫生设施。通常为后院独立小木屋，内设木制座位和坑洞，下方连接砖砌粪池。工人阶级家庭多使用共用设施，卫生条件恶劣常导致疾病传播；富裕家庭则建造隐蔽精巧的私人厕所。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/物件/Victrola.html">
+  <span class="noun">Victrola</span>
+  <span class="cat-tag">物件</span>
+  <div class="snippet">维克多牌留声机，由维克多谈话机器公司（Eldridge R. Johnson创立）于1906年推出的家用留声机。其创新之处在于将唱盘和放大喇叭隐藏在木制柜体内，使其看起来像家具而非机器。完全机械驱动，需手摇上弦，转速78 RPM。小说中杰姆</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Vigilantism.html">
+  <span class="noun">Vigilantism</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">治安维持主义，指个人或群体未经法律授权自行执法、调查或惩罚 perceived offenses 的行为。在美国历史上表现为边疆地区的治安委员会、三K党以及对非裔美国人的私刑。核心特征是绕过司法程序以暴力手段维护自认为的正义。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/voodoo.html">
+  <span class="noun">voodoo</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">伏都教（Voodoo，也拼写为Vodou、Vodun或Voudou）是一种源自西非的宗教传统，其词根来自丰族（Fon）语言的&quot;vodu&quot;一词，意为&quot;神灵&quot;或&quot;神祇&quot;。该宗教的核心信仰包括祖先崇拜、泛灵论和与神灵（loa/lwa）沟通。伏都教</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/Walter Cunningham.html">
+  <span class="noun">Walter Cunningham</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">沃尔特·坎宁安（老坎宁安），《杀死一只知更鸟》中的重要配角，一位贫穷但诚实的农民，是阿提克斯·芬奇的当事人，以实物抵债。他曾参与企图对汤姆·罗宾逊施私刑的暴民，但被斯库特的纯真对话唤醒了良知，体现了小说&quot;人性的复杂性&quot;这一主题。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/事件/War Between the States.html">
+  <span class="noun">War Between the States</span>
+  <span class="cat-tag">事件</span>
+  <div class="snippet">美国内战（American Civil War）在美国南部的一种替代称谓，强调冲突是两个主权州（美国联邦与美利坚联盟国）之间的战争，而非同一国家内部的&quot;内战&quot;。该术语在战后由南方邦联退伍军人组织和&quot;南方失落事业&quot;运动推动普及。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/welfare money.html">
+  <span class="noun">welfare money</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">救济金是大萧条时期政府向尤厄尔家发放的福利款项。鲍勃·尤厄尔将救济金用来买威士忌而不是养育八个孩子。他是梅科姆唯一因懒惰被公共事业振兴署（WPA）解雇的人。镇上默许鲍勃在禁猎季节非法狩猎，因为知道孩子们快饿死了。救济金制度体现了梅科姆对尤厄</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/white man cheating black man.html">
+  <span class="noun">white man cheating black man</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">白人欺骗黑人——阿提克斯告诉杰姆，随着年龄增长他会每天看到白人欺骗黑人的现象，并严厉警告说，任何利用种族优势欺骗黑人的白人无论贫富贵贱都是&quot;垃圾&quot;。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/white men's chances.html">
+  <span class="noun">white men&#x27;s chances</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿提克斯用&quot;白人的机会&quot;指代由白人控制的司法和法律体系。汤姆·罗宾逊意识到即使阿提克斯上诉，这个体系也不会给黑人真正的公正，因此宁可自己冒险。这句话揭示了系统性种族歧视和对司法公正的彻底绝望。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/William Jennings Bryan.html">
+  <span class="noun">William Jennings Bryan</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">威廉·詹宁斯·布莱恩（1860-1925）是美国著名的政治家、演说家，曾任美国众议员和国务卿。他是民主党和平民党的领袖，三次竞选总统均告失败，以&quot;黄金十字架&quot;演讲闻名，晚年参与斯科普斯&quot;猴子审判&quot;（进化论争议案）。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/人物/William Wyatt Bibb.html">
+  <span class="noun">William Wyatt Bibb</span>
+  <span class="cat-tag">人物</span>
+  <div class="snippet">威廉·怀亚特·比布（1781年10月2日-1820年7月10日），美国医生、政治家，曾任美国众议员和参议员（代表乔治亚州），1817年被詹姆斯·门罗总统任命为阿拉巴马领地总督（唯一一任），后当选为阿拉巴马州第一任州长（1819年就职）。他在</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/地点/Winston Swamp.html">
+  <span class="noun">Winston Swamp</span>
+  <span class="cat-tag">地点</span>
+  <div class="snippet">温斯顿沼泽是《杀死一只知更鸟》中虚构的地点。据Scout在小说第13章中叙述，如果Sinkfield没有要花招欺骗测量员，梅科姆镇本应建在温斯顿沼泽中央——一个&quot;完全乏味无趣的地方&quot;。温斯顿沼泽在小说中代表了梅科姆幸运避免的、不理想的选址方</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/witness.html">
+  <span class="noun">witness</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">证人是在法庭程序中经宣誓后作证的人，提供其所见、所闻或所经历的事实证据。分为外行证人（基于亲身感知）和专家证人（基于专业知识）等类型。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/women excluded from juries Alabama.html">
+  <span class="noun">women excluded from juries Alabama</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">阿拉巴马州女性被排除在陪审团之外——阿提克斯告诉斯各特，当时的阿拉巴马州法律禁止女性担任陪审员。他半开玩笑地说这是为了&quot;保护脆弱的女士们&quot;免受汤姆案这样肮脏案件的侵扰。</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/WPA.html">
+  <span class="noun">WPA</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">公共事业振兴署（Works Progress Administration，1939年更名为Work Projects Administration），是美国大萧条时期富兰克林·罗斯福总统&quot;新政&quot;下创建的最大 就业救济机构，于1935年5月</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/yap_tacky.html">
+  <span class="noun">yap/tacky</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">这是杰姆用来描述坎宁安家族社会地位低于芬奇家族的俚语词汇。&quot;yap&quot;原指小犬尖叫声，引申为乡下人或喋喋不休的人；&quot;tacky&quot;是南方俚语，意为廉价、俗气、缺乏品位的人。这两个词反映了梅科姆镇严格的社会等级制度——杰姆实际上是在转述亚历山德拉</div>
+</a>
+<a class="flat-item" href="To Kill a Mocking Bird_wiki/概念/Your father's passin'.html">
+  <span class="noun">Your father&#x27;s passin&#x27;</span>
+  <span class="cat-tag">概念</span>
+  <div class="snippet">雷文德·赛克斯在汤姆·罗宾逊被定罪后对斯库特说的话。当阿提克斯·芬奇独自走下法庭过道时，有色人种包厢里的所有黑人观众全体起立，以沉默的敬意目送他离开。雷文德·赛克斯提醒斯库特站起来向自己的父亲表达敬意。这是小说中最感人的时刻之一，象征着黑人</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:25
+</footer>
+<script>
+function switchView(view) {
+  var catView = document.getElementById('cat-view');
+  var flatView = document.getElementById('flat-view');
+  var btnCat = document.getElementById('btn-cat-view');
+  var btnFlat = document.getElementById('btn-flat-view');
+  if (view === 'cat') {
+    catView.classList.remove('view-hidden');
+    flatView.classList.add('view-hidden');
+    btnCat.classList.add('active');
+    btnFlat.classList.remove('active');
+  } else {
+    flatView.classList.remove('view-hidden');
+    catView.classList.add('view-hidden');
+    btnCat.classList.remove('active');
+    btnFlat.classList.add('active');
+  }
+}
+</script>
+</body>
+</html>

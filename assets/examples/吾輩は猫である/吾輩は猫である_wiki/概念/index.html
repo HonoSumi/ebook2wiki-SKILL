@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概念 · 吾輩は猫である</title>
+<style>
+:root {
+  --bg: #faf5f6;
+  --bg-card: #ffffff;
+  --bg-detail: #fefafb;
+  --text: #4a3548;
+  --text-secondary: #7a6578;
+  --text-muted: #aa95a8;
+  --heading: #3a2538;
+  --border: #e8d5de;
+  --accent: #b8727e;
+  --accent-hover: #c98a94;
+  --link: #a05a68;
+  --tag-bg: #f2e2e8;
+  --tag-text: #8a5068;
+  --divider: #e8d5de;
+  --shadow: 0 1px 3px rgba(74,53,72,0.06);
+  --shadow-hover: 0 3px 12px rgba(74,53,72,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "Hiragino Mincho Pro", serif;
+  --font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">概念 · 吾輩は猫である</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../吾輩は猫である_wiki.html">Home</a>
+<span>/</span>
+概念
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">381 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="many a slip 'twixt the cup and the lip.html">
+  <div class="noun">many a slip &#x27;twixt the cup and the lip</div>
+  <div class="snippet">这是一句英语谚语，字面意为&quot;杯与唇之间有很多差错&quot;，比喻事情在成功之前随时可能出意外，即使看似万无一失也有功亏一篑的可能。相当于中文的&quot;功败垂成&quot;&quot;事情不到最后难料&quot;。该谚语源自古希腊神话：阿尔戈号英雄安卡伊俄斯被预言&quot;喝不到自己葡萄园酿的</div>
+</a>
+<a class="entry-item" href="いろはにほへと.html">
+  <div class="noun">いろはにほへと</div>
+  <div class="snippet">《伊吕波歌》的首句，日本最著名的全字母诗（pangram）。平安时代（10—11世纪）创作的七五调短歌，用47个假名不重复地组成。内容咏唱佛教无常观——&quot;色は匂へど散りぬるを／我が世誰ぞ常ならむ&quot;（花虽芬芳终会凋零，此世谁能恒常不变）。传为</div>
+</a>
+<a class="entry-item" href="かちかち山.html">
+  <div class="noun">かちかち山</div>
+  <div class="snippet">日本古来の代表的な民話。狸に殺されたおばあさんの仇を兎が討つ復讐譚。題名は火打石の音に由来する。</div>
+</a>
+<a class="entry-item" href="ちょん髷.html">
+  <div class="noun">ちょん髷</div>
+  <div class="snippet">丁髷（Chonmage），日本传统的男性发型，江户时代在武士阶层中非常普遍。特点是将头顶前部到头顶中央的头发剃光（月代），保留侧面和后部头发并束成圆髻。明治时代1871年发布散发脱刀令后迅速减少。现代仅相扑力士在训练和比赛中保留此发型，时代</div>
+</a>
+<a class="entry-item" href="ばってん.html">
+  <div class="noun">ばってん</div>
+  <div class="snippet">九州方言（特别是博多弁、佐贺弁等肥筑方言）中的逆接接续助词，相当于标准语的&quot;けれども&quot;（然而、但是）。此外，&quot;ばってんが&quot;的形式也作为转折用语使用。&quot;ばってん&quot;是九州方言中最具代表性的特征词汇之一。在作品中多々良三平使用唐津方言时用&quot;ばって</div>
+</a>
+<a class="entry-item" href="へべれけ.html">
+  <div class="noun">へべれけ</div>
+  <div class="snippet">へべれけ是日语俗语，形容因饮酒过量而烂醉如泥的状态，同义于&quot;泥酔&quot;。语源有两种主要说法：一说源自希腊神话中的青春女神赫柏（Hebe）给众神斟酒，众神饮至烂醉，即&quot;Hebe erryake&quot;（赫柏倒酒）的音译；另一说认为是由日语表示摇晃的拟态</div>
+</a>
+<a class="entry-item" href="ほととぎす.html">
+  <div class="noun">ほととぎす</div>
+  <div class="snippet">日本最具权威和历史的俳句专业杂志，由正冈子规与高滨虚子于1897年1月创刊。最初在松山市发行，次年迁至东京由高滨虚子主编。杂志倡导&quot;客观写生&quot;与&quot;花鸟讽咏&quot;的俳句理念，长期占据俳坛主流。夏目漱石的《我是猫》最初就是在《杜鹃》（ホトトギス）上</div>
+</a>
+<a class="entry-item" href="オタンチン・パレオロガス.html">
+  <div class="noun">オタンチン・パレオロガス</div>
+  <div class="snippet">夏目漱石在《我是猫》中创造的著名无意义短语/胡言乱语。原是苦沙弥用来揶揄妻子不识逻辑的随口胡诌之词。该短语模仿西方人名或学术术语的读音，实则毫无含义。&quot;オタンチン&quot;可能来自&quot;御団珍&quot;，&quot;パレオロガス&quot;则模仿&quot;paleologus&quot;（古语学者</div>
+</a>
+<a class="entry-item" href="カステラ.html">
+  <div class="noun">カステラ</div>
+  <div class="snippet">卡斯特拉（カステラ），源自葡萄牙语&quot;Pão de Castela&quot;，是16世纪大航海时代由葡萄牙传教士传入日本的南蛮菓子之一。以鸡蛋、面粉、砂糖为主要原料，经日本本土改良后加入水饴形成独特的湿润口感。1624年长崎福砂屋创业，为现存最古老的</div>
+</a>
+<a class="entry-item" href="サヴェジ・チー.html">
+  <div class="noun">サヴェジ・チー</div>
+  <div class="snippet">&quot;Savage Tea&quot;是《我是猫》中苦沙弥将&quot;番茶&quot;误译成的英文。英语教师苦沙弥不知如何翻译&quot;番茶&quot;（粗茶），自作聪明地直译为&quot;Savage tea&quot;（野蛮的茶）。漱石借此讽刺当时知识分子的虚荣心和半吊子英语水平，是日本文学史上著名的笑谈</div>
+</a>
+<a class="entry-item" href="ジュピター.html">
+  <div class="noun">ジュピター</div>
+  <div class="snippet">拉丁语Juppiter的音译，即罗马神话中的主神朱庇特（对应希腊神话的宙斯），掌管天空与雷霆，是众神之王。在作品中，猫引用&quot;上至在天之神朱庇特，下至土中鸣叫的蚯蚓、蝼蛄&quot;来表现恋爱是宇宙性的活力，一切生物无不为之所动。这一典故被猫用来解释春</div>
+</a>
+<a class="entry-item" href="スタビリチー.html">
+  <div class="noun">スタビリチー</div>
+  <div class="snippet">英语 stability（安定性、稳定性）的外来语变体表记。在《我是猫》中，迷亭用此词形容寒月&quot;日夜研究橡子的稳定性&quot;。这是漱石对当时日本知识分子热衷于用生僻的外来学术用语研究琐碎课题的讽剌。寒月这位高学历的理学士埋头于&quot;橡子的稳定性&quot;这一</div>
+</a>
+<a class="entry-item" href="ズーズー.html">
+  <div class="noun">ズーズー</div>
+  <div class="snippet">日语中东北方言的俗称，语言学上称为&quot;一假名方言&quot;（一つ仮名弁）。其特点为&quot;し&quot;与&quot;す&quot;、&quot;ち&quot;与&quot;つ&quot;、&quot;じ&quot;与&quot;ず&quot;等四组假名的发音合流，听起来带&quot;ズー&quot;音，因而得名。主要分布在东北地区和山阴地区。在作品中，猫提到&quot;北方的人因懒惰而尽量不</div>
+</a>
+<a class="entry-item" href="チェヴィ・チェーズ.html">
+  <div class="noun">チェヴィ・チェーズ</div>
+  <div class="snippet">英国中世纪边境民谣&quot;Chevy Chase&quot;（日文片假名&quot;チェヴィ・チェーズ&quot;），讲述英格兰诺森伯兰伯爵珀西与苏格兰伯爵道格拉斯在切维厄特丘陵因狩猎引发的大规模战斗。该民谣可追溯至15世纪，被菲利普·悉尼在《诗辩》中赞为&quot;粗犷而高贵的激情&quot;</div>
+</a>
+<a class="entry-item" href="デカダン.html">
+  <div class="noun">デカダン</div>
+  <div class="snippet">デカダン（Decadent/颓废派），源自19世纪末法国象征主义文学运动， 主张打破传统道德和艺术规范，追求感官刺激、人工之美和世纪末的颓废美学。 日本明治末期至大正初期引入该概念，影响了永井荷风、谷崎润一郎、岩野泡鸣等作家。 作品中迷亭听</div>
+</a>
+<a class="entry-item" href="ハイカラ.html">
+  <div class="noun">ハイカラ</div>
+  <div class="snippet">明治後期から大正期にかけての流行語。西洋風の服装や文化を取り入れた進歩的・モダンな様子を指す。 --- 源自英语&quot;high collar&quot;（高领），明治末期至大正时期的流行语。最初指穿西式高领衬衫的人，后泛指追求西洋文化、时尚新潮的人或事物</div>
+</a>
+<a class="entry-item" href="ベトヴェンのシンフォニー.html">
+  <div class="noun">ベトヴェンのシンフォニー</div>
+  <div class="snippet">贝多芬的交响曲。ベトヴェン即贝多芬（Ludwig van Beethoven），这是夏目漱石当时常用的日语表记（现代日语一般写作ベートーヴェン）。猫将自己的叫声比作贝多芬的交响曲，以极度的自负口吻形成幽默反差，体现漱石通过猫的视角进行自我夸</div>
+</a>
+<a class="entry-item" href="ベースボール.html">
+  <div class="noun">ベースボール</div>
+  <div class="snippet">棒球。1872年（明治5年）由美国教师霍勒斯·威尔逊在东京开成学校（东京大学前身）首次传授给日本学生。明治时代作为&quot;文明开化&quot;的象征迅速在精英学生阶层中普及。正冈子规（俳人）和同学中马庚将&quot;Baseball&quot;译为&quot;野球&quot;，子规还贡献了&quot;打者</div>
+</a>
+<a class="entry-item" href="ペスト.html">
+  <div class="noun">ペスト</div>
+  <div class="snippet">鼠疫（黑死病），由鼠疫耶尔森菌（Yersinia pestis）引起的急性传染病。历史上造成三次世界大流行：第1次6世纪地中海地区约1亿人死亡；第2次14世纪欧洲约2500万人死亡（占人口1/4）；第3次18-19世纪波及32国。日本在明治</div>
+</a>
+<a class="entry-item" href="リードル.html">
+  <div class="noun">リードル</div>
+  <div class="snippet">英语&quot;riddle&quot;（谜语）的明治时期日语音译。当时存在《英学捷解一名リードル独学》等以谜语式阅读法教授英语的教材。文中客人称苦沙弥为&quot;十年一日のごとくリードル専門の教師&quot;，讽刺他十年如一日只会用老套的谜语法教英语，暗示其教学方法的僵化与迂</div>
+</a>
+<a class="entry-item" href="一夫多妻主義.html">
+  <div class="noun">一夫多妻主義</div>
+  <div class="snippet">一夫多妻制，指一个男性同时拥有多个女性配偶的制度。日本明治初期曾沿袭江户时代的妾室制度，在法律上承认一夫多妻。直到1882年才为迎合西方文明标准在法律上废除纳妾，但明治民法中的&quot;家制度&quot;仍保留了实质上的多妻空间。</div>
+</a>
+<a class="entry-item" href="一念万年、万年一念.html">
+  <div class="noun">一念万年、万年一念</div>
+  <div class="snippet">禅宗用语，出自《信心铭》（僧璨）&quot;宗非促延、一念万年&quot;。意为短暂的一念之中包含万年之久，万年时光浓缩于当下的一念。超越时间长短的相对性，表达消除二元对立、心物不二的悟道境界。与《华严经》&quot;一念无量劫、无量劫一念&quot;相通。</div>
+</a>
+<a class="entry-item" href="一所不住.html">
+  <div class="noun">一所不住</div>
+  <div class="snippet">佛教禅宗用语，意为&quot;不执著停留于任何一处&quot;。源于&quot;無住&quot;概念——心不执著于善恶、有无、内外等一切二元对立，不住于空亦不住于不空，达到自由无碍的境界。《金刚经》云&quot;应无所住而生其心&quot;，《六祖坛经》以&quot;无念为宗、无相为体、无住为本&quot;。在日语中，</div>
+</a>
+<a class="entry-item" href="一狐裘.html">
+  <div class="noun">一狐裘</div>
+  <div class="snippet">&quot;十年一狐裘&quot;的略语，出自中国古典《礼记·檀弓下》&quot;晏子一狐裘三十年&quot;的典故。春秋时期齐国名相晏婴（晏子）一件狐裘穿了三十年，成为清廉节俭的象征。作品中多々良三平引用此典故讽刺苦沙弥身为英文讲师（リーダー専門）多年却依然清贫，意在劝其弃教从</div>
+</a>
+<a class="entry-item" href="一竿風月.html">
+  <div class="noun">一竿風月</div>
+  <div class="snippet">出自中国南宋诗人陆游的诗句。原文为&quot;回首壮游真昨梦，一竿风月老南湖&quot;（《感旧》），意为手持钓竿、沐浴风月、悠然度日。在《吾辈是猫》中化身&quot;独仙&quot;角色的悠闲隐逸之语，表达超然物外的隐士情怀。</div>
+</a>
+<a class="entry-item" href="一騎当千.html">
+  <div class="noun">一騎当千</div>
+  <div class="snippet">日语四字熟语（ikkitousen），意为&quot;以一当千&quot;，形容武士勇猛无敌，一人可敌千人。源自中国《答苏武书》中&quot;一以当千&quot;的表述，是日本广为使用的成语。作品中猫称来访苦沙弥家的知识分子们为&quot;一騎当千の豪傑連&quot;，以夸张的战争修辞来形容这群爱辩</div>
+</a>
+<a class="entry-item" href="七転び八起き.html">
+  <div class="noun">七転び八起き</div>
+  <div class="snippet">日本谚语（nanakorobi yaoki），字面意为&quot;跌倒七次，第八次站起来&quot;，比喻无论失败多少次都重新振作的不屈精神。也写作&quot;七転八起&quot;（しちてんはっき）。与达摩不倒翁的意象相通，是日本代表性的励志谚语。迷亭在讲述Agnodice的故事</div>
+</a>
+<a class="entry-item" href="万葉調.html">
+  <div class="noun">万葉調</div>
+  <div class="snippet">日本最古和歌集《万叶集》（8世纪成书）所代表的诗歌风格，亦称&quot;ますらをぶり&quot;（益荒男振）。特点为率直雄浑、感情真挚，与后世《古今和歌集》的纤巧优美形成对比。代表歌人有柿本人麻吕、山部赤人、山上忆良、大伴旅人等。</div>
+</a>
+<a class="entry-item" href="三世相.html">
+  <div class="noun">三世相</div>
+  <div class="snippet">源自中国的一种占卜术，以出生年月日的干支判断前世、现世、来世三世的命运吉凶，江户时代在日本广泛流行，印成通俗读物。</div>
+</a>
+<a class="entry-item" href="三十三間堂.html">
+  <div class="noun">三十三間堂</div>
+  <div class="snippet">本文中指净琉璃（义太夫节）的曲目《三十三间堂》，全名为《摄津大掾的三十三间堂》。此曲目以京都三十三间堂（莲华王院）的由来传说为题材。&quot;三十三间堂&quot;本为京都东山区的著名寺院，因正殿梁柱间有三十三个间隔而得名。在江户至明治时期，以此题材创作的净</div>
+</a>
+<a class="entry-item" href="三角主義.html">
+  <div class="noun">三角主義</div>
+  <div class="snippet">在《我是猫》的语境中，&quot;三角主义&quot;指金田一家所信奉的多角婚姻策略。金田作为大资本家，同时为女儿富子物色多个可能的结婚对象（寒月、多多良三平等），形成&quot;三角&quot;乃至多角的婚姻博弈关系。这一措辞讽刺了金田家将婚姻视为商业交易的冷酷理性，以及拜金主</div>
+</a>
+<a class="entry-item" href="三角術.html">
+  <div class="noun">三角術</div>
+  <div class="snippet">夏目漱石《吾辈は猫である》中出现的讽刺性商业概念。铃木藤十郎转述某实业家的说法，称赚钱必须使用&quot;三角术&quot;——即舍弃义理（义理をかく）、舍弃人情（人情をかく）、舍弃羞耻（恥をかく），三者形成三角。这是漱石对明治时代拜金主义资本家的辛辣批判。</div>
+</a>
+<a class="entry-item" href="不動智神妙録.html">
+  <div class="noun">不動智神妙録</div>
+  <div class="snippet">日本江户时代临济宗禅僧泽庵宗彭（沢庵宗彭）为剑豪柳生宗矩撰写的禅武著作，共13章。核心思想是&quot;不动智&quot;——即动中不动的智慧，强调&quot;无停留处之心&quot;，心不滞留于任何一点（敌身、敌刀、我刀等），全身遍满自在。书中主张&quot;石火之机&quot;&quot;间不容发&quot;等瞬间</div>
+</a>
+<a class="entry-item" href="不敬.html">
+  <div class="noun">不敬</div>
+  <div class="snippet">天皇や皇室に対する尊敬を欠く行為。明治憲法下では不敬罪として罰せられた戦前日本の重要な法的概念。</div>
+</a>
+<a class="entry-item" href="中庸.html">
+  <div class="noun">中庸</div>
+  <div class="snippet">中庸，儒家核心思想之一，语出《礼记·中庸》篇，相传为孔子之孙子思所作。后被朱熹编入&quot;四书&quot;，成为科举考试必读经典。&quot;中&quot;即不偏不倚，&quot;庸&quot;即恒常不变，中庸之道追求&quot;执两用中&quot;&quot;时中&quot;与&quot;权变&quot;，强调审时度势、因时因地制宜。在《我是猫》中，猫</div>
+</a>
+<a class="entry-item" href="中間.html">
+  <div class="noun">中間</div>
+  <div class="snippet">江户时代武家奉公人的一种身份，位于足轻之下、小者之上。主要职责为平日宅邸杂务，战时搬运兵粮和武器。非世袭制，多为百姓或町人子弟短期就职，薪酬较低，属&quot;卒&quot;（非武士阶层）。中间虽非士分，但比一般百姓更接近权力中枢，是介于武士与庶民之间的社会身</div>
+</a>
+<a class="entry-item" href="丸薬缶.html">
+  <div class="noun">丸薬缶</div>
+  <div class="snippet">丸薬缶（がんやくかん），原意为盛放丸药的圆形金属小罐。在作品中用以比喻秃头——&quot;如同药罐般光滑圆润的头顶&quot;。这是迷亭失恋故事的关键包袱：迷亭清晨醒来，看到窗外有个&quot;药缶頭&quot;（秃得像药罐一样光溜的脑袋）在洗脸，细看之下才发现正是昨夜梳着华美高</div>
+</a>
+<a class="entry-item" href="乾屎橛.html">
+  <div class="noun">乾屎橛</div>
+  <div class="snippet">禅宗著名的公案用语，原指古印度民间便后使用的厕筹（小竹木片），为至秽至贱之物。最著名的两则公案：一是临济义玄禅师以&quot;无位真人是什么乾屎橛&quot;截断学人思维；二是云门文偃禅师在《无门关》中以&quot;乾屎橛&quot;回答&quot;如何是佛&quot;之问。其核心禅理在于破除对&quot;佛</div>
+</a>
+<a class="entry-item" href="亀の子（かめのこ）.html">
+  <div class="noun">亀の子（かめのこ）</div>
+  <div class="snippet">字面意为小龟或龟的儿子。在本文中用作比喻，形容主人像乌龟一样把头缩进被窝里只露出脚，以此逃避妻子的催促起床。暗喻主人胆小、消极逃避的性格特点，体现了漱石以动物作喻的幽默讽刺手法。</div>
+</a>
+<a class="entry-item" href="仁王.html">
+  <div class="noun">仁王</div>
+  <div class="snippet">仁王是佛教护法神金刚力士的通称，通常成对供奉于寺院山门（仁王门）两侧。张口者为阿形（那罗延天），闭口者为吽形（密迹金刚力士），分别象征生命之始与终。手持金刚杵，现忿怒相，守护佛法及寺院。源自印度神话中的金刚手菩萨，随着佛教传入东亚后成为伽蓝</div>
+</a>
+<a class="entry-item" href="代言.html">
+  <div class="noun">代言</div>
+  <div class="snippet">日本明治时期对律师的旧称。1872年司法职制定制创设&quot;代言人&quot;制度，规定代言人是在法院陈述诉讼主旨并进行辩论的职业。1893年旧律师法制定后，&quot;代言人&quot;正式改称为&quot;弁護士&quot;，成为现代律师制度的基础。作品中提到的&quot;三毛君は代言の主人を持ってい</div>
+</a>
+<a class="entry-item" href="以心伝心.html">
+  <div class="noun">以心伝心</div>
+  <div class="snippet">佛教禅宗用语，意为不借助语言文字，以心传心、师徒间直接以心灵感悟传递佛法真谛。源自释迦牟尼&quot;拈花微笑&quot;的典故。作品中猫观察到迷亭闯入后三人沉默的微妙场面，将之比作禅宗的无言问答和以心传心。</div>
+</a>
+<a class="entry-item" href="体面.html">
+  <div class="noun">体面</div>
+  <div class="snippet">体面、面子、尊严。指个人在社会中的名誉、身份和外在形象。猫虽自称无名，却强调作为猫的&quot;体面&quot;不可受损，展现了其自尊心。</div>
+</a>
+<a class="entry-item" href="余瀾.html">
+  <div class="noun">余瀾</div>
+  <div class="snippet">余波、后续影响。本义为尚未平息的波浪，引申为大事件之后残留的余波余韵。出自《梁书·敬帝纪》及韩愈诗。</div>
+</a>
+<a class="entry-item" href="依托販売.html">
+  <div class="noun">依托販売</div>
+  <div class="snippet">日语中&quot;委託販売&quot;（itaku hanbai，委托销售/寄售）的异写。指货主将商品委托给销售方代为销售，售出后才结算的商业模式。《我是猫》中寒月讽刺道，明治时代的女性不再需要人贩子沿街叫卖，而是通过学校、慈善会、园游会等进行&quot;自我推销&quot;，其</div>
+</a>
+<a class="entry-item" href="価切.html">
+  <div class="noun">価切</div>
+  <div class="snippet">日语&quot;値切る&quot;（ねぎる，negiru）的缩略形，意为讨价还价、杀价。由&quot;値（价格）&quot;和&quot;切る（切、砍）&quot;构成，字面含义为&quot;砍价&quot;。《我是猫》中迷亭讲述父亲与人口贩子就女童价格反复讨价还价的情节，展现了明治初年的商品化意识——人的买卖像商品一</div>
+</a>
+<a class="entry-item" href="侮辱.html">
+  <div class="noun">侮辱</div>
+  <div class="snippet">侮辱，用言行损害他人名誉和尊严。乌鸦对猫叫&quot;阿呆&quot;（傻瓜）的挑衅行为被猫视为对自身尊严的严重侮辱，由此引发对峙。</div>
+</a>
+<a class="entry-item" href="俳人.html">
+  <div class="noun">俳人</div>
+  <div class="snippet">创作俳句或俳谐的诗人。俳句由五、七、五共17音节构成，是世界上最短的定型诗之一。自松尾芭蕉（被尊为&quot;俳圣&quot;）将俳谐提升为高雅艺术后，历经与谢芜村、小林一茶，至明治时期正冈子规将&quot;发句&quot;独立为&quot;俳句&quot;。俳人是日本文学史上的重要创作群体。</div>
+</a>
+<a class="entry-item" href="俳体詩.html">
+  <div class="noun">俳体詩</div>
+  <div class="snippet">俳体诗，又称俳谐体诗，指内容谐谑幽默、带有讽刺或游戏性质的诗歌形式。源起于中国，宋代陆游《老学庵笔记》中已有记载，唐代杜甫有「戏作俳谐体遣闷二首」等名作。特征是通俗易懂、风趣滑稽，格律相对自由。日本的「俳谐」及后世「俳句」的名称和概念受中国</div>
+</a>
+<a class="entry-item" href="俳劇.html">
+  <div class="noun">俳劇</div>
+  <div class="snippet">寒月在小说的聚会中即兴创作的虚构戏剧体裁，全称&quot;俳句趣味の劇&quot;（haiku趣味剧）， 简称&quot;俳劇&quot;。寒月将俳句的含蓄、余韵和季感融入戏剧之中，创作了一幕极简的剧作： 舞台中央一棵大柳树，树上栖一只乌鸦，树下美女行水沐浴，俳人高滨虚子登场吟句</div>
+</a>
+<a class="entry-item" href="俳句.html">
+  <div class="noun">俳句</div>
+  <div class="snippet">日本传统定型短诗，由五·七·五共17个音节组成，是世界上最短的诗歌形式之一。必须包含表示季节的&quot;季语&quot;和使用&quot;切字&quot;。起源于江户时代俳谐连歌的首句，经松尾芭蕉等发扬光大，明治时代正冈子规将其革新独立为&quot;俳句&quot;。代表作家有松尾芭蕉、与谢芜村、</div>
+</a>
+<a class="entry-item" href="俳諧.html">
+  <div class="noun">俳諧</div>
+  <div class="snippet">日本传统文艺形式之一，起源于平安时代末期的&quot;俳谐连歌&quot;。室町时代发展为独立形式，江户时代经松永贞德（贞门）、西山宗因（谈林）等发展，后由松尾芭蕉确立&quot;蕉风俳谐&quot;，提升为高雅艺术。明治时代正冈子规将俳谐连歌的&quot;发句&quot;（首句）独立为&quot;俳句&quot;。《</div>
+</a>
+<a class="entry-item" href="倒行逆施.html">
+  <div class="noun">倒行逆施</div>
+  <div class="snippet">倒行逆施（とうぎょうぎゃくし），汉语成语，出自《史记·伍子胥列传》。春秋时期楚国伍子胥为报父兄之仇攻入楚都郢，掘楚平王墓鞭尸三百。其友申包胥遣人责之，伍子胥答曰：&quot;吾日暮途远，吾故倒行而逆施之。&quot;（天色已晚而路途尚远，故不顾常理反向行事。）</div>
+</a>
+<a class="entry-item" href="偕老同穴.html">
+  <div class="noun">偕老同穴</div>
+  <div class="snippet">成语，意为夫妻共同生活到老，死后同葬一个墓穴，形容夫妻恩爱、生死与共。&quot;偕老&quot;出自《诗经·邶风·击鼓》&quot;执子之手，与子偕老&quot;，&quot;同穴&quot;出自《诗经·王风·大车》&quot;谷则异室，死则同穴&quot;。在日本，此词也指一种深海玻璃海绵（Euplectella，</div>
+</a>
+<a class="entry-item" href="催眠術.html">
+  <div class="noun">催眠術</div>
+  <div class="snippet">催眠术，明治时代日本经历了一场空前的催眠术热潮。1903年（明治36年）前后，催眠术相关书籍、通信教育团体大量涌现，被视为对&quot;物质万能主义&quot;的反动，追求精神层面的慰藉。东京帝国大学心理学教授福来友吉（1869—1952）于1905年出版日本</div>
+</a>
+<a class="entry-item" href="儒家.html">
+  <div class="noun">儒家</div>
+  <div class="snippet">儒家是以孔子为创始人的中国最重要的哲学思想流派，由战国时期孟子、荀子等继承发展，汉武帝时&quot;罢黜百家、独尊儒术&quot;后成为中国古代正统思想。儒家经典《论语》《孟子》《大学》《中庸》等构成核心典籍，核心概念为&quot;仁&quot;&quot;礼&quot;&quot;义&quot;&quot;忠恕&quot;。儒家思想在5</div>
+</a>
+<a class="entry-item" href="全智全能.html">
+  <div class="noun">全智全能</div>
+  <div class="snippet">基督教神学中描述神之根本属性的概念。「全智」指神拥有无限完全的知力，知晓过去、现在、未来的一切；「全能」指神拥有完全支配万物的能力，可按其旨意成就一切。与「全在」并列为神的三个「全」属性。文中夏目漱石借猫之口对这一教义提出质疑，认为神的全能</div>
+</a>
+<a class="entry-item" href="公徳.html">
+  <div class="noun">公徳</div>
+  <div class="snippet">明治时代由福泽谕吉在《文明论之概略》（1875年）中首次定义的道德概念，指个人在与外界接触和社交行为中应遵守的道德规范，如廉耻、公平、正直、勇敢等。与&quot;私德&quot;（内心活动的道德）相对。明治维新后，因西方人对日本公德现状的批评，日本社会掀起了广</div>
+</a>
+<a class="entry-item" href="具不退転.html">
+  <div class="noun">具不退転</div>
+  <div class="snippet">佛教术语，&quot;具&quot;为具足、具备，&quot;不退転&quot;（梵语avinivartanīya，音译阿鞞跋致）指修行者在通向觉悟的道路上不再退堕的境地。有三种不退转：位不退（不退入凡夫位）、行不退（不退入小乘）、念不退（不退失中道正念）。净土宗《阿弥陀经》说极</div>
+</a>
+<a class="entry-item" href="写生.html">
+  <div class="noun">写生</div>
+  <div class="snippet">直接观察实物或自然景物进行描绘的绘画方法。原为中国五代北宋花鸟画概念，强调捕捉对象生命力。明治时代引入西方写实主义后，该词被赋予&quot;如实描绘&quot;的含义。正冈子规将写生理念应用于俳句与短歌创作，推动了日本文学的写实主义运动。作品中友人以安德烈亚·</div>
+</a>
+<a class="entry-item" href="写生文.html">
+  <div class="noun">写生文</div>
+  <div class="snippet">写生文（しゃせいぶん）是明治末期由正冈子规倡导的文学写作方法及文体。其核心理念是&quot;如实描写所见所闻&quot;，强调客观观察和忠实的细节记录，如同绘画中的&quot;写生&quot;（素描）一般。子规通过俳句杂志《杜鹃》（ホトトギス）推广这一理念，影响了高浜虚子、河東碧</div>
+</a>
+<a class="entry-item" href="冥土.html">
+  <div class="noun">冥土</div>
+  <div class="snippet">佛教用语，指死者居住的世界、阴间、黄泉。与&quot;冥途&quot;同义。佛教中特指地狱、饿鬼、畜生等三恶道，与光明充满的极乐净土相对。</div>
+</a>
+<a class="entry-item" href="冥頑不霊.html">
+  <div class="noun">冥頑不霊</div>
+  <div class="snippet">四字熟语，读作&quot;めいがんふれい&quot;，意为&quot;愚昧顽固、冥顽不灵&quot;。原为中国成语，出自唐代韩愈《祭鳄鱼文》：&quot;不然，则是鳄鱼冥顽不灵，刺史虽有言，不闻不知也。&quot;韩愈贬为潮州刺史时，当地鳄鱼为患，他写此文祭告鳄鱼，称若鳄鱼&quot;冥顽不灵&quot;则刺史虽言也无</div>
+</a>
+<a class="entry-item" href="冷暖自知.html">
+  <div class="noun">冷暖自知</div>
+  <div class="snippet">冷暖自知是禅宗著名公案用语，出自&quot;如人饮水，冷暖自知&quot;（如人饮水，冷暖自知）。最早见于唐代善无畏译《大日经疏》卷第十二，后载于《六祖大师法宝坛经》和宋代《景德传灯录》。故事为六祖慧能问道明禅师&quot;不思善，不思恶，正与么时，哪个是明上座本来面目</div>
+</a>
+<a class="entry-item" href="処士.html">
+  <div class="noun">処士</div>
+  <div class="snippet">日语词汇，读作&quot;しょし&quot;，指有才学而隐居不仕之人，即隐士、在野之人。源自中国儒家思想，《论语》等典籍中已有记载。在日本，平安时代以降成为仕官しない武士或知识分子的雅称，江户时代常用来指浪人或民间学者。与&quot;隐者&quot;的区别在于：処士强调有能力却主</div>
+</a>
+<a class="entry-item" href="出鱈目.html">
+  <div class="noun">出鱈目</div>
+  <div class="snippet">いい加減で荒唐無稽なこと。語源は博徒の隠語「出たら（その）目」で、サイコロの出た目任せという意味から転じて、理屈や筋道を通さない様子を表す。漢字表記はすべて当て字。</div>
+</a>
+<a class="entry-item" href="割愛.html">
+  <div class="noun">割愛</div>
+  <div class="snippet">日语汉字词，源自佛教用语，意为&quot;断除爱欲（烦恼）&quot;，后引申为&quot;忍痛割舍&quot;或&quot;省略&quot;。读音为&quot;かつあい&quot;（非&quot;わりあい&quot;）。《我是猫》中迷亭在长篇大论中提到关于伊势源有很多奇谈逸事，但决定&quot;割愛&quot;（割爱省略），只讲人口贩卖的故事，展示了明治知</div>
+</a>
+<a class="entry-item" href="功力.html">
+  <div class="noun">功力</div>
+  <div class="snippet">读作&quot;くりき&quot;，佛教术语，指通过修行或虔敬行为所积累的功德之力。&quot;功&quot;指功德（善行积累的果报），&quot;力&quot;指由此产生的力量（效力）。在佛教经典中，&quot;功力&quot;指修行者通过精进修行而获得的灵性力量，能够产生感应、实现愿望。该词也用于世俗语境中泛指某种</div>
+</a>
+<a class="entry-item" href="十六むさし.html">
+  <div class="noun">十六むさし</div>
+  <div class="snippet">日本传统棋盘游戏，又称&quot;十六武蔵&quot;&quot;十六六指&quot;。使用5×5（带斜线）的棋盘，一方执1枚&quot;武蔵&quot;（亲石），另一方执16枚&quot;军官&quot;（子石），武蔵通过跳入两敌之间夹取而消灭对方。别称还有&quot;牛追い&quot;&quot;弁慶むさし&quot;等，起源于中国古棋&quot;八道行成&quot;，在江</div>
+</a>
+<a class="entry-item" href="千載一遇.html">
+  <div class="noun">千載一遇</div>
+  <div class="snippet">日语四字熟语（senzaiichigu），意为&quot;千载难逢&quot;，指千年才遇到一次的极稀有良机。出自中国后汉《东观汉记》耿况列传。作品中猫用&quot;千載一遇の光栄&quot;来形容自己能作为苦沙弥门下的猫，朝夕观察这些豪杰们的举止，实属千载难逢的荣幸。这是猫自我</div>
+</a>
+<a class="entry-item" href="南無阿弥陀仏.html">
+  <div class="noun">南無阿弥陀仏</div>
+  <div class="snippet">净土宗的重要修行方法——称名念佛（口称念佛）。&quot;南无&quot;（namo）源自梵语，意为归命、归依；&quot;阿弥陀&quot;意为无量光、无量寿；&quot;佛&quot;即觉者。整体意为&quot;归命无量光无量寿佛&quot;。通过唱念此六字名号，祈愿往生西方极乐净土。在中国由昙鸾、道绰、善导等祖师</div>
+</a>
+<a class="entry-item" href="博士論文.html">
+  <div class="noun">博士論文</div>
+  <div class="snippet">博士学位申请论文。作品中金田家提出以寒月获得博士学位作为嫁女儿的条件，既为保全在世俗社会的面子，也为提升家族声望。反映了明治时代学历崇拜与门第观念，以及新兴资本家阶层对学术头衔的功利追求。</div>
+</a>
+<a class="entry-item" href="取越苦労.html">
+  <div class="noun">取越苦労</div>
+  <div class="snippet">日语惯用语（torikoshigurou），意为&quot;杞人忧天&quot;，指为尚未发生的事情过分担忧、自寻烦恼。同义词有&quot;杞憂&quot;。作品中使用&quot;取越苦労&quot;来描写老年人对年轻一代品行的不必要担忧——寒月说老人总是不必要地担心，实际上这正是文明进步的趋势。</div>
+</a>
+<a class="entry-item" href="右往左往.html">
+  <div class="noun">右往左往</div>
+  <div class="snippet">右往左往（うおうさおう），日语四字熟语，意为慌乱地四处奔走、狼狈不堪的样子。原为佛教用语，描述众生在迷妄中奔波的状态。在《我是猫》中，猫描述被它捉弄的螳螂被逼得走投无路、拼命逃窜的样子时使用了此语：&quot;ただ右往左往へ逃げ惑うのみである&quot;，生动</div>
+</a>
+<a class="entry-item" href="名主.html">
+  <div class="noun">名主</div>
+  <div class="snippet">日本江户时代村庄中的基层行政职务，相当于村长（在东日本称为&quot;名主&quot;，西日本称为&quot;庄屋&quot;）。作品透露苦沙弥的父亲曾是&quot;场末的名主&quot;，因此养成了对官员卑躬屈膝的习惯，并遗传给了苦沙弥。</div>
+</a>
+<a class="entry-item" href="名目読み.html">
+  <div class="noun">名目読み</div>
+  <div class="snippet">日语汉字的一种特殊读法，又称&quot;故实読み&quot;。指按照古代惯例来读汉字词汇，而非使用通常的音读或训读。例如：&quot;杉原&quot;读作&quot;すいはら&quot;而不读&quot;すぎはら&quot;，&quot;透垣&quot;读作&quot;すいがい&quot;、&quot;茎立&quot;读作&quot;くくたち&quot;。文中老人用&quot;蚯蚓（みみず）来自目見ず的名目</div>
+</a>
+<a class="entry-item" href="君子.html">
+  <div class="noun">君子</div>
+  <div class="snippet">儒家经典中的核心道德人格概念，指具有高尚品德的人。孔子将&quot;君子&quot;从西周时期指称贵族（有位者）的身份概念革新为以道德为标准的理想人格——&quot;君子喻于义，小人喻于利&quot;。《论语》中&quot;君子&quot;共出现107次，涵盖仁、义、礼、智、勇、中庸等德目，追求&quot;文</div>
+</a>
+<a class="entry-item" href="唐人.html">
+  <div class="noun">唐人</div>
+  <div class="snippet">原指唐朝时期的中国人。因唐朝国力鼎盛、文化远播，唐代以后日本及东南亚诸国长期沿用&quot;唐人&quot;称呼全体中国人。日本江户时代将来自中国的商人和移民称为&quot;唐人&quot;或&quot;唐人之&quot;，长崎设有唐人屋敷（中国人聚居区）。该词在日本文学和历史文献中广泛使用。《明史</div>
+</a>
+<a class="entry-item" href="唐変木.html">
+  <div class="noun">唐変木</div>
+  <div class="snippet">唐変木（とうへんぼく）是日语中的骂詈语，意为&quot;木头脑袋、死脑筋的人、顽固不化、不懂变通之人&quot;。字面构成为&quot;唐&quot;（中国唐朝，引申为异国/奇怪之物）+&quot;変木&quot;（奇特的树木），合起来字面意思为&quot;来自中国的奇怪木头&quot;。比喩性地指像木头一样脑袋硬邦邦</div>
+</a>
+<a class="entry-item" href="唐津訛.html">
+  <div class="noun">唐津訛</div>
+  <div class="snippet">唐津方言，佐贺县唐津地区的口音。属九州方言中的肥筑方言，特征包括：形容词终止形式用&quot;〜か&quot;（如&quot;よか&quot;代替&quot;よい&quot;），使用&quot;ばってん&quot;（けれども）、&quot;ばい/たい&quot;（〜だよ）等助词，主格助词用&quot;の&quot;等。在作品中多々良三平讲唐津方言口音（&quot;唐津</div>
+</a>
+<a class="entry-item" href="唐詩選.html">
+  <div class="noun">唐詩選</div>
+  <div class="snippet">中国唐代诗歌的精选集，特指明人李攀龙编选的《唐诗选》。全书收录128位诗人的465篇名诗，以盛唐诗人王维、李白、杜甫等为中心。江户时代传入日本后成为最受欢迎的汉诗入门书，被广泛诵读和模仿。日本文人吟诵&quot;唐诗选&quot;被视为风雅之事，也是明治时代知</div>
+</a>
+<a class="entry-item" href="四畳半.html">
+  <div class="noun">四畳半</div>
+  <div class="snippet">面积相当于4.5张榻榻米的房间，约7.29平方米。在日本传统建筑中，四叠半被认为是&quot;和室中最完美的空间&quot;，也是茶圣千利休确立的经典茶室规格，象征&quot;和敬清寂&quot;的茶道精神。</div>
+</a>
+<a class="entry-item" href="四百四病.html">
+  <div class="noun">四百四病</div>
+  <div class="snippet">四百四病（しひゃくしびょう），佛教医学概念，指人体由四大（地·水·火·风）构成， 每一大不调则生101种病，四大合计404种病，泛指一切疾病。 典出《正法念处经》《维摩诘经》等佛教经典。在日本民间「四百四病」也作为 「万病」「所有疾病」的惯</div>
+</a>
+<a class="entry-item" href="回向.html">
+  <div class="noun">回向</div>
+  <div class="snippet">佛教术语，意为将自身修行所积累的善根功德，回转施予他人或导向特定目的（如往生净土）。梵语parinama，意为&quot;转向&quot;、&quot;转化&quot;。有大乘佛教中&quot;回事向理、回因向果、回自向他、回小向大&quot;四种回向。在净土宗中分为&quot;往相回向&quot;（将功德施予众生共往</div>
+</a>
+<a class="entry-item" href="団栗.html">
+  <div class="noun">団栗</div>
+  <div class="snippet">日语中指橡子/橡实，即橡树的果实。在本章中作为&quot;団栗博士&quot;（Acorn Doctor）的缩略语出现，是迷亭对寒月博士论文课题的调侃称呼。寒月是理学士、物理学者，迷亭推测其论文主题与&quot;団栗&quot;或&quot;上吊的力学&quot;（首縊りの力学）之类相关，因此戏称其</div>
+</a>
+<a class="entry-item" href="図案学校.html">
+  <div class="noun">図案学校</div>
+  <div class="snippet">本章中猫讲述的英国设计学校轶事。约六十年前（19世纪中期）， 英国某古都设立了一所图案设计学校（図案学校），购置了裸体画、裸体像的 摹写模型用于教学。但在开校式之际，教职员们陷入困境——必须邀请城中淑女出席， 而当时贵妇人们认为&quot;人間は服装</div>
+</a>
+<a class="entry-item" href="坐禅.html">
+  <div class="noun">坐禅</div>
+  <div class="snippet">坐禅（Zazen），佛教禅宗的核心修行方法，通过结跏趺坐（盘腿端坐）的姿势静坐，使心念安定、消除杂念，以达致觉悟。源于古印度瑜伽禅定，由菩提达摩传入中国（约520年），其后在中国发展出临济宗、曹洞宗等五家七宗。宋代由荣西、道元等僧人传入日本</div>
+</a>
+<a class="entry-item" href="増上慢.html">
+  <div class="noun">増上慢</div>
+  <div class="snippet">佛教术语，为七种傲慢（七慢）之一。指尚未证得殊胜功德或圣果，却妄称自己已经证得（未得谓得、未证谓证）。《法华经》等经典中多有提及，是修行人容易犯的过失。书中引用此概念说明傲慢自大的人最终会害人害己。</div>
+</a>
+<a class="entry-item" href="声盲（せいもう）.html">
+  <div class="noun">声盲（せいもう）</div>
+  <div class="snippet">夏目漱石在《我是猫》中创造的造语，由色盲类比而来。声指声音、盲指不能，合指对声音听而不闻的状态。猫以此讽刺女佣御三对自己的叫声毫无反应，幽默地将其类比为一种感官残疾，体现了漱石独特的语言游戏和讽刺手法。</div>
+</a>
+<a class="entry-item" href="多勢に無勢.html">
+  <div class="noun">多勢に無勢</div>
+  <div class="snippet">日本谚语，读作&quot;たぜいにぶぜい&quot;，意为&quot;寡不敌众、众寡悬殊&quot;。由&quot;多勢&quot;（人数众多）与&quot;無勢&quot;（人数稀少）对比构成，指少数方无法与多数方抗衡。本句出自日语古语表达&quot;众寡敌せず&quot;（しゅうかてきせず），在日本战国时代、源平合战等历史军记物语中频</div>
+</a>
+<a class="entry-item" href="大和魂.html">
+  <div class="noun">大和魂</div>
+  <div class="snippet">大和魂（やまとだましい），日本传统文化中代表民族精神的核心概念， 原指&quot;大和民族在接受外来文化时保持自身判断力和感性认知的能力&quot;。 江户时代经国学学者（本居宣长等）重新阐释后，与神道、天皇崇拜相结合。 明治时期与武士道精神融合，被用于塑造国</div>
+</a>
+<a class="entry-item" href="大日本国帝都.html">
+  <div class="noun">大日本国帝都</div>
+  <div class="snippet">大日本帝国首都的称谓。大日本帝国是1889年《大日本帝国宪法》颁布后的日本正式国号，至1947年为止。&quot;帝都&quot;指天皇所在的都市，即东京。1868年明治天皇颁布&quot;江户改称东京诏书&quot;后，东京成为事实上的首都。在《我是猫》的写作背景（1905年前</div>
+</a>
+<a class="entry-item" href="大死一番乾坤新.html">
+  <div class="noun">大死一番乾坤新</div>
+  <div class="snippet">禅宗的修行用语。意为彻底打破自我执著与妄念（大死一番），之后天地一新、豁然开悟（乾坤新）。强调&quot;大死&quot;之后的&quot;大活&quot;——不是虚无而是佛性的新生。</div>
+</a>
+<a class="entry-item" href="大蔵卿.html">
+  <div class="noun">大蔵卿</div>
+  <div class="snippet">明治初期太政官制下的大藏省长官，相当于后来的财务大臣。太政官制设二官六省，大藏省掌管财政、货币、税收等事务。「卿」为各省长官的官名，自1869年（明治二年）职員令确立，至1885年内阁制度创立后改为「大蔵大臣」为止。</div>
+</a>
+<a class="entry-item" href="大象.html">
+  <div class="noun">大象</div>
+  <div class="snippet">即大象。在《我是猫》中，迷亭使用&quot;百兽之中最聪慧的大象&quot;这一比喻来形容寒月——知识渊博、品格高尚。与后文的&quot;最贪婪的小猪&quot;（金田之女富子）形成鲜明对比，以此强调两人在智识和品格上的巨大差距，表达了迷亭对这门婚事的强烈反对态度。</div>
+</a>
+<a class="entry-item" href="天の河.html">
+  <div class="noun">天の河</div>
+  <div class="snippet">银河的日语名称。在日本神话与文学中常以&quot;天の河&quot;（あまのがわ）出现，是日本古典文学中重要的天文意象，与七夕传说（織姫と彦星）紧密相关。</div>
+</a>
+<a class="entry-item" href="天保調.html">
+  <div class="noun">天保調</div>
+  <div class="snippet">指日本江户时代天保年间（1830年—1844年）的色彩倾向与文化样式。天保年间幕府实行奢侈禁令，限制庶民使用华丽颜色和材质，仅允许麻布、棉布以及鼠色、茶色、蓝色等朴素色调。町人阶层在限制中反而发展出「四十八茶百鼠」的丰富中间色体系，形成了以</div>
+</a>
+<a class="entry-item" href="天地玄黄.html">
+  <div class="noun">天地玄黄</div>
+  <div class="snippet">天地玄黄是中国古代启蒙读物《千字文》的开篇首句，源自《易经·坤卦》文言&quot;天玄而地黄&quot;。意为天色为玄（黑中带赤，象征高远神秘），地色为黄（黄土色，象征大地滋养）。南朝梁代周兴嗣受命编纂《千字文》，从王羲之书法中选取一千个不重复汉字，编为四字韵</div>
+</a>
+<a class="entry-item" href="天探女.html">
+  <div class="noun">天探女</div>
+  <div class="snippet">天探女（あめのさぐめ）是日本神话中登场的神祇，《日本书纪》作天探女，《古事记》作天佐具卖。她在天稚彦（天若日子）下凡镇压苇原中国时担任侍从，具有探知神意和人心并故意违逆的禀性。天探女被认为是民间传说&quot;天邪鬼&quot;（あまのじゃく）的原型与起源。夏</div>
+</a>
+<a class="entry-item" href="天明調.html">
+  <div class="noun">天明調</div>
+  <div class="snippet">日本江户后期天明期（1781-1789年）的文学艺术样式。俳谐方面以回归松尾芭蕉蕉风为特征，追求风雅质素；狂歌方面以大田南亩等人为代表，以洒脱机智、滑稽讽刺见长。天明期是町人文化成熟的时期，与元禄期并称江户文坛两大高峰。</div>
+</a>
+<a class="entry-item" href="天涯の遊子（てんがいのゆうし）.html">
+  <div class="noun">天涯の遊子（てんがいのゆうし）</div>
+  <div class="snippet">出自中国古典诗歌的文学表达。天涯指天的尽头、极远之地，遊子指离乡漂泊的旅人。合指在遥远异乡流浪、思念故土的孤独旅人。唐代孟郊《游子》诗游子行天涯为其著名出处。</div>
+</a>
+<a class="entry-item" href="天狗.html">
+  <div class="noun">天狗</div>
+  <div class="snippet">天狗（てんぐ），日本最具代表性的妖怪之一。最初源于中国《山海经》中像狸猫的吉兽， 传入日本后演变为红脸长鼻、背生双翼、身着修验僧服的山妖形象。天狗分为大天狗（鼻高天狗） 和鸦天狗等多个等级，居住在深山之中，拥有飞行、幻术等神通。天狗传说与修</div>
+</a>
+<a class="entry-item" href="天真爛漫.html">
+  <div class="noun">天真爛漫</div>
+  <div class="snippet">四字熟语，意为性情直率、天真无邪、毫不做作。语出南宋画家龚开的诗《高马小儿图》：&quot;天真烂熳好容仪&quot;。在日语中&quot;天真爛漫&quot;常用于形容儿童或少女纯真自然的姿态。在作品中，猫描写春夜的灯火照在苦沙弥家人睡姿上的情景——虽然天真烂漫却毫无风雅情趣，</div>
+</a>
+<a class="entry-item" href="天祐.html">
+  <div class="noun">天祐</div>
+  <div class="snippet">源自中国古典思想的&quot;上天佑助&quot;观念，最早见于《尚书》与《周易》。在中国哲学中，天佑与天命思想密不可分，强调上天保佑有德者、顺天应人者，主张先自助而后得天助的理性主义精神。</div>
+</a>
+<a class="entry-item" href="天神様.html">
+  <div class="noun">天神様</div>
+  <div class="snippet">菅原道真を神格化した日本の神。学問の神様として広く信仰され、天満宮で祀られる。</div>
+</a>
+<a class="entry-item" href="天稟.html">
+  <div class="noun">天稟</div>
+  <div class="snippet">汉语词汇，指天生具备的资质、才能或品性，即&quot;天赋&quot;&quot;天性&quot;。源自中国古典哲学中&quot;天&quot;（自然、天道）与&quot;禀&quot;（承受、领受）的组合概念。王充《论衡·幸偶》有&quot;非天稟施有左右也，人物受性有厚薄也&quot;之论。在夏目漱石笔下用于形容人物天生的奇特性格。</div>
+</a>
+<a class="entry-item" href="太平の逸民.html">
+  <div class="noun">太平の逸民</div>
+  <div class="snippet">「太平盛世的逸民」是夏目漱石《我是猫》中猫对苦沙弥、迷亭、寒月等知识分子群体的经典评语。逸民指远离世俗、隐居不仕的人。猫以讽刺口吻称这些知识分子为太平之世的逸民——他们表面上如丝瓜般随风飘荡、超然物外，实则内心仍存有世俗念想和欲望。这是理解</div>
+</a>
+<a class="entry-item" href="太平楽.html">
+  <div class="noun">太平楽</div>
+  <div class="snippet">日语词汇，原为日本雅乐（唐乐）曲名，用于即位大礼等隆重场合演奏，伴随四人舞。因雅乐从容悠扬的印象，词义演变为形容人优哉游哉、不负责任地说无关痛痒的话。常用搭配&quot;太平楽を並べる&quot;，意为&quot;说风凉话&quot;或&quot;发表不负责任的乐观言论&quot;。作品中苦沙弥在实</div>
+</a>
+<a class="entry-item" href="太政大臣.html">
+  <div class="noun">太政大臣</div>
+  <div class="snippet">日本律令制度下的最高官位，相当于宰相。定员一人，位阶为正一位或从一位。别称&quot;则阙&quot;（养老律令规定无合适人选则空缺），是非常设荣誉职位。701年大宝律令正式确立，但长期空缺。历史上平清盛、丰臣秀吉、德川家康等著名人物也曾担任。1885年明治政</div>
+</a>
+<a class="entry-item" href="失恋.html">
+  <div class="noun">失恋</div>
+  <div class="snippet">失恋（しつれん），恋爱中失去对方或感情破裂的状态。在《吾辈は猫である》第六章中，美学家迷亭讲述了一段荒诞的&quot;失恋&quot;经历：他在越后国山中旅店借宿时，对一位梳着高島田发髻的少女一见钟情，次日清晨却发现少女其实是秃头，美丽发髻只是一顶假发，于是&quot;</div>
+</a>
+<a class="entry-item" href="奇観.html">
+  <div class="noun">奇観</div>
+  <div class="snippet">奇观、奇妙壮观的景象。猫进入澡堂内部后首次看到蒸汽弥漫中人洗澡的场面，感叹世界虽大却无此等奇观。暗含对人类裸体入浴习俗的讽刺。</div>
+</a>
+<a class="entry-item" href="奇警.html">
+  <div class="noun">奇警</div>
+  <div class="snippet">文学批评用语，指文章或言谈新奇精妙、敏锐深刻、出人意表。源自中国古典文论，宋代《宋史·王珪传》载&quot;珪弱岁奇警，出语惊人&quot;。在夏目漱石研究中特指其独特文体——用新奇巧妙、机智幽默的比喻和讽刺手法揭示社会现象，是漱石文学风格的标志性特征之一。</div>
+</a>
+<a class="entry-item" href="女に惚れる烏かな.html">
+  <div class="noun">女に惚れる烏かな</div>
+  <div class="snippet">寒月创作的俳剧中高滨虚子在舞台上即兴吟诵的一句俳句，意为&quot;乌鸦也迷上这女子了吧&quot;。 这是俳剧的高潮与落幕句——虚子看到柳树下有女子在行水沐浴、枝头乌鸦俯视入迷， 遂吟此句为剧作画龙点睛。寒月随后对此句进行了长篇&quot;理论阐释&quot;： 乌鸦实际上并未</div>
+</a>
+<a class="entry-item" href="女子の品性.html">
+  <div class="noun">女子の品性</div>
+  <div class="snippet">日语意为&quot;女性的品性/道德&quot;（joshi no hinshou）。明治时期，社会对女性品德（良妻贤母主义）的要求与女性自我意识觉醒之间产生了激烈碰撞。作品中迷亭与寒月围绕明治初年与明治三十八年（1905年）女性品性是否进步展开了辩论——迷亭</div>
+</a>
+<a class="entry-item" href="女学生.html">
+  <div class="noun">女学生</div>
+  <div class="snippet">明治时期伴随女子教育制度的确立而出现的新社会阶层。1872年学制施行后，女子开始进入学校接受教育。1899年高等女学校令颁布后，中等女子教育制度化。&quot;女学生&quot;成为明治末期引人注目的社会群体，以海老茶袴、筒袖等独特装束为特征。作品中迷亭从二楼</div>
+</a>
+<a class="entry-item" href="女権.html">
+  <div class="noun">女権</div>
+  <div class="snippet">日语指女性权利（joken）、女权。明治时期伴随西方自由平等思想的传入，日本出现了早期的女权思想。1870年代自由民权运动中有岸田俊子、福田英子等女性活动家参与，1911年平塚雷鸟创刊《青鞜》杂志提出&quot;元始、女性は太陽であった&quot;。作品中寒月</div>
+</a>
+<a class="entry-item" href="如是法.html">
+  <div class="noun">如是法</div>
+  <div class="snippet">佛教术语，《法华经》&quot;十如是&quot;概念之一，指诸法本身即为&quot;如是&quot;（如其本然的真实）。法华经以十如是（相、性、体、力、作、因、缘、果、报、本末究竟等）阐明一切存在的真实面貌。&quot;如是法&quot;强调超越语言概念的绝对真理。文中猫自称&quot;信如是法&quot;，为其行为</div>
+</a>
+<a class="entry-item" href="如是観.html">
+  <div class="noun">如是観</div>
+  <div class="snippet">佛教术语，源自《法华经》&quot;十如是&quot;概念，指以&quot;如是&quot;（如实/如其所是）的态度观照一切现象。语出《金刚经》&quot;一切有为法，如梦幻泡影，如露亦如电，应作如是观&quot;。天台宗智者大师将其发展为&quot;一念三千&quot;教理。文中猫以此表明遵循如实观照的哲学态度，为其</div>
+</a>
+<a class="entry-item" href="娑婆.html">
+  <div class="noun">娑婆</div>
+  <div class="snippet">佛教用语，梵语Saha（音译&quot;娑婆&quot;）意为&quot;堪忍&quot;（耐忍）。指我们生活的现实世界，即&quot;娑婆世界&quot;。该世界充满劫浊、见浊、烦恼浊、众生浊、命浊等&quot;五浊&quot;，众生沉溺于贪瞋痴三毒中却仍能忍耐。佛教认为此世界苦难深重但也是修行成道的场所。日本俗语中</div>
+</a>
+<a class="entry-item" href="娼家.html">
+  <div class="noun">娼家</div>
+  <div class="snippet">娼家（しょうか）是江户时代游廓内的妓院设施。游廓是幕府官方认可的合法风月区，以围墙水沟包围便于管理。妓楼按等级分为大见世（最高级，花魁所在）、中见世、小见世、局见世、河岸见世（最底层）等。游女大多出身贫困，幼年被贩卖入娼家，受严格等级制度束</div>
+</a>
+<a class="entry-item" href="媒酌人.html">
+  <div class="noun">媒酌人</div>
+  <div class="snippet">日本结婚仪式中为新人牵线搭桥并担任婚礼见证人的角色。传统上由双方有社会地位的长辈担任，在婚礼上进行&quot;媒酌致辞&quot;，介绍两家结缘经过。明治至昭和前期，无媒人的婚姻甚至被视为不合法的&quot;野合&quot;。</div>
+</a>
+<a class="entry-item" href="嫁姑.html">
+  <div class="noun">嫁姑</div>
+  <div class="snippet">嫁と姑（夫の母）の関係。日本の家制度のもとで伝統的に複雑な問題をはらむ人間関係として認識されてきた。</div>
+</a>
+<a class="entry-item" href="孔雀の舌.html">
+  <div class="noun">孔雀の舌</div>
+  <div class="snippet">孔雀の舌（くじゃくのした）是古代罗马帝国时期象征极致奢侈的料理，以孔雀的舌头为食材。罗马贵族以此展示财富与地位，但据诗人贺拉斯记述，其味道与鸡肉无异。文学作品中常将其作为罗马贵族沉溺美食、追求新奇珍味的风气之象征。日本作家涩泽龙彦在《华丽食</div>
+</a>
+<a class="entry-item" href="定業.html">
+  <div class="noun">定業</div>
+  <div class="snippet">佛教术语，指必定会产生果报的业（行为及其业力）。分为善定业（必生乐果）和恶定业（必生苦果），按受报时间又分顺现受、顺生受、顺后受三种。与&quot;不定业&quot;相对。</div>
+</a>
+<a class="entry-item" href="定石.html">
+  <div class="noun">定石</div>
+  <div class="snippet">围棋术语，指棋手们经过长年经验积累确立的、特定局面下双方最合理的固定着法组合。主要用于布局阶段的角部，总数超过一万种，但常用者仅数百种。</div>
+</a>
+<a class="entry-item" href="実業家.html">
+  <div class="noun">実業家</div>
+  <div class="snippet">明治时代日本资本主义发展过程中崛起的实业家/资本家阶层。作品中主人公苦沙弥坦言&quot;从学生时代就讨厌实业家&quot;，而金田和铃木藤十郎作为实业家代表被刻画为拜金、缺乏道德感的形象。体现了漱石对明治资本主义社会&quot;金钱至上&quot;风气的批判态度。 --- 实业</div>
+</a>
+<a class="entry-item" href="審美学.html">
+  <div class="noun">審美学</div>
+  <div class="snippet">審美学（しんびがく）即美学（Aesthetics），是哲学的一个分支，研究美的本质、审美体验与艺术的意义。18世纪德国哲学家鲍姆加登（Alexander Baumgarten）在1750年出版《Aesthetica》将其确立为独立学科。「審</div>
+</a>
+<a class="entry-item" href="小春.html">
+  <div class="noun">小春</div>
+  <div class="snippet">阴历十月的异称，相当于阳历11月至12月上旬，指晚秋至初冬期间像春天般温暖和煦的天气，在俳句中作为冬季季语使用。</div>
+</a>
+<a class="entry-item" href="小癪.html">
+  <div class="noun">小癪</div>
+  <div class="snippet">小癪（こしゃく），日语的形容动词，意为&quot;狂妄、可恨、令人生气&quot;。 用于对方言行让人感到恼火、冒犯的场合。 由&quot;癪&quot;（しゃく，指怒气、气恼）加上&quot;小&quot;构成。 常见搭配&quot;小癪に障る&quot;（令人恼火）。与&quot;生意気&quot;（狂妄）含义接近， 但&quot;小癪&quot;更侧重</div>
+</a>
+<a class="entry-item" href="小豚.html">
+  <div class="noun">小豚</div>
+  <div class="snippet">即小猪。在《我是猫》中，迷亭将金田之女富子比喻为&quot;最贪婪的小猪&quot;，与前面形容寒月的&quot;最聪慧的大象&quot;形成两极化对比。这一尖刻的比喻表达了迷亭对金田家族拜金主义本性的极度轻蔑——富子在迷亭眼中不过是贪婪的化身，与寒月完全不匹配。</div>
+</a>
+<a class="entry-item" href="居候（いそうろう）.html">
+  <div class="noun">居候（いそうろう）</div>
+  <div class="snippet">日语中指寄食在别人家、白吃白住的人。原为谦逊表达，来自居（住）加候ふ（侍奉），字面意为谦卑地寄居。候在古代日语中表谦让。在本文中猫自称居候の身分，以寄人篱下的身份自嘲，流露出虽有不满但仍要仰人鼻息的无奈。</div>
+</a>
+<a class="entry-item" href="居士.html">
+  <div class="noun">居士</div>
+  <div class="snippet">佛教术语，梵语grha-pati（迦罗越）的汉译，原意为&quot;家之主人&quot;。佛教中指在家修行佛法的信徒，即不出家而受持三皈五戒的男性修行者。在中国和日本，&quot;居士&quot;也发展为一种用于戒名中的荣誉称号，通常为中间等级的位号（低于大居士，高于信士）。宋代</div>
+</a>
+<a class="entry-item" href="山出し.html">
+  <div class="noun">山出し</div>
+  <div class="snippet">山出し（やまだし），日语俗语，字面义为&quot;从山里运出&quot;。 原指从山区运出木材、矿产等物资。引申义指： (1) 刚从乡下进城、不谙世事的人，即&quot;乡下人&quot;&quot;土包子&quot;； (2) 举止粗俗、缺乏城市教养的人。 带有明显的轻蔑语气（occasional</div>
+</a>
+<a class="entry-item" href="工学士.html">
+  <div class="noun">工学士</div>
+  <div class="snippet">日本明治时期大学工科（工学部）毕业生被授予的学士学位称号。随着1871年工部大学校的设立和1886年帝国大学工科大学的成立，日本开始系统培养工学领域的高级技术人才。工学士在明治·大正时期被视为产业近代化的中坚力量，多进入政府担任技术官僚或进</div>
+</a>
+<a class="entry-item" href="希臘.html">
+  <div class="noun">希臘</div>
+  <div class="snippet">&quot;希臘&quot;是日本历史上对希腊（ギリシャ/Greece）的汉字表记（当て字），源自葡萄牙语&quot;Grécia&quot;的音译。明治至昭和初期，日本广泛使用这种方式表记外国国名（如英吉利、独逸、佛兰西）。战后随国名片假名表记的标准化而逐渐废弃。在《我是猫》中</div>
+</a>
+<a class="entry-item" href="平等.html">
+  <div class="noun">平等</div>
+  <div class="snippet">平等（びょうどう），指人与人之间在社会地位、权利等方面处于同等状态。 本章中猫提出了一个核心命题：&quot;自然は真空を忌むごとく、人間は平等を嫌う&quot; （如同自然厌恶真空，人类也憎恶平等）。猫通过虚构的服装发明史来论证： 人类发明猿股、羽織、袴乃至</div>
+</a>
+<a class="entry-item" href="平身低頭.html">
+  <div class="noun">平身低頭</div>
+  <div class="snippet">四字熟语，意为&quot;跪伏在地、深深低头&quot;，形容极度谦卑或诚恳谢罪的态度。原自中国宫廷礼仪（臣子跪拜后起身的动作），在日本演变为彻底谢罪的最高级表达。作品中迷亭用此词讽刺苦沙弥向小偷鞠躬的举动。</div>
+</a>
+<a class="entry-item" href="廓然無聖.html">
+  <div class="noun">廓然無聖</div>
+  <div class="snippet">禅宗著名公案，出自《碧巖錄》第一则。达摩大师与梁武帝问答：武帝问&quot;如何是圣谛第一义&quot;，达摩答&quot;廓然无圣&quot;。意为&quot;广大空寂，无有圣凡之别&quot;。此回答截断了武帝心中对&quot;凡&quot;与&quot;圣&quot;的二元分别——梁武帝以建寺度僧为功德，心中存有求圣之念，达摩以&quot;廓</div>
+</a>
+<a class="entry-item" href="弊竇.html">
+  <div class="noun">弊竇</div>
+  <div class="snippet">日文读作&quot;へいとう&quot;，汉文词汇。由&quot;弊&quot;（害、弊端）和&quot;竇&quot;（穴、漏洞）组成，意为产生弊害的漏洞、制度缺陷或滋生不正行为的温床。在汉文中常用于批判制度、政令或社会风气中的缺陷。作品中出现在迷亭引用的&quot;非结婚论哲学者&quot;之口，将此词用于批判结婚</div>
+</a>
+<a class="entry-item" href="弥生.html">
+  <div class="noun">弥生</div>
+  <div class="snippet">日本旧历（太阴太阳历）三月的和风月名。语源为&quot;木草弥や生ひ月&quot;（草木愈发茂盛的月份）。旧历三月对应新历约三月下旬至五月中旬，正值樱花盛开时节。现代日本仍广泛使用此称，亦是常见女性名。文中&quot;弥生の春に明け放って&quot;描写金田家客厅在阳春三月敞开的</div>
+</a>
+<a class="entry-item" href="強弩の末勢.html">
+  <div class="noun">強弩の末勢</div>
+  <div class="snippet">成语，意为强弩射出的箭到了射程末端连薄绢也穿不透。比喻强大的力量到了后期也已衰竭。出自《史记·韩长孺列传》。文中自嘲主人雷声大雨点小的性格。</div>
+</a>
+<a class="entry-item" href="強情.html">
+  <div class="noun">強情</div>
+  <div class="snippet">日语词汇，读作&quot;ごうじょう&quot;，意为固执、倔强、顽固不化。指坚持己见、不肯改变。常用搭配有&quot;強情を張る&quot;（固执己见）。在作品中，女佣被指出磨牙时&quot;强情&quot;地否认，坚持说&quot;从出生至今从未有过磨牙的记忆&quot;。猫借此进行讽刺——&quot;做了坏事却始终自以为是</div>
+</a>
+<a class="entry-item" href="形式論理学（けいしきろんりがく）.html">
+  <div class="noun">形式論理学（けいしきろんりがく）</div>
+  <div class="snippet">研究思维的形式结构及其规律的科学，由亚里士多德创立。注重命题的形式而非内容，遵循同一律、矛盾律、排中律等基本法则。本文中以形式逻辑的名辞关系比喻打扫形式与实质的脱节。</div>
+</a>
+<a class="entry-item" href="形而下の学.html">
+  <div class="noun">形而下の学</div>
+  <div class="snippet">源自《周易·系辞》&quot;形而上者谓之道，形而下者谓之器&quot;，指研究具体有形事物（器物）的学问，与探究无形本体的形而上学相对。在日本近代语境中，常被用来批判性地指代西方实证科学和实用学问。文中迷亭的伯父认为当今的学问都是&quot;形而下之学&quot;，看似不错、关</div>
+</a>
+<a class="entry-item" href="待った.html">
+  <div class="noun">待った</div>
+  <div class="snippet">日本围棋中将已落下的棋子取回重下的行为（悔棋）。源自动词&quot;待つ&quot;的命令形用法，意为&quot;请等一下&quot;。正式比赛中禁止，但业余对局中有时经双方同意可允许。相扑中亦用&quot;待った&quot;表示仕切直し。</div>
+</a>
+<a class="entry-item" href="御上の御威光.html">
+  <div class="noun">御上の御威光</div>
+  <div class="snippet">日文读作&quot;おかみのごいこう&quot;，指天皇或明治政府所拥有的神圣权威与统治威光。&quot;御上&quot;（おかみ）在日本语境中是对天皇、政府或上级权力机构的尊称。明治维新后，天皇被建构为近代国家的最高权威象征，&quot;御威光&quot;即指这种不容置疑的统治性权威。作品中迷亭指</div>
+</a>
+<a class="entry-item" href="御仕置.html">
+  <div class="noun">御仕置</div>
+  <div class="snippet">日语中&quot;惩罚&quot;&quot;刑罚&quot;的敬语表达（oshoki）。原指江户幕府的官方刑事处罚制度，包括磔刑、狱门、追放、敲等。作品中迷亭用&quot;重き御仕置に仰せつけられそうになりました&quot;（险些被处以重刑）来描述Agnodice在雅典因无证行医面临死刑判决的情景</div>
+</a>
+<a class="entry-item" href="御利益.html">
+  <div class="noun">御利益</div>
+  <div class="snippet">读作&quot;ごりやく&quot;，佛教用语，指神佛给予人的恩惠、灵验、保佑。由敬语前缀&quot;御&quot;与佛教术语&quot;利益&quot;（りやく，梵语artha，意为&quot;善果&quot;或&quot;功德带来的好处&quot;）组合而成。在佛教语境中，&quot;利益&quot;指由于信仰、修行或善行而得到的福报和恩惠。在现代日语中</div>
+</a>
+<a class="entry-item" href="御法度.html">
+  <div class="noun">御法度</div>
+  <div class="snippet">日语意为&quot;严禁&quot;&quot;禁忌&quot;（gohatto）。源自中世至江户时代的法令用语&quot;法度&quot;（禁令），加上美化前缀&quot;御&quot;后成为现代日语中表示&quot;绝对不能做的事&quot;的常见表达。大岛渚导演曾拍摄同名电影《御法度》（1999年，新选组题材）。作品中迷亭用&quot;御上の</div>
+</a>
+<a class="entry-item" href="御祐筆.html">
+  <div class="noun">御祐筆</div>
+  <div class="snippet">日本中世至近世武家机构中的书记官职，负责文书起草与记录管理。在江户幕府和宫廷中，御祐笔（右笔）分为表右笔（行政文书）和奥右笔（机密文书），大奥内部亦有女中担任此职。</div>
+</a>
+<a class="entry-item" href="御維新.html">
+  <div class="noun">御維新</div>
+  <div class="snippet">即&quot;明治维新&quot;，为当时日本人的口语说法，亦称&quot;御一新&quot;。源自《诗经·大雅·文王》&quot;周虽旧邦，其命维新&quot;。1868年日本推翻江户幕府，以天皇为中心推行版籍奉还、废藩置县、地租改正、学制颁布、富国强兵等一系列改革，使日本从封建社会迅速转型为近代</div>
+</a>
+<a class="entry-item" href="心中物.html">
+  <div class="noun">心中物</div>
+  <div class="snippet">心中物（しんじゅうもの）是日本江户时代以男女殉情（心中）为题材的戏剧作品，以人形净琉璃和歌舞伎为主要表演形式。由剧作家近松门左卫门（1653-1725）确立为独立类型，代表作有《曾根崎心中》（1703年）和《心中天网岛》（1720年）。这些</div>
+</a>
+<a class="entry-item" href="心要放.html">
+  <div class="noun">心要放</div>
+  <div class="snippet">北宋哲学家邵雍（邵康节）提出的心性修养概念，源出其诗作《六得吟》。原句为&quot;心能放得&quot;，意为心要能够放下、不执着、获得解放。这是邵雍&quot;以物观物&quot;哲学的核心——只有放下主观私欲和偏见（以我观物之情），才能如实地认知事物（以物观物之性），从而达到</div>
+</a>
+<a class="entry-item" href="応無所住而生其心.html">
+  <div class="noun">応無所住而生其心</div>
+  <div class="snippet">《金刚般若波罗蜜经》名句。意为不执着于六尘（色声香味触法）而生清净心，体现般若智慧与方便慈悲合一之境界。六祖慧能闻此句大悟。</div>
+</a>
+<a class="entry-item" href="忠恕.html">
+  <div class="noun">忠恕</div>
+  <div class="snippet">孔子儒家思想的核心概念，出自《论语·里仁篇》。曾子概括孔子之道为&quot;夫子之道，忠恕而已矣&quot;。&quot;忠&quot;即&quot;尽己&quot;——以诚心待人；&quot;恕&quot;即&quot;推己&quot;——以己心推度他人，即&quot;己所不欲，勿施于人&quot;。忠恕是实现&quot;仁&quot;的具体方法（行仁之方），被后世视为儒家伦</div>
+</a>
+<a class="entry-item" href="怒液.html">
+  <div class="noun">怒液</div>
+  <div class="snippet">四体液说中的&quot;黄胆汁&quot;，希腊医学中四种体液之一，对应火元素，属热性。在古典的四体液病理学中，黄胆汁（choleric humor）被认为由肝脏生成，储存于胆囊。当其在体内失衡或&quot;逆上&quot;（异常上升）时，导致人易怒暴躁，对应&quot;胆汁质&quot;（多血质·</div>
+</a>
+<a class="entry-item" href="恕.html">
+  <div class="noun">恕</div>
+  <div class="snippet">儒家核心道德概念之一，与&quot;忠&quot;并称&quot;忠恕&quot;。出自《论语·卫灵公篇》：&quot;其恕乎！己所不欲，勿施于人。&quot;字义为&quot;如心&quot;——以自己的心推度他人的心，即推己及人、将心比心。朱熹解释为&quot;推己及人为恕&quot;。恕被视为&quot;仁&quot;的实践入口，孟子称&quot;强恕而行，求仁</div>
+</a>
+<a class="entry-item" href="悪寒.html">
+  <div class="noun">悪寒</div>
+  <div class="snippet">悪寒（おかん）是医学症状，指患者自觉寒冷，即使添加衣物或靠近热源也无法缓解的感觉。其生理机制为：当病原体侵入人体后，免疫细胞释放致热物质作用于下丘脑体温调节中枢，引起皮肤血管收缩和骨骼肌紧张（颤抖），使体温上升。在明治时期的日本，恶寒被认为</div>
+</a>
+<a class="entry-item" href="意気銷沈.html">
+  <div class="noun">意気銷沈</div>
+  <div class="snippet">四字熟语，读作&quot;いきしょうちん&quot;，意为&quot;意气消沉、灰心丧气&quot;。由&quot;意気&quot;（气概、精神）与&quot;銷沈&quot;（消失、沉落）构成，形容人的精神气力消失、意志消沉的状态。现代日语通常写作&quot;意気消沈&quot;，是表达失意、沮丧情绪的标准书面语。在《我是猫》中，铃木与</div>
+</a>
+<a class="entry-item" href="感投詞.html">
+  <div class="noun">感投詞</div>
+  <div class="snippet">日语品词之一，又称感动词或感叹词。指表示感叹、呼唤、应答等语气，无活用变化的独立词。与其他词无语法连接关系，通常单独使用。例如&quot;まあ&quot;&quot;もしもし&quot;&quot;はい&quot;&quot;いいえ&quot;等。现代日语语法中常归入&quot;感动词&quot;（感叹词一类）。日语中感投词的研究可追溯到</div>
+</a>
+<a class="entry-item" href="憂液.html">
+  <div class="noun">憂液</div>
+  <div class="snippet">四体液说中的&quot;黑胆汁&quot;，希腊医学中四种体液之一，对应土元素，属干性。在古典的四体液理论中，黑胆汁（melancholic humor）被认为由脾脏生成。当黑胆汁过多时，导致人焦虑、阴郁、多思，对应&quot;忧郁质&quot;气质。在《我是猫》中，猫引用四体液</div>
+</a>
+<a class="entry-item" href="懸崖撒手.html">
+  <div class="noun">懸崖撒手</div>
+  <div class="snippet">禅宗用语，出自《无门关》第三十二则，字面意为&quot;在悬崖上放手&quot;。比喻修行者必须彻底放下一切执着、依存和依靠，经历&quot;大死一番&quot;后方能绝后复苏、豁然开悟。是表达禅宗顿悟境界的著名公案。</div>
+</a>
+<a class="entry-item" href="我儘.html">
+  <div class="noun">我儘</div>
+  <div class="snippet">自分の欲求や考えだけを優先し他人の都合を考えないこと。「我（自分）の思うまま」が原義で、利己的・自分勝手な態度を指す。漢字「儘」は「あるがまま」の意。</div>
+</a>
+<a class="entry-item" href="我儘者（わがままもの）.html">
+  <div class="noun">我儘者（わがままもの）</div>
+  <div class="snippet">日语中任性的人、自私的人。我儘（わがまま）意为任性、随心所欲，由我（自己）和儘（任凭）组成。加者后缀指具有这种性格的人。本文中猫称主人为我儘者，讽刺其任性固执的脾性。</div>
+</a>
+<a class="entry-item" href="戒名.html">
+  <div class="noun">戒名</div>
+  <div class="snippet">日本佛教中授予逝者的法名，亦称&quot;法名&quot;、&quot;法号&quot;。原本是出家受戒时由师父授予的法名，但日本在江户时代寺请制度下演变为普遍授予在家逝者的死后法名。戒名有等级之分，从&quot;信士·信女&quot;到&quot;居士·大姊&quot;再到&quot;院殿&quot;等，字数越长等级越高。戒名的汉字结构</div>
+</a>
+<a class="entry-item" href="拳骨.html">
+  <div class="noun">拳骨</div>
+  <div class="snippet">拳骨（げんこつ），日语中表示握紧的拳头（握り拳），尤指以拳击打的动作。&quot;拳&quot;意为握拳，&quot;骨&quot;强调其坚硬。标准读音&quot;げんこつ&quot;为日语习惯性浊化读音。常用短语有&quot;拳骨を食らわす&quot;（给一拳）。在《我是猫》中，迷亭为了展示巴拿马帽的柔韧性，握紧拳头</div>
+</a>
+<a class="entry-item" href="按摩.html">
+  <div class="noun">按摩</div>
+  <div class="snippet">日本传统按摩疗法（あんま），源自中国的推拿，经日本独立发展而成。历史上视力障碍者从事此职业者甚多，江户时代曾有法令规定仅限盲人经营按摩业务。现代日本仍有国家资格的按摩师制度。</div>
+</a>
+<a class="entry-item" href="按腹揉療治.html">
+  <div class="noun">按腹揉療治</div>
+  <div class="snippet">日本传统的腹部按摩疗法，源于中国按摩导引术，经日本汉方医学独立发展而成，在江户时代最为兴盛，以按圧和揉捏手法刺激腹部来调理内脏功能。</div>
+</a>
+<a class="entry-item" href="敵愾心.html">
+  <div class="noun">敵愾心</div>
+  <div class="snippet">敌忾心（てきがいしん），意为对敌人的愤怒、斗志和敌对心。 源自中国《诗经·秦风·无衣》&quot;修我戈矛，与子同仇&quot;及 《左传》&quot;诸侯敌王所忾&quot;的典故。&quot;愾&quot;（がい）意为愤怒。 作为四字熟语&quot;同仇敌忾&quot;的核心成分， 指面对共同敌人时团结一致的战斗意</div>
+</a>
+<a class="entry-item" href="文人画.html">
+  <div class="noun">文人画</div>
+  <div class="snippet">中国绘画史上重要的流派，指士大夫（文人）以抒发胸中逸气为目的、不追求工细形似而重笔墨意趣的绘画风格。讲究&quot;诗书画印&quot;四绝合一。宋代苏轼提出&quot;士人画&quot;概念，明代董其昌以&quot;南北宗论&quot;确立文人画正统地位。文人画在江户时代传入日本，发展为&quot;南画&quot;（</div>
+</a>
+<a class="entry-item" href="新体詩.html">
+  <div class="noun">新体詩</div>
+  <div class="snippet">明治时代受西方诗歌影响而诞生的日本新形式诗歌。以1882年出版的《新体诗抄》（外山正一、矢田部良吉、井上哲次郎编）为发端，摆脱了和歌·俳句的传统定型，采用七五调等新格律，题材扩展到社会、人生、科学等领域。新体诗是日本近代诗歌的起点，后发展为</div>
+</a>
+<a class="entry-item" href="明星.html">
+  <div class="noun">明星</div>
+  <div class="snippet">明治时期日本最重要的浪漫主义诗歌杂志之一，由与谢野铁干（与谢野宽）于1900年创刊，作为&quot;东京新诗社&quot;的机关刊物。1908年停刊，共发行100期。与谢野晶子、岛崎藤村、森鸥外、石川啄木等众多文人参与，引领了明治30年代的浪漫主义诗歌运动。与</div>
+</a>
+<a class="entry-item" href="明治.html">
+  <div class="noun">明治</div>
+  <div class="snippet">日本第122代天皇睦仁在位期间的年号（1868年10月23日—1912年7月30日），出自《周易·说卦》&quot;圣人南面而听天下，向明而治&quot;，是日本实施一世一元制以来的第一个年号。明治时代经历了明治维新、日清战争、日俄战争等重大历史事件，是日本从</div>
+</a>
+<a class="entry-item" href="明治の紳士.html">
+  <div class="noun">明治の紳士</div>
+  <div class="snippet">&quot;明治绅士&quot;指明治时代（1868—1912）兼具西洋教养与传统精神的理想知识人形象。明治时期大量翻译西洋礼仪书，塑造了&quot;绅士&quot;这一象征西洋化与近代化的理想人格。福泽谕吉等启蒙思想家将知识人比喻为&quot;雁奴&quot;——先天下之忧而忧的精英。在作品中，猫</div>
+</a>
+<a class="entry-item" href="昏睡病.html">
+  <div class="noun">昏睡病</div>
+  <div class="snippet">医学上指以白天难以抗拒的过度嗜睡为特征的中枢神经性睡眠障碍，日语中亦用于描述发作性睡病（ナルコレプシー），表现为突然袭来的强烈睡意，可伴脱力发作和睡眠麻痹。</div>
+</a>
+<a class="entry-item" href="易水の壮士.html">
+  <div class="noun">易水の壮士</div>
+  <div class="snippet">&quot;易水的壮士&quot;指中国战国末期燕国的刺客荆轲（？—前227年）。 燕太子丹派遣荆轲以献樊於期首级和燕国督亢地图为名刺杀秦王政（后来的秦始皇）。 出发当天在易水（今河北省易县境内）边告别，好友高渐离击筑， 荆轲唱出千古名句&quot;风萧萧兮易水寒，壮士</div>
+</a>
+<a class="entry-item" href="易経.html">
+  <div class="noun">易経</div>
+  <div class="snippet">又称《周易》，中国最古老的经典之一，被尊为&quot;群经之首&quot;。包括《易经》（六十四卦卦爻辞）和《易传》（十翼）两部分。最初为占卜之书，后经哲学化阐释，成为阐述阴阳变化、天人合一思想的哲学著作。其核心概念&quot;一阴一阳之谓道&quot;&quot;生生之谓易&quot;对中国哲学、</div>
+</a>
+<a class="entry-item" href="書生.html">
+  <div class="noun">書生</div>
+  <div class="snippet">明治时代，以帮佣家务为代价寄宿于他人家中并刻苦求学的学生。特指明治·大正时期，吸收西方学问、逐步形成新兴知识阶层的年轻人。&quot;書生&quot;一词随着日本高等教育的制度化逐渐被&quot;学生&quot;取代，是日本近代化过渡期的重要社会角色。坪内逍遥的《当世书生气质》、</div>
+</a>
+<a class="entry-item" href="月並.html">
+  <div class="noun">月並</div>
+  <div class="snippet">原意为&quot;每月&quot;，指江户时代每月定期举办的俳谐句会（月並俳諧）。明治时期正冈子规为推行俳句革新，激烈批判旧派俳谐千篇一律、陈腐守旧，将此词赋予&quot;平凡、俗套、毫无新意&quot;的贬义并固定下来。反映了日本近世文学史上革新与传统的对抗，是词义发生重大转折</div>
+</a>
+<a class="entry-item" href="有為転変.html">
+  <div class="noun">有為転変</div>
+  <div class="snippet">有為転変（ういてんぺん）是佛教术语。&quot;有為&quot;指因缘和合而生的一切现象（有为法），&quot;転変&quot;指变迁流转。合起来意指世间万事万物因缘而生、不断变化的本质，即&quot;诸行无常&quot;的具体表现。常与&quot;生者必滅&quot;连用，表达佛教无常观的核心理念——一切存在皆处于永</div>
+</a>
+<a class="entry-item" href="服装.html">
+  <div class="noun">服装</div>
+  <div class="snippet">服装（衣服），即穿在身体上起保护、装饰作用的物品的总称。 本章中猫以&quot;人間は全く服装で持ってるのだ&quot;&quot;人間は服装の動物である&quot;为核心论点， 展开了长篇的服装哲学议论。猫引用英国バス温泉的规则、図案学校开校式的轶事， 并虚构了服装进化史（猿股</div>
+</a>
+<a class="entry-item" href="朧月.html">
+  <div class="noun">朧月</div>
+  <div class="snippet">胧月（おぼろづき），日语中形容春天夜晚月色朦胧的优美词汇。 春夜因空气中水分含量大，月光透过湿润的空气变得柔和模糊， 带有梦幻般的朦胧美感。与秋天的&quot;名月&quot;（清冽明亮的满月）相对， 春天的&quot;胧月&quot;是日本文学和俳句中的重要季语（春之季语）。 </div>
+</a>
+<a class="entry-item" href="木強漢.html">
+  <div class="noun">木強漢</div>
+  <div class="snippet">汉语词汇，出自中国史籍。《史记》以&quot;木强敦厚&quot;评价汉初功臣周勃，意为质朴刚直、性格如木石般坚固不阿。含双重意味：一方面指性格刚直不阿、不事修饰；另一方面也指固执、不知变通、缺乏文采。在夏目漱石《我是猫》中，猫用&quot;木强汉&quot;来形容主人苦沙弥——</div>
+</a>
+<a class="entry-item" href="木枯.html">
+  <div class="noun">木枯</div>
+  <div class="snippet">日语&quot;木枯らし&quot;（Kogarashi），指晚秋至初冬吹来的寒冷北风。因吹落树叶、使树木枯萎而得名。日本的国字&quot;凩&quot;（风+木）即为此意。在俳句中属于冬季季语，象征着冬天的来临和萧瑟寂寥的氛围。作品中用木枯的呼啸声衬写客人离去后家中的寂静。</div>
+</a>
+<a class="entry-item" href="未来記.html">
+  <div class="noun">未来記</div>
+  <div class="snippet">《我是猫》中迷亭（美学家）虚构创作的&quot;未来预言书&quot;，是一种讽刺性的文学手法。迷亭在第十一章中长篇讲述&quot;未来记&quot;，预言未来社会将因个性极度发展而导致结婚不可能、艺术消亡等趋势。这并非真正的预言，而是漱石借迷亭之口，以夸张和幽默的方式对明治时代</div>
+</a>
+<a class="entry-item" href="本因坊.html">
+  <div class="noun">本因坊</div>
+  <div class="snippet">日本江户时代围棋四大家之首，由一世本因坊算砂创立，历代培养出道策、丈和、秀策等棋圣级棋手。1938年由第二十一世秀哉将名号转让给日本棋院，改为新闻棋战标题沿用至今。 --- 日本围棋史上最重要的称号。原为江户时代围棋四大家之首本因坊家的家名</div>
+</a>
+<a class="entry-item" href="朱子学.html">
+  <div class="noun">朱子学</div>
+  <div class="snippet">朱子学（Shushigaku），指南宋大儒朱熹（1130—1200）集大成的宋明理学体系。镰仓时代随禅宗传入日本，江户时代被德川幕府奉为官学，成为统治意识形态。藤原惺窝被视为日本朱子学开山祖师，其弟子林罗山推动朱子学官学化。日本朱子学带有庶</div>
+</a>
+<a class="entry-item" href="杏仁水.html">
+  <div class="noun">杏仁水</div>
+  <div class="snippet">杏仁水（Aqua Armeniacae）是一种以杏仁（杏核）为原料制成的液体制剂，在明治时期被广泛用作镇咳祛痰药。杏仁含有苦杏仁苷（Amygdalin），在体内分解可产生微量氢氰酸，具有抑制咳嗽中枢的作用。但因其具有一定毒性，调配浓度需严格</div>
+</a>
+<a class="entry-item" href="枯坐.html">
+  <div class="noun">枯坐</div>
+  <div class="snippet">汉语及日语中的文学词汇，意为&quot;无精打采地独坐&quot;、&quot;呆坐&quot;，指心无所寄、百无聊赖地坐着的样子。&quot;枯&quot;字取枯槁、无生气的意象。作品中使用该词描绘苦沙弥先生被盗后因缺少衣物御寒、无法活动而枯坐室内的窘态——血液循环不畅、手脚冰冷，反映了明治时期底</div>
+</a>
+<a class="entry-item" href="枯野に蛍.html">
+  <div class="noun">枯野に蛍</div>
+  <div class="snippet">夏目漱石在《我是猫》中创造的文学比喻，并非已有的习惯用语或谚语。字面意为&quot;在原野枯草间放飞萤火虫&quot;，在文中用于形容苦沙弥脸上的麻子——犹如枯野中星星点点的萤火。枯野（秋冬意象）与萤（夏季意象）的季节错位，营造出一种介于幽玄与滑稽之间的独特美</div>
+</a>
+<a class="entry-item" href="柔道.html">
+  <div class="noun">柔道</div>
+  <div class="snippet">日本传统武术，由嘉纳治五郎于1882年综合柔术各流派创立。以&quot;精力善用&quot;&quot;柔能制刚&quot;为理念，强调以柔克刚、借力使力。1964年成为奥运会正式项目，现已风靡全球。</div>
+</a>
+<a class="entry-item" href="柩.html">
+  <div class="noun">柩</div>
+  <div class="snippet">柩（Hitsugi），即棺材、灵柩，指盛装遗体的容器。在《我是猫》中，该词出现在与死亡相关的隐喻语境中，是猫对人类生死问题的哲学思索的一部分。漱石的作品常以猫的视角对死亡进行冷澈的观察，柩这一意象象征着生命的终局。</div>
+</a>
+<a class="entry-item" href="柳の下に鰌.html">
+  <div class="noun">柳の下に鰌</div>
+  <div class="snippet">日本谚语，完整形式为&quot;柳の下にいつも泥鰌はいない&quot;。源自中国典故&quot;守株待兔&quot;（《韩非子》），比喻偶然的幸运不会重复发生——在柳树下偶然抓到一条泥鳅，但不可能每次都在同一地点等到泥鳅。告诫人们不要因一次成功而固守相同方法，应当不断努力而非依赖</div>
+</a>
+<a class="entry-item" href="梁上の君子.html">
+  <div class="noun">梁上の君子</div>
+  <div class="snippet">汉语成语，字面意为&quot;房梁上的君子&quot;，实为窃贼、小偷的婉称与雅称。出自《后汉书·陈寔传》：东汉时岁荒民饥，有盗贼潜入陈寔家中躲在梁上，陈寔发现后并未直接呵斥，而是召集子孙训诫&quot;人不可不自勉，不善之人未必本恶，习以性成，遂至于此，梁上君子者是矣</div>
+</a>
+<a class="entry-item" href="楚辞.html">
+  <div class="noun">楚辞</div>
+  <div class="snippet">中国战国时期兴起于楚国的一种诗歌体裁，也是中国最早的一部浪漫主义诗歌总集。由西汉刘向编集，收录屈原、宋玉等人的作品，以屈原的《离骚》为代表作。与《诗经》并称中国文学的两大源头。</div>
+</a>
+<a class="entry-item" href="極楽主義.html">
+  <div class="noun">極楽主義</div>
+  <div class="snippet">夏目漱石《我是猫》中铃木藤十郎信奉的人生哲学。&quot;极乐主义&quot;指避免一切不必要的冲突、抗争和口舌之争，以最少的阻力使事件按照自己的意愿推进，从而获得安逸快乐。漱石借此讽刺明治社会中一部分知识分子放弃原则、趋炎附势的处世态度。这种&quot;极乐主义&quot;与苦</div>
+</a>
+<a class="entry-item" href="模傚主義.html">
+  <div class="noun">模傚主義</div>
+  <div class="snippet">即「模仿主义」（mimesis），源自古希腊哲学的概念。亚里士多德在《诗学》中提出「人是模仿的动物」，认为模仿是人类学习与认知的根本方式。文中夏目漱石借猫之口，讨论人类语言通过模仿传承，但同时指出完全的模仿极为困难，以此质疑神的全能性。</div>
+</a>
+<a class="entry-item" href="権助.html">
+  <div class="noun">権助</div>
+  <div class="snippet">権助（ごんすけ）是日语古语，指男性下人、男仆、男性奉公人。原为男性仆人常用的名字（通称）——&quot;権&quot;+&quot;助&quot;是当时下层男性常见的取名方式——后演变为指代这一类人的普通名词。武家、商家等雇佣的男性使用人皆可称为権助。在现代日语中已几乎不使用，仅</div>
+</a>
+<a class="entry-item" href="権柄ずく.html">
+  <div class="noun">権柄ずく</div>
+  <div class="snippet">日语的副词/形容动词，读作&quot;けんぺいずく&quot;，意为&quot;倚仗权势、蛮横地、专横地&quot;。由&quot;権柄（权力权势）&quot;与接尾词&quot;〜ずく（尽く、全凭）&quot;组合而成，意为&quot;全凭权势压人&quot;。常用搭配有&quot;権柄ずくな態度&quot;（专横的态度）、&quot;権柄ずくの口をきく&quot;（以蛮横的</div>
+</a>
+<a class="entry-item" href="歌留多.html">
+  <div class="noun">歌留多</div>
+  <div class="snippet">歌留多（かるた）是日本传统纸牌游戏，名称源自葡萄牙语&quot;Carta&quot;。最著名的形式是使用《小仓百人一首》的竞技歌牌，由读手朗诵和歌上句，玩家抢夺对应的下句牌。16世纪由葡萄牙传教士传入，江户时代中期随浮世绘版画技术进步而普及于庶民阶层。因比赛</div>
+</a>
+<a class="entry-item" href="歯軋り.html">
+  <div class="noun">歯軋り</div>
+  <div class="snippet">日语&quot;歯軋り&quot;（ Hagishiri），即磨牙、咬牙。医学上称为&quot;ブラキシズム&quot;（ Bruxism），指人在睡眠或清醒时无意识地上下牙齿摩擦或咬紧。常见原因包括精神压力、焦虑、睡眠障碍等。在作品中，猫听到远处女佣的磨牙声，由此引发了一段关于</div>
+</a>
+<a class="entry-item" href="殿下.html">
+  <div class="noun">殿下</div>
+  <div class="snippet">天皇・皇后を除く皇族に対する敬称。皇太子、親王、内親王などに用いられる。</div>
+</a>
+<a class="entry-item" href="水薬.html">
+  <div class="noun">水薬</div>
+  <div class="snippet">水薬（みずぐすり）是日本对液状内服药物的统称，即水剂或液剂。在明治时期，随着西洋医学的引入，液状医药品的调制剂型逐渐规范化。1886年（明治19年）首版《日本药局方》颁布后，水剂的配制有了统一标准。明治时期的&quot;水薬&quot;主要分为内服液剂和外用液</div>
+</a>
+<a class="entry-item" href="求放心.html">
+  <div class="noun">求放心</div>
+  <div class="snippet">孟子提出的儒家修养概念，出自《孟子·告子上》。&quot;放&quot;指放逸、迷失，&quot;放心&quot;即迷失了的本心，&quot;求放心&quot;意为寻找回那颗被物欲蒙蔽、走失了的本心。孟子说：&quot;学问之道无他，求其放心而已矣。&quot;认为做学问的根本目的不是知识积累，而是找回人本有的善心（四</div>
+</a>
+<a class="entry-item" href="江戸趣味.html">
+  <div class="noun">江戸趣味</div>
+  <div class="snippet">指江户时代（1603-1868）在日本形成的独特审美意识和文化趣味，涵盖浮世绘、琳派美术、歌舞伎、川柳、落语等庶民文化。其特征是清简淡雅又不失精致，带有浓厚的市井生活气息和&quot;活在当下&quot;的享乐主义倾向，是日本传统美学的集大成。</div>
+</a>
+<a class="entry-item" href="沈澱党.html">
+  <div class="noun">沈澱党</div>
+  <div class="snippet">夏目漱石《我是猫》中出现的临时造语/俚语，指学业上毫无进步、始终停留在班级底层（像沉淀物一样）的学生群体。反映了明治时期学校中的学生生态。</div>
+</a>
+<a class="entry-item" href="沙門.html">
+  <div class="noun">沙門</div>
+  <div class="snippet">佛教术语，梵语&quot;Śramaṇa&quot;的音译，意为&quot;勤息&quot;（勤修善法、止息恶行），指出家修行者（僧侣）的总称。源自古代印度出家修行传统，佛教兴起后成为僧侣的通用名称。沙门须遵守戒律、剃发染衣、乞食为生，以解脱轮回为最终目标。《四十二章经》曰：&quot;辞</div>
+</a>
+<a class="entry-item" href="法学士.html">
+  <div class="noun">法学士</div>
+  <div class="snippet">日本明治时期大学法科（法学部）毕业生被授予的学士学位称号。1877年东京大学设立后，于1879年开始授予&quot;学士&quot;称号，&quot;法学士&quot;随之诞生。1887年《学位令》颁布后正式制度化。在明治时代，法学士是高级知识分子的身份象征，许多政治家、官僚和法</div>
+</a>
+<a class="entry-item" href="法螺を吹く.html">
+  <div class="noun">法螺を吹く</div>
+  <div class="snippet">大げさなことを言う、ほらを吹くという意味の日本語表現。法螺貝（ほらがい）が見た目以上に大きな音を出すことから、実際より大げさに話すことを指すようになった。</div>
+</a>
+<a class="entry-item" href="法螺吹.html">
+  <div class="noun">法螺吹</div>
+  <div class="snippet">日语俗语，意为&quot;吹牛的人、说大话的人、夸大其词的人&quot;。语源来自法螺贝（ほらがい）——大型海螺壳吹奏时发出的声音远比螺壳本身给人的印象更为宏大响亮，由此引申为&quot;说大话&quot;。在中国也有&quot;吹法螺&quot;的相同用法。在本章中，苦沙弥评价迷亭&quot;从那时起就是法</div>
+</a>
+<a class="entry-item" href="法螺吹き.html">
+  <div class="noun">法螺吹き</div>
+  <div class="snippet">大げさなことを言う人、ほらを吹く人。語源は法螺貝（大きな音が出る巻貝）に由来し、誇張して話すことを指す。</div>
+</a>
+<a class="entry-item" href="法語.html">
+  <div class="noun">法語</div>
+  <div class="snippet">佛教用语，指佛陀或高僧阐述佛法真理的言教、开示。禅宗中特指祖师对弟子的教诫语录。文中猫将自己的文章比作&quot;法語&quot;，是自嘲与自负的幽默写法。</div>
+</a>
+<a class="entry-item" href="泰西文明.html">
+  <div class="noun">泰西文明</div>
+  <div class="snippet">日语中对西方（欧美）文明的称呼。&quot;泰西&quot;（たいせい）意为&quot;极西&quot;，由明末来华传教士利玛窦创制，指代欧洲及欧美世界。明治时期日本积极吸收泰西文明以推进近代化，福泽谕吉的《西洋事情》《文明论之概略》等著作是介绍泰西文明的代表。作品中迷亭将女性品</div>
+</a>
+<a class="entry-item" href="洋行帰り.html">
+  <div class="noun">洋行帰り</div>
+  <div class="snippet">幕末至明治时期，赴欧美留学或考察后返回日本的人士。这一群体在日本的近代化进程中发挥了决定性作用。1863年长州藩秘密派遣伊藤博文、井上馨等&quot;长州五杰&quot;留学英国，开启了日本海外留学的先河。明治维新后，政府大量派遣留学生赴欧美学习西方制度、技术</div>
+</a>
+<a class="entry-item" href="洒掃薪水.html">
+  <div class="noun">洒掃薪水</div>
+  <div class="snippet">洒掃薪水（しゃそうしんすい）是由&quot;洒掃&quot;（洒水扫地）和&quot;薪水&quot;（打柴汲水）组成的复合词，泛指日常家务劳动。&quot;洒掃&quot;出自儒家经典《大学章句》中&quot;洒掃応対&quot;的典故，是儒家八岁入小学的第一课——学习洒扫应对等基本礼仪；&quot;薪水&quot;出自《南史·陶潜传》</div>
+</a>
+<a class="entry-item" href="洒落.html">
+  <div class="noun">洒落</div>
+  <div class="snippet">日语中指机敏风趣的言谈，尤指利用同音异义进行的双关语语言游戏。起源于古代和歌中的修辞技巧，江户时代在町人文化中高度发展，形成了&quot;洒落本&quot;这一独特的文学体裁。&quot;洒落&quot;体现日语中细腻的语言感觉和幽默精神，巧妙者为&quot;洒落&quot;，拙劣者则称&quot;駄洒落&quot;（</div>
+</a>
+<a class="entry-item" href="洗い張り.html">
+  <div class="noun">洗い張り</div>
+  <div class="snippet">日本传统和服洗涤整修方法。将和服完全拆解为布片，水洗后上浆、用木板或竹竿绷紧晾干，再重新缝制。可使高级绢制和服焕然一新，是传统和服保养的重要手工艺。</div>
+</a>
+<a class="entry-item" href="活動図書館.html">
+  <div class="noun">活動図書館</div>
+  <div class="snippet">夏目漱石《我是猫》中迷亭评价寒月的比喻。&quot;活动图书馆&quot;意指寒月如同行走的图书馆，是知识的化身。迷亭还用&quot;用知识铸造的二十八珊的子弹&quot;来形容寒月，与形容金田的&quot;活动纸币&quot;相对，突出知识精英与拜金主义者的截然对立。</div>
+</a>
+<a class="entry-item" href="活動紙幣.html">
+  <div class="noun">活動紙幣</div>
+  <div class="snippet">夏目漱石《我是猫》中迷亭讽刺大资本家金田的比喻性词汇。&quot;活动钞票&quot;意为&quot;行走的纸币&quot;，指金田这个人除了金钱之外毫无人格与教养，不过是纸币被贴上眼鼻的怪物。这是迷亭对拜金主义者的痛烈批判，与后文形容寒月的&quot;活动图书馆&quot;形成鲜明对比——金钱的化</div>
+</a>
+<a class="entry-item" href="活版の睡眠剤.html">
+  <div class="noun">活版の睡眠剤</div>
+  <div class="snippet">夏目漱石《我是猫》中猫观察主人苦沙弥的读书习惯后创造的独特比喻。&quot;活版印刷的安眠药&quot;意指对主人来说，书籍不是用来阅读的，而是用来诱导睡眠的工具。苦沙弥每晚必从书房带书到枕边，却从未连续读过两页以上，有时甚至一字未读。这一细节生动刻画了苦沙弥</div>
+</a>
+<a class="entry-item" href="浄土.html">
+  <div class="noun">浄土</div>
+  <div class="snippet">佛教术语，指佛菩萨所居住的清净无染的理想世界，又称&quot;清净土&quot;、&quot;佛国&quot;。与充满烦恼苦难的&quot;秽土&quot;（娑婆世界）相对。最著名的是阿弥陀佛的西方极乐净土（极乐世界），此外还有药师如来的东方净琉璃净土、弥勒菩萨的兜率净土等。净土思想在东亚佛教中极为</div>
+</a>
+<a class="entry-item" href="浩然の気.html">
+  <div class="noun">浩然の気</div>
+  <div class="snippet">孟子提出的中国哲学概念，指通过长期积累正义行为而培养出的至大至刚的精神力量，充塞于天地之间，是道德修养的最高境界。</div>
+</a>
+<a class="entry-item" href="消極的.html">
+  <div class="noun">消極的</div>
+  <div class="snippet">日语中&quot;消极的&quot;指被动的、退让的、不主动改变外部环境的态度。在《吾辈是猫》第11章中，哲学者独仙系统阐述了&quot;消极主义&quot;哲学：认为人不应试图改变外部环境（如对抗学生骚扰），而应通过内心修养达到心境平静。他将其与日本传统（禅、儒）联系起来，认为</div>
+</a>
+<a class="entry-item" href="淑徳婦人会.html">
+  <div class="noun">淑徳婦人会</div>
+  <div class="snippet">明治時代の日本に存在した浄土教系の女性団体。中国への女性教習派遣などを行った。</div>
+</a>
+<a class="entry-item" href="淡灰色.html">
+  <div class="noun">淡灰色</div>
+  <div class="snippet">淡灰色、浅灰色。日语中&quot;淡灰色&quot;（うすはいいろ/あわはいいろ）指较浅的灰色调。猫担心自己的淡灰色毛皮被松脂污染损毁，因而放弃蹭松树止痒的念头。</div>
+</a>
+<a class="entry-item" href="清和源氏.html">
+  <div class="noun">清和源氏</div>
+  <div class="snippet">日本武家氏族中最著名的一支，以第56代清和天皇的孙子源经基为始祖。其后裔建立了日本历史上三个幕府政权——源赖朝开创镰仓幕府、足利尊氏开创室町幕府、德川家康开创江户幕府（自称新田氏支流），支配日本武家政治近700年。主要分支有河内源氏、摄津源</div>
+</a>
+<a class="entry-item" href="滑稽趣味.html">
+  <div class="noun">滑稽趣味</div>
+  <div class="snippet">滑稽趣味，夏目漱石文学理论中的重要概念，与&quot;低徊趣味&quot;密切相关。指以余裕和幽默的态度观察人生与社会，通过讽刺和笑来揭示事物本质的创作态度。在《我是猫》中达到巅峰——以猫的视角，将明治知识分子的自命不凡、资本家的唯利是图以诙谐笔法一一呈现。漱</div>
+</a>
+<a class="entry-item" href="漢学者.html">
+  <div class="noun">漢学者</div>
+  <div class="snippet">汉学者（Kangakusha），即日本从事中国古典（汉学）研究的学者。江户时代，汉学以朱子学为中心成为幕府官学，涌现出藤原惺窝、林罗山、荻生徂徕、伊藤仁斋等众多学派。明治以后&quot;儒学&quot;改称&quot;汉学&quot;，确立了以实证主义、文献学为主的研究方法。代表</div>
+</a>
+<a class="entry-item" href="漢法.html">
+  <div class="noun">漢法</div>
+  <div class="snippet">日本对中医（传统中国医学）的称呼，亦称&quot;汉方医学&quot;或&quot;汉方&quot;。5-6世纪经朝鲜半岛传入日本，在飞鸟奈良时代形成制度化的医疗体系。江户时代发展出日本特色的古方派、后世派等流派。明治维新后西洋医学成为正统，汉方医学一度衰退，但20世纪后半叶复兴</div>
+</a>
+<a class="entry-item" href="無事是貴人.html">
+  <div class="noun">無事是貴人</div>
+  <div class="snippet">無事是貴人（ぶじこれきじん），著名的禅语，出自唐代临济宗祖师临济义玄的语录《临济录》。 禅宗语境中「無事」并非指平安无事，而是指放下一切追求心（求佛、求悟、求道之心）、 停止造作、保持平常心的状态；「貴人」则指觉悟者、佛本身。 整句意为：不</div>
+</a>
+<a class="entry-item" href="無何有郷.html">
+  <div class="noun">無何有郷</div>
+  <div class="snippet">出自《庄子·逍遥游》，指&quot;什么都没有的地方&quot;，比喻超越世俗价值判断的自由境界、理想乡。后世用来指乌托邦、虚幻的理想世界，或逍遥自得的精神状态。</div>
+</a>
+<a class="entry-item" href="無為にして化す.html">
+  <div class="noun">無為にして化す</div>
+  <div class="snippet">出自中国儒家／道家经典，日文训读&quot;むいにしてかす&quot;。指统治者不妄加干预，以德化民、自然而然使民众向善的治国理念。语出《论语·卫灵公》&quot;无为而治者其舜也与&quot;、《孟子·尽心上》等。作品中独仙引用此语，将其作为东洋心性修行的代表思想，与西洋个人主</div>
+</a>
+<a class="entry-item" href="無絃の素琴.html">
+  <div class="noun">無絃の素琴</div>
+  <div class="snippet">没有弦的琴。源自中国东晋诗人陶渊明的典故——他拥有一张无弦琴，每当饮酒便抚弄以寄心意，并说&quot;但识琴中趣，何劳弦上声&quot;。比喻不拘泥于形式、追求事物本质精神的境界。</div>
+</a>
+<a class="entry-item" href="無聊.html">
+  <div class="noun">無聊</div>
+  <div class="snippet">日语汉字词（buryou），意为无聊、烦闷、百无聊赖。由&quot;無&quot;（没有）和&quot;聊&quot;（依靠、乐趣）构成，字面意为&quot;没有可依凭的乐趣&quot;。是较为文语化的表达。作品中猫说&quot;少なくとも吾輩の無聊を慰むるに足るほどの頭数は御揃になった&quot;（至少凑齐了足以慰藉</div>
+</a>
+<a class="entry-item" href="無言劇.html">
+  <div class="noun">無言劇</div>
+  <div class="snippet">即哑剧（pantomime），不用台词仅靠肢体动作和表情表演的戏剧形式。作品中猫看到迷亭突然闯入后三人沉默的微妙场面，认为无声剧完全可以成立，且比有声音更尖锐深刻，暗示沉默中蕴含丰富的情感交流。</div>
+</a>
+<a class="entry-item" href="煩悩.html">
+  <div class="noun">煩悩</div>
+  <div class="snippet">佛教用语，梵语kleśa的汉译。指扰乱身心、妨碍觉悟的一切精神作用，包括贪、瞋、痴、慢、疑、恶见等。佛教认为人有108种烦恼（百八烦恼），年末敲钟108次即为除去烦恼之意。在作品中，猫说自己对春天满天下的雌猫雄猫狂乱奔走&quot;丝毫没有用烦恼、迷</div>
+</a>
+<a class="entry-item" href="燕雀焉んぞ大鵬の志を知らんや.html">
+  <div class="noun">燕雀焉んぞ大鵬の志を知らんや</div>
+  <div class="snippet">中国古典成语，源自《史记·陈涉世家》。原句为&quot;燕雀安知鸿鹄之志哉&quot;，意为燕子麻雀之类的平凡小鸟，无法理解大鹏（鸿鹄）的远大志向。比喻平庸之人无法理解英雄豪杰的抱负。是中日两国通用的谚语。</div>
+</a>
+<a class="entry-item" href="独立心.html">
+  <div class="noun">独立心</div>
+  <div class="snippet">日语指独立自主的精神（dokuritsushin）。明治启蒙思想家福泽谕吉在《学问之劝》中提出&quot;一身独立して、一国独立す&quot;（个人独立才能国家独立），将独立心作为文明开化和国家强盛的核心精神。作品中寒月提到&quot;人間に独立心が発達してくると自然こ</div>
+</a>
+<a class="entry-item" href="猫なで声.html">
+  <div class="noun">猫なで声</div>
+  <div class="snippet">猫叫声、谄媚的声音。字面意思是&quot;抚摸猫时发出的声音（指人哄猫时的说话声）&quot;，但猫调侃说对自己而言其实是&quot;被抚摸的声音&quot;。此处指刻意讨好他人的声调。</div>
+</a>
+<a class="entry-item" href="猫児.html">
+  <div class="noun">猫児</div>
+  <div class="snippet">日语&quot;猫儿&quot;（びょうじ/ねこ），意为小猫。在《我是猫》中，&quot;苦沙弥先生門下の猫児&quot;是叙述者主人公猫的自称，表达了猫将自己定位为苦沙弥门下的弟子/学生的身份认同。这一表述既有自嘲，也带有一种猫以知识分子自居的傲气，是整部作品中猫独特的叙事视角</div>
+</a>
+<a class="entry-item" href="猫又.html">
+  <div class="noun">猫又</div>
+  <div class="snippet">日本传说中著名的妖怪，最显著的特征是尾巴分叉为两条。通常认为家猫饲养超过十年（一说五十年）会成精变为猫又，体型可大如小牛。传说中猫又能直立行走、说人话、变化人形（常扮美女或老妪）、操纵尸体。最早见于平安时代《日本灵异记》，江户时代鸟山石燕《</div>
+</a>
+<a class="entry-item" href="献立.html">
+  <div class="noun">献立</div>
+  <div class="snippet">日本料理中指完整的菜品计划和配膳顺序，远不止&quot;菜单&quot;之意。以&quot;一汁三菜&quot;（饭、汤、三道菜）为基本结构，综合考虑季节感、食材搭配、烹饪方法和上菜节奏。起源于平安时代末期，在怀石料理和会席料理中发展至极致，是日本饮食文化中体现季节性与美学意识的</div>
+</a>
+<a class="entry-item" href="猿.html">
+  <div class="noun">猿</div>
+  <div class="snippet">哺乳纲灵长目动物的通称。在《我是猫》中，&quot;猿&quot;作为比喻性词汇出现在苦沙弥等人讨论进化论和相关话题的语境中，用以衬托明治时期知识分子对西方科学思想的引用方式。在猫的视角中，人类的行为有时与猿类无异，构成了作品独特的讽刺视角。</div>
+</a>
+<a class="entry-item" href="猿智慧.html">
+  <div class="noun">猿智慧</div>
+  <div class="snippet">猿智慧（Sarujie），也写作&quot;猿知恵&quot;，日语惯用语，意为&quot;小聪明&quot;&quot;鬼聪明&quot;。指看似聪明但实际上浅薄、只顾眼前利益的狡猾智慧。带有贬义和讽刺色彩。在《我是猫》中，迷亭评价鼻子夫人的谎言时说：&quot;あの女のは、みんな魂胆があって、曰く付きの噓</div>
+</a>
+<a class="entry-item" href="玉を抱いて罪あり.html">
+  <div class="noun">玉を抱いて罪あり</div>
+  <div class="snippet">日本古语，出自中国《左传·桓公十年》的&quot;匹夫无罪，怀璧其罪&quot;。意为一个人本身并无过错，却因拥有珍贵的宝玉（或才能、财富）而招来罪过与灾祸。故事讲述春秋时虞国虞叔获美玉，虞公前来索取，虞叔为避祸献玉，但虞公贪得无厌又索要宝剑，虞叔最终起兵反抗</div>
+</a>
+<a class="entry-item" href="玉拾い.html">
+  <div class="noun">玉拾い</div>
+  <div class="snippet">捡球的人。原指在棒球或网球练习中负责捡拾散落球的人，引申为干杂活、地位低下的角色。文中指被高年级生命令去捡球的低年级学生。</div>
+</a>
+<a class="entry-item" href="王者の民蕩々たり.html">
+  <div class="noun">王者の民蕩々たり</div>
+  <div class="snippet">出自中国儒家经典《孟子·尽心章句上》的日本汉文训读&quot;王者之民皞皞如也&quot;（&quot;蕩々&quot;是&quot;皞皞&quot;的转写）。孟子将治国分为&quot;霸道&quot;与&quot;王道&quot;，认为行仁政的圣王（王者）统治下的子民心境宽广、悠然自得（皞皞/蕩蕩），如天地自然般化育而不自知。作品中独仙</div>
+</a>
+<a class="entry-item" href="珍譚.html">
+  <div class="noun">珍譚</div>
+  <div class="snippet">日语词汇，读作&quot;ちんたん&quot;，由&quot;珍&quot;（珍奇）与&quot;譚&quot;（故事、谈话）组成，意为&quot;珍奇的故事&quot;&quot;奇谈&quot;。与&quot;珍談（ちんだん）&quot;同义，但使用了更文雅的&quot;譚&quot;字。在《我是猫》中，作者以&quot;珍譚&quot;自称即将讲述的空地骚动故事，带有自嘲与戏谑的语气。</div>
+</a>
+<a class="entry-item" href="琳琅璆鏘.html">
+  <div class="noun">琳琅璆鏘</div>
+  <div class="snippet">四字成语，形容美玉相互碰撞时发出的清越响声。语出屈原《楚辞·九歌·东皇太一》&quot;抚长剑兮玉珥，璆锵鸣兮琳琅&quot;。在日语汉文中，多用于比喻文采斐然或音声清雅。</div>
+</a>
+<a class="entry-item" href="琴瑟調和.html">
+  <div class="noun">琴瑟調和</div>
+  <div class="snippet">中国成语，出自《诗经·小雅·常棣》「妻子好合，如鼓瑟琴」。琴（七弦）和瑟（二十五弦）合奏出和谐音乐，比喻夫妻感情融洽、婚姻美满。亦作「琴瑟和鸣」「琴瑟相调」。在日语中作为四字熟语使用。</div>
+</a>
+<a class="entry-item" href="瑣談繊話.html">
+  <div class="noun">瑣談繊話</div>
+  <div class="snippet">琐碎细微的闲谈。指看似无关紧要、细枝末节的小话题。猫自谓其文字貌似琐碎闲谈，实则暗藏哲理，告诫读者不可轻慢对待。</div>
+</a>
+<a class="entry-item" href="甎を磨.html">
+  <div class="noun">甎を磨</div>
+  <div class="snippet">中国禅宗著名的公案，出自唐代南岳怀让禅师与马祖道一之间的问答。马祖道一在南岳衡山终日坐禅，怀让禅师便取一片瓦（甎）在石上磨。道一问磨瓦作什么，答曰磨作镜。道一问瓦岂能磨成镜，怀让即反问：&quot;磨砖既不成镜，坐禅岂得成佛？&quot;以此点破拘泥于坐禅形式</div>
+</a>
+<a class="entry-item" href="生者必滅.html">
+  <div class="noun">生者必滅</div>
+  <div class="snippet">生者必滅（しょうじゃひつめつ）是佛教根本教义之一，意为&quot;凡有生命之物，终将走向灭亡&quot;。此语出自《涅槃经》等佛教经典，与&quot;会者定离&quot;（相逢之人终将分离）常作为对句使用。它集中表达了佛教&quot;诸行无常&quot;的核心思想，在日本文学中尤为著名，如《平家物语</div>
+</a>
+<a class="entry-item" href="生霊.html">
+  <div class="noun">生霊</div>
+  <div class="snippet">日本民间信仰中活着的人的魂魄脱离肉体的现象，或因强烈的怨恨、嫉妒、爱执等情感而脱离肉体去附身或加害他人的魂魄。与&quot;死灵&quot;相对。在《源氏物语》中六条御息所化为生灵折磨葵之上是最著名的文学例证。</div>
+</a>
+<a class="entry-item" href="産婆.html">
+  <div class="noun">産婆</div>
+  <div class="snippet">日语中对助产士的传统称呼（sanba）。明治初期，日本产婆多为经验传承，缺乏系统医学训练。1899年产婆规则颁布后，助产业走向法制化。作品中迷亭讲述古代雅典禁止女性从事产婆职业的法律，而Agnodice突破禁令成为女医的故事。</div>
+</a>
+<a class="entry-item" href="男子.html">
+  <div class="noun">男子</div>
+  <div class="snippet">日语中指男性、男人（danshi）。与&quot;女子&quot;相对，在明治时期的语境中常出现在&quot;男子に負けない&quot;（不输给男子）等表述中，反映了女性争取与男性平等的时代诉求。《我是猫》中迷亭赞赏女学生&quot;何でも男子に負けないところが敬服の至りだ&quot;，表现了当时对</div>
+</a>
+<a class="entry-item" href="疱瘡.html">
+  <div class="noun">疱瘡</div>
+  <div class="snippet">即天花（天然痘），由天花病毒引起的高致死率急性传染病。日本历史上多次大流行，最严重的是735-737年（天平年间）的天花大流行，导致全国人口25-35%死亡。幸存者面部会留下凹陷瘢痕即&quot;痘痕&quot;（あばた）。1796年詹纳发明牛痘接种法后，日本</div>
+</a>
+<a class="entry-item" href="痘痕.html">
+  <div class="noun">痘痕</div>
+  <div class="snippet">即天花（天然痘）痊愈后留在皮肤上的凹陷瘢痕，俗称&quot;麻子&quot;。日本江户时代天花常周期性大流行，幸存者面部多残留痘痕。明治推行种痘（牛痘接种）后，天花患者大幅减少，痘痕逐渐稀少。小说中作者以大量篇幅描写苦沙弥的痘痕脸，以此象征前现代遗留的&quot;旧时代</div>
+</a>
+<a class="entry-item" href="瘋癲院.html">
+  <div class="noun">瘋癲院</div>
+  <div class="snippet">日本近代对精神病院的旧称，亦写作&quot;癲狂院&quot;。明治时期开始出现近代化精神病院，1879年设立&quot;东京府癫狂院&quot;（后迁至巢鸭更名为东京府巢鸭病院，即今东京都立松泽病院的前身）。1900年《精神病者监护法》颁布后，精神医疗体系逐渐制度化。该词在现代</div>
+</a>
+<a class="entry-item" href="白雨.html">
+  <div class="noun">白雨</div>
+  <div class="snippet">日语中指夏日突然降下的暴雨，即&quot;夕立&quot;。作品中南藏院在雷雨中有雷击落寺内松树。该词常在日本文学中出现，用以描写夏天的骤雨景象。</div>
+</a>
+<a class="entry-item" href="百獣.html">
+  <div class="noun">百獣</div>
+  <div class="snippet">&quot;百獣&quot;（Hyakujū），意为&quot;百种野兽&quot;或&quot;所有的野兽&quot;，其中&quot;百&quot;表示数量之多、种类之全。常用于&quot;百獣の王&quot;（百兽之王，即狮子）等成语中。语出唐代《酉阳杂俎》等中国古典文献。在作品中，迷亭用&quot;百兽之中最聪慧的大象与最贪婪的小猪结婚&quot;的</div>
+</a>
+<a class="entry-item" href="皮癬病.html">
+  <div class="noun">皮癬病</div>
+  <div class="snippet">日语&quot;皮癬病&quot;（ひぜんびょう）即皮肤癣菌病，俗称金钱癣、环状癣，由真菌感染引起的皮肤病，症状为圆形红斑、瘙痒、脱屑。在作品中，猫形容主人抓痒的动作&quot;像患皮癣般抓挠&quot;，生动刻画了主人苦沙弥不拘小节、粗俗的形象。</div>
+</a>
+<a class="entry-item" href="盗難告訴.html">
+  <div class="noun">盗難告訴</div>
+  <div class="snippet">盗难（盗窃案）被害者向司法机关提出的控诉。日本明治时代根据1882年施行的治罪法建立近代刑事告诉制度。被害者可以书面或口头向警察、检事或预审判事提出告诉，需署名捺印，受理后由司法警察官调查、检事搜查、预审判事审理。在作品中有对该制度的幽默描</div>
+</a>
+<a class="entry-item" href="石火の機.html">
+  <div class="noun">石火の機</div>
+  <div class="snippet">禅宗及日本剑道术语，出自泽庵宗彭《不动智神妙录》第四章标题。指像打火石（燧石）撞击瞬间迸发火花一样，不容一丝间隙的瞬间反应速度——所谓&quot;间不容发&quot;。在剑道中体现为不经过思考、纯然灵感的迅速反射动作。在禅宗公案中，则指电光石火般迅捷的机锋应答</div>
+</a>
+<a class="entry-item" href="磔.html">
+  <div class="noun">磔</div>
+  <div class="snippet">日本历史上的一种死刑方式，即将犯人绑在十字形或&quot;キ&quot;字形木柱上，用长枪反复刺穿致死，死后尸体暴露数日。与中国&quot;磔&quot;（凌迟）含义不同，日本&quot;磔&quot;更接近西方的十字架刑，但执行方式不同——日本是用长枪穿刺致死而非钉穿手脚悬挂窒息。在江户时代是正式</div>
+</a>
+<a class="entry-item" href="礼服.html">
+  <div class="noun">礼服</div>
+  <div class="snippet">礼服（れいふく），指在正式社交场合穿着的服装。 本章中猫专门批评了西洋妇女的&quot;礼服&quot;——她们在夜间社交场合袒胸露肩露出臂膀， 自称为礼服，但一到白天就耸肩遮胸裹臂，连脚趾甲都不愿让人看见。 猫讽刺这种&quot;顿珍漢的作用&quot;，认为这是愚昧盲从西洋的</div>
+</a>
+<a class="entry-item" href="祝捷会.html">
+  <div class="noun">祝捷会</div>
+  <div class="snippet">祝捷会（Shukushoukai），即庆祝胜利的大会。在《我是猫》的语境中指日俄战争（1904—1905）后日本各地举行的战胜庆祝活动。日俄战争以日本胜利告终，日本国内举行了大规模的凯旋仪式和庆祝活动。然而1905年9月5日《朴茨茅斯和约》</div>
+</a>
+<a class="entry-item" href="神祇釈教.html">
+  <div class="noun">神祇釈教</div>
+  <div class="snippet">神祇釈教是由&quot;神祇&quot;（日本固有神道信仰）和&quot;釈教&quot;（释迦之教、即佛教）组合而成的词语，概括了日本传统宗教的两大支柱。神祇指《古事记》《日本书纪》中记载的天地诸神及皇室祖先神，是神道信仰的核心；釈教指自6世纪经朝鲜传入日本的佛教。日本历史上经</div>
+</a>
+<a class="entry-item" href="神経衰弱.html">
+  <div class="noun">神経衰弱</div>
+  <div class="snippet">神経衰弱（しんけいすいじゃく，neurasthenia），19世纪后期至20世纪初流行的医学诊断概念， 由美国神经学家乔治·米勒·比尔德于1869年提出。明治时期随西洋医学传入日本后， 被视作「文明病」——因近代化的精神压力而导致的神经疲劳</div>
+</a>
+<a class="entry-item" href="禅の機鋒.html">
+  <div class="noun">禅の機鋒</div>
+  <div class="snippet">禅宗术语，指禅师用以接引学人、勘验悟境的锐利言行动作。&quot;机&quot;指弓弩的扳机，&quot;锋&quot;指刀刃的尖端，合喻机敏锐利的才智言辞。表现形式包括棒打、喝斥、踢打、沉默等非语言手段。宋代以后的公案（如&quot;庭前柏树子&quot;&quot;麻三斤&quot;等）即是历史上著名机锋的体系化。</div>
+</a>
+<a class="entry-item" href="禅学.html">
+  <div class="noun">禅学</div>
+  <div class="snippet">指佛教禅宗的学问与修行体系。作品中的独仙沉溺于禅学，并影响了多人。明治时期，禅宗在知识界中颇为流行，夏目漱石本人青年时期也曾在圆觉寺参禅，但对盲目迷信持批判态度。</div>
+</a>
+<a class="entry-item" href="禅宗.html">
+  <div class="noun">禅宗</div>
+  <div class="snippet">大乘佛教宗派之一，以菩提达摩为初祖，主张&quot;不立文字、教外别传、直指人心、见性成佛&quot;，以坐禅为根本修行方法。南宋时由荣西、道元等人传入日本，对日本茶道、花道、武道、庭院、俳谐等传统文化影响深远。</div>
+</a>
+<a class="entry-item" href="禅家.html">
+  <div class="noun">禅家</div>
+  <div class="snippet">禅宗佛教的修行者或禅宗流派。禅宗以&quot;不立文字、教外别传、直指人心、见性成佛&quot;为宗旨，强调超越语言文字的直观觉悟。作品中猫将迷亭、铃木、主人三人沉默的戏剧性场面与禅家的无言问答相类比。</div>
+</a>
+<a class="entry-item" href="禿.html">
+  <div class="noun">禿</div>
+  <div class="snippet">秃（はげ），意即头发脱落、光头、秃头的状态。在日本社会中有较强的负面文化含义——传统观念中浓密黑发是青春与健康的象征，秃头则与衰老、疾病或滑稽形象相关联。在江户时代的文学与落语中，女性的秃头尤其被视为重大缺陷和笑料（如文金高島田发髻之下其实</div>
+</a>
+<a class="entry-item" href="禿頭.html">
+  <div class="noun">禿頭</div>
+  <div class="snippet">はげあたま。日本では武士の月代頭（さかやき）に代表される禿頭文化があり、日常会話では「禿頭」は忌諱語とされる。作中では金田が頭を叩く音として描写される。</div>
+</a>
+<a class="entry-item" href="積極的.html">
+  <div class="noun">積極的</div>
+  <div class="snippet">日语中&quot;积极的&quot;指主动的、进取的、力图改变外部环境的态度。在《吾辈是猫》中，独仙将&quot;积极主义&quot;视为西方文明的根本特征：遇到山挡路就挖隧道，对政治不满就改革制度，对人不满意就斗争或诉讼。他批评这种态度永无止境、无法带来真正的满足，与东方（日本</div>
+</a>
+<a class="entry-item" href="窮措大.html">
+  <div class="noun">窮措大</div>
+  <div class="snippet">汉语词汇，读作&quot;きゅうそだい&quot;，指贫穷的读书人、寒酸的知识分子。&quot;措大&quot;一词最早见于五代王定保《唐摭言·贤仆夫》，是唐宋以来对贫寒书生的蔑称。苏轼《东坡志林》等宋人笔记中经常出现此词。清人考证认为&quot;措大&quot;亦写作&quot;醋大&quot;，以醋酸比喻穷书生的寒</div>
+</a>
+<a class="entry-item" href="立て膝.html">
+  <div class="noun">立て膝</div>
+  <div class="snippet">日语中单膝跪地、另一膝立起的坐姿。&quot;立て膝をつく&quot;指呈跪姿时将一侧膝部立起、另一侧膝部贴地的动作。在日本传统和室中的一种较为随意的坐法，介于正座和盘腿坐之间，常见于男性不拘礼节时的姿势。在作品中三平君在女主人面前以这种姿势坐下，体现其朴实、</div>
+</a>
+<a class="entry-item" href="竜頭蛇尾.html">
+  <div class="noun">竜頭蛇尾</div>
+  <div class="snippet">四字成语，亦作&quot;龙头蛇尾&quot;。比喻事物的开头声势浩大，结尾却草草了事、软弱无力。语出宋代朱熹《朱子语类》卷一百三十，朱熹评苏轼为欧阳修文集所作序言&quot;开头说得天大，结尾却不过如此，实乃龙头蛇尾&quot;。在作品中，迷亭在激昂地赞美寒月后，一时找不到合适</div>
+</a>
+<a class="entry-item" href="竜騰虎闘.html">
+  <div class="noun">竜騰虎闘</div>
+  <div class="snippet">龙腾虎斗（りゅうとうことう），日语四字熟语（成语），意为龙升腾、虎搏斗，形容极其激烈、气势磅礴的战斗或竞争场面。源自汉语成语&quot;龙争虎斗&quot;（出典于汉代班固《答宾戏》：&quot;分裂诸夏，龙战虎争&quot;）。两者含义相同，但日语版使用&quot;腾&quot;（跃升）字，更强调</div>
+</a>
+<a class="entry-item" href="竜鳴.html">
+  <div class="noun">竜鳴</div>
+  <div class="snippet">龙鸣（剣竜鳴），指宝剑在鞘中发出龙吟般鸣响的传说。 源于中国《太平御览》所引《世说》故事：战国时王子乔墓中有一柄宝剑， 盗墓者欲取之时，剑作&quot;龙鸣虎吼&quot;之声，随后飞上天去。 唐代李白《独漉篇》有&quot;雄剑挂壁，时时龙鸣&quot;之句， 意为宝剑虽闲置却</div>
+</a>
+<a class="entry-item" href="笑う門には福来る.html">
+  <div class="noun">笑う門には福来る</div>
+  <div class="snippet">日本谚语，读作&quot;わらうかどにはふくきたる&quot;，意为&quot;笑门福来、和气生财&quot;。意指经常充满欢声笑语的家庭或人，自然会招来幸福和好运。源自中国成语&quot;笑门福来&quot;或&quot;打开笑门福自来&quot;，在日本战国时代至安土桃山时代（16世纪）的文献中已见记载。作为日本最</div>
+</a>
+<a class="entry-item" href="細君.html">
+  <div class="noun">細君</div>
+  <div class="snippet">細君（さいくん），日语中对妻子的称呼，原为汉语词汇，后传入日本。在日本有两种用法：一是在朋友面前谦称自己的妻子（相当于&quot;内人&quot;）；二是称呼地位低于自己的人的妻子。明治至昭和中期比较常用，现代日语中逐渐被&quot;妻&quot;&quot;家内&quot;&quot;奥さん&quot;等取代，带有古</div>
+</a>
+<a class="entry-item" href="紳士.html">
+  <div class="noun">紳士</div>
+  <div class="snippet">绅士。源自英文gentleman。明治时期引入日本的概念，指有教养、品行端正的上流男性。猫引用书中&quot;紳士養成方&quot;的伪书典故，为自己的行为寻找理论依据。</div>
+</a>
+<a class="entry-item" href="絞罪.html">
+  <div class="noun">絞罪</div>
+  <div class="snippet">以绞刑处死的刑罚，即绞首刑。在《吾輩は猫である》寒月的演讲中，他追溯了绞刑的历史：主要行于盎格鲁-撒克逊民族之间，古代则多作为自杀方法。寒月引用了《奥德赛》中忒勒马科斯绞死女仆的记载、希罗多德关于犹太人的叙述，以及波斯人的磔刑习俗等。在日本</div>
+</a>
+<a class="entry-item" href="綱渡り.html">
+  <div class="noun">綱渡り</div>
+  <div class="snippet">走钢丝，比喻做非常危险的事情。原指杂技艺人在悬空的绳索上行走表演。猫用这个词形容自己在垣根上行走的状态，既是指物理上的危险动作，也暗示人生的艰险。</div>
+</a>
+<a class="entry-item" href="羅甸語.html">
+  <div class="noun">羅甸語</div>
+  <div class="snippet">羅甸語（らてんご），日本历史上对拉丁语（Latin）的汉字音译表记。&quot;羅甸&quot;二字为&quot;Latin&quot;的当て字（音译），是日本独自的译法（中国译作&quot;拉丁&quot;）。明治时期在学术文献中广泛使用，与&quot;英語&quot;&quot;独逸語&quot;&quot;仏蘭西語&quot;等并列。现代日语中已改用片</div>
+</a>
+<a class="entry-item" href="美学.html">
+  <div class="noun">美学</div>
+  <div class="snippet">源自希腊语aisthetikos（感知），是研究美、艺术与审美经验的哲学分支。18世纪由德国哲学家鲍姆嘉通（Baumgarten）确立为独立学科。在日本，明治时代引进西方哲学体系后，&quot;美学&quot;一词作为翻译术语被广泛使用。作品中的迷亭自称专攻美</div>
+</a>
+<a class="entry-item" href="義俠心.html">
+  <div class="noun">義俠心</div>
+  <div class="snippet">義俠心（Gikyoushin），即侠义之心、扶弱抗强的正义精神。指不计个人得失、为正义而行动的勇气与气概。与&quot;任侠&quot;&quot;男気&quot;等词近义。在《我是猫》中，猫听闻寒月君被金田家暗中调查后，激发了自己的义侠心，决心冒险前往金田邸侦察。猫自称虽为猫却</div>
+</a>
+<a class="entry-item" href="義士遺物保存会.html">
+  <div class="noun">義士遺物保存会</div>
+  <div class="snippet">泉岳寺内设立的展示赤穗义士遗物的组织或展览机构。作品中被称为&quot;见世物&quot;（展览），展示与元禄赤穗事件相关的遗物和资料。赤穗义士（四十七士）于1702年为主君浅野长矩复仇后全部切腹，其后人及敬仰者保存其遗物以供后人瞻仰。该会所管理的文物现已成为</div>
+</a>
+<a class="entry-item" href="耶蘇.html">
+  <div class="noun">耶蘇</div>
+  <div class="snippet">日本历史上对耶稣及基督教的汉字表记（音译），读作&quot;ヤソ&quot;。源自中文&quot;耶稣&quot;。江户时代禁教期至明治初期广泛使用，现代日语中已不常用，代之以&quot;イエス&quot;&quot;キリスト&quot;。</div>
+</a>
+<a class="entry-item" href="耶蘇学校.html">
+  <div class="noun">耶蘇学校</div>
+  <div class="snippet">耶蘇学校（やそがっこう）是明治时期对基督教传教士创办的教会学校（Mission School）的俗称。&quot;耶蘇&quot;即&quot;耶稣&quot;的日文旧表记，源自葡萄牙语。明治初期，随着西方 missionaries 来日，建立了众多教会学校，如明治学院（1863</div>
+</a>
+<a class="entry-item" href="耶蘇教.html">
+  <div class="noun">耶蘇教</div>
+  <div class="snippet">日本近代以前对基督教的称呼，源自汉语「耶穌」（Jesus的音译）加「教」字，读音为「ヤソきょう」。江户时代禁教期至明治初期广泛使用，常带有贬义色彩。现代日语中已为「キリスト教」所取代。</div>
+</a>
+<a class="entry-item" href="股肱.html">
+  <div class="noun">股肱</div>
+  <div class="snippet">汉语成语&quot;股肱之臣&quot;的略称。&quot;股&quot;指大腿，&quot;肱&quot;指手臂，合喻辅佐君主的得力重臣。源自《尚书·益稷》&quot;臣作朕股肱耳目&quot;。后泛指领导者身边最信任、最能干的助手。作品中金田将铃木藤十郎收为&quot;股肱&quot;，派其监视苦沙弥的一举一动，讽刺了明治实业家利用旧</div>
+</a>
+<a class="entry-item" href="肺病.html">
+  <div class="noun">肺病</div>
+  <div class="snippet">肺结核的旧称，日本传统亦称&quot;労咳&quot;。明治至昭和初期被称为日本的&quot;国民病&quot;，与脚气并称两大疾病。1935-1945年间高居日本人死因首位。明治时期工业化与城市化带来的密集居住和恶劣卫生条件使结核菌广泛传播。文中御师匠将肺病与ペスト并列为&quot;新し</div>
+</a>
+<a class="entry-item" href="胡麻塩.html">
+  <div class="noun">胡麻塩</div>
+  <div class="snippet">本义是将黑芝麻与白盐混合的日本传统调味料，撒在米饭上食用。因其黑白相间的外观，比喻花白头发（黑发与白发混杂交织）。&quot;胡麻塩頭&quot;（gomashio atama）指花白头发，相当于英语&quot;salt and pepper hair&quot;。文中以&quot;胡麻塩</div>
+</a>
+<a class="entry-item" href="胴間声.html">
+  <div class="noun">胴間声</div>
+  <div class="snippet">胴间声（どうまごえ），日语中指粗重、浑浊、低俗的大嗓音。 形容像破锣一样的嘶哑大声，带有贬义色彩。 &quot;胴间&quot;原指和服躯干部分的布料宽度，转义为&quot;又粗又大&quot;。 同义词有&quot;どら声&quot;（铜锣声）。并非单纯指声音洪亮， 而是强调音色粗糙、不悦耳、缺乏</div>
+</a>
+<a class="entry-item" href="脊髄.html">
+  <div class="noun">脊髄</div>
+  <div class="snippet">脊髓，中枢神经系统的重要组成部分，位于脊柱椎管内，连接脑与身体各部位。猫用&quot;脊髄の縦に通う真中&quot;指自己背部中央的纵向中线区域，因无法自己抓挠而困扰。</div>
+</a>
+<a class="entry-item" href="脱兎.html">
+  <div class="noun">脱兎</div>
+  <div class="snippet">日语四字熟语，意为&quot;如惊逃的兔子般极其迅速的动作&quot;。源出中国古代兵法书《孙子·九地篇》：&quot;始如处女，敌人开户；后如脱兔，敌不及拒&quot;（始めは処女の如く、後は脱兎の如し）。原指军事上先以静弱示敌使其松懈，后以雷霆之势突袭使之无法防备的战术，后转</div>
+</a>
+<a class="entry-item" href="腹膜炎.html">
+  <div class="noun">腹膜炎</div>
+  <div class="snippet">腹膜腔的炎症，可危及生命。作品中理野陶然因在僧堂长期食用粗劣的麦饭和万年渍，导致腹膜炎而死亡。迷亭借此批评独仙的禅道修习间接害死了人。</div>
+</a>
+<a class="entry-item" href="臨済録.html">
+  <div class="noun">臨済録</div>
+  <div class="snippet">全称《镇州临济慧照禅师语录》，又称《临济义玄禅师语录》，禅宗临济宗创始人义玄禅师（？—867）的语录汇编，由门人三圣慧然编集。收录于《大正藏》第四十七册。其禅风以机锋峻烈著称，提倡&quot;随处作主，立处皆真&quot;&quot;无事是贵人&quot;，著名的&quot;无位真人&quot;&quot;逢</div>
+</a>
+<a class="entry-item" href="自炊.html">
+  <div class="noun">自炊</div>
+  <div class="snippet">自分で食事を準備すること。明治期の学生寮における「賄征伐」運動を経て自炊制度が導入され、下宿学生の生活様式として定着した。旧制高校では自炊記念日を設ける習慣もあった。</div>
+</a>
+<a class="entry-item" href="色盲（しきもう）.html">
+  <div class="noun">色盲（しきもう）</div>
+  <div class="snippet">指无法正常辨别某些颜色的视觉障碍，即色觉异常。常见类型为红绿色盲。在本文中用于铺垫修辞，引出下文声盲这一造语，以类比手法增强讽刺效果。</div>
+</a>
+<a class="entry-item" href="艶罪.html">
+  <div class="noun">艶罪</div>
+  <div class="snippet">夏目漱石在《我是猫》中创造的造词兼同音双关语。寒月说拒绝婚事后怕金田小姐因此生病&quot;那就是我的罪过了&quot;，迷亭接口说&quot;那就是艳罪（えんざい）&quot;。利用与&quot;冤罪&quot;同音的双关效果——&quot;艶&quot;意为情爱风流，&quot;艶罪&quot;即&quot;情罪/风流罪&quot;，同时暗含&quot;冤枉&quot;之意</div>
+</a>
+<a class="entry-item" href="花吹雪.html">
+  <div class="noun">花吹雪</div>
+  <div class="snippet">花吹雪（はなふぶき），日语中形容樱花花瓣如暴风雪般随风飘落的优美词汇。 &quot;吹雪&quot;原指暴风雪，而&quot;花吹雪&quot;将花瓣比作雪花，构成一幅春日特有的 动态美景，是日本文学与俳句中重要的春之季语。 这一意象体现了日本文化独特的审美意识——&quot;物哀&quot;（もの</div>
+</a>
+<a class="entry-item" href="花魁.html">
+  <div class="noun">花魁</div>
+  <div class="snippet">花魁（おいらん）是江户时代吉原游廓中最高级别的游女。她们自幼接受严格教育，精通书道、茶道、舞蹈、三味线等艺能，衣着华丽，走路方式独特（八文字）。花魁有权选择客人，一般客人需经历三次见面（初会、裏、馴染み）才能获得服务。18世纪末随着芸妓兴起</div>
+</a>
+<a class="entry-item" href="茶人.html">
+  <div class="noun">茶人</div>
+  <div class="snippet">茶道爱好者、茶道实践者。广义指热爱茶道、精通茶道美学的人，也指风雅之士。猫自称为&quot;茶人的猫&quot;，表达自己崇尚淡泊、风雅的审美品味，厌恶粘腻的事物。</div>
+</a>
+<a class="entry-item" href="華族.html">
+  <div class="noun">華族</div>
+  <div class="snippet">日本明治维新后至二战结束期间（1869-1947）存在的贵族阶层。1869年废除公家、大名称号统一为华族，1884年颁布《华族令》确立公爵至男爵五等爵位制度。书中苦沙弥收到署名华族的募捐信，但吝啬的他并不打算响应。</div>
+</a>
+<a class="entry-item" href="落人.html">
+  <div class="noun">落人</div>
+  <div class="snippet">战败后逃往偏僻地区隐藏的人及其后裔的历史用语。最著名的是&quot;平家の落人&quot;——源平合战中败北后隐居山间的平家残部。日本各地至今流传着&quot;落人伝説&quot;。</div>
+</a>
+<a class="entry-item" href="蒟蒻閻魔.html">
+  <div class="noun">蒟蒻閻魔</div>
+  <div class="snippet">蒟蒻閻魔（こんにゃくえんま）是东京文京区源觉寺供奉的一尊特殊阎魔王像，因与蒟蒻（魔芋）相关的民间传说而得名。传说宝历年间（1751-1764），一位右眼失明的老婆婆每日以蒟蒻供奉祈愿，21天后阎魔托梦将一目赠与她，老婆婆右眼复明，阎魔像的右</div>
+</a>
+<a class="entry-item" href="蔭弁慶.html">
+  <div class="noun">蔭弁慶</div>
+  <div class="snippet">日语惯用语，亦作&quot;阴弁庆&quot;。源自平安末期僧兵武将武藏坊弁庆的典故，&quot;荫&quot;指背后、暗中，合为&quot;只在背地里像弁庆一样勇猛&quot;。与更常用的&quot;内弁庆&quot;（家里横）同义，讽刺在无人处嚣张而在公共场合怯懦的人。现代衍生出&quot;网络弁庆&quot;等新用法。文中邻居以此嘲</div>
+</a>
+<a class="entry-item" href="薬味.html">
+  <div class="noun">薬味</div>
+  <div class="snippet">日本料理中用于增添风味、去除腥膻而少量添加的芳香性调味料总称。&quot;薬味&quot;一词由&quot;薬&quot;（药材）和&quot;味&quot;（味道）组成，源于药食同源的中药哲学。荞麦面和乌冬面的代表薬味包括：青葱、生姜、山葵、大叶（紫苏）、七味唐辛子、白萝卜泥等。江户时代随着荞麦面</div>
+</a>
+<a class="entry-item" href="蚯蚓.html">
+  <div class="noun">蚯蚓</div>
+  <div class="snippet">蚯蚓，环节动物门贫毛纲陆栖无脊椎动物，在日语中称为&quot;ミミズ&quot;。雌雄同体，以土壤中的有机物为食，被誉为&quot;生态系工程师&quot;，其排泄物能改善土壤团粒结构、增加通气性和保水性。在作品中，猫以&quot;从在天之神朱庇特到土中鸣叫的蚯蚓&quot;作为两端的对比，说明恋爱</div>
+</a>
+<a class="entry-item" href="蛙の眼球.html">
+  <div class="noun">蛙の眼球</div>
+  <div class="snippet">《我是猫》中角色寒月（理学士）的博士论文研究主题，全称为&quot;蛙の眼球の電動作用に対する紫外光線の影響&quot;（紫外线对青蛙眼球的电动作用的影响）。这是夏目漱石对明治时期学院派学术研究中脱离现实、追求细枝末节的倾向所进行的讽刺。该研究主题极度专业化且</div>
+</a>
+<a class="entry-item" href="蝙蝠に夕月.html">
+  <div class="noun">蝙蝠に夕月</div>
+  <div class="snippet">日本俳句与文学中常见的季语搭配，表现黄昏时刻的寂寥美感。江户俳人与谢芜村有咏蝙蝠的名句&quot;蝙蝠に夕月昔の友鳥か&quot;（蝙蝠与夕月，可是昔日友鸟乎？）。蝙蝠既非鸟亦非兽的暧昧身份，与黄昏昼夜交织的朦胧氛围相映成趣，赋予此搭配独特的诗意。在《我是猫》</div>
+</a>
+<a class="entry-item" href="行徳の俎.html">
+  <div class="noun">行徳の俎</div>
+  <div class="snippet">夏目漱石《我是猫》中出现的特殊比喻性词组。&quot;行徳&quot;（Gyōtoku）是千叶县市川市的一个地名，历史上以海产闻名，当地居民常食用贝类，导致砧板（俎/まないた）因频繁敲击贝壳而严重磨损。由此衍生出&quot;被社会磨去棱角、圆滑世故的人&quot;这一比喻义。在小</div>
+</a>
+<a class="entry-item" href="行雲流水.html">
+  <div class="noun">行雲流水</div>
+  <div class="snippet">四字成语，字面意为&quot;流动的云、流淌的水&quot;。典出北宋苏轼《与谢民师推官书》：&quot;大略如行云流水，初无定质，但常行于所当行，常止于所不可不止。&quot;原指诗文、书法等艺术作品自然流畅、不受拘束的风格境界，后也用于形容人生态度随缘自在、不执著于事物。在《</div>
+</a>
+<a class="entry-item" href="裸体.html">
+  <div class="noun">裸体</div>
+  <div class="snippet">裸体（らたい），指不穿衣服、裸露身体的状态。 本章中猫围绕裸体展开了文化比较与讽刺：猫认为裸体是希腊、罗马的遗风， 经文艺复兴（文芸復興時代）的颓废风气才重新流行。猫讽刺了&quot;裸体画裸体画&quot; 鼓吹裸体的先生们，指出北欧寒冷地带无法裸体生存，因</div>
+</a>
+<a class="entry-item" href="裸体画.html">
+  <div class="noun">裸体画</div>
+  <div class="snippet">裸体画（らたいが），以裸露人体为题材的绘画作品。 本章中猫批判了明治时期鼓吹裸体画的&quot;先生们&quot;。猫认为裸体是希腊罗马的古代遗风， 经文艺复兴时期的颓废风气重新流行，但北欧气候寒冷无法裸体生存， 因此欧洲人本质上视裸体为兽类。猫讽刺道：&quot;美し</div>
+</a>
+<a class="entry-item" href="西洋人.html">
+  <div class="noun">西洋人</div>
+  <div class="snippet">西洋人（せいようじん），指西方人，尤指欧洲人。 本章中猫对西洋人进行了辛辣的讽刺：猫指出北欧寒冷，裸体会冻死， 因此欧洲人必须穿衣服，一旦穿上衣服就成了&quot;服装的动物&quot;， 看到裸体就认为是&quot;兽&quot;。猫批评西洋妇女的礼服是&quot;顿珍漢的作用&quot;， 是&quot;</div>
+</a>
+<a class="entry-item" href="西洋料理.html">
+  <div class="noun">西洋料理</div>
+  <div class="snippet">明治时期传入日本的西餐统称。1871年肉食禁令事实上废除后，西洋料理作为&quot;富国强兵&quot;国策的一环被引入，先在政商阶层流行，后经&quot;和洋折衷&quot;改造演变为日本独有的洋食文化。代表作包括咖喱饭、炸猪排、可乐饼等，成为日本国民饮食的重要组成部分。</div>
+</a>
+<a class="entry-item" href="見性成仏.html">
+  <div class="noun">見性成仏</div>
+  <div class="snippet">禅宗核心教义，意为彻见自己本具的佛性而即时成佛。出自达摩&quot;直指人心，见性成佛&quot;之宗旨，强调不假外求、顿悟自性。</div>
+</a>
+<a class="entry-item" href="見番.html">
+  <div class="noun">見番</div>
+  <div class="snippet">見番（けんばん）是日本花街（花柳界）中负责管理艺妓派遣、联络和排练的核心机构。起源于1779年吉原游廓为区分游女与艺妓而设置的「見板」。见番连接置屋（培养艺妓的店铺）与料亭（高级料理店），调度艺妓前往待客，并记录出勤、管理费用。现代京都祇园</div>
+</a>
+<a class="entry-item" href="解脱.html">
+  <div class="noun">解脱</div>
+  <div class="snippet">佛教核心概念之一，梵文vimoksha/vimukti的意译，意为&quot;解放&quot;、&quot;脱离束缚&quot;。指从烦恼、执着、无明中彻底解放出来，脱离生死轮回的苦海。即通过智慧（般若）洞见&quot;诸行无常、诸法无我&quot;的真理，断除对&quot;我&quot;的执着而达到的究竟自由的境地。</div>
+</a>
+<a class="entry-item" href="言語同断.html">
+  <div class="noun">言語同断</div>
+  <div class="snippet">「言語道断」の異表記。もとは仏教用語で言葉では説明し尽くせない深遠な真理を指したが、現代では言葉にできないほどひどいさま、もってのほかという意味で用いられる。</div>
+</a>
+<a class="entry-item" href="読心術.html">
+  <div class="noun">読心術</div>
+  <div class="snippet">指不通过言语交流而直接洞察他人内心的技术或能力。广义上可指心理学中通过观察微表情、肢体语言等非言语信息来推测他人心理状态的方法，狭义上则指超自然意义上的心灵感应。在学术心理学中，与之对应的概念称为&quot;心智理论&quot;（Theory of Mind）</div>
+</a>
+<a class="entry-item" href="謡曲.html">
+  <div class="noun">謡曲</div>
+  <div class="snippet">謡曲（ようきょく）是日本古典歌舞剧「能」的台本（词章），亦称「謡」。能起源于8世纪中国散乐传入日本后发展为猿乐，经观阿弥、世阿弥父子在室町时代改革大成。謡曲以《古事记》《源氏物语》《平家物语》等古典为题材，文辞优雅格调高雅，现存约240曲。</div>
+</a>
+<a class="entry-item" href="警視庁.html">
+  <div class="noun">警視庁</div>
+  <div class="snippet">日本东京都的警察本部，负责首都治安。前身为1871年设置的「逻卒」，1874年正式创立「东京警视厅」，初代大警视为川路利良（日本近代警察之父）。作为内务省直属的国家警察，地位高于其他道府县警察。警視厅长官称「警視総監」。明治时期以维护首都治</div>
+</a>
+<a class="entry-item" href="豚的幸福.html">
+  <div class="noun">豚的幸福</div>
+  <div class="snippet">夏目漱石在《我是猫》中创造的讽刺性概念，指像猪一样对自身处境的真实评价毫不知觉、仅因无知而获得的虚假幸福感。在原文中，主人公苦沙弥因为顽固地坚持己见而自认为战胜了迷亭，但实际上其人格价值已随之贬低。漱石讽刺道：这种人至死都以为自己在世人面前</div>
+</a>
+<a class="entry-item" href="豪傑.html">
+  <div class="noun">豪傑</div>
+  <div class="snippet">日语指豪杰（gouketsu），即武勇超群、胆识过人的杰出人物。源自中国古典（《孟子》《史记》），日本战国时代用于形容勇猛的武将。作品中猫以&quot;一騎当千の豪傑連&quot;（以一当千的豪杰们）来形容聚集在苦沙弥家的迷亭、寒月、东风等知识分子，是猫眼中的</div>
+</a>
+<a class="entry-item" href="豹変.html">
+  <div class="noun">豹変</div>
+  <div class="snippet">日语意为态度、主张突然发生转变（多含贬义）。源自中国《易经·革卦》&quot;君子豹变&quot;，原指君子如豹纹般变得华美，但在日语中转化为急剧翻脸、变节的负面含义。</div>
+</a>
+<a class="entry-item" href="賓頭顱.html">
+  <div class="noun">賓頭顱</div>
+  <div class="snippet">宾头卢尊者（梵文Pindola Bharadvaja），全称「宾头卢跋罗堕阇」，是释迦牟尼佛的十大弟子之一，位列十六罗汉之首。因其曾当众示现神通而被佛陀斥责，并被命令不得入涅槃，永住世间为众生福田。在日本以「びんずる様」之名广为信仰，常作为</div>
+</a>
+<a class="entry-item" href="賤業婦.html">
+  <div class="noun">賤業婦</div>
+  <div class="snippet">明治时期对卖春妇的官方蔑称，与&quot;醜業婦&quot;同义。明治政府在1872年颁布芸妓娼妓解放令后，转而通过贷座敷渡世规则等建立公娼制度，将从业女性制度性地归入&quot;贱业&quot;范畴。</div>
+</a>
+<a class="entry-item" href="贋物.html">
+  <div class="noun">贋物</div>
+  <div class="snippet">即赝品、伪造品，指以假充真的仿造物品，尤指书画、文物、古董等领域伪造名家作品的行为。日语亦作&quot;贋作（がんさく）&quot;或&quot;偽物（にせもの）&quot;。汉语&quot;赝&quot;字读yàn，形声字从贝雁声，本义为假货。《韩非子·说林下》中便有&quot;贋鼎&quot;（假鼎）的典故。作品中</div>
+</a>
+<a class="entry-item" href="超然主義.html">
+  <div class="noun">超然主義</div>
+  <div class="snippet">夏目漱石在《我是猫》中赋予主人公苦沙弥的一种人生态度，意指超脱世俗事务、不为名利所动的处世哲学。然而漱石以讽刺笔调揭示：苦沙弥虽标榜超然，实际上对金钱并非无动于衷，只是固守清贫的教员生活。这一矛盾是作品对明治时期知识分子&quot;伪超然&quot;的深刻讽刺</div>
+</a>
+<a class="entry-item" href="蹲踞.html">
+  <div class="noun">蹲踞</div>
+  <div class="snippet">蹲踞（そんきょ），意为深深蹲下、蜷缩身体的动作或姿态。 在日本的相扑和剑道中特指比赛开始前双方对峙的基本姿势—— 踮起脚尖、深屈膝盖、上体挺正、重心下沉，如蓄势待发的弹簧。 是一种集集中注意力与力量准备为一体的武道起始姿势。 弓道中也有类似</div>
+</a>
+<a class="entry-item" href="軽蔑.html">
+  <div class="noun">軽蔑</div>
+  <div class="snippet">意为&quot;轻蔑、鄙视、看不起&quot;，指认为对方或事物没有价值而予以轻视。日语中同义词有&quot;侮蔑&quot;&quot;蔑視&quot;&quot;見下す&quot;等，反义词为&quot;尊敬&quot;&quot;尊重&quot;。在作品中，猫表示自己对春天猫类因本能而狂乱奔走的行为&quot;毫无轻蔑之意&quot;，体现了猫作为叙事者超然物外、包容万物</div>
+</a>
+<a class="entry-item" href="迷.html">
+  <div class="noun">迷</div>
+  <div class="snippet">佛教用语，&quot;迷&quot;（Māyā / Moha），与&quot;悟&quot;相对。指因烦恼（贪、瞋、痴等）的作用而无法认清事物真实面貌的精神状态。是众生在六道中轮回流转的根本原因。在《我是猫》中，猫说&quot;烦恼之迷&quot;一词，是佛教式表达，意指为世俗欲望所困而产生的迷惘状</div>
+</a>
+<a class="entry-item" href="退却.html">
+  <div class="noun">退却</div>
+  <div class="snippet">撤退、退避。猫在与乌鸦对峙时权衡利弊，一度考虑退却以求安全，但因感到自尊受损而放弃退却决定。</div>
+</a>
+<a class="entry-item" href="逆上.html">
+  <div class="noun">逆上</div>
+  <div class="snippet">日语词，读作&quot;ぎゃくじょう&quot;，指因极度愤怒或兴奋导致&quot;血冲上头&quot;、失去冷静的精神状态。源于日语动词&quot;逆上せる（のぼせる）&quot;，字面义为&quot;向上逆行&quot;。在夏目漱石笔下，逆上被置于西方四体液说的框架中来解读——血液全身仅五升五合（约合1升），当全部</div>
+</a>
+<a class="entry-item" href="逆上家.html">
+  <div class="noun">逆上家</div>
+  <div class="snippet">夏目漱石在《我是猫》中造的词，指容易暴怒、情绪失控的人，特指主人公苦沙弥那种动辄激动亢奋、失去冷静的性格类型。</div>
+</a>
+<a class="entry-item" href="逆鱗.html">
+  <div class="noun">逆鱗</div>
+  <div class="snippet">典出《韩非子·说难》。传说龙喉下有逆生鳞片，触及者必遭龙怒杀。韩非以此比喻君主也有不可触犯的禁忌。后引申为&quot;触怒上级&quot;的惯用语。&quot;逆鳞に触れる&quot;意为触怒上位者。文中&quot;大に逆鱗の体&quot;描写苦沙弥被嘲笑后勃然大怒的样子。</div>
+</a>
+<a class="entry-item" href="通人.html">
+  <div class="noun">通人</div>
+  <div class="snippet">日本江户时代町人文化中产生的审美概念，指对游廓、人情世故精通，举止潇洒洗练的人，与&quot;粋&quot;共同构成江户审美意识的核心范畴。</div>
+</a>
+<a class="entry-item" href="進化論.html">
+  <div class="noun">進化論</div>
+  <div class="snippet">进化论是由英国博物学家查尔斯·达尔文在1859年出版的《物种起源》中系统提出的生物学理论。核心思想是生物通过自然选择（natural selection）机制，从共同祖先经过漫长的地质时间逐渐演化而来。自然选择的基本要素包括过度繁殖、生存竞</div>
+</a>
+<a class="entry-item" href="運動.html">
+  <div class="noun">運動</div>
+  <div class="snippet">运动、锻炼身体。猫将在围墙顶上行走视为一种兼有杂技表演和体育锻炼的特殊运动。本章开头即描写猫正在&quot;运动&quot;之中。</div>
+</a>
+<a class="entry-item" href="道家.html">
+  <div class="noun">道家</div>
+  <div class="snippet">中国先秦时期重要哲学学派，以老子、庄子为代表。以&quot;道&quot;为最高哲学范畴，主张&quot;道法自然&quot;&quot;无为而治&quot;。其核心经典《道德经》和《庄子》构建了以&quot;道&quot;为核心的宇宙观与人生观，强调顺应自然、柔弱胜刚强。与儒家、佛家并称中国思想三大支柱，对中华文化乃</div>
+</a>
+<a class="entry-item" href="道徳経.html">
+  <div class="noun">道徳経</div>
+  <div class="snippet">又称《老子》《老子五千言》，道家学派最重要经典，相传为春秋时期老子（李耳）所著。全书约五千字，分《道经》（第1—37章）和《德经》（第38—81章）共八十一章。以&quot;道&quot;为核心概念，论述宇宙本源、辩证法、无为而治的政治哲学及处世智慧，是中国历</div>
+</a>
+<a class="entry-item" href="遣手.html">
+  <div class="noun">遣手</div>
+  <div class="snippet">遣手（やりて）是江户时代游廓中管理游女、监督营业的女性负责人，类似于妓楼的女将或经理。负责花魁与客人之间的联络协调、游女的纪律管理及财务收支。因精于从客人手中收取钱财而闻名，故有「遣手といえど取るばかり」（名为派遣实则只取不给）的吉原七不思</div>
+</a>
+<a class="entry-item" href="邯鄲夢の枕.html">
+  <div class="noun">邯鄲夢の枕</div>
+  <div class="snippet">出自中国唐代传奇小说《枕中记》（沈既济作）的典故。贫困书生卢生在邯郸旅店遇见道士吕翁，得一青瓷枕入梦，梦中历经娶名门之女、科举高中、官至宰相、享尽八十载荣华富贵；醒来却发现旅店主人煮的黄粱米饭尚未熟。比喻人生荣华富贵不过一场虚幻之梦。</div>
+</a>
+<a class="entry-item" href="酔興人.html">
+  <div class="noun">酔興人</div>
+  <div class="snippet">酔興（すいきょう）な人、すなわち風変わりな人、奇想天外な人、物好きな人のこと。「酔狂人」「粋狂人」とも書かれ、作中では迷亭を評して金田が用いた表現。</div>
+</a>
+<a class="entry-item" href="醍醐.html">
+  <div class="noun">醍醐</div>
+  <div class="snippet">醍醐本是牛乳精制而成的最高级乳制品。《大般涅槃经》中以&quot;牛乳→酪→生酥→熟酥→醍醐&quot;五阶段精制过程比喻佛法的深浅层次，醍醐为最高境界，象征佛性。天台宗将释迦一代说法分为五个时期（五味相生），以醍醐味对应最高圆教的《法华经》和《涅槃经》。密教</div>
+</a>
+<a class="entry-item" href="野暮.html">
+  <div class="noun">野暮</div>
+  <div class="snippet">日语形容词/名词，意为粗俗、不风雅、缺乏情趣、不谙世故。与&quot;粋（いき）&quot;相对，是江户时代町人文化中衡量修养的重要概念。江户子（江户人）将不谙风雅的地方出身者称为&quot;野暮&quot;。《我是猫》中寒月以&quot;頭を敲いて品物は確かかなんて聞くような野暮は一人も</div>
+</a>
+<a class="entry-item" href="金剛不壊.html">
+  <div class="noun">金剛不壊</div>
+  <div class="snippet">佛教用语，源自梵语vajra。意为&quot;如金刚石般坚固、不可破坏&quot;。作品中理野陶然发狂后自认为修成&quot;入火不烧、入水不溺&quot;的金刚不坏之身，跳入寺内莲池。在佛教中&quot;金刚不坏&quot;指法身（真理之体）而非肉体，属于常被误解的概念。</div>
+</a>
+<a class="entry-item" href="金柑頭.html">
+  <div class="noun">金柑頭</div>
+  <div class="snippet">金柑頭（きんかんあたま），日语中形容秃头的俗语表达。金柑是一种柑橘类水果，个头小而圆，表皮呈金黄色、富有光泽，以金柑比喻秃头——圆润且光亮——带有幽默色彩。江户时代初期的文献《义残后觉》中已有记载，其中织田信长曾称明智光秀为&quot;金柑头&quot;，这一</div>
+</a>
+<a class="entry-item" href="鈍液.html">
+  <div class="noun">鈍液</div>
+  <div class="snippet">四体液说中的&quot;黏液&quot;（phlegm），希腊医学中四种体液之一，对应水元素，属寒性。在古典的四体液理论中，黏液（phlegmatic humor）被认为由脑部生成，在体内起冷却和润滑作用。当黏液过多或&quot;逆上&quot;时，表现为迟钝、冷漠、思维迟缓，对</div>
+</a>
+<a class="entry-item" href="鉄牛面の鉄牛心.html">
+  <div class="noun">鉄牛面の鉄牛心</div>
+  <div class="snippet">禅宗用语，意为面容和内心都像铁牛一样坚固不动摇。比喻彻底不为外境所动的禅者境界。&quot;铁牛&quot;在禅宗中象征不惧任何外界刺激、坚固不动的信念。&quot;铁牛面&quot;指毫无动摇的表情，&quot;铁牛心&quot;指如铁般不被任何事物扰乱的心。</div>
+</a>
+<a class="entry-item" href="開陳.html">
+  <div class="noun">開陳</div>
+  <div class="snippet">日语汉字词（kaichin），意为陈述、阐述（自己的意见、观点）。由&quot;開&quot;（打开）和&quot;陳&quot;（陈述）构成，核心义为&quot;敞开胸襟陈述己见&quot;。作品中使用&quot;大に当世流の考を開陳しておいて&quot;来形容寒月以一派现代青年的姿态，洋洋得意地阐述自己关于新时代女</div>
+</a>
+<a class="entry-item" href="関白.html">
+  <div class="noun">関白</div>
+  <div class="snippet">日本律令制下的令外官，是天皇成年后的最高辅政大臣。源自中国《汉书》&quot;诸事皆先关白光，然后奏天子&quot;，意为所有大事先禀报关白再上奏天皇。857年藤原良房开创外戚专权；887年藤原基经正式就任首任关白，形成&quot;摄关政治&quot;。平安时代藤原道长时期达到鼎</div>
+</a>
+<a class="entry-item" href="陽春白雪.html">
+  <div class="noun">陽春白雪</div>
+  <div class="snippet">中国古代典故，出自战国楚辞赋家宋玉《对楚王问》。宋玉以歌唱为喻：唱通俗的《下里》《巴人》时，和者数千人；唱高雅的《阳春》《白雪》时，和者不过数十人，故&quot;其曲弥高，其和弥寡&quot;。后世以&quot;阳春白雪&quot;指代高雅深奥、不易为大众理解的文学或艺术作品，与</div>
+</a>
+<a class="entry-item" href="雑兵.html">
+  <div class="noun">雑兵</div>
+  <div class="snippet">古代战争中地位最低的士兵，即足轻、喽啰。身分低微、战斗力弱，以数量取胜。也比喻组织中最底层、不被重视的角色。文中以&quot;玉拾いなる雑兵&quot;形容被高年级学生使唤的低年级生。</div>
+</a>
+<a class="entry-item" href="離魂病.html">
+  <div class="noun">離魂病</div>
+  <div class="snippet">日本江户时代民间认知中的一种疾病概念，指人的灵魂脱离肉体的状态。现代医学可对应为梦游症（somnambulism）或自像幻视（autoscopy）。与&quot;生灵&quot;（生霊）的民间信仰密切相关，认为活人的怨念或强烈情感可使灵魂离体对他者产生影响。日</div>
+</a>
+<a class="entry-item" href="雷.html">
+  <div class="noun">雷</div>
+  <div class="snippet">即雷电。作品中南藏院遭雷击，雷落在隐居老人所住院内的松树上将其劈裂。而老人因耳聋听不到雷声而&quot;泰然自若&quot;，迷亭以此揶揄所谓&quot;禅者的泰然&quot;不过是耳聋而已。</div>
+</a>
+<a class="entry-item" href="電光影裏に春風を斬る.html">
+  <div class="noun">電光影裏に春風を斬る</div>
+  <div class="snippet">著名的禅宗偈语，出自南宋禅僧无学祖元（1226-1286，后赴日成为圆觉寺开山、被敕封为佛光国师）。元军攻入温州能仁寺时，祖元泰然坐禅，兵士以刀架颈，祖元吟此偈：&quot;乾坤无地卓孤筇，喜得人空法亦空。珍重大元三尺剑，电光影里斩春风。&quot;意谓悟道者</div>
+</a>
+<a class="entry-item" href="電車株.html">
+  <div class="noun">電車株</div>
+  <div class="snippet">明治时代日本的电气铁路（路面电车）股票。作品中铃木藤十郎自称持有六十股街铁（市区铁路）股票，显摆自己的经济实力。迷亭则调侃说自己曾持有八百八十八股半但被虫蛀了。反映了明治后期新兴铁路产业带动的股票投机热潮。</div>
+</a>
+<a class="entry-item" href="露地の白牛.html">
+  <div class="noun">露地の白牛</div>
+  <div class="snippet">出自《法华经·譬喻品》&quot;火宅之喻&quot;的禅宗用语。&quot;露地&quot;指脱离烦恼火宅后的清净之地，&quot;白牛&quot;象征清净佛性与一乘真理。喻指经过修行调伏后，心性完全清净自在的悟道境界。</div>
+</a>
+<a class="entry-item" href="露西亜.html">
+  <div class="noun">露西亜</div>
+  <div class="snippet">&quot;露西亜&quot;是日本历史上对俄罗斯（Russia）的汉字表记。最初使用&quot;鲁西亚&quot;，1877年应俄方要求（&quot;鲁&quot;字有鲁莽、粗野的负面含义）改为&quot;露西亜&quot;。其中&quot;露&quot;字也有&quot;日出（日本）则露（俄罗斯）蒸发&quot;之意。日俄战争（1904—1905）爆发时</div>
+</a>
+<a class="entry-item" href="韋駄天.html">
+  <div class="noun">韋駄天</div>
+  <div class="snippet">韦驮天（梵名 Skanda），佛教护法神之一，原为印度教战神，后被大乘佛教吸收成为守护伽蓝（寺院）的神祇。据佛经记载，释迦牟尼涅槃后，有一捷疾鬼盗取佛牙舍利，诸天神无人能追上，唯韦驮天在一瞬间追上并夺回舍利，因此被赋予&quot;奔跑神速&quot;的象征。日</div>
+</a>
+<a class="entry-item" href="韓国統監.html">
+  <div class="noun">韓国統監</div>
+  <div class="snippet">1905年第二次日韩协约（乙巳条约）签订后，日本在韩国设立的统治机构长官。统监府设于汉城（首尔），掌管韩国的外交及内政。初代统监为伊藤博文。1910年日韩合并后，统监府废止，改为朝鲜总督府。统监府时期是日本吞并朝鲜半岛的关键过渡阶段。</div>
+</a>
+<a class="entry-item" href="頓服.html">
+  <div class="noun">頓服</div>
+  <div class="snippet">頓服（とんぷく）是日本医学用语，指在症状出现时临时服用的单次剂量药物。与每日定时服用的&quot;定期服药&quot;相对。&quot;頓服薬&quot;即&quot;按需服用&quot;的药物，如头痛药、退烧药、安眠药等，在必要时才服用。这种给药方式在明治时期被引入日本，通过医师处方明确标注&quot;頓服</div>
+</a>
+<a class="entry-item" href="頓珍漢.html">
+  <div class="noun">頓珍漢</div>
+  <div class="snippet">日语形容动词与名词，形容事物前后矛盾、不合逻辑、不着边际、支离破碎的状态。汉字&quot;頓珍漢&quot;为根据发音后补的当て字（借字），与单个汉字的本义无关。语源来自铁匠铺的锻造声——熟练铁匠打铁的节奏整齐规律，而徒弟打出的声音&quot;トン·チン·カン&quot;（ton</div>
+</a>
+<a class="entry-item" href="頭寒足熱.html">
+  <div class="noun">頭寒足熱</div>
+  <div class="snippet">日本传统养生理念，字面意为&quot;头凉脚热&quot;，主张保持头部凉爽、足部温暖的状态以维持健康。其理论基础源自中医阴阳调和思想，与江户时代儒医贝原益轩的《养生训》一脉相通。《伤寒论》中亦有&quot;头寒足热为延命息灾之征&quot;的类似论述。日本现代&quot;排寒疗法&quot;倡导者</div>
+</a>
+<a class="entry-item" href="顔.html">
+  <div class="noun">顔</div>
+  <div class="snippet">日语意为&quot;脸&quot;、&quot;面容&quot;（kao）。在日语文化中，&quot;顔&quot;不仅指物理意义上的面部，还具有丰富的象征意义——&quot;顔が利く&quot;（吃得开）、&quot;顔が潰れる&quot;（丢脸）、&quot;顔を立てる&quot;（给面子）等惯用语体现了其作为&quot;社会名誉&quot;&quot;体面&quot;的文化功能。作品中&quot;顔を</div>
+</a>
+<a class="entry-item" href="飛花落葉.html">
+  <div class="noun">飛花落葉</div>
+  <div class="snippet">&quot;飞花落叶&quot;（Hika Raku-yō），佛教用语，出自《佛学大辞典》。指独觉乘（Pratyekabuddha）修行者独自进入山林，看到飞舞的花瓣和飘落的树叶，由此悟知世间无常之理，从而开启涅槃之悟。这一概念体现了佛教中&quot;触境悟道&quot;的修行方</div>
+</a>
+<a class="entry-item" href="首縊りの力学.html">
+  <div class="noun">首縊りの力学</div>
+  <div class="snippet">夏目漱石《吾輩は猫である》中水島寒月在理学协会发表的演讲题目，全称为&quot;首縊りの力学&quot;。这是一个虚构的学术演讲题目，意为&quot;上吊的力学&quot;，寒月以极其认真的态度从历史、力学角度阐述绞刑的物理原理，包括绳索角度、受力分析、女体重力等多角形方程，是小</div>
+</a>
+<a class="entry-item" href="馬鹿大名.html">
+  <div class="noun">馬鹿大名</div>
+  <div class="snippet">日语词组，意为&quot;愚蠢的大名（封建领主）&quot;。大名是日本江户时代领有万石以上知行的地方领主。&quot;馬鹿大名&quot;并非正式历史分类，而是对愚昧无能、骄奢淫逸的领主的揶揄称呼。&quot;馬鹿&quot;一词的来源有秦代赵高&quot;指鹿为马&quot;典故说和梵语&quot;moha&quot;（愚痴）说等。在</div>
+</a>
+<a class="entry-item" href="駄弁.html">
+  <div class="noun">駄弁</div>
+  <div class="snippet">駄弁（だべん），日语词汇，意为毫无价值的闲谈、废话、胡扯。由&quot;駄&quot;（无价值、粗劣）加&quot;弁&quot;（言辞、说话）构成。与&quot;駄弁を弄する&quot;（说废话、胡扯）同义。在现代日语中也写作&quot;駄辯&quot;。明治文学中常用于描写爱吹牛、说大话、不着边际之人的讲话风格。作</div>
+</a>
+<a class="entry-item" href="骨折り損の草臥儲け.html">
+  <div class="noun">骨折り損の草臥儲け</div>
+  <div class="snippet">日本谚语，读作&quot;ほねおりぞんのくたびれもうけ&quot;，意为&quot;劳而无功、徒劳一场&quot;。由&quot;骨折り損&quot;（白费力气）与&quot;草臥儲け&quot;（只赚到一身疲惫）组成，指费尽力气却一无所获，唯一得到的就是疲惫不堪，是一种充满讽刺意味的表达。其变体&quot;骨折り損のくたびれ儲</div>
+</a>
+<a class="entry-item" href="鬼気.html">
+  <div class="noun">鬼気</div>
+  <div class="snippet">日语词汇，指令人毛骨悚然的恐怖气氛或阴森的气息。常以&quot;鬼気迫る&quot;（鬼气逼人）的形式使用，形容异常紧迫、令人恐惧的场景或气势。</div>
+</a>
+<a class="entry-item" href="鬼窟裏.html">
+  <div class="noun">鬼窟裏</div>
+  <div class="snippet">禅宗用语，指幽鬼栖息的黑暗洞穴。比喻依赖概念思维、分别妄想的迷妄状态，或执着于形式坐禅、误将空寂当作悟境的错误修行状态。禅宗严厉批判&quot;向鬼窟里作活计&quot;。</div>
+</a>
+<a class="entry-item" href="魑魅.html">
+  <div class="noun">魑魅</div>
+  <div class="snippet">原为中国古代典籍《左传》《山海经》中记载的山林精怪，传入日本后融入日本妖怪文化，指山林中充满妖气的邪恶魔性存在，人若遭遇则会生病或遭祸。常与&quot;魍魉&quot;并称&quot;魑魅魍魉&quot;，泛指各种鬼怪。</div>
+</a>
+<a class="entry-item" href="鳳眠.html">
+  <div class="noun">鳳眠</div>
+  <div class="snippet">鳳眠（ほうみん），字面意为&quot;凤凰之眠&quot;，在汉语和日语中并非固定的典故成语，而是诗文中偶尔出现的雅语表达，形容优雅、高贵的睡眠。在《我是猫》中，迷亭以戏谑的口吻使用&quot;鳳眠&quot;一词来尊称苦沙弥的午睡，将其平凡的昼寝附会为凤凰般高雅的休憩，体现漱石</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:09
+</footer>
+</body>
+</html>

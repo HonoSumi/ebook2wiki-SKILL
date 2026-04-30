@@ -1,0 +1,800 @@
+{
+  "book_name": "To Kill a Mocking Bird",
+  "source_file": "F:\\Ebooks\\小说\\To Kill a Mocking Bird.mobi",
+  "total_chunks": 113,
+  "chunk_size": 5000,
+  "overlap": 100,
+  "chunks": [
+    {
+      "seq": 1,
+      "filename": "To Kill a Mocking Bird_1.txt",
+      "char_count": 4024,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 2,
+      "filename": "To Kill a Mocking Bird_2.txt",
+      "char_count": 4903,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 3,
+      "filename": "To Kill a Mocking Bird_3.txt",
+      "char_count": 4634,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 4,
+      "filename": "To Kill a Mocking Bird_4.txt",
+      "char_count": 4861,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 5,
+      "filename": "To Kill a Mocking Bird_5.txt",
+      "char_count": 4798,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 6,
+      "filename": "To Kill a Mocking Bird_6.txt",
+      "char_count": 4579,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 7,
+      "filename": "To Kill a Mocking Bird_7.txt",
+      "char_count": 4761,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 8,
+      "filename": "To Kill a Mocking Bird_8.txt",
+      "char_count": 4883,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 9,
+      "filename": "To Kill a Mocking Bird_9.txt",
+      "char_count": 4844,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 10,
+      "filename": "To Kill a Mocking Bird_10.txt",
+      "char_count": 4877,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 11,
+      "filename": "To Kill a Mocking Bird_11.txt",
+      "char_count": 4599,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 12,
+      "filename": "To Kill a Mocking Bird_12.txt",
+      "char_count": 4987,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 13,
+      "filename": "To Kill a Mocking Bird_13.txt",
+      "char_count": 4977,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 14,
+      "filename": "To Kill a Mocking Bird_14.txt",
+      "char_count": 4535,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 15,
+      "filename": "To Kill a Mocking Bird_15.txt",
+      "char_count": 4985,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 16,
+      "filename": "To Kill a Mocking Bird_16.txt",
+      "char_count": 4807,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 17,
+      "filename": "To Kill a Mocking Bird_17.txt",
+      "char_count": 4811,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 18,
+      "filename": "To Kill a Mocking Bird_18.txt",
+      "char_count": 4969,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 19,
+      "filename": "To Kill a Mocking Bird_19.txt",
+      "char_count": 4998,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 20,
+      "filename": "To Kill a Mocking Bird_20.txt",
+      "char_count": 4987,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 21,
+      "filename": "To Kill a Mocking Bird_21.txt",
+      "char_count": 4944,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 22,
+      "filename": "To Kill a Mocking Bird_22.txt",
+      "char_count": 4799,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 23,
+      "filename": "To Kill a Mocking Bird_23.txt",
+      "char_count": 4813,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 24,
+      "filename": "To Kill a Mocking Bird_24.txt",
+      "char_count": 4865,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 25,
+      "filename": "To Kill a Mocking Bird_25.txt",
+      "char_count": 4981,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 26,
+      "filename": "To Kill a Mocking Bird_26.txt",
+      "char_count": 4887,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 27,
+      "filename": "To Kill a Mocking Bird_27.txt",
+      "char_count": 4804,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 28,
+      "filename": "To Kill a Mocking Bird_28.txt",
+      "char_count": 4810,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 29,
+      "filename": "To Kill a Mocking Bird_29.txt",
+      "char_count": 4978,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 30,
+      "filename": "To Kill a Mocking Bird_30.txt",
+      "char_count": 4866,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 31,
+      "filename": "To Kill a Mocking Bird_31.txt",
+      "char_count": 4853,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 32,
+      "filename": "To Kill a Mocking Bird_32.txt",
+      "char_count": 4332,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 33,
+      "filename": "To Kill a Mocking Bird_33.txt",
+      "char_count": 4995,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 34,
+      "filename": "To Kill a Mocking Bird_34.txt",
+      "char_count": 4952,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 35,
+      "filename": "To Kill a Mocking Bird_35.txt",
+      "char_count": 4742,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 36,
+      "filename": "To Kill a Mocking Bird_36.txt",
+      "char_count": 4969,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 37,
+      "filename": "To Kill a Mocking Bird_37.txt",
+      "char_count": 4983,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 38,
+      "filename": "To Kill a Mocking Bird_38.txt",
+      "char_count": 4919,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 39,
+      "filename": "To Kill a Mocking Bird_39.txt",
+      "char_count": 4782,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 40,
+      "filename": "To Kill a Mocking Bird_40.txt",
+      "char_count": 4943,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 41,
+      "filename": "To Kill a Mocking Bird_41.txt",
+      "char_count": 4925,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 42,
+      "filename": "To Kill a Mocking Bird_42.txt",
+      "char_count": 4935,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 43,
+      "filename": "To Kill a Mocking Bird_43.txt",
+      "char_count": 4992,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 44,
+      "filename": "To Kill a Mocking Bird_44.txt",
+      "char_count": 4896,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 45,
+      "filename": "To Kill a Mocking Bird_45.txt",
+      "char_count": 4994,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 46,
+      "filename": "To Kill a Mocking Bird_46.txt",
+      "char_count": 4920,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 47,
+      "filename": "To Kill a Mocking Bird_47.txt",
+      "char_count": 4940,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 48,
+      "filename": "To Kill a Mocking Bird_48.txt",
+      "char_count": 4974,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 49,
+      "filename": "To Kill a Mocking Bird_49.txt",
+      "char_count": 4989,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 50,
+      "filename": "To Kill a Mocking Bird_50.txt",
+      "char_count": 4975,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 51,
+      "filename": "To Kill a Mocking Bird_51.txt",
+      "char_count": 4989,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 52,
+      "filename": "To Kill a Mocking Bird_52.txt",
+      "char_count": 4771,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 53,
+      "filename": "To Kill a Mocking Bird_53.txt",
+      "char_count": 4949,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 54,
+      "filename": "To Kill a Mocking Bird_54.txt",
+      "char_count": 4997,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 55,
+      "filename": "To Kill a Mocking Bird_55.txt",
+      "char_count": 4966,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 56,
+      "filename": "To Kill a Mocking Bird_56.txt",
+      "char_count": 4666,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 57,
+      "filename": "To Kill a Mocking Bird_57.txt",
+      "char_count": 4974,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 58,
+      "filename": "To Kill a Mocking Bird_58.txt",
+      "char_count": 4794,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 59,
+      "filename": "To Kill a Mocking Bird_59.txt",
+      "char_count": 4908,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 60,
+      "filename": "To Kill a Mocking Bird_60.txt",
+      "char_count": 4971,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 61,
+      "filename": "To Kill a Mocking Bird_61.txt",
+      "char_count": 4745,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 62,
+      "filename": "To Kill a Mocking Bird_62.txt",
+      "char_count": 4917,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 63,
+      "filename": "To Kill a Mocking Bird_63.txt",
+      "char_count": 4983,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 64,
+      "filename": "To Kill a Mocking Bird_64.txt",
+      "char_count": 4742,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 65,
+      "filename": "To Kill a Mocking Bird_65.txt",
+      "char_count": 4789,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 66,
+      "filename": "To Kill a Mocking Bird_66.txt",
+      "char_count": 4941,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 67,
+      "filename": "To Kill a Mocking Bird_67.txt",
+      "char_count": 4592,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 68,
+      "filename": "To Kill a Mocking Bird_68.txt",
+      "char_count": 4857,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 69,
+      "filename": "To Kill a Mocking Bird_69.txt",
+      "char_count": 4804,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 70,
+      "filename": "To Kill a Mocking Bird_70.txt",
+      "char_count": 4851,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 71,
+      "filename": "To Kill a Mocking Bird_71.txt",
+      "char_count": 4929,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 72,
+      "filename": "To Kill a Mocking Bird_72.txt",
+      "char_count": 4995,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 73,
+      "filename": "To Kill a Mocking Bird_73.txt",
+      "char_count": 4989,
+      "status": "completed",
+      "keyword_count": 16
+    },
+    {
+      "seq": 74,
+      "filename": "To Kill a Mocking Bird_74.txt",
+      "char_count": 4966,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 75,
+      "filename": "To Kill a Mocking Bird_75.txt",
+      "char_count": 4990,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 76,
+      "filename": "To Kill a Mocking Bird_76.txt",
+      "char_count": 4452,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 77,
+      "filename": "To Kill a Mocking Bird_77.txt",
+      "char_count": 4994,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 78,
+      "filename": "To Kill a Mocking Bird_78.txt",
+      "char_count": 4963,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 79,
+      "filename": "To Kill a Mocking Bird_79.txt",
+      "char_count": 4928,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 80,
+      "filename": "To Kill a Mocking Bird_80.txt",
+      "char_count": 4933,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 81,
+      "filename": "To Kill a Mocking Bird_81.txt",
+      "char_count": 4773,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 82,
+      "filename": "To Kill a Mocking Bird_82.txt",
+      "char_count": 4965,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 83,
+      "filename": "To Kill a Mocking Bird_83.txt",
+      "char_count": 4836,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 84,
+      "filename": "To Kill a Mocking Bird_84.txt",
+      "char_count": 4966,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 85,
+      "filename": "To Kill a Mocking Bird_85.txt",
+      "char_count": 4973,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 86,
+      "filename": "To Kill a Mocking Bird_86.txt",
+      "char_count": 4978,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 87,
+      "filename": "To Kill a Mocking Bird_87.txt",
+      "char_count": 4906,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 88,
+      "filename": "To Kill a Mocking Bird_88.txt",
+      "char_count": 4896,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 89,
+      "filename": "To Kill a Mocking Bird_89.txt",
+      "char_count": 4748,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 90,
+      "filename": "To Kill a Mocking Bird_90.txt",
+      "char_count": 4903,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 91,
+      "filename": "To Kill a Mocking Bird_91.txt",
+      "char_count": 4924,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 92,
+      "filename": "To Kill a Mocking Bird_92.txt",
+      "char_count": 4702,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 93,
+      "filename": "To Kill a Mocking Bird_93.txt",
+      "char_count": 4868,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 94,
+      "filename": "To Kill a Mocking Bird_94.txt",
+      "char_count": 4819,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 95,
+      "filename": "To Kill a Mocking Bird_95.txt",
+      "char_count": 4997,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 96,
+      "filename": "To Kill a Mocking Bird_96.txt",
+      "char_count": 4807,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 97,
+      "filename": "To Kill a Mocking Bird_97.txt",
+      "char_count": 4675,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 98,
+      "filename": "To Kill a Mocking Bird_98.txt",
+      "char_count": 4775,
+      "status": "completed",
+      "keyword_count": 16
+    },
+    {
+      "seq": 99,
+      "filename": "To Kill a Mocking Bird_99.txt",
+      "char_count": 4902,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 100,
+      "filename": "To Kill a Mocking Bird_100.txt",
+      "char_count": 4815,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 101,
+      "filename": "To Kill a Mocking Bird_101.txt",
+      "char_count": 4872,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 102,
+      "filename": "To Kill a Mocking Bird_102.txt",
+      "char_count": 4983,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 103,
+      "filename": "To Kill a Mocking Bird_103.txt",
+      "char_count": 4454,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 104,
+      "filename": "To Kill a Mocking Bird_104.txt",
+      "char_count": 4833,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 105,
+      "filename": "To Kill a Mocking Bird_105.txt",
+      "char_count": 4985,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 106,
+      "filename": "To Kill a Mocking Bird_106.txt",
+      "char_count": 4873,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 107,
+      "filename": "To Kill a Mocking Bird_107.txt",
+      "char_count": 4994,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 108,
+      "filename": "To Kill a Mocking Bird_108.txt",
+      "char_count": 4909,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 109,
+      "filename": "To Kill a Mocking Bird_109.txt",
+      "char_count": 4967,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 110,
+      "filename": "To Kill a Mocking Bird_110.txt",
+      "char_count": 4982,
+      "status": "completed",
+      "keyword_count": 0
+    },
+    {
+      "seq": 111,
+      "filename": "To Kill a Mocking Bird_111.txt",
+      "char_count": 4881,
+      "status": "completed",
+      "keyword_count": 1
+    },
+    {
+      "seq": 112,
+      "filename": "To Kill a Mocking Bird_112.txt",
+      "char_count": 4970,
+      "status": "completed",
+      "keyword_count": 2
+    },
+    {
+      "seq": 113,
+      "filename": "To Kill a Mocking Bird_113.txt",
+      "char_count": 1914,
+      "status": "completed",
+      "keyword_count": 2
+    }
+  ]
+}

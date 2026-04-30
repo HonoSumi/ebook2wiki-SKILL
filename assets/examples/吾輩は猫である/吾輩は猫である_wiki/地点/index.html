@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地点 · 吾輩は猫である</title>
+<style>
+:root {
+  --bg: #faf5f6;
+  --bg-card: #ffffff;
+  --bg-detail: #fefafb;
+  --text: #4a3548;
+  --text-secondary: #7a6578;
+  --text-muted: #aa95a8;
+  --heading: #3a2538;
+  --border: #e8d5de;
+  --accent: #b8727e;
+  --accent-hover: #c98a94;
+  --link: #a05a68;
+  --tag-bg: #f2e2e8;
+  --tag-text: #8a5068;
+  --divider: #e8d5de;
+  --shadow: 0 1px 3px rgba(74,53,72,0.06);
+  --shadow-hover: 0 3px 12px rgba(74,53,72,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "Hiragino Mincho Pro", serif;
+  --font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">地点 · 吾輩は猫である</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../吾輩は猫である_wiki.html">Home</a>
+<span>/</span>
+地点
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">94 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="はんの木村.html">
+  <div class="noun">はんの木村</div>
+  <div class="snippet">《我是猫》中出现的东京地名。&quot;はんの木&quot;即榛木（赤杨），该地可能因榛木林而得名。在小说中为迷亭买完小提琴后绕远路返回下宿途中经过的村落，位于药王师道通往庚申山方向的路线上，反映明治末期东京郊外的地理风貌。</div>
+</a>
+<a class="entry-item" href="ケニルウォース.html">
+  <div class="noun">ケニルウォース</div>
+  <div class="snippet">凯尼尔沃思城堡（Kenilworth Castle）是英国沃里克郡的一座中世纪城堡，始建于12世纪。1563年伊丽莎白一世将其赐予罗伯特·达德利（レスター伯）。达德利为迎接1575年女王的19天到访，进行了大规模改建，建造了女王专用的「レス</div>
+</a>
+<a class="entry-item" href="コルドヴァ.html">
+  <div class="noun">コルドヴァ</div>
+  <div class="snippet">科尔多瓦（Córdoba），西班牙南部安达卢西亚的历史名城。曾为罗马帝国贝提卡行省首府，后成为后倭马亚王朝首都，10世纪时与巴格达、君士坦丁堡并称世界三大文化都市。以清真寺—大教堂（梅斯基塔）著称，1984年被列为世界文化遗产。</div>
+</a>
+<a class="entry-item" href="トロイ.html">
+  <div class="noun">トロイ</div>
+  <div class="snippet">古希腊神话与荷马史诗《伊利亚特》中的传奇城市，特洛伊战争的发生地。位于小亚细亚西北部（今土耳其希萨利克）。1870年代由海因里希·施里曼发掘证实其历史真实性，拥有9层文化堆积（特洛伊I—IX层），其中特洛伊VI和VII层与史诗所述的青铜时代</div>
+</a>
+<a class="entry-item" href="ブライトン.html">
+  <div class="noun">ブライトン</div>
+  <div class="snippet">布莱顿（Brighton），英国英格兰东萨塞克斯郡的海滨城市，位于伦敦以南约80公里， 乘火车约1小时可达，被称为「伦敦的海边」。18世纪中叶前只是一个小渔村 （旧名Brighthelmstone），1750年代因医生理查德·拉塞尔在此推广</div>
+</a>
+<a class="entry-item" href="上野.html">
+  <div class="noun">上野</div>
+  <div class="snippet">东京都台东区的地域名。江户时代第三代将军德川家光在此建造宽永寺作为德川家菩提寺，1873年废寺旧址被指定为日本第一座公园——上野恩赐公园，现为东京重要的文化中心，汇集国立博物馆、动物园、美术馆等设施。</div>
+</a>
+<a class="entry-item" href="上野の公園.html">
+  <div class="noun">上野の公園</div>
+  <div class="snippet">位于东京都台东区的都市公园，正式名称为上野恩赐公园。原为德川幕府宽永寺的寺域，1873年被指定为日本最早的公园之一，1924年由宫内省赐予东京市。园内有上野动物园、东京国立博物馆、国立西洋美术馆、上野东照宫、不忍池等众多文化设施，是日本最大</div>
+</a>
+<a class="entry-item" href="丸善.html">
+  <div class="noun">丸善</div>
+  <div class="snippet">日本最古老的西式书店兼出版社，由早矢仕有的于1869年（明治二年）在横滨创立，后迁至东京日本桥。全称丸善株式会社，是日本第一家近代株式会社企业，福泽谕吉曾参与其经营制度设计。丸善专营进口洋书、医学书籍、文具及文房具，是明治时期知识人吸收西洋</div>
+</a>
+<a class="entry-item" href="亜典.html">
+  <div class="noun">亜典</div>
+  <div class="snippet">日语汉文表记中雅典（Athens）的旧译名。作品中迷亭讲述Agnodice故事时提到&quot;当時亜典の法律で女が産婆を営業する事を禁じてあった&quot;，即&quot;当时雅典的法律禁止女性从事助产士职业&quot;。此表记为明治时期日本知识界对古希腊地名Athens的汉字</div>
+</a>
+<a class="entry-item" href="仏蘭西.html">
+  <div class="noun">仏蘭西</div>
+  <div class="snippet">日本对法国的汉文表记，源自中国汉语音译&quot;佛蘭西／法兰西&quot;。日本明治时代以汉字音译西洋国名之风盛行，&quot;仏&quot;取&quot;フ&quot;音、&quot;蘭&quot;取&quot;ラン&quot;音、&quot;西&quot;取&quot;ス／シ&quot;音，合为&quot;フランス&quot;。现代日语中通常写为片假名&quot;フランス&quot;，但简称为&quot;仏&quot;（如&quot;日仏協</div>
+</a>
+<a class="entry-item" href="仲見世.html">
+  <div class="noun">仲見世</div>
+  <div class="snippet">仲见世（Nakamise），特指浅草寺雷门至宝藏门之间参道两侧的商店街，是日本最古老的商业街之一。起源于江户时代（17世纪），当时在浅草寺负责清扫的附近居民被授予了在参道营业的特权。全长约250米，现约有89家店铺，以人形烧、雷おこし（雷米</div>
+</a>
+<a class="entry-item" href="伊勢源.html">
+  <div class="noun">伊勢源</div>
+  <div class="snippet">静冈江户至明治时期的著名吴服店（绸缎庄）。根据《我是猫》中的描述，该店面宽十间（约18米）、拥有五间仓库，是当时静冈最大的吴服屋。作品通过迷亭之口详细描写了店内的番头甚兵卫和年轻伙计初さん的人物形象，是反映明治初年静冈商业风貌的重要细节。</div>
+</a>
+<a class="entry-item" href="円覚寺.html">
+  <div class="noun">円覚寺</div>
+  <div class="snippet">正式名称为&quot;圆觉寺&quot;，位于神奈川县镰仓市，临济宗圆觉寺派大本山。1282年由北条时宗为追悼元寇战没者而创建，开山为南宋高僧无学祖元。镰仓五山第二位。夏目漱石本人也曾在此参禅，其作品《门》中亦提及该寺。</div>
+</a>
+<a class="entry-item" href="加茂川.html">
+  <div class="noun">加茂川</div>
+  <div class="snippet">即贺茂川（Kamogawa/Kamo River），流经京都市的主要河流之一。狭义指从北山地区流至出町柳与高野川汇合前的上游段，汇合后下游称为鸭川。贺茂川之名源自古代居住于此的贺茂氏（かも氏），京都最古老的神社——上贺茂神社和下鸭神社均与此</div>
+</a>
+<a class="entry-item" href="勧工場.html">
+  <div class="noun">勧工場</div>
+  <div class="snippet">明治至大正时期日本流行的商业设施，一座建筑内聚集众多小店铺、自由陈列商品供顾客浏览选购。1878年东京设立第一号勧工場，打破了传统的座卖方式，成为日本百货店的直接前身。银座曾集中多家勧工場。</div>
+</a>
+<a class="entry-item" href="南蔵院.html">
+  <div class="noun">南蔵院</div>
+  <div class="snippet">苦沙弥家附近的一座寺院。作品中迷亭提到该寺中住着一位八十岁左右的隐居于寺内的老人。南蔵院的具体宗派和位置在作品中未详述。</div>
+</a>
+<a class="entry-item" href="吉原.html">
+  <div class="noun">吉原</div>
+  <div class="snippet">日本江户时代最著名的官方游廓（红灯区），位于现今东京都台东区千束。1617年设立于日本桥人形町附近，地名源于原为芦苇丛生之地，称为&quot;葭原&quot;，后雅化为&quot;吉原&quot;。1657年明历大火后迁至浅草以北，称为&quot;新吉原&quot;。吉原四周以深约2米、宽3至9米的</div>
+</a>
+<a class="entry-item" href="向島.html">
+  <div class="noun">向島</div>
+  <div class="snippet">东京都墨田区的地名，位于隅田川东岸，与浅草隔河相望。江户时代起便是著名的赏樱胜地（墨堤樱花），德川吉宗曾在此大量栽种樱花。江户中期至明治时代发展为繁华的花街，料亭与艺伎文化兴盛，至今仍是东京六大花街之一。文中提及向岛阿部宅邸举办过演奏会。</div>
+</a>
+<a class="entry-item" href="吾妻橋.html">
+  <div class="noun">吾妻橋</div>
+  <div class="snippet">吾妻桥（Azumabashi），横跨东京隅田川的著名桥梁，连接台东区浅草与墨田区本所。最初建于1774年（安永三年），时称&quot;大川桥&quot;。1875年改名为&quot;吾妻桥&quot;。1923年关东大地震中受损，1931年重建为现今的朱红色桥梁。该桥周边是著名的</div>
+</a>
+<a class="entry-item" href="唐津.html">
+  <div class="noun">唐津</div>
+  <div class="snippet">日本佐贺县西北部的港口城市，面向玄界滩。历史上是肥前国的重要贸易港口，因与中国唐朝最早接触的港口而得名。江户时代为唐津藩的城下町，以唐津城为中心发展。唐津焼（陶瓷）是日本著名传统工艺品。作品中多々良三平是唐津出身的住人。 --- 日本佐贺县</div>
+</a>
+<a class="entry-item" href="在巣鴨.html">
+  <div class="noun">在巣鴨</div>
+  <div class="snippet">即&quot;于巢鸭&quot;之意，为信件末尾所署发信地址。巢鸭（巣鴨）是东京都丰岛区的一个地名。江户时代为巢鸭村，明治以后发展为东京市街的一部分。以高岩寺（拔刺地藏）闻名，地藏通商店街被称为&quot;老奶奶的原宿&quot;。巢鸭监狱曾关押二战甲级战犯并于1948年在此处决</div>
+</a>
+<a class="entry-item" href="埃及人.html">
+  <div class="noun">埃及人</div>
+  <div class="snippet">即古埃及人，指古代尼罗河流域文明（约前3100-前332年）的居民。古埃及以金字塔、象形文字、木乃伊、多神信仰等闻名，是人类四大文明古国之一。小说中作者以&quot;通过木乃伊（ミイラ）来想象埃及人&quot;的有趣类比，暗讽要理解苦沙弥的痘痕脸，后世的学者需</div>
+</a>
+<a class="entry-item" href="埼玉生れ.html">
+  <div class="noun">埼玉生れ</div>
+  <div class="snippet">出生于埼玉县的意思。文中指苦沙弥家的女佣出身于埼玉县，被唤作&quot;御三&quot;，负责跑腿去落云馆叫人来处理闯入事件。</div>
+</a>
+<a class="entry-item" href="外濠線.html">
+  <div class="noun">外濠線</div>
+  <div class="snippet">明治末期至昭和初期在东京运行的市区路面电车线路，由东京电气铁道（外濠線）于1904年至1905年间分段开通运营，沿江户城的外护城河（外濠）运行。后经合并成为东京市电车（都电）的一部分，于1960年代末至1970年代初废止。线路沿途经过新桥、</div>
+</a>
+<a class="entry-item" href="大平.html">
+  <div class="noun">大平</div>
+  <div class="snippet">《我是猫》中庚申山上的一处平地，位于山的南侧。文中描述那里有约百坪的平地，中央有一块八叠席大小的岩石，可俯瞰城下景色。</div>
+</a>
+<a class="entry-item" href="姥子.html">
+  <div class="noun">姥子</div>
+  <div class="snippet">位于神奈川县箱根町的温泉地名，箱根十七汤之一。地处箱根神山半山腰（海拔约900米），靠近芦之湖和桃源台。传说金太郎的母亲山姥曾在此温泉治眼疾。夏目漱石在《我是猫》中借迷亭之口提到曾在此温泉住宿的经历。</div>
+</a>
+<a class="entry-item" href="安宅の関.html">
+  <div class="noun">安宅の関</div>
+  <div class="snippet">位于石川县小松市安宅町的古代关所，日本古代北陆道的重要关卡。因能乐《安宅》和歌舞伎《劝进帐》而广为人知，讲述源义经一行在逃往奥州途中，家臣弁庆在此关以机智通过盘查的故事。后世以&quot;安宅之关&quot;比喻人生难关或危机时刻。</div>
+</a>
+<a class="entry-item" href="宗谷海峡.html">
+  <div class="noun">宗谷海峡</div>
+  <div class="snippet">宗谷海峡（Soya Strait），俄称拉彼鲁兹海峡（La Perouse Strait）， 位于日本北海道（宗谷岬）与俄罗斯萨哈林岛（库页岛）之间， 连接日本海与鄂霍次克海，最窄处约42公里。 以法国探险家拉彼鲁兹伯爵命名。是日本海的&quot;北</div>
+</a>
+<a class="entry-item" href="寄席.html">
+  <div class="noun">寄席</div>
+  <div class="snippet">日本传统曲艺表演场所，主要上演落语（单口相声）、漫才（相声）、讲谈等大众演艺。江户时代（1830-1840年代）定型，入场费称&quot;木户钱&quot;，观众可自由出入。现存四大定席：铃本演艺场、新宿末广亭、浅草演艺大厅、池袋演艺场。</div>
+</a>
+<a class="entry-item" href="対馬海峡.html">
+  <div class="noun">対馬海峡</div>
+  <div class="snippet">对马海峡，位于日本对马岛与九州·本州之间，连接日本海与东海， 最窄处约41.6公里。是日本海的&quot;南大门&quot;，日俄战争日本海海战的主战场。 海峡分为东水道（对马岛与九州之间）和西水道（对马岛与朝鲜半岛之间， 又称釜山海峡）。日本在此海峡设领海宽</div>
+</a>
+<a class="entry-item" href="小川町の勧工場.html">
+  <div class="noun">小川町の勧工場</div>
+  <div class="snippet">指明治时代位于东京神田小川町的&quot;勧工場&quot;。勧工場是明治时代日本特有的商业设施，在同一建筑内聚集众多小零售商，可视为现代百货商场的前身。明治11年（1878年）东京永楽町设立首家&quot;府立第一勧工場&quot;，最盛期的1902年东京有27家之多。勧工場随</div>
+</a>
+<a class="entry-item" href="小石川.html">
+  <div class="noun">小石川</div>
+  <div class="snippet">东京都文京区的地名，原为东京市小石川区。历史上是武家宅邸和寺院密集的区域，以水户德川家的庭园&quot;小石川后乐园&quot;和东京大学附属小石川植物园闻名。夏目漱石在东京生活期间曾居住于小石川一带法藏院附近。</div>
+</a>
+<a class="entry-item" href="巣鴨.html">
+  <div class="noun">巣鴨</div>
+  <div class="snippet">东京都丰岛区的地名。作品中代指当时位于此地的精神病院——东京府巢鸭病院（现东京都立松泽医院的前身），日本最早的近代精神科医院。文中立町老梅（天道公平）即被收容于此。</div>
+</a>
+<a class="entry-item" href="布哇.html">
+  <div class="noun">布哇</div>
+  <div class="snippet">夏威夷（Hawaii）的日语旧式汉字音译表记，读作&quot;ハワイ&quot;。明治至昭和初期在日语文献中广泛使用，现代已完全被片假名&quot;ハワイ&quot;取代。属于历史性表记。</div>
+</a>
+<a class="entry-item" href="庚申山.html">
+  <div class="noun">庚申山</div>
+  <div class="snippet">位于栃木县日光市足尾町的山峰，标高1892米，属于日光国立公园。山名源于庚申信仰，以奇岩怪石和绝壁著称。登山口位于银山平，周边有庚申山荘、庚申七滝等景观，是关东地区知名的登山路线之一。 --- 夏目漱石《我是猫》中登场人物寒月前往拉小提琴的</div>
+</a>
+<a class="entry-item" href="御台場.html">
+  <div class="noun">御台場</div>
+  <div class="snippet">东京湾内的人工岛群，原为江户时代末期幕府为防御外敌而修筑的炮台。1853年美国佩里舰队&quot;黑船来航&quot;后，幕府委托江川英龙在品川海域建造了11座炮台（实际完成5座）。二战后经填海造陆发展为东京临海副都心。现为东京著名观光区，拥有彩虹大桥、富士电</div>
+</a>
+<a class="entry-item" href="御成道.html">
+  <div class="noun">御成道</div>
+  <div class="snippet">江户时代通往日光东照宫的脇街道，正式名称为&quot;日光御成道&quot;，起于本乡追分、终于幸手宿，是将军参诣日光时使用的专用道路，别称岩槻街道。</div>
+</a>
+<a class="entry-item" href="招魂社.html">
+  <div class="noun">招魂社</div>
+  <div class="snippet">明治政府为祭奠戊辰战争等历次内战中官军战死者而设立的神社。1869年设立&quot;东京招魂社&quot;，1879年改称靖国神社。全国各地也设立了类似的招魂社。作品中将金田夫人巨大的鼻子比作&quot;招魂社的石灯笼&quot;，暗示其突兀不协调的感觉，体现了夏目漱石巧妙的讽刺</div>
+</a>
+<a class="entry-item" href="文明中学.html">
+  <div class="noun">文明中学</div>
+  <div class="snippet">夏目漱石小说《我是猫》中虚构的一所中学，主人公苦沙弥在此担任英语教师。校名&quot;文明&quot;二字暗含对明治时期&quot;文明开化&quot;风潮的讽刺意味，是作者批判近代日本社会的重要舞台设定之一。</div>
+</a>
+<a class="entry-item" href="旅順.html">
+  <div class="noun">旅順</div>
+  <div class="snippet">位于中国辽宁省最南端的港口城市，旧称Port Arthur。在日俄战争（1904—1905）中，旅顺攻围战是日俄战争最惨烈的战役之一，日军第三军以近六万人的伤亡攻陷旅顺要塞。</div>
+</a>
+<a class="entry-item" href="日本堤.html">
+  <div class="noun">日本堤</div>
+  <div class="snippet">日本堤（にほんづつみ）是东京都台东区的地名。1621年（元和6年）为防隅田川泛滥而筑堤，因两堤并立称&quot;二本堤&quot;，后转写为&quot;日本堤&quot;。1657年明历大火后，吉原游廓从日本桥迁至浅草寺后方的日本堤南侧，此地成为通往吉原的繁华道路（&quot;土手八丁&quot;&quot;</div>
+</a>
+<a class="entry-item" href="日本堤分署.html">
+  <div class="noun">日本堤分署</div>
+  <div class="snippet">位于东京浅草日本堤地区的警察分署，属于浅草警察署管辖。日本堤是江户时代初期（1621年）筑造的堤防所在地。作品中刑事巡査通知苦沙弥到此分署领取被盗物品。</div>
+</a>
+<a class="entry-item" href="東嶺寺.html">
+  <div class="noun">東嶺寺</div>
+  <div class="snippet">《我是猫》中庚申山附近的一座寺院。寒月登山途中听到该寺钟声，钟声透过毛毯传入耳中。具体原型未详，可能为虚构的寺名。</div>
+</a>
+<a class="entry-item" href="根津.html">
+  <div class="noun">根津</div>
+  <div class="snippet">东京都文京区的地名，江户时代为根津神社的门前町，曾设有冈场所（简易花街）。明治初期因邻近东京帝国大学而将游廓强制迁移。现保留浓厚下町风情，与谷中、千駄木合称&quot;谷根千&quot;。</div>
+</a>
+<a class="entry-item" href="梵刹.html">
+  <div class="noun">梵刹</div>
+  <div class="snippet">佛教用语，意为寺院、佛寺。&quot;梵&quot;源自梵语&quot;梵天&quot;（清净之意），&quot;刹&quot;源自梵语&quot;kṣetra&quot;（国土、寺院）。属于较文雅的佛教词汇，多见于经书及文学作品中。</div>
+</a>
+<a class="entry-item" href="横浜.html">
+  <div class="noun">横浜</div>
+  <div class="snippet">日本神奈川县的主要港口城市，1859年（安政6年）开港，是最早对外开放的日本港口之一。开港后迅速成为生丝贸易中心和国际化城市，设有日本最大的中华街。1889年设市，1956年成为政令指定都市，现为东京都市圈的重要交通与商业枢纽。</div>
+</a>
+<a class="entry-item" href="歌舞伎座.html">
+  <div class="noun">歌舞伎座</div>
+  <div class="snippet">歌舞伎座（かぶきざ）是位于东京银座的歌舞伎专用剧场，1889年（明治22年）11月21日开场的日本最著名的传统戏剧剧场。初代建筑为木造三层西洋风格外观、和风内部的设计，历经火灾、关东大地震、战争空袭等磨难，至今已重建至第五代。第五代歌舞伎座</div>
+</a>
+<a class="entry-item" href="水道橋.html">
+  <div class="noun">水道橋</div>
+  <div class="snippet">东京都千代田区与文京区交界处的地名，原为神田川上架设的上水引樋（水道管）之桥，江户时代已有记载。附近有东京巨蛋、小石川后乐园等知名设施。</div>
+</a>
+<a class="entry-item" href="油町.html">
+  <div class="noun">油町</div>
+  <div class="snippet">日本静冈市的历史地名，江户至明治时期静冈城下町（骏府城下町）的一条街道。油町是油商聚集的商业街区，与通町等共同构成了静冈的商业中心地带。《我是猫》中迷亭讲述幼时随父亲从油町散步到通町的经历，展现了明治初年静冈的市井风貌。</div>
+</a>
+<a class="entry-item" href="泉岳寺.html">
+  <div class="noun">泉岳寺</div>
+  <div class="snippet">位于东京都港区高轮的曹洞宗寺院，山号万松山。1612年由德川家康命门庵宗关创建，1641年烧毁后由六家大名重建。因&quot;元禄赤穗事件&quot;闻名，寺内安葬着赤穗四十七义士及主君浅野长矩。每年12月举行&quot;义士祭&quot;，有义士行列游行。寺内设有赤穗义士纪念馆</div>
+</a>
+<a class="entry-item" href="波斯.html">
+  <div class="noun">波斯</div>
+  <div class="snippet">古代文明大国，位于西亚，今伊朗境内。公元前6世纪阿契美尼德王朝建立横跨亚欧非的大帝国，在文化、艺术、建筑等方面对世界产生深远影响。</div>
+</a>
+<a class="entry-item" href="津軽海峡.html">
+  <div class="noun">津軽海峡</div>
+  <div class="snippet">津轻海峡，位于日本本州（青森县）与北海道（函馆市）之间， 连接日本海与太平洋，最窄处约19.5公里，是日本海三大海峡之一。 水深最深达521米。青函隧道（全长53.85公里，1988年通车）从海底穿过此海峡。 日本在此海峡仅设3海里领海，中</div>
+</a>
+<a class="entry-item" href="浅草の観音様.html">
+  <div class="noun">浅草の観音様</div>
+  <div class="snippet">即浅草寺（金龍山浅草寺），位于东京都台东区，是东京最古老的寺院。相传628年渔夫桧前浜成兄弟在隅田川网得一尊圣观音像，当地名士土师真中知将其安置家中供奉，后经胜海上人建寺，遂成浅草寺。江户时代被德川幕府定为祈愿所，香火鼎盛。&quot;浅草观音&quot;是庶</div>
+</a>
+<a class="entry-item" href="浅草警察署.html">
+  <div class="noun">浅草警察署</div>
+  <div class="snippet">管辖东京浅草地区的警察署，历史上曾别称&quot;象潟警察署&quot;。作品中刑事巡査告知苦沙弥，日本堤分署属于浅草警察署的管辖范围。</div>
+</a>
+<a class="entry-item" href="清国.html">
+  <div class="noun">清国</div>
+  <div class="snippet">日本对清朝统治下中国的历史称呼。1644年至1912年清朝统治时期，日本及西方列强称中国为&quot;清国&quot;。明治时期日本在中日甲午战争（1894-1895）中战胜清国，两国的国际地位发生逆转。&quot;清国&quot;一词在当时日本文献中广泛使用，至1912年清朝灭</div>
+</a>
+<a class="entry-item" href="牛込の山伏町.html">
+  <div class="noun">牛込の山伏町</div>
+  <div class="snippet">牛込山伏町是东京都新宿区东北部的历史地名，位于旧牛込区范围内。地名源于该地区曾有众多山伏（修验道修行者）居住。1872年（明治5年）分割为市谷山伏町、北山伏町、南山伏町三个町名。小说中提及此处有浅田宗伯名医居住，反映了明治时代东京的城市地理</div>
+</a>
+<a class="entry-item" href="独逸.html">
+  <div class="noun">独逸</div>
+  <div class="snippet">日本对德国的汉文表记，明治时代创作的和制汉语音译。&quot;独&quot;取&quot;ド&quot;音、&quot;逸&quot;取&quot;イツ&quot;音，合为&quot;ドイツ&quot;。源自德语&quot;Deutsch&quot;或荷兰语&quot;Duits&quot;的发音。现代日语中通常写为片假名&quot;ドイツ&quot;，但简称为&quot;独&quot;（如&quot;独語&quot;&quot;日独関係&quot;）仍广</div>
+</a>
+<a class="entry-item" href="白木屋.html">
+  <div class="noun">白木屋</div>
+  <div class="snippet">日本历史上著名的老字号百货店，1662年（宽文2年）在江户日本桥以吴服店创业，与越后屋（三越）、大丸并称&quot;江户三大吴服店&quot;。明治后转型为现代百货公司，曾设有日本最早的百货店电梯（1911年）和屋顶游乐园。1932年发生重大火灾，造成14人死</div>
+</a>
+<a class="entry-item" href="神田.html">
+  <div class="noun">神田</div>
+  <div class="snippet">东京都千代田区东北部的地域名。江户时代为职人与商人聚居区，明治时期曾设神田区，1947年与麴町区合并为千代田区。以神田明神（江户总镇守）、神保町古书街和秋叶原电器街闻名。 --- 日本东京都千代田区东北部的地域名，历史上曾为东京市神田区，拥</div>
+</a>
+<a class="entry-item" href="穴守稲荷.html">
+  <div class="noun">穴守稲荷</div>
+  <div class="snippet">位于东京都大田区羽田的神社，正式名称为穴守稲荷神社。创立于1804年（文化元年），当时羽田浦的海堤因风浪出现大洞，村民为守护田地而建祠祭祀稻荷大神。明治18年（1885年）开放公众参拜，后因温泉发现发展为一大观光地。1945年二战结束后，因</div>
+</a>
+<a class="entry-item" href="築地.html">
+  <div class="noun">築地</div>
+  <div class="snippet">筑地（築地／つきじ），东京都中央区的地名，濒临东京湾。原为江户时代明历大火（1657年） 后为重建本愿寺而填海造地的区域，「築地」即「填筑的土地」之意。幕末设有军舰操练所， 明治初期曾设外国人居留地，福泽谕吉的兰学塾（庆应义塾前身）也在此发</div>
+</a>
+<a class="entry-item" href="築山.html">
+  <div class="noun">築山</div>
+  <div class="snippet">日本庭园中人工堆土建造的假山，与平庭相对。筑山庭常配池泉、石组、树木，模拟自然山水。江户时代的回游式筑山泉池庭园最为著名（如六义园、兼六园）。文中金田邸的筑山是猫暗中观察金田家动静的常用据点，猫常伏在筑山草坪上窥探客厅内的情况。 --- 日</div>
+</a>
+<a class="entry-item" href="群鶴館.html">
+  <div class="noun">群鶴館</div>
+  <div class="snippet">夏目漱石《我是猫》中虚构的廉价寄宿屋（安下宿）名称。位于苦沙弥先生住宅的南侧，透过扁柏林间隙可见其廉价屋顶。漱石以&quot;群鹤馆&quot;这一风雅名称与实际的简陋形成反差，与&quot;卧龙窟&quot;&quot;落云馆&quot;等一并构成名称与实质不符的讽刺手法。文中&quot;群鹤馆に鹤の下りざ</div>
+</a>
+<a class="entry-item" href="聖堂.html">
+  <div class="noun">聖堂</div>
+  <div class="snippet">汤岛圣堂（Yushima Seido），位于东京都文京区汤岛，是日本最著名的孔子庙。1690年由德川幕府第五代将军德川纲吉建造。1797年设立官学昌平坂学问所，成为幕府最高学府。明治维新后成为日本学校教育发祥地，为东京大学前身之一。1922</div>
+</a>
+<a class="entry-item" href="肥前国.html">
+  <div class="noun">肥前国</div>
+  <div class="snippet">日本古代令制国之一，属西海道，领域相当于现在的佐贺县和长崎县本土部分。与肥后国（现熊本县）相对，取&quot;肥之国&quot;的前后之分。肥前国是日本西南的重要地区，唐津是其港口城市之一。明治废藩置县后被分割为佐贺县和长崎县。</div>
+</a>
+<a class="entry-item" href="臥竜窟.html">
+  <div class="noun">臥竜窟</div>
+  <div class="snippet">《我是猫》中主人公苦沙弥先生住宅的书斋名，由猫（叙事者）以调侃口吻命名。&quot;臥竜&quot;即卧龙，暗指苦沙弥怀才不遇、如卧龙般蛰伏。原作中苦沙弥住所附近有一家名为&quot;群鶴館&quot;的旅馆，猫便戏谑地将主人居所称为&quot;臥竜窟&quot;以对应。实际上只是寒酸小屋，反映了猫</div>
+</a>
+<a class="entry-item" href="花川戸.html">
+  <div class="noun">花川戸</div>
+  <div class="snippet">花川户（Hanakawado），东京都台东区的地名，位于浅草繁华街一角，东临隅田川。地名意为&quot;花之川之门户&quot;，因樱花与隅田川得名。历史上曾是鞋类批发街，现为商业与住宅混合区。东武铁道浅草站即位于花川户一丁目。在《我是仙》中，寒月从花川户方向</div>
+</a>
+<a class="entry-item" href="芳原.html">
+  <div class="noun">芳原</div>
+  <div class="snippet">芳原（よしわら），即江户时代最大的公娼区域——吉原游廓。始设于1612年（庆长17年），位于日本桥人形町附近（元吉原），1657年明历大火后迁至浅草日本堤（新吉原）。面积约7.26万平方米，四周有深沟环绕。吉原、京都岛原、大坂新町并称日本三</div>
+</a>
+<a class="entry-item" href="英吉利.html">
+  <div class="noun">英吉利</div>
+  <div class="snippet">日本对英国的汉文表记，源自中国汉语音译&quot;英吉利（Yīngjílì）&quot;。最初由葡萄牙语经中国传入日本，经历了&quot;諳厄利亚→英機黎→英吉利&quot;的演变。&quot;英&quot;字有&quot;精华、优秀&quot;的正面含义，被认为不仅是音译，也暗含对英国的褒扬。现代日语中通常写为&quot;イギ</div>
+</a>
+<a class="entry-item" href="草廬.html">
+  <div class="noun">草廬</div>
+  <div class="snippet">草庐，茅草盖的简陋房屋，引申为隐士或穷书生的居所。在日语和汉语中都指代贫寒的住所。&quot;草廬&quot;在作品中指苦沙弥的家。三平君因过去与主人的关系，&quot;時々旧先生の草廬を訪問して&quot;，即时常访问昔日师长的简陋居所。这是漱石对苦沙弥作为清贫知识分子的生活环</div>
+</a>
+<a class="entry-item" href="菩提所.html">
+  <div class="noun">菩提所</div>
+  <div class="snippet">日本佛教中，某一家族世代埋葬先祖遗骨并举行供养仪式的寺院，亦称&quot;菩提寺&quot;。江户时代通过寺请制度（寺檀制度）固定下来，与家族的祖先供养传统紧密相连。</div>
+</a>
+<a class="entry-item" href="華厳滝.html">
+  <div class="noun">華厳滝</div>
+  <div class="snippet">位于日本栃木县日光市的著名瀑布，落差97米，水源来自中禅寺湖。与那智瀑布、袋田瀑布并称为日本三大名瀑，被指定为国家名胜。</div>
+</a>
+<a class="entry-item" href="落雲館.html">
+  <div class="noun">落雲館</div>
+  <div class="snippet">夏目漱石长篇小说《我是猫》中虚构的私立中学名称。位于苦沙弥先生住宅北侧空地对面，其学生频繁侵入空地喧哗、唱歌、踢球，成为苦沙弥的烦恼之源。作品中对该校学生以&quot;君子&quot;反讽，讽刺明治教育之实态。其现实原型被认为是位于东京都文京区的郁文馆中学（现</div>
+</a>
+<a class="entry-item" href="蓮池.html">
+  <div class="noun">蓮池</div>
+  <div class="snippet">寺内种植莲花的池塘。作品中发狂的理野陶然自称金刚不坏之身，跳入圆觉寺内的莲池中行走，几乎溺死，幸被路过的道场僧人所救。</div>
+</a>
+<a class="entry-item" href="薬王師道.html">
+  <div class="noun">薬王師道</div>
+  <div class="snippet">《我是猫》中出现的东京道路名，位于现今东京都新宿区市谷药王寺町一带。该地名来源于当地的药王寺（已废寺），是主人公迷亭在讲述买小提琴后绕路返回住处时途经的道路，反映明治末期东京的地理风貌。</div>
+</a>
+<a class="entry-item" href="藁店（わらだな）.html">
+  <div class="noun">藁店（わらだな）</div>
+  <div class="snippet">江户时代贩卖稻草（藁）及其制品的店铺。稻草是当时重要的日常资材，用于制作草鞋、草履、绳索、屋茅等。也曾作为新宿牛込地区的地名由来（藁店横町）。落语寄席牛込藁店亭也与此有关，夏目漱石曾是常客。</div>
+</a>
+<a class="entry-item" href="蛸壺峠.html">
+  <div class="noun">蛸壺峠</div>
+  <div class="snippet">蛸壺峠（たこつぼとうげ），夏目漱石《吾辈は猫である》中迷亭虚构的山间险路名称。&quot;蛸壺&quot;原指捕捉章鱼用的陶壶，也比喻战场上小型单人掩体（猫耳洞）。&quot;峠&quot;意为山路的最高处（山岭、垭口）。在真实地理中越后国（今新潟县）并无此地名，当为漱石或迷亭信</div>
+</a>
+<a class="entry-item" href="裏店（うらだな）.html">
+  <div class="noun">裏店（うらだな）</div>
+  <div class="snippet">江户时代城市中建在背街小巷深处的出租长屋，与临街的表店相对。多为平房，每户仅3-5坪（约10-16平方米），共用井、厕所等设施，是当时江户七成以上庶民的居住形态。在幽默的语境中，小女孩将裏店误说成藁店。</div>
+</a>
+<a class="entry-item" href="角屋敷.html">
+  <div class="noun">角屋敷</div>
+  <div class="snippet">角屋敷，即位于街角的宅邸，在《我是猫》中指实业家金田家的豪华住宅。金田是作品中的资本家，住在苦沙弥家附近的转角处。角屋敷与苦沙弥寒酸的住宅形成鲜明对比，象征着明治时代资本家的财富与权势。猫从未踏足此地，但听闻鼻子夫人的谈话后，决定前往这座&quot;</div>
+</a>
+<a class="entry-item" href="赤坂.html">
+  <div class="noun">赤坂</div>
+  <div class="snippet">东京都港区北部的著名地区，皇居西南侧。江户时代为纪州藩德川家宅邸所在地，明治以后发展为高级住宅区和繁华商业街，以迎宾馆赤坂离宫、高级料亭和办公街区闻名。</div>
+</a>
+<a class="entry-item" href="越後国.html">
+  <div class="noun">越後国</div>
+  <div class="snippet">越后国（えちごのくに），日本古代令制国之一，属北陆道，领域相当于今新潟县（佐渡岛除外）。东接陆奥国，南接岩代国，西接越中国，北临日本海。以多雪、米产、冬日严寒而闻名。古代为交通不便的偏远之地。作品中迷亭的失恋故事以此地为舞台，利用其&quot;山中偏</div>
+</a>
+<a class="entry-item" href="近江屋.html">
+  <div class="noun">近江屋</div>
+  <div class="snippet">日本历史上由近江（今滋贺县）出身的商人经营的商号名。近江商人是日本三大商人之一，活跃于江户至明治时期，在江户日本桥等地开设店铺，经营烟草、麻布、吴服等。&quot;近江屋&quot;这一商号在江户时代分布广泛，明治17年（1884年）在东京神田创立的&quot;近江屋西</div>
+</a>
+<a class="entry-item" href="通町.html">
+  <div class="noun">通町</div>
+  <div class="snippet">日本静冈市的历史地名，指城下町中沿着主要街道形成的商业区。与油町相邻，是静冈江户至明治时期的繁华街区。迷亭的回忆中，油町和通町之间的散步路线经过了当时静冈最大的吴服店伊势源。</div>
+</a>
+<a class="entry-item" href="遊廓.html">
+  <div class="noun">遊廓</div>
+  <div class="snippet">日本历史上由官方认可并集中设置妓院（游女屋）的特定区域，周围以围墙或水沟包围进行封闭式管理。起源于安土桃山时代（16世纪末至17世纪初），丰臣秀吉时代在大阪道顿堀首次设置，江户幕府出于治安管理目的大规模推行制度化。最著名的三大官方游廓为江户</div>
+</a>
+<a class="entry-item" href="金善.html">
+  <div class="noun">金善</div>
+  <div class="snippet">《我是猫》中出现的商店名称（金善商店），位于迷亭买小提琴后返回下宿的路线转角处。主人公迷亭在讲述买小提琴的经历时提到&quot;金善的转角向西拐&quot;，是小说中描写明治末期东京街景的一个具体地名标记。</div>
+</a>
+<a class="entry-item" href="鎌倉.html">
+  <div class="noun">鎌倉</div>
+  <div class="snippet">镰仓（鎌倉／かまくら），日本神奈川县的城市，三面环山一面临海， 与奈良、京都并列为日本三大古都。1192年源赖朝在此建立日本第一个武家政权 ——镰仓幕府（至1333年）。拥有鹤冈八幡宫、高德院镰仓大佛、建长寺等众多历史遗迹。 明治时期起镰仓</div>
+</a>
+<a class="entry-item" href="長坂橋.html">
+  <div class="noun">長坂橋</div>
+  <div class="snippet">位于今湖北省当阳市的长坂坡附近的一座古桥，因208年（建安十三年）曹操追击刘备时，张飞率二十骑在此据水断桥、大喝退敌而闻名。此战为赤壁之战的前哨战，张飞以孤身挡曹军的表现成就了千古名将的威名。后世&quot;长坂桥&quot;成为忠勇孤胆的象征，《三国演义》进</div>
+</a>
+<a class="entry-item" href="隅田川.html">
+  <div class="noun">隅田川</div>
+  <div class="snippet">隅田川是流经东京都中心部的一级河川，为荒川支流。全长约23.5公里，从北区新岩渊水门由荒川分流，经北区、足立区、荒川区、墨田区、台东区、中央区、江东区后注入东京湾。江户时代称为「大川」。两岸有著名的隅田公园樱花胜地，每年七月举办历史悠久的隅</div>
+</a>
+<a class="entry-item" href="静岡.html">
+  <div class="noun">静岡</div>
+  <div class="snippet">静冈县（Shizuoka），位于日本本州岛中部，面临太平洋。古代分属远江国、骏河国、伊豆国。战国时代为今川氏、德川家康的根据地，家康隐居于骏府（今静冈市）并开展&quot;大御所政治&quot;。东海道五十三次中有22个宿场位于此地。现代以茶（静冈茶）、柑橘、</div>
+</a>
+<a class="entry-item" href="首懸の松.html">
+  <div class="noun">首懸の松</div>
+  <div class="snippet">出现在夏目漱石《我是猫》中的传说之松，位于东京麹町区土手三番町（今千代田区五番町一带）。据小说中迷亭所述，此松因&quot;自古传说任何人来到松树下都会想上吊&quot;而得名，每年有两三人必定在此树上吊。与之相对的是鸿之台的&quot;钟悬之松&quot;。这一地名很可能是漱石</div>
+</a>
+<a class="entry-item" href="高輪.html">
+  <div class="noun">高輪</div>
+  <div class="snippet">东京都港区南部的地名，位于都心与郊外的边界丘陵地带。历史上是江户时代各藩的下屋敷所在地，也是东海道的沿线。地名源自&quot;高繩原&quot;（意为高地上的直路）。日本第一条铁路（新桥—横滨）在此经过，设有品川站。现代为高级住宅区，2020年JR山手线新站&quot;</div>
+</a>
+<a class="entry-item" href="鴻の台.html">
+  <div class="noun">鴻の台</div>
+  <div class="snippet">鸿之台（Kōnodai），位于千叶县市川市的地名，现在写作&quot;国府台&quot;。据《我是猫》中寒月的对话所述，此处有一棵&quot;钟悬之松&quot;（鐘懸の松），与土手三番町的&quot;首悬之松&quot;相对。该地历史上是军事要冲，曾发生&quot;国府台合战&quot;。京成电铁&quot;国府台站&quot;的旧名即</div>
+</a>
+<a class="entry-item" href="鵜の沼.html">
+  <div class="noun">鵜の沼</div>
+  <div class="snippet">《我是猫》中庚申山附近的一个池塘，位于大平平地北侧。池边环绕着粗大的樟树，周围人烟稀少，只有一间采樟脑的小屋。</div>
+</a>
+<a class="entry-item" href="黒谷.html">
+  <div class="noun">黒谷</div>
+  <div class="snippet">指京都市左京区的黑谷，净土宗大本山金戒光明寺（こんかいこうみょうじ）的所在地。该寺由法然上人于1175年创建，是净土宗最初的寺院，通称&quot;黑谷先生&quot;。幕末时期曾是京都守护职会津藩主松平容保的本阵（驻屯地），也是新选组的发祥地之一，保留有多项重</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:09
+</footer>
+</body>
+</html>

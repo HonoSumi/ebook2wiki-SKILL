@@ -7,7 +7,7 @@
     python chunk_ebook.py <电子书路径> [--chunk-size 10000] [--overlap 100]
 
 输出:
-    在 <书名>_tmp/ 目录下生成 <书名>_001.txt, <书名>_002.txt, ...
+    在 <书名>_tmp/ 目录下生成 <书名>_1.txt, <书名>_2.txt, ...（无前导零）
 """
 
 import os
@@ -162,12 +162,12 @@ def clean_text(text):
     """清洗文本：去除多余空行和空格，保留段落结构"""
     text = re.sub(r"\n{4,}", "\n\n\n", text)          # 过多空行压缩
     text = re.sub(r"[ \t]{3,}", "  ", text)           # 过多空格压缩
-    text = re.sub(r"^\s+", "", text, flags=re.MULTILINE)  # 行首空白
+    text = re.sub(r"^[ \t]+", "", text, flags=re.MULTILINE)  # 行首空白（不含换行）
     text = re.sub(r"(\S)\n(\S)", r"\1\2", text)       # 行中断续（英文换行）
     return text.strip()
 
 
-def chunk_text(text, chunk_size=10000, overlap=100):
+def chunk_text(text, chunk_size=5000, overlap=100):
     """
     将文本分割为重叠块。
 
@@ -248,7 +248,7 @@ def main():
 
     print(f"[3/4] 正在写出文本块")
     for i, chunk in enumerate(chunks, 1):
-        filename = f"{base_name}_{i:03d}.txt"
+        filename = f"{base_name}_{i}.txt"
         filepath = os.path.join(output_dir, filename)
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(chunk)
@@ -264,7 +264,7 @@ def main():
         "chunks": [
             {
                 "seq": i,
-                "filename": f"{base_name}_{i:03d}.txt",
+                "filename": f"{base_name}_{i}.txt",
                 "char_count": len(chunks[i - 1]),
                 "status": "pending"
             }

@@ -1,0 +1,27 @@
+{
+  "name": "森林",
+  "description": "自然森林绿意风格，适合自然散文、游记、田园",
+  "colors": {
+    "--bg": "#eff5ee",
+    "--bg-card": "#ffffff",
+    "--bg-detail": "#f7faf6",
+    "--text": "#2a3a28",
+    "--text-secondary": "#5a6b57",
+    "--text-muted": "#8b9a88",
+    "--heading": "#1a2b18",
+    "--border": "#cdd8ca",
+    "--accent": "#4a7c3f",
+    "--accent-hover": "#5c944f",
+    "--link": "#3d6b33",
+    "--tag-bg": "#dcebd7",
+    "--tag-text": "#3d6b33",
+    "--divider": "#cdd8ca",
+    "--shadow": "0 1px 3px rgba(42,58,40,0.06)",
+    "--shadow-hover": "0 3px 12px rgba(42,58,40,0.1)"
+  },
+  "fonts": {
+    "--font-heading": "\"Noto Serif SC\", \"Source Han Serif SC\", Georgia, serif",
+    "--font-body": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+    "--font-mono": "\"Consolas\", \"Courier New\", monospace"
+  }
+}

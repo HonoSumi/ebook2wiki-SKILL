@@ -1,0 +1,513 @@
+{
+  "book_name": "吾輩は猫である",
+  "source_file": "E:\\ebook-kb\\吾輩は猫である.epub",
+  "total_chunks": 72,
+  "chunk_size": 5000,
+  "overlap": 100,
+  "chunks": [
+    {
+      "seq": 1,
+      "filename": "吾輩は猫である_1.txt",
+      "char_count": 4965,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 2,
+      "filename": "吾輩は猫である_2.txt",
+      "char_count": 4980,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 3,
+      "filename": "吾輩は猫である_3.txt",
+      "char_count": 4905,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 4,
+      "filename": "吾輩は猫である_4.txt",
+      "char_count": 4915,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 5,
+      "filename": "吾輩は猫である_5.txt",
+      "char_count": 4889,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 6,
+      "filename": "吾輩は猫である_6.txt",
+      "char_count": 3667,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 7,
+      "filename": "吾輩は猫である_7.txt",
+      "char_count": 4007,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 8,
+      "filename": "吾輩は猫である_8.txt",
+      "char_count": 4959,
+      "status": "completed",
+      "keyword_count": 17
+    },
+    {
+      "seq": 9,
+      "filename": "吾輩は猫である_9.txt",
+      "char_count": 4253,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 10,
+      "filename": "吾輩は猫である_10.txt",
+      "char_count": 4951,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 11,
+      "filename": "吾輩は猫である_11.txt",
+      "char_count": 4640,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 12,
+      "filename": "吾輩は猫である_12.txt",
+      "char_count": 3623,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 13,
+      "filename": "吾輩は猫である_13.txt",
+      "char_count": 4934,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 14,
+      "filename": "吾輩は猫である_14.txt",
+      "char_count": 4579,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 15,
+      "filename": "吾輩は猫である_15.txt",
+      "char_count": 3762,
+      "status": "completed",
+      "keyword_count": 17
+    },
+    {
+      "seq": 16,
+      "filename": "吾輩は猫である_16.txt",
+      "char_count": 2546,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 17,
+      "filename": "吾輩は猫である_17.txt",
+      "char_count": 4978,
+      "status": "completed",
+      "keyword_count": 23
+    },
+    {
+      "seq": 18,
+      "filename": "吾輩は猫である_18.txt",
+      "char_count": 4072,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 19,
+      "filename": "吾輩は猫である_19.txt",
+      "char_count": 3036,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 20,
+      "filename": "吾輩は猫である_20.txt",
+      "char_count": 4998,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 21,
+      "filename": "吾輩は猫である_21.txt",
+      "char_count": 4733,
+      "status": "completed",
+      "keyword_count": 25
+    },
+    {
+      "seq": 22,
+      "filename": "吾輩は猫である_22.txt",
+      "char_count": 4970,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 23,
+      "filename": "吾輩は猫である_23.txt",
+      "char_count": 4826,
+      "status": "completed",
+      "keyword_count": 16
+    },
+    {
+      "seq": 24,
+      "filename": "吾輩は猫である_24.txt",
+      "char_count": 4423,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 25,
+      "filename": "吾輩は猫である_25.txt",
+      "char_count": 4862,
+      "status": "completed",
+      "keyword_count": 39
+    },
+    {
+      "seq": 26,
+      "filename": "吾輩は猫である_26.txt",
+      "char_count": 4894,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 27,
+      "filename": "吾輩は猫である_27.txt",
+      "char_count": 4955,
+      "status": "completed",
+      "keyword_count": 41
+    },
+    {
+      "seq": 28,
+      "filename": "吾輩は猫である_28.txt",
+      "char_count": 4966,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 29,
+      "filename": "吾輩は猫である_29.txt",
+      "char_count": 4972,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 30,
+      "filename": "吾輩は猫である_30.txt",
+      "char_count": 3398,
+      "status": "completed",
+      "keyword_count": 23
+    },
+    {
+      "seq": 31,
+      "filename": "吾輩は猫である_31.txt",
+      "char_count": 4736,
+      "status": "completed",
+      "keyword_count": 19
+    },
+    {
+      "seq": 32,
+      "filename": "吾輩は猫である_32.txt",
+      "char_count": 4587,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 33,
+      "filename": "吾輩は猫である_33.txt",
+      "char_count": 3911,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 34,
+      "filename": "吾輩は猫である_34.txt",
+      "char_count": 4845,
+      "status": "completed",
+      "keyword_count": 47
+    },
+    {
+      "seq": 35,
+      "filename": "吾輩は猫である_35.txt",
+      "char_count": 4994,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 36,
+      "filename": "吾輩は猫である_36.txt",
+      "char_count": 3014,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 37,
+      "filename": "吾輩は猫である_37.txt",
+      "char_count": 2807,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 38,
+      "filename": "吾輩は猫である_38.txt",
+      "char_count": 4760,
+      "status": "completed",
+      "keyword_count": 34
+    },
+    {
+      "seq": 39,
+      "filename": "吾輩は猫である_39.txt",
+      "char_count": 3774,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 40,
+      "filename": "吾輩は猫である_40.txt",
+      "char_count": 3637,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 41,
+      "filename": "吾輩は猫である_41.txt",
+      "char_count": 4990,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 42,
+      "filename": "吾輩は猫である_42.txt",
+      "char_count": 4078,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 43,
+      "filename": "吾輩は猫である_43.txt",
+      "char_count": 4213,
+      "status": "completed",
+      "keyword_count": 28
+    },
+    {
+      "seq": 44,
+      "filename": "吾輩は猫である_44.txt",
+      "char_count": 4927,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 45,
+      "filename": "吾輩は猫である_45.txt",
+      "char_count": 4847,
+      "status": "completed",
+      "keyword_count": 30
+    },
+    {
+      "seq": 46,
+      "filename": "吾輩は猫である_46.txt",
+      "char_count": 4954,
+      "status": "completed",
+      "keyword_count": 17
+    },
+    {
+      "seq": 47,
+      "filename": "吾輩は猫である_47.txt",
+      "char_count": 4891,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 48,
+      "filename": "吾輩は猫である_48.txt",
+      "char_count": 4998,
+      "status": "completed",
+      "keyword_count": 30
+    },
+    {
+      "seq": 49,
+      "filename": "吾輩は猫である_49.txt",
+      "char_count": 4755,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 50,
+      "filename": "吾輩は猫である_50.txt",
+      "char_count": 4974,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 51,
+      "filename": "吾輩は猫である_51.txt",
+      "char_count": 4982,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 52,
+      "filename": "吾輩は猫である_52.txt",
+      "char_count": 4997,
+      "status": "completed",
+      "keyword_count": 20
+    },
+    {
+      "seq": 53,
+      "filename": "吾輩は猫である_53.txt",
+      "char_count": 4996,
+      "status": "completed",
+      "keyword_count": 31
+    },
+    {
+      "seq": 54,
+      "filename": "吾輩は猫である_54.txt",
+      "char_count": 4508,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 55,
+      "filename": "吾輩は猫である_55.txt",
+      "char_count": 4531,
+      "status": "completed",
+      "keyword_count": 22
+    },
+    {
+      "seq": 56,
+      "filename": "吾輩は猫である_56.txt",
+      "char_count": 4674,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 57,
+      "filename": "吾輩は猫である_57.txt",
+      "char_count": 4993,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 58,
+      "filename": "吾輩は猫である_58.txt",
+      "char_count": 4996,
+      "status": "completed",
+      "keyword_count": 16
+    },
+    {
+      "seq": 59,
+      "filename": "吾輩は猫である_59.txt",
+      "char_count": 4305,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 60,
+      "filename": "吾輩は猫である_60.txt",
+      "char_count": 4981,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 61,
+      "filename": "吾輩は猫である_61.txt",
+      "char_count": 4944,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 62,
+      "filename": "吾輩は猫である_62.txt",
+      "char_count": 4995,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 63,
+      "filename": "吾輩は猫である_63.txt",
+      "char_count": 4941,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 64,
+      "filename": "吾輩は猫である_64.txt",
+      "char_count": 4979,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 65,
+      "filename": "吾輩は猫である_65.txt",
+      "char_count": 4977,
+      "status": "completed",
+      "keyword_count": 21
+    },
+    {
+      "seq": 66,
+      "filename": "吾輩は猫である_66.txt",
+      "char_count": 4981,
+      "status": "completed",
+      "keyword_count": 16
+    },
+    {
+      "seq": 67,
+      "filename": "吾輩は猫である_67.txt",
+      "char_count": 4976,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 68,
+      "filename": "吾輩は猫である_68.txt",
+      "char_count": 4988,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 69,
+      "filename": "吾輩は猫である_69.txt",
+      "char_count": 4809,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 70,
+      "filename": "吾輩は猫である_70.txt",
+      "char_count": 4986,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 71,
+      "filename": "吾輩は猫である_71.txt",
+      "char_count": 4987,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 72,
+      "filename": "吾輩は猫である_72.txt",
+      "char_count": 4228,
+      "status": "completed",
+      "keyword_count": 10
+    }
+  ]
+}

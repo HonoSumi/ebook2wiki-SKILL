@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>习俗 · 吾輩は猫である</title>
+<style>
+:root {
+  --bg: #faf5f6;
+  --bg-card: #ffffff;
+  --bg-detail: #fefafb;
+  --text: #4a3548;
+  --text-secondary: #7a6578;
+  --text-muted: #aa95a8;
+  --heading: #3a2538;
+  --border: #e8d5de;
+  --accent: #b8727e;
+  --accent-hover: #c98a94;
+  --link: #a05a68;
+  --tag-bg: #f2e2e8;
+  --tag-text: #8a5068;
+  --divider: #e8d5de;
+  --shadow: 0 1px 3px rgba(74,53,72,0.06);
+  --shadow-hover: 0 3px 12px rgba(74,53,72,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "Hiragino Mincho Pro", serif;
+  --font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Consolas", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">习俗 · 吾輩は猫である</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../吾輩は猫である_wiki.html">Home</a>
+<span>/</span>
+习俗
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">42 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="べっかんこう.html">
+  <div class="noun">べっかんこう</div>
+  <div class="snippet">日本儿童传统的鬼脸动作，与&quot;あかんべ&quot;（赤ん目）同义。做法是用手指将下眼睑向下拉露出眼内侧的红色黏膜，有时配合吐舌头，用以嘲笑或挑衅对方。词源来自&quot;赤い目&quot;（红眼睛）的音变。这个动作被夏目漱石在本书中生动地记录下来，说明主人苦沙弥在镜前做出</div>
+</a>
+<a class="entry-item" href="一七日.html">
+  <div class="noun">一七日</div>
+  <div class="snippet">佛教中阴七七法要的首次忌日，即人去世后的第7天（以去世当天为第1日算起），也称&quot;初七日&quot;、&quot;所願忌&quot;。佛教认为死者识体（中阴身）每7日有一次转生机缘，故每7日举行一次法要，共7次（49日）。这49日期间称为&quot;中阴&quot;，初七日是其中第一个重要节</div>
+</a>
+<a class="entry-item" href="一人相撲.html">
+  <div class="noun">一人相撲</div>
+  <div class="snippet">字面意为&quot;一个人的相扑&quot;。一是指在没有对手的情况下独自模拟相扑比赛；二是指比喻一个人自说自话、空忙一气。在日本也有真实的传统神事——爱媛县大山祇神社的&quot;一人相撲祭典&quot;，力士与稻作精灵对战的仪式。</div>
+</a>
+<a class="entry-item" href="三々九度.html">
+  <div class="noun">三々九度</div>
+  <div class="snippet">日本神前式婚礼中最重要的仪式之一，又称&quot;三献之仪&quot;。新郎新妇使用大、中、小三种酒杯交替饮三次清酒，每杯分三口饮尽（共九口），故名&quot;三三九度&quot;。象征天地人和，夫妻结缘。</div>
+</a>
+<a class="entry-item" href="付け文.html">
+  <div class="noun">付け文</div>
+  <div class="snippet">日语中指偷偷放置或通过他人转交的情书，日本传统恋爱文化中的求爱方式之一。平安时代起贵族男女通过和歌赠答传递情意，江户时代町人间亦广为流行。名称源自将书信「付け」（附在）对方家门或物品上的习俗。文中迷亭听闻寒月可能有恋情后，兴奋地猜测寒月写了</div>
+</a>
+<a class="entry-item" href="凱旋祝賀会.html">
+  <div class="noun">凱旋祝賀会</div>
+  <div class="snippet">指日俄战争（1904-1905）后日本各地为欢迎凯旋官兵而举办的大型庆祝活动。文中引用的信件提到某区计划为一千余名出征将士举办凯旋祝贺会并慰问遗族，反映了日俄战争后日本社会的庆祝热潮。</div>
+</a>
+<a class="entry-item" href="合卺の式.html">
+  <div class="noun">合卺の式</div>
+  <div class="snippet">读作&quot;ごうきんのしき&quot;，原为中国先秦时代的结婚仪式，指将一个匏瓜（葫芦）剖成两半作为酒杯，新婚夫妇各持一半共饮交杯酒，象征二人合为一体、苦乐与共。此仪式后演变为&quot;交杯酒&quot;习俗，传入日本后影响了日本神前婚礼中的&quot;三三九度&quot;（さんさんくど）之仪</div>
+</a>
+<a class="entry-item" href="向う三軒両隣.html">
+  <div class="noun">向う三軒両隣</div>
+  <div class="snippet">日本传统俗语，字面意为&quot;对门三户和左右两邻&quot;，合计五户人家。指代日常亲近交往的邻里范围，反映了日本传统社会中以近邻为单位互相帮助、共同生活的共同体意识和交往习俗。</div>
+</a>
+<a class="entry-item" href="味噌汁.html">
+  <div class="noun">味噌汁</div>
+  <div class="snippet">味噌汁（みそしる）是以味噌为基底的日本传统汤品，与米饭、腌菜并列为和食的基本构成。味噌的原料大豆与麴菌发酵工艺源自中国/朝鲜，约7-8世纪传入日本，最初为贵族和僧侣的珍贵药膳。镰仓时代随武士的&quot;一汁一菜&quot;风习普及，室町时代平民开始自制味噌，</div>
+</a>
+<a class="entry-item" href="喇叭節.html">
+  <div class="noun">喇叭節</div>
+  <div class="snippet">明治时代流行的一种大众歌谣（流行唄），由被誉为&quot;演歌始祖&quot;的添田哑蝉坊于明治37年（1904年）创作。歌曲具有模仿军号（喇叭）旋律的轻快曲风，末尾带有&quot;トコトットット&quot;的特色吆喝声。诞生于日俄战争时期，以幽默讽刺的笔调描绘了当时的世态，是明</div>
+</a>
+<a class="entry-item" href="土用.html">
+  <div class="noun">土用</div>
+  <div class="snippet">土用（どよう），日本历法中基于阴阳五行说的季节转换期，指立春、立夏、立秋、立冬前各约18天。一年有四次土用，通常单说&quot;土用&quot;多指夏季土用（立秋前18天），是一年中最炎热的时期。其中&quot;土用丑日&quot;有吃鳗鱼的习俗，源自江户时代平贺源内的营销创意。</div>
+</a>
+<a class="entry-item" href="大掃除.html">
+  <div class="noun">大掃除</div>
+  <div class="snippet">日本年末迎接年神的传统习俗，起源于平安时代宫廷的&quot;煤払い&quot;，在12月13日前后进行彻底清扫，除去旧年污秽以洁净状态迎接新年。</div>
+</a>
+<a class="entry-item" href="大神楽.html">
+  <div class="noun">大神楽</div>
+  <div class="snippet">&quot;大神楽&quot;（Daikagura，亦写作&quot;太神楽&quot;），日本传统民间演艺形式，起源于伊势神宫的祭祀神乐，后发展为包含狮子舞、杂技、抛球、伞上旋转等曲艺表演的大众娱乐形式。江户时代繁荣发展，尤其在正月等节庆期间表演，是日本重要的无形民俗文化财产。</div>
+</a>
+<a class="entry-item" href="天長節.html">
+  <div class="noun">天長節</div>
+  <div class="snippet">日本战前四大节之一，即天皇诞生日。名称源自中国《老子》&quot;天长地久&quot;及唐玄宗诞辰之称。明治时期定为正式国家祝日。战后改称&quot;天皇诞生日&quot;，沿用至今但性质已从国家神道仪式转变为现代国民节日。</div>
+</a>
+<a class="entry-item" href="宝生流.html">
+  <div class="noun">宝生流</div>
+  <div class="snippet">日本能乐五大流派之一，以独特唱腔和沉稳功架闻名。源自猿乐，江户时代受德川纲吉庇护，现传至第20代宗家宝生和英。</div>
+</a>
+<a class="entry-item" href="小笠原流.html">
+  <div class="noun">小笠原流</div>
+  <div class="snippet">日本传统礼法流派，起源于镰仓时代，由小笠原远光创立。约700年历史，被誉为日本最高峰之礼法。涵盖坐姿、行礼、饮食、茶道、座席等全方位礼仪规范。在《我是猫》中雪江以学校所学的&quot;小笠原流&quot;方式奉茶。</div>
+</a>
+<a class="entry-item" href="座禅.html">
+  <div class="noun">座禅</div>
+  <div class="snippet">即坐禅，佛教禅宗的重要修行方法。通过结跏趺坐、调息静心，以求开悟见性。作品中理野陶然在圆觉寺前的铁轨上打坐，试图让火车停下，反映了其因修行禅学而精神失常的极端表现。</div>
+</a>
+<a class="entry-item" href="彼岸.html">
+  <div class="noun">彼岸</div>
+  <div class="snippet">日本の仏教行事。春分と秋分を中日とする前後各3日の計7日間で、この世（此岸）から悟りの世界（彼岸）に近づく期間とされる。墓参りや牡丹餅の供養などの習慣がある。</div>
+</a>
+<a class="entry-item" href="懐手.html">
+  <div class="noun">懐手</div>
+  <div class="snippet">指将双手插入怀中（和服的胸前开口处）的姿势，通常表示悠闲、傲慢或无礼的态度。作品中刑事巡査指责小偷以&quot;懐手&quot;的姿态站立，迷亭则认为真正的警察不会如此无礼地站在别人家里。</div>
+</a>
+<a class="entry-item" href="手品.html">
+  <div class="noun">手品</div>
+  <div class="snippet">手品（てじな），日本对魔术、戏法的传统称呼。日本传统魔术称&quot;和妻&quot;（わづま）或&quot;手妻&quot;（てづま），与西洋魔术&quot;洋妻&quot;相对。&quot;手品&quot;一词源自&quot;手&quot;（手技）与&quot;品&quot;（表演），强调手法之巧妙迅捷。江户时代作为街头表演艺术繁荣发展，明治时期西洋魔术</div>
+</a>
+<a class="entry-item" href="海水浴.html">
+  <div class="noun">海水浴</div>
+  <div class="snippet">海水浴，指在海水中浸泡、游泳以求健康或娱乐的活动。在日本，海水浴作为医疗手段 于明治时期由西方传入，此前仅有部分地区（如爱知大野）有「潮湯治」的传统。 1881年（明治14年）德国医学书籍将海水浴概念正式引入日本，初代陆军军医总监松本顺 在</div>
+</a>
+<a class="entry-item" href="海老茶式部.html">
+  <div class="noun">海老茶式部</div>
+  <div class="snippet">海老茶式部（えびちゃしき）是明治后期至大正时期日本女学生中流行的时尚风格，指穿着深海老茶色（暗红紫色）行灯袴的装扮。通常搭配庇髪发型和白色丝带。田山花袋《蒲团》（1907年）、小杉天外《魔风恋风》（1903年）等文学作品中有典型描写。&quot;海老</div>
+</a>
+<a class="entry-item" href="独逸人.html">
+  <div class="noun">独逸人</div>
+  <div class="snippet">日本历史上对德国人的称呼，源自荷兰语&quot;Duits&quot;。江户锁国时期，日本主要通过荷兰获取西方知识，因此经由荷兰语引入的&quot;独逸&quot;一词逐渐固定下来。&quot;独逸&quot;是日本独立创造的汉字音译词（非经中国传入），这在西方国名译词中较为罕见。现代日语中一般用片</div>
+</a>
+<a class="entry-item" href="猫大明神.html">
+  <div class="noun">猫大明神</div>
+  <div class="snippet">被奉为神明的猫，即&quot;猫神&quot;。日本民间信仰中猫被视为具有灵性的动物，可保佑商业繁荣（招财猫）、渔业丰收（田代岛猫神社）等。著名的猫神信仰包括和歌山贵志川线的&quot;小玉大明神&quot;（猫站长）、德岛阿南市的&quot;阿松大权现&quot;（日本三大怪猫传说之一）、高知箕越</div>
+</a>
+<a class="entry-item" href="獅子の洞入り.html">
+  <div class="noun">獅子の洞入り</div>
+  <div class="snippet">日本江户时代流行的一种吸食烟草的技艺，吸烟者将烟雾从口中缓缓吐出，用气息控制使烟雾形成类似狮子进入洞穴形状的烟圈。是当时烟民展示技巧、消遣娱乐的一种方式，常见于江户庶民文化中，与&quot;洞返り&quot;互为对应技法。</div>
+</a>
+<a class="entry-item" href="獅子の洞返り.html">
+  <div class="noun">獅子の洞返り</div>
+  <div class="snippet">日本江户时代流行的一种吸食烟草的技艺，与&quot;獅子の洞入り&quot;相对应，指吸烟者将烟雾以特定技法从鼻中呼出，形成狮子从洞穴返回般的烟圈形状。这类烟戏是当时庶民文化中的一种消遣方式和社交技艺。</div>
+</a>
+<a class="entry-item" href="異体同心.html">
+  <div class="noun">異体同心</div>
+  <div class="snippet">日本四字熟语，读作&quot;いたいどうしん&quot;。意为&quot;身体虽异，心却为一&quot;，形容夫妻或挚友之间精神高度契合、心意相通的状态。源自中国古典思想，在日本作为描述理想夫妻关系的传统谚语广为使用。作品中迷亭在批判封建婚姻观时引用此语，指出在&quot;个性中心&quot;的现代</div>
+</a>
+<a class="entry-item" href="盆暮.html">
+  <div class="noun">盆暮</div>
+  <div class="snippet">日语词汇，指代日本传统中最重要的两个节日时期——&quot;盆&quot;（盂兰盆节，通常在8月，祭祀祖先的佛教节日）和&quot;暮&quot;（岁末/年终）。在日本商业文化中，这两个时期是企业发放奖金（配当）和进行礼尚往来的重要节点。作品中多々良三平介绍铃木藤十郎的薪资时提到</div>
+</a>
+<a class="entry-item" href="節季師走.html">
+  <div class="noun">節季師走</div>
+  <div class="snippet">&quot;节季师走&quot;（Sekki Shiwasu）是日语中表示岁末年终（12月）繁忙时节的表达。&quot;节季&quot;指季节的转换节点，尤其指年末的结算期；&quot;师走&quot;是12月的和名，语源来自&quot;师馳す&quot;，意为僧侣（师）在年末为诵经而四处奔走（驰）。合起来意指一年中最</div>
+</a>
+<a class="entry-item" href="素袷.html">
+  <div class="noun">素袷</div>
+  <div class="snippet">日本和服穿着方式之一，指不穿长襦袢等内衣，直接将袷（有里衬的和服）穿在素肌上。属于轻装便服的做法，多见于天气温暖时节。在《我是猫》中描写学生穿着时提到&quot;素袷や素足は意気なものだそうだが&quot;。</div>
+</a>
+<a class="entry-item" href="結跏.html">
+  <div class="noun">結跏</div>
+  <div class="snippet">全称&quot;結跏趺坐&quot;，佛教禅定中最正式的坐法。做法是将两脚足背分别置于左右大腿上，足心向上。据传释迦牟尼在菩提树下悟道时即采用此坐法。结跏趺坐分为&quot;降魔坐&quot;（先右后左，禅宗传承）和&quot;吉祥坐&quot;（先左后右）。此坐法可使身体安稳、心不散乱，被认为是诸</div>
+</a>
+<a class="entry-item" href="羽根つき.html">
+  <div class="noun">羽根つき</div>
+  <div class="snippet">日本新年（正月）的传统游戏，使用木制球拍&quot;羽子板&quot;击打带羽毛的毽子，两人对打，输者在脸上涂墨汁。起源于室町时代，江户时代普及于庶民，寓意驱邪避灾、祈祷儿童健康成长。</div>
+</a>
+<a class="entry-item" href="芸者.html">
+  <div class="noun">芸者</div>
+  <div class="snippet">日本传统女性表演艺术工作者，在茶屋、料亭等场合表演舞蹈、三味线等传统艺术以助兴，兴起于江户时代，是日本文化的重要象征。</div>
+</a>
+<a class="entry-item" href="薬湯.html">
+  <div class="noun">薬湯</div>
+  <div class="snippet">日本从江户时代延续至今的药浴文化，在温泉和钱汤（公共浴场）中尤为盛行。传统药汤使用&quot;五木八草&quot;等药草入浴，具有治疗疾病、促进健康之效。冬至的柚子汤、端午的菖蒲汤等节气药浴至今仍是日本生活文化的一部分。现代钱汤常设有日替或周替的药汤浴槽，被视</div>
+</a>
+<a class="entry-item" href="行水.html">
+  <div class="noun">行水</div>
+  <div class="snippet">行水（ぎょうずい），日本传统夏季消暑习俗，指在炎夏时节用木桶或水盆盛水冲洗身体或入水浸泡。 行水多在户外庭院或屋檐下进行，既实用降温又带有风雅情趣，是日本夏季风物诗之一。 江户时代至明治时期，行水是庶民生活中常见的纳凉方式， 与&quot;打ち水&quot;（</div>
+</a>
+<a class="entry-item" href="親子別居の制.html">
+  <div class="noun">親子別居の制</div>
+  <div class="snippet">日文读作&quot;おやこべっきょのせい&quot;，指父母与成年子女分开居住的社会制度。作品中迷亭将其视为个性发展的必然产物：在个性中心的社会，即使是亲子之间也需要保持距离以维护各自的个性自由。他指出欧洲文明先进国家已实行此制度，甚至存在儿子向父亲支付利息借</div>
+</a>
+<a class="entry-item" href="謡.html">
+  <div class="noun">謡</div>
+  <div class="snippet">日本传统能乐剧中的歌唱部分，即能乐台本（词章）中带旋律的演唱。由&quot;地谣&quot;合唱队伴唱，与舞、囃子（笛·小鼓·大鼓·太鼓）共同构成能乐表演。謡曲作为日本古典表演艺术的核心要素，具有独特的幽玄美学。2001年能乐被联合国教科文组织列为世界无形文化</div>
+</a>
+<a class="entry-item" href="赤十字.html">
+  <div class="noun">赤十字</div>
+  <div class="snippet">即红十字会。日本赤十字社的前身为1877年（明治10年）西南战争时期由佐野常民创立之博爱社，1887年改称日本赤十字社并加入日内瓦公约。明治时代赤十字社年会等大型集会活动成为民众接触皇室和西方慈善文化的重要场合。书中写老人专程从静冈到上野参</div>
+</a>
+<a class="entry-item" href="越後獅子.html">
+  <div class="noun">越後獅子</div>
+  <div class="snippet">日本传统民俗艺能，一种狮子舞，又称角兵卫狮子。发源于越后国（今新潟县），江户时代由旅艺人带领儿童巡回表演，以轻快活泼、滑稽杂技为特色。后发展为地呗和长呗的著名曲目。</div>
+</a>
+<a class="entry-item" href="車屋.html">
+  <div class="noun">車屋</div>
+  <div class="snippet">日语中指人力车的车行或车夫，是明治时期随人力车普及而兴盛的职业。车夫多为体力劳动者，社会地位不高。文中車屋の神さん（神さん为人名）被金田夫人收买，负责监视寒月到访苦沙弥家时的谈话内容，充当间谍角色。 --- 車屋（Kurumaya），指人力</div>
+</a>
+<a class="entry-item" href="門松.html">
+  <div class="noun">門松</div>
+  <div class="snippet">日本新年（正月）时装饰在门口的松枝和竹子，是迎接年神（岁德神）的依代（神灵依附物）。松树象征长寿，竹子象征繁荣，门松通常从12月28日左右装饰到1月7日或15日（松之内）。这一习俗起源于中国唐代的门松柏枝风俗，平安时代传入日本，江户时代普及</div>
+</a>
+<a class="entry-item" href="髷.html">
+  <div class="noun">髷</div>
+  <div class="snippet">日语中指盘在头顶或脑后的传统发髻。日本传统发型统称&quot;日本髪&quot;，髷是其核心元素。男性最著名的是&quot;丁髷&quot;（Chonmage），源于战国时代武士佩戴头盔时剃去头顶（月代）的实用需要；女性则有島田髷、丸髷、桃割髷等多种样式。江户时代是日本发型的黄金</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 06:09
+</footer>
+</body>
+</html>

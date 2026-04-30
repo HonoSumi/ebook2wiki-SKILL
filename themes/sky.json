@@ -1,0 +1,27 @@
+{
+  "name": "苍穹",
+  "description": "清新天空蓝风格，适合科幻小说、科技类",
+  "colors": {
+    "--bg": "#eef5fa",
+    "--bg-card": "#ffffff",
+    "--bg-detail": "#f7fafd",
+    "--text": "#243746",
+    "--text-secondary": "#567288",
+    "--text-muted": "#8ba0b0",
+    "--heading": "#1a3040",
+    "--border": "#d0dde8",
+    "--accent": "#3a6b8c",
+    "--accent-hover": "#4d85ab",
+    "--link": "#2d5a78",
+    "--tag-bg": "#dae9f3",
+    "--tag-text": "#2d5a78",
+    "--divider": "#d0dde8",
+    "--shadow": "0 1px 3px rgba(36,55,70,0.06)",
+    "--shadow-hover": "0 3px 12px rgba(36,55,70,0.1)"
+  },
+  "fonts": {
+    "--font-heading": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+    "--font-body": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+    "--font-mono": "\"Consolas\", \"Courier New\", monospace"
+  }
+}
