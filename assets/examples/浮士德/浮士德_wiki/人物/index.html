@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人物 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">人物 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+人物
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">391 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="三勇士.html">
+  <div class="noun">三勇士</div>
+  <div class="snippet">圣经《撒母耳记下》第23章记载的大卫王的三位最勇猛的战士：约设·巴设（三勇士之首，一次击杀八百人）、以利亚撒（亚合人朵多的儿子，独战非利士人至手臂疲乏）、沙玛（哈拉人亚基的儿子，独守红豆田）。三人曾冒死闯过非利士军营，从伯利恒城门旁的井中取</div>
+</a>
+<a class="entry-item" href="不和女神.html">
+  <div class="noun">不和女神</div>
+  <div class="snippet">希腊神话中的纷争与不和女神厄里斯（Eris），罗马名为狄斯科蒂娅（Discordia）。据赫西俄德《神谱》，她是黑夜女神倪克斯之女。最著名的故事是&quot;金苹果之争&quot;：因未受邀参加珀琉斯与忒提斯的婚礼，厄里斯投下刻有&quot;献给最美丽的女神&quot;的金苹果，</div>
+</a>
+<a class="entry-item" href="丘比特.html">
+  <div class="noun">丘比特</div>
+  <div class="snippet">罗马神话中的小爱神，在《浮士德》中梅非斯特用以暗示情欲。原文中梅非斯特对浮士德说不久将感到丘比特怎样跳来跳去不得安身，指药酒生效后浮士德将被情欲驱使。在第二部古典的瓦尔普吉斯之夜中，厄洛斯（丘比特的希腊原型）被作为宇宙生成的原动力受到赞颂。</div>
+</a>
+<a class="entry-item" href="主教.html">
+  <div class="noun">主教</div>
+  <div class="snippet">歌德《浮士德》第二部中代表宗教/教会权威的角色，在第四幕登场。他以首相身份敦促皇帝签署文件，要求将海岸土地和什一税献给教会，体现了教会势力对世俗王权的渗透和控制，是歌德批判教会腐败的讽刺性角色。</div>
+</a>
+<a class="entry-item" href="乌良.html">
+  <div class="noun">乌良</div>
+  <div class="snippet">恶魔之别名，即魔王撒旦。在德语文学传统中&quot;Herr Urian&quot;或&quot;Meister Urian&quot;用以指代魔鬼或不速之客。歌德在《浮士德·瓦尔普吉斯之夜》中以乌良代指撒旦。</div>
+</a>
+<a class="entry-item" href="乌良先生.html">
+  <div class="noun">乌良先生</div>
+  <div class="snippet">魔鬼撒旦的别名（Urian），德文中也称Herr Urian或Meister Urian，指不受欢迎的不速之客，后演变为魔鬼的代称。在《浮士德》瓦尔普吉斯之夜中，乌良先生被描绘为统领女巫集会的黑色公山羊形象的魔王。</div>
+</a>
+<a class="entry-item" href="亚伯拉罕.html">
+  <div class="noun">亚伯拉罕</div>
+  <div class="snippet">圣经中以色列民族的始祖，原名亚伯兰，75岁受神呼召离开吾珥前往迦南，神与他立约应许后裔多如众星。100岁生以撒，因信称义，被尊为&quot;信心之父&quot;和&quot;多国之父&quot;。</div>
+</a>
+<a class="entry-item" href="亚巴顿.html">
+  <div class="noun">亚巴顿</div>
+  <div class="snippet">亚巴顿（Abaddon），希腊名亚玻伦（Apollyon），意为&quot;毁灭者&quot;，是圣经《启示录》第9章中掌管无底坑的天使，也是折磨人类的蝗虫大军的王。希伯来语意为&quot;毁灭&quot;或&quot;毁灭之地&quot;，在旧约《约伯记》《箴言》等书中指阴间或死者的领域。其身份有</div>
+</a>
+<a class="entry-item" href="亚底挪.html">
+  <div class="noun">亚底挪</div>
+  <div class="snippet">圣经中大卫王的三大勇士之首（又称约设巴设/雅朔班），据《撒母耳记下》23:8记载，他一时击杀了八百人。歌德在《浮士德》注释中提及三勇士之名以比喻梅非斯特挑选的勇士。</div>
+</a>
+<a class="entry-item" href="亚当.html">
+  <div class="noun">亚当</div>
+  <div class="snippet">《圣经·创世记》中上帝创造的第一位人类，万物命名者。在犹太教传说中，亚当有两位妻子：先有莉莉特，后有夏娃（由亚当肋骨所造）。歌德在《浮士德》中借梅非斯特之口提及亚当的前妻莉莉特。</div>
+</a>
+<a class="entry-item" href="亚述王.html">
+  <div class="noun">亚述王</div>
+  <div class="snippet">指希腊文献中的萨达纳帕鲁斯（Sardanapalus），被视为亚述帝国最后一位国王，以极度的奢侈和堕落闻名。传说穿女装涂脂抹粉，最终在宫中与财宝、妃嫔一起自焚而死，成为骄奢淫逸的象征。</div>
+</a>
+<a class="entry-item" href="亨利.html">
+  <div class="noun">亨利</div>
+  <div class="snippet">浮士德的本名海因里希（Heinrich）的昵称/简称。在牢狱场景中，玛加蕾特（格蕾辛）在神智恍惚中反复呼唤亨利，流露出对浮士德刻骨铭心的爱与依恋。歌德笔下的浮士德博士全名为海因里希·浮士德（Heinrich Faust）。</div>
+</a>
+<a class="entry-item" href="亨宁格斯.html">
+  <div class="noun">亨宁格斯</div>
+  <div class="snippet">丹麦作家，在他主编的杂志《时代精神》（后改名《十九世纪精神》）上曾攻击席勒的杂志《时序女神》及《诗神年鉴》，因而受到歌德和席勒在《克塞尼集》中的回击。</div>
+</a>
+<a class="entry-item" href="代福玻斯.html">
+  <div class="noun">代福玻斯</div>
+  <div class="snippet">希腊神话中的特洛伊王子，普里阿摩斯与赫卡柏之子，赫克托尔和帕里斯的兄弟。帕里斯死后娶海伦为妻。特洛伊沦陷时被墨涅拉斯残酷杀害（割去耳鼻等）。在《浮士德》中，福耳库阿斯以代福玻斯的悲惨遭遇警告海伦，墨涅拉斯会以同样手段对待她。</div>
+</a>
+<a class="entry-item" href="代达罗斯.html">
+  <div class="noun">代达罗斯</div>
+  <div class="snippet">希腊神话中著名的工匠、发明家和建筑师。曾为克里特国王米诺斯建造囚禁弥诺陶洛斯的迷宫，后与儿子伊卡洛斯用蜡翼飞逃。被视为古希腊工匠和发明家的守护神。</div>
+</a>
+<a class="entry-item" href="以利亚撒.html">
+  <div class="noun">以利亚撒</div>
+  <div class="snippet">圣经中大卫王的三大勇士之一，亚合人朵多的儿子。据《撒母耳记下》23:9-10记载，他在与非利士人交战时手黏刀把，独自击杀敌军，直至以色列人大获全胜。歌德在《浮士德》注释中提及。</div>
+</a>
+<a class="entry-item" href="伊俄拉俄斯.html">
+  <div class="noun">伊俄拉俄斯</div>
+  <div class="snippet">希腊神话中的底比斯英雄，赫拉克勒斯的侄子和终身伙伴。协助赫拉克勒斯斩杀九头蛇许德拉（用火把灼烧断颈阻止蛇头再生），也是阿尔戈英雄之一。在《浮士德》注解中被提及在赫拉克勒斯诛灭勒耳那水蛇时相助。</div>
+</a>
+<a class="entry-item" href="伊卡洛斯.html">
+  <div class="noun">伊卡洛斯</div>
+  <div class="snippet">伊卡洛斯（Icarus，古希腊语Ἴκαρος）是希腊神话中著名的悲剧人物。他是雅典伟大的建筑师和发明家代达罗斯（Daedalus）之子。代达罗斯为克里特国王米诺斯建造囚禁牛头怪弥诺陶洛斯的迷宫后，父子一同被囚禁。为逃离克里特岛，代达罗斯用羽</div>
+</a>
+<a class="entry-item" href="伊尔泽.html">
+  <div class="noun">伊尔泽</div>
+  <div class="snippet">德国哈尔茨山民间传说中的公主，居住在布罗肯山附近的伊尔泽石中。据传说她每天在伊尔泽河中洗澡，谁碰到她就可以被她带去过国王般的生活。歌德在《浮士德》中提及这一人物。</div>
+</a>
+<a class="entry-item" href="伊尔泽夫人.html">
+  <div class="noun">伊尔泽夫人</div>
+  <div class="snippet">德国哈尔茨山区民间传说中的人物，伊尔泽河（Ilse）的人格化象征，传说是一位居住在伊尔森施泰因（Ilsenstein）岩石宫殿中的美丽公主或山灵。</div>
+</a>
+<a class="entry-item" href="伊索.html">
+  <div class="noun">伊索</div>
+  <div class="snippet">伊索（希腊语：Αἴσωπος，Aesop，约公元前620—560年）是古希腊寓言作家，相传原为萨摩斯岛的奴隶，后因智慧聪颖获得自由。《伊索寓言》虽是古希腊人长时间内集体创作、托名伊索的作品集，但伊索被尊为西方寓言的始祖。作品约357篇，以动</div>
+</a>
+<a class="entry-item" href="伊阿宋.html">
+  <div class="noun">伊阿宋</div>
+  <div class="snippet">希腊神话中的英雄，爱俄尔卡斯王国合法继承人。率领阿尔戈英雄乘阿尔戈号远征科尔喀斯夺取金羊毛，在美狄亚帮助下成功。后被美狄亚复仇死于悲剧。在《浮士德》注解中被提及为远征船上的带队。</div>
+</a>
+<a class="entry-item" href="休谟.html">
+  <div class="noun">休谟</div>
+  <div class="snippet">大卫·休谟（David Hume，1711-1776），苏格兰启蒙运动哲学家、经验主义和怀疑论代表人物。在《浮士德》中，怀疑主义者的台词影射休谟的哲学立场。</div>
+</a>
+<a class="entry-item" href="伯尔纳.html">
+  <div class="noun">伯尔纳</div>
+  <div class="snippet">明谷的伯尔纳（Bernard de Clairvaux，1090-1153），法国熙笃会修士、明谷修道院创始人，中世纪著名神秘主义神学家，教会圣师，主张&quot;信仰先于理解&quot;，推动圣母崇拜，曾鼓动第二次十字军东征。</div>
+</a>
+<a class="entry-item" href="伽拉忒亚.html">
+  <div class="noun">伽拉忒亚</div>
+  <div class="snippet">希腊神话中的海洋女神，涅柔斯与多里斯之女，为五十位涅瑞伊得斯（海仙女）之一。她与西西里牧羊少年阿喀斯相恋，遭独眼巨人波吕斐摩斯嫉妒，阿喀斯被巨石砸死。拉斐尔曾创作名画《伽拉忒亚的胜利》。在《浮士德》中，伽拉忒亚接替维纳斯作为女爱神，乘坐贝壳</div>
+</a>
+<a class="entry-item" href="但丁.html">
+  <div class="noun">但丁</div>
+  <div class="snippet">但丁·阿利吉耶里（1265—1321），意大利中世纪诗人，现代意大利语的奠基者，文艺复兴的先驱。代表作《神曲》分为《地狱》《炼狱》《天堂》三篇，以第一人称游历三界的叙事结构，融合神学、哲学、历史与政治，被恩格斯誉为&quot;中世纪的最后一位诗人，新</div>
+</a>
+<a class="entry-item" href="佐伊罗.html">
+  <div class="noun">佐伊罗</div>
+  <div class="snippet">佐伊罗（希腊语：Ζωίλος，Zoilus，约公元前400—前320年）是古希腊犬儒学派哲学家、修辞学家，出生于马其顿的安菲波利斯。他以辛辣批评著名，尤其对荷马史诗竭尽挑剔之能事，著有《反对荷马》九卷，批评荷马史诗中的矛盾与不合理之处，因而</div>
+</a>
+<a class="entry-item" href="佐伊罗-忒耳西忒斯.html">
+  <div class="noun">佐伊罗-忒耳西忒斯</div>
+  <div class="snippet">歌德在《浮士德》第二部中创造的复合人物，由古希腊的恶毒批评家佐伊罗（Zoilus）与《伊利亚特》中丑陋的士兵忒耳西忒斯（Thersites）融合而成。代表纯粹的否定精神和颠覆性批判，在假面舞会中攻击维多利亚，高喊&quot;低的变高，高的变低，直的变</div>
+</a>
+<a class="entry-item" href="佛萝拉.html">
+  <div class="noun">佛萝拉</div>
+  <div class="snippet">罗马神话中的花神与青春之神（Flora），掌管鲜花、青春与春天，是狂欢节的核心神祇。在《浮士德》化装舞会中，蔷薇花蕾唱词中提到&quot;佛萝拉的国度&quot;，象征着美与爱的领域。</div>
+</a>
+<a class="entry-item" href="侍从长.html">
+  <div class="noun">侍从长</div>
+  <div class="snippet">浮士德中皇帝战后封赏的第二位元勋。皇帝因其勇敢又和蔼可亲，封为侍从长，负责宫中一切人事管理，成为宫廷中的模范。</div>
+</a>
+<a class="entry-item" href="侍童.html">
+  <div class="noun">侍童</div>
+  <div class="snippet">《浮士德》第二部第一幕中出现在皇帝宫廷的年轻侍从。他因恋爱而苦恼，对方嫌他年纪太小。梅非斯特对他旁白说&quot;年纪太轻的，不要去碰运气&quot;，暗示在情场中年轻反而是劣势。</div>
+</a>
+<a class="entry-item" href="侦察兵.html">
+  <div class="noun">侦察兵</div>
+  <div class="snippet">皇帝军队中的两名侦察兵（斥候），由元帅派遣下山刺探伪帝军情。第一名侦察兵回报说许多人表面效忠实则推诿；第二名侦察兵精疲力竭地回报说出现了新的皇帝，群众跟着伪旗如同绵羊。他们是无名功能性角色，在推动战争剧情中起关键作用。</div>
+</a>
+<a class="entry-item" href="侯爵.html">
+  <div class="noun">侯爵</div>
+  <div class="snippet">浮士德中皇帝战后封赏的贵族封号。四位侯爵因在战争中协助皇帝击败伪帝有功，分别受封为礼部大臣、侍从长、膳部总管和大酒正，获得叛臣的世袭领土作为封地。</div>
+</a>
+<a class="entry-item" href="俄底修斯.html">
+  <div class="noun">俄底修斯</div>
+  <div class="snippet">希腊神话中的英雄，伊萨卡国王。以机智勇敢、足智多谋著称。献木马计攻破特洛伊，战后在海上漂泊十年才返回家乡。《奥德赛》的主角。罗马名尤利西斯。在《浮士德》注解中被提及用麻绳捆于桅杆以抵御塞壬歌声。</div>
+</a>
+<a class="entry-item" href="俄普斯.html">
+  <div class="noun">俄普斯</div>
+  <div class="snippet">罗马神话中的播种、丰产、财富女神，对应希腊神话中的瑞亚。萨图恩之妻，朱庇特、尼普顿、普鲁托、朱诺等神祇之母。在萨图恩吞食子女的神话中，她用石头伪装婴儿救下朱庇特。在《浮士德》中梅非斯特提及自己曾向她致敬。</div>
+</a>
+<a class="entry-item" href="俄狄浦斯.html">
+  <div class="noun">俄狄浦斯</div>
+  <div class="snippet">希腊神话中忒拜（底比斯）的国王，因破解斯芬克斯之谜而闻名。出生时神谕预言他将&quot;弑父娶母&quot;，虽竭力逃避却终究应验，成为西方文学中最经典的命运悲剧人物。索福克勒斯据此创作了著名悲剧《俄狄浦斯王》。</div>
+</a>
+<a class="entry-item" href="俄耳甫斯.html">
+  <div class="noun">俄耳甫斯</div>
+  <div class="snippet">希腊神话中的吟游诗人，阿波罗与缪斯女神卡利俄珀之子，琴声能使猛兽驯服、木石动容。曾闯入冥界试图带回亡妻欧律狄刻。</div>
+</a>
+<a class="entry-item" href="俄里翁.html">
+  <div class="noun">俄里翁</div>
+  <div class="snippet">希腊神话中的著名猎人，海神波塞冬之子，英俊高大的巨人，能在海面上行走。因追求墨洛珀被刺瞎双眼，后得太阳神阿波罗帮助复明。最终因多种说法而死（被蝎蛰死、被阿尔忒弥斯误杀等），死后化为猎户座。在《浮士德》中，福耳库阿斯与合唱队相互辱骂时，合唱队</div>
+</a>
+<a class="entry-item" href="保婆.html">
+  <div class="noun">保婆</div>
+  <div class="snippet">希腊神话中的角色（Baubo），与埃莱夫西斯秘仪相关。她曾通过掀起裙子露出下体（anasyrma）的粗俗举动，使因女儿被掳而悲伤的丰产女神德墨忒尔开怀大笑。在《浮士德》中，保婆被描绘为骑母猪的老女巫，参与瓦尔普吉斯之夜的女巫集会。 --- </div>
+</a>
+<a class="entry-item" href="元帅.html">
+  <div class="noun">元帅</div>
+  <div class="snippet">皇帝麾下的最高军事指挥官，在浮士德第二部第四幕中负责指挥皇家军队与反叛的伪帝作战。他向皇帝汇报军情、分析左右翼阵势、派遣侦察兵刺探敌情，是尊重传统军事战术的职业军人形象，对梅菲斯特的魔法介入持怀疑态度。</div>
+</a>
+<a class="entry-item" href="先下手.html">
+  <div class="noun">先下手</div>
+  <div class="snippet">浮士德第二部中皇帝的士兵之一，贪婪狡诈，与同伴&quot;抢夺快&quot;一同在敌营中抢夺黄金。先下手怂恿抢夺快搬运沉重的金箱，并在近卫兵质问时以卖身投靠为由为自己辩解。</div>
+</a>
+<a class="entry-item" href="克劳埃采.html">
+  <div class="noun">克劳埃采</div>
+  <div class="snippet">格奥尔格·弗里德里希·克劳埃采（1771-1858），德国语文学家、神话学家和考古学家，海德堡大学教授。代表作《古代民族的象征与神话》提出希腊神话源于东方的理论，引发了广泛争议。歌德在《浮士德》中提及克劳埃采与谢林等人对卡柏洛密教的研究与考</div>
+</a>
+<a class="entry-item" href="克林格尔.html">
+  <div class="noun">克林格尔</div>
+  <div class="snippet">弗里德里希·马克西米利安·克林格尔（1752-1831），德国剧作家、小说家，狂飙突进运动的代表人物，该运动名称即来源于他的同名剧作《狂飙突进》。其他作品包括《孪生兄弟》等，剧本充满反抗激情，主人公多为现存秩序的叛逆者。1780年后赴俄国，</div>
+</a>
+<a class="entry-item" href="克洛托.html">
+  <div class="noun">克洛托</div>
+  <div class="snippet">古希腊神话中三位命运女神（摩伊拉）之一，名字意为&quot;纺线者&quot;。手拿纺锤，负责纺织生命之线，掌管未来。对应罗马神话中的诺娜（Nona）。</div>
+</a>
+<a class="entry-item" href="克罗卜史托克.html">
+  <div class="noun">克罗卜史托克</div>
+  <div class="snippet">弗里德里希·戈特利布·克洛卜施托克（1724-1803），德国诗人，狂飙突进运动的先驱，对歌德产生了深远影响。代表作包括史诗《救世主》（1748-1773）和《颂歌集》（1771）。他突破了早期启蒙文学的理性约束，将情感因素提升到首位，改变</div>
+</a>
+<a class="entry-item" href="克罗托.html">
+  <div class="noun">克罗托</div>
+  <div class="snippet">克罗托（希腊语：Κλωθώ，Clotho，意为&quot;纺线者&quot;）是希腊神话中命运三女神（摩伊赖）中最年幼的一位。她的职责是纺织生命之线，掌控每个人的未来与出生。在罗马神话中对应诺娜（Nona）。在艺术形象中常被描绘为手持纺锤纺线的老妇人。即使在众</div>
+</a>
+<a class="entry-item" href="内海神女.html">
+  <div class="noun">内海神女</div>
+  <div class="snippet">即涅瑞伊得斯（Nereids），希腊神话中涅柔斯与多里斯所生的五十位海洋仙女。在《浮士德》中与特里同们一同举行迎神仪式。</div>
+</a>
+<a class="entry-item" href="军士.html">
+  <div class="noun">军士</div>
+  <div class="snippet">浮士德中皇帝的军队士兵。文本中提及皇帝发给军士饷银（黄金），反映了战后犒赏士兵的惯例，也指在敌营中抢夺财宝的散兵游勇。</div>
+</a>
+<a class="entry-item" href="冥后.html">
+  <div class="noun">冥后</div>
+  <div class="snippet">指珀耳塞福涅（Persephone），希腊神话中的冥界王后，宙斯与农业女神得墨忒耳之女。被冥王哈迪斯掳至冥界为妻，因吃了六颗石榴籽，每年须在冥界度过数月，由此形成四季轮回。她的神话是厄琉西斯秘仪的核心内容，兼具丰产女神与冥界女王的双重身份。</div>
+</a>
+<a class="entry-item" href="冥王普路同.html">
+  <div class="noun">冥王普路同</div>
+  <div class="snippet">冥王普路同（Pluto）是罗马神话中的冥界之神，对应希腊神话的哈迪斯（Hades），为克洛诺斯与瑞亚之子，宙斯与波塞冬的兄长。普路同源自希腊语ploutos，意为财富，因地下埋藏金银矿产，他同时也是财富之神。</div>
+</a>
+<a class="entry-item" href="凌波仙子.html">
+  <div class="noun">凌波仙子</div>
+  <div class="snippet">即水精（Nixen），德语中的女性水精灵。在《浮士德》中，梅非斯特派乌鸦去向水精们请求借出水波的影子制造假洪水。水精的法术能够将影子和实体分开，使人无法分辨真假。凌波仙子是欧洲民间传说中的水泽仙女，常与河流、湖泊相关联。</div>
+</a>
+<a class="entry-item" href="凯斯特纳.html">
+  <div class="noun">凯斯特纳</div>
+  <div class="snippet">亚伯拉罕·戈特黑尔夫·凯斯特纳（1719-1800），德国数学家、数学史家，格丁根大学教授。主要贡献在欧几里得平行公设研究、方程论和数学史领域。高斯曾称赞他&quot;数学家中最伟大的诗人，诗人中最伟大的数学家&quot;。他擅长创作讽刺短诗，培养和影响了多位</div>
+</a>
+<a class="entry-item" href="别林斯基.html">
+  <div class="noun">别林斯基</div>
+  <div class="snippet">维萨里昂·别林斯基（1811—1848），俄国文学批评家、哲学家、革命民主主义者，俄国文学批评与文学理论的奠基人。他在短暂的一生中撰写了一千多篇评论文章，提出了&quot;形象思维&quot;、&quot;典型性&quot;、&quot;人民性&quot;等重要文学概念，为俄国批判现实主义文学奠定了</div>
+</a>
+<a class="entry-item" href="别西卜.html">
+  <div class="noun">别西卜</div>
+  <div class="snippet">别西卜（Beelzebub）源自希伯来语Ba&#x27;al Zəbûb，意为&quot;苍蝇之主&quot;，原为非利士人在以革伦崇拜的神祇。新约圣经中被称为鬼王，法利赛人指控耶稣靠别西卜赶鬼。后世恶魔学中将其列为仅次于路西法的堕落天使，对应七宗罪中的暴食。弥尔顿《失</div>
+</a>
+<a class="entry-item" href="制花女郎.html">
+  <div class="noun">制花女郎</div>
+  <div class="snippet">化装舞会中装扮成佛罗伦萨少女的卖花女郎，头戴五彩人造花，以曼陀林伴奏唱歌。她们的唱词描述了人造花一年四季不凋谢的特点，以及年轻妇女的天性与艺术之间的密切关系。</div>
+</a>
+<a class="entry-item" href="刻戎.html">
+  <div class="noun">刻戎</div>
+  <div class="snippet">即喀戎（Chiron），希腊神话中最著名的半人马（马人），与众不同的贤者。他是克洛诺斯与菲吕拉之子，精通琴棋书画、医药天文，曾教导阿喀琉斯、赫拉克勒斯、伊阿宋等众多希腊英雄。在《浮士德》第二部中，人面狮告诉浮士德前去向马人刻戎打听海伦的踪迹</div>
+</a>
+<a class="entry-item" href="刻瑞斯.html">
+  <div class="noun">刻瑞斯</div>
+  <div class="snippet">罗马神话中的农业与丰收女神（Ceres），对应希腊神话中的德墨忒尔（Demeter），罗马十二主神之一。在《浮士德》化装舞会中，麦穗冠自称是刻瑞斯的礼物，象征丰收与馈赠。</div>
+</a>
+<a class="entry-item" href="加百列.html">
+  <div class="noun">加百列</div>
+  <div class="snippet">加百列（希伯来语意为&quot;神的战士&quot;），亦译圣嘉俾厄尔，是《圣经》中记载的天使长之一。在《路迦福音》中，他向祭司撒迦利亚预言施洗约翰的诞生，并向童女马利亚预告耶稣降生（&quot;圣母领报&quot;）。在《浮士德》天上序幕中，加百列被描绘为歌颂地界的天使长，与拉</div>
+</a>
+<a class="entry-item" href="勒托.html">
+  <div class="noun">勒托</div>
+  <div class="snippet">希腊神话中的提坦女神，司掌保育。宙斯的第六任妻子，生下双胞胎阿波罗和阿耳忒弥斯。因赫拉嫉妒被迫四处流浪，最终在提洛岛生下子女。在《浮士德》注解中被提及于得罗斯岛分娩的故事。</div>
+</a>
+<a class="entry-item" href="勒达.html">
+  <div class="noun">勒达</div>
+  <div class="snippet">希腊神话中的斯巴达王后，廷达瑞俄斯之妻。宙斯化为天鹅与之交合，勒达产下两枚蛋，孵出海伦、克吕泰涅斯特拉、卡斯托尔和波吕丢刻斯。在《浮士德》第二部中，浮士德在梦中见到了勒达与化为天鹅的宙斯相会的情景，这正是海伦的诞生之源。</div>
+</a>
+<a class="entry-item" href="包喀斯.html">
+  <div class="noun">包喀斯</div>
+  <div class="snippet">希腊神话中菲勒蒙的妻子，一对虔诚善良的老妇人。在《浮士德》第五幕中，她和丈夫住在海边沙丘小屋，曾救助遇难旅人。她向旅人描述浮士德填海工程的奇迹，认为这是&quot;用活人献祭&quot;的邪恶工程。</div>
+</a>
+<a class="entry-item" href="医神.html">
+  <div class="noun">医神</div>
+  <div class="snippet">指阿斯克勒庇俄斯（Asclepius），希腊神话中的医药之神，太阳神阿波罗与科洛尼斯之子。由半人马喀戎抚养长大并传授医术。因能起死回生，被宙斯用雷电击杀，后化为蛇夫座。其手持的蛇杖（阿斯克勒庇俄斯之杖）是世界卫生组织（WHO）会徽的核心元素</div>
+</a>
+<a class="entry-item" href="升天童子.html">
+  <div class="noun">升天童子</div>
+  <div class="snippet">升天童子（Selige Knaben / Blessed Boys，意为&quot;极乐的童子&quot;）是《浮士德》第二部第五幕终场中的童灵群体。他们是早夭而纯洁的灵魂，无需经历尘世漫长挣扎就已获得天恩。在终场中，他们绕着最高峰飞翔起舞，迎接浮士德的灵魂，</div>
+</a>
+<a class="entry-item" href="半吊子魔女.html">
+  <div class="noun">半吊子魔女</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中的一个角色，指能力不足、不够格的魔女。在群魔狂欢中，她步履急促追赶其他魔女却始终落于人后，自嘲在家中闷得发慌来到此地也赶不上。</div>
+</a>
+<a class="entry-item" href="卡吕普索.html">
+  <div class="noun">卡吕普索</div>
+  <div class="snippet">卡吕普索（Calypso）是希腊神话中的海之女神，擎天巨人阿特拉斯之女，居住在俄古吉亚岛。她救起遭遇海难的奥德修斯，用魔法将他留在岛上七年，并以赐予永生为条件希望他留下。但奥德修斯始终思念家乡，最终宙斯派遣赫耳墨斯传令，命她释放奥德修斯。</div>
+</a>
+<a class="entry-item" href="卡尔·奥古斯特.html">
+  <div class="noun">卡尔·奥古斯特</div>
+  <div class="snippet">卡尔·奥古斯特（1757—1828），萨克森-魏玛-艾森纳赫公爵（后为大公），开明专制君主的典范。1775年邀请歌德到魏玛从政并委以重任，使魏玛成为德意志古典文化的中心，被后世称为&quot;德意志的雅典&quot;。1816年颁布德意志各邦国第一部自由主义宪</div>
+</a>
+<a class="entry-item" href="卡德弥罗斯.html">
+  <div class="noun">卡德弥罗斯</div>
+  <div class="snippet">卡德弥罗斯（Kadmilos/Cadmilus）是萨莫色雷斯秘仪中的重要神祇，火神赫菲斯托斯与卡柏洛之子。他被视为伟大诸神秘仪的主持之神，也是第四位卡柏洛兄弟。其名源自古希腊词kadmos，意为圆盾。谢林曾探讨卡柏洛一字的字源。</div>
+</a>
+<a class="entry-item" href="卡德林辛.html">
+  <div class="noun">卡德林辛</div>
+  <div class="snippet">梅非斯特在《浮士德》中所唱歌曲中提到的虚构少女名字，为&quot;卡特琳&quot;（Katharina）的昵称形式。歌词讲述卡德林辛在黎明时分到情郎家，被警告&quot;进去是闺女，出来就不是女儿身&quot;，是一首关于贞洁与警惕的民谣式歌曲。该歌根据莎士比亚《哈姆雷特》第四</div>
+</a>
+<a class="entry-item" href="卡斯托耳.html">
+  <div class="noun">卡斯托耳</div>
+  <div class="snippet">希腊神话中的英雄，宙斯与勒达之子（一说为凡人），擅长骑术与驯马。与兄弟波吕丢刻斯合称狄奥斯库里兄弟（双子座）。参加了阿尔戈英雄远征。在《浮士德》注解中，卡斯托耳与波吕丢刻斯被提及为海伦的双胞胎兄弟。</div>
+</a>
+<a class="entry-item" href="卡斯托耳和波路克斯.html">
+  <div class="noun">卡斯托耳和波路克斯</div>
+  <div class="snippet">希腊神话中的狄俄斯库里兄弟（Dioscuri），宙斯的双生子。卡斯托耳为凡人，波路克斯为神之子。卡斯托耳死后，波路克斯请求宙斯分其永生，宙斯感动，将二人置于天空成为双子座。成对的圣埃尔摩之火即以他们命名。</div>
+</a>
+<a class="entry-item" href="卢济弗.html">
+  <div class="noun">卢济弗</div>
+  <div class="snippet">即 Lucifer（路西法），圣经中反叛天主而坠入地狱的堕落天使长，魔鬼之王。在《浮士德》中，梅非斯特被天使的美貌所吸引，询问他们是否也是卢济弗的后裔，暗示天使与魔鬼同源但走向了不同的道路。 --- 拉丁语意为&quot;光之使者&quot;，原指金星/晨星（</div>
+</a>
+<a class="entry-item" href="厄洛斯.html">
+  <div class="noun">厄洛斯</div>
+  <div class="snippet">希腊神话中的原始爱神，在赫西俄德《神谱》中是与卡俄斯、盖亚并列的宇宙原始神，代表创造的原动力。后演变为阿佛洛狄忒之子、手持弓箭的小爱神，对应罗马的丘比特。在柏拉图哲学中，厄洛斯被视为追求美与智慧的原初动力。在《浮士德》中，小人的玻璃瓶撞碎后</div>
+</a>
+<a class="entry-item" href="厄里克托.html">
+  <div class="noun">厄里克托</div>
+  <div class="snippet">古罗马文学中的著名女巫，最早出现在卢坎（Lucan）史诗《法撒利尔》（Pharsalia）第六卷中，来自希腊忒萨利亚地区，精通死灵术。在但丁《神曲·地狱篇》中也有提及。在歌德《浮士德·第二部》&quot;古典的瓦尔普吉斯之夜&quot;开场时，厄里克托是第一个</div>
+</a>
+<a class="entry-item" href="反逆皇帝.html">
+  <div class="noun">反逆皇帝</div>
+  <div class="snippet">又称&quot;伪帝&quot;，是浮士德第二部第四幕中出现的一位篡位者。他联合皇帝的不满亲戚发动叛乱，自立为帝，其军队打着伪旗与皇帝的正式军队对抗。浮士德帮助皇帝平定此叛乱，以此换取皇帝赐予沿海土地用于填海造田。</div>
+</a>
+<a class="entry-item" href="叔本华.html">
+  <div class="noun">叔本华</div>
+  <div class="snippet">阿图尔·叔本华（1788-1860），德国哲学家，唯意志论创始人，非理性主义哲学代表。其代表作《作为意志和表象的世界》提出&quot;意志是世界的本质&quot;的核心命题，断言人生本质上是痛苦的。在《浮士德》第二部中，歌德通过青年大学生之口提及叔本华的哲学。</div>
+</a>
+<a class="entry-item" href="叛臣.html">
+  <div class="noun">叛臣</div>
+  <div class="snippet">浮士德中与皇帝敌对的叛乱贵族。皇帝在击败伪帝和叛军后，将叛臣的世袭领土没收，重新分封给有功的四位侯爵及大主教，以此巩固皇权并奖赏忠臣。</div>
+</a>
+<a class="entry-item" href="叶卡捷林娜.html">
+  <div class="noun">叶卡捷林娜</div>
+  <div class="snippet">即叶卡捷琳娜二世（1729—1796），又称叶卡捷琳娜大帝，俄罗斯帝国女皇，1762年至1796年在位。她是俄国历史上唯一被冠以&quot;大帝&quot;之名的女皇。在位期间推行&quot;开明专制&quot;，与伏尔泰、狄德罗等启蒙思想家通信，同时大力扩张领土，通过两次俄土战</div>
+</a>
+<a class="entry-item" href="司仪.html">
+  <div class="noun">司仪</div>
+  <div class="snippet">宫廷化装舞会的主持人和报幕人，负责介绍登场角色、引导舞会进程。在《浮士德》第二部第一幕中，司仪以幽默讽刺的口吻开场，讲述皇帝远征罗马带回狂欢节传统的故事。 --- 《浮士德》第二部假面舞会中的报幕人和主持人，负责介绍登场人物、引导剧情、维持</div>
+</a>
+<a class="entry-item" href="司命神.html">
+  <div class="noun">司命神</div>
+  <div class="snippet">希腊神话中的命运三女神摩伊拉（Moirai），掌管万物命运。分别为克洛托（纺织生命之线）、拉刻西斯（丈量生命之线）、阿特洛波斯（剪断生命之线）。其权力超越众神，连宙斯也无法违抗。在《浮士德》中被称为混沌之女的姊妹。</div>
+</a>
+<a class="entry-item" href="吉卜赛女郎.html">
+  <div class="noun">吉卜赛女郎</div>
+  <div class="snippet">对吉卜赛（吉普赛）女性的称呼。吉卜赛人自称罗姆人（Roma），起源于印度北部，约10世纪开始向西迁徙，14世纪到达东南欧，15-16世纪遍布全欧洲。名称源于欧洲人误以为他们来自埃及。在文学作品中常被塑造为自由奔放、热情神秘的女性形象。在《浮</div>
+</a>
+<a class="entry-item" href="吕西波斯.html">
+  <div class="noun">吕西波斯</div>
+  <div class="snippet">Lysippus，古希腊古典晚期著名雕刻家（约前395—前305年），与普拉克西特列斯和斯科帕斯并称为古希腊最杰出的三大雕刻家。创立了头与身体比例为1:8的人体美新标准，曾任亚历山大大帝的宫廷雕刻家。代表作包括《刮汗污的运动员》《法尔内塞的</div>
+</a>
+<a class="entry-item" href="君士坦丁大帝.html">
+  <div class="noun">君士坦丁大帝</div>
+  <div class="snippet">君士坦丁大帝（拉丁语：Gaius Flavius Valerius Constantinus，约272—337年），又称君士坦丁一世，是罗马帝国皇帝（在位306—337年），第一位信奉基督教的罗马皇帝。他在312年米尔维安大桥战役击败马克森</div>
+</a>
+<a class="entry-item" href="命运女神.html">
+  <div class="noun">命运女神</div>
+  <div class="snippet">古希腊神话中的三位命运女神（摩伊拉），即阿特洛波斯、克洛托和拉刻西斯。她们纺织、丈量并剪断人类的生命之线，掌控一切生灵的命运。在《浮士德》假面舞会中作为角色登场。</div>
+</a>
+<a class="entry-item" href="品达.html">
+  <div class="noun">品达</div>
+  <div class="snippet">品达（希腊语：Πίνδαρος，Pindar，约公元前518—前438年）是古希腊抒情诗人，被希腊化时代学者列为九大抒情诗人之首。他出身忒拜贵族，以创作竞技颂歌（Epinikia/胜利曲）闻名，现存四十四首作品。其四卷胜利曲《奥林匹亚赞歌》</div>
+</a>
+<a class="entry-item" href="唯心主义者.html">
+  <div class="noun">唯心主义者</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中讽刺的费希特派哲学家，把外界都看成是自我内在的意识反映。</div>
+</a>
+<a class="entry-item" href="喀耳刻.html">
+  <div class="noun">喀耳刻</div>
+  <div class="snippet">喀耳刻（Circe）是希腊神话中的巫术女神，太阳神赫利俄斯与大洋神女珀耳塞伊斯之女。她定居于埃埃亚岛，精通草药与魔药。在《奥德赛》中，她将奥德修斯的同伴变成猪，但奥德修斯在赫耳墨斯的帮助下抵抗了她的魔法，迫使她将船员恢复人形。</div>
+</a>
+<a class="entry-item" href="四位元勋.html">
+  <div class="noun">四位元勋</div>
+  <div class="snippet">浮士德中皇帝战后封赏的四位有功之臣，分别为礼部大臣、侍从长、膳部总管和大酒正。皇帝与他们共商国家宫廷大事，将叛臣世袭领土赏赐给他们，将其地位提高到仅次于皇帝。</div>
+</a>
+<a class="entry-item" href="四位灰色的妇女.html">
+  <div class="noun">四位灰色的妇女</div>
+  <div class="snippet">《浮士德》第二部第五幕&quot;半夜&quot;（子夜）中登场的四个象征性人物，分别代表贫乏（匮乏）、过失（罪责）、忧愁（忧虑）和苦难（困厄）。她们以灰色为衣，象征混沌、沉闷与不幸。四个灰色妇女中的前三个无法进入浮士德的宫殿，唯有忧愁从锁眼潜入，向浮士德吹气</div>
+</a>
+<a class="entry-item" href="图勒王.html">
+  <div class="noun">图勒王</div>
+  <div class="snippet">歌德谣曲《图勒王》（Der König in Thule）中的古代国王，出自北欧传说。该谣曲原为歌德1774年独立创作的民谣，后嵌入《浮士德》第一部第八场，由玛加蕾特在闺房中吟唱。故事讲述图勒国王对爱情忠贞不渝，爱妃临终赠其金杯，国王视若至</div>
+</a>
+<a class="entry-item" href="土精.html">
+  <div class="noun">土精</div>
+  <div class="snippet">欧洲神话中的土元素精灵，源自16世纪炼金术士帕拉塞尔苏斯的四大 元素精灵体系（与火精、风精、水精并列）。土精（Gnome/诺姆/地精） 居住于地下，守护矿藏，身形矮小，勤劳好动。在歌德《浮士德》第二 部中，土精们以穿苔衣、持明灯的小人形象登</div>
+</a>
+<a class="entry-item" href="圣安得烈.html">
+  <div class="noun">圣安得烈</div>
+  <div class="snippet">又称安德烈、安德肋，耶稣十二使徒之一，是使徒彼得的弟弟，原为加利利海边的渔夫，是第一位被耶稣呼召的门徒。据基督教传统，他在希腊帕特雷被钉在X形十字架上殉教，因自认为不配以与耶稣相同的姿势被钉。X形十字架因此被称为&quot;圣安得烈十字架&quot;。圣安得烈</div>
+</a>
+<a class="entry-item" href="圣彼得.html">
+  <div class="noun">圣彼得</div>
+  <div class="snippet">原名西门，耶稣十二使徒之首，基督教早期重要领袖。耶稣为他改名彼得（意为&quot;磐石&quot;），天主教认为他是首任教宗。曾三次不认主，事后痛哭悔改。耶稣升天后成为初期教会领导人，后在罗马被倒钉十字架殉道。著作有《彼得前书》《彼得后书》。</div>
+</a>
+<a class="entry-item" href="圣母.html">
+  <div class="noun">圣母</div>
+  <div class="snippet">圣母（Blessed Virgin Mary）即耶稣基督的母亲玛利亚，是天主教最受尊崇的圣人。在《浮士德》第十八场&quot;城墙里巷&quot;中，格蕾辛向痛苦圣母像祈祷，歌词&quot;多苦多难的圣母，请你垂鉴我的忧伤&quot;反映了她内心的恐惧与绝望。注释说明痛苦圣母像以</div>
+</a>
+<a class="entry-item" href="圣隐修士.html">
+  <div class="noun">圣隐修士</div>
+  <div class="snippet">在深山幽谷中隐居修行的圣洁神父，出现在《浮士德》终场&quot;山峡、森林、岩石、荒凉之地&quot;的场景中。他们分散结庐于岩洞之间，通过祈祷与沉思修行，是连接尘世与天国的中介，象征着灵性修炼的不同阶段。</div>
+</a>
+<a class="entry-item" href="坦塔罗斯.html">
+  <div class="noun">坦塔罗斯</div>
+  <div class="snippet">希腊神话中宙斯之子，统治吕狄亚的西庇洛斯。因泄露神界秘密、偷盗神界酒食、杀子宴请众神等罪行，被打入地狱承受永恒惩罚：站在齐颈深的水中却无法喝到（水即退去），头顶果实累累却无法摘到（风将树枝吹高），头顶还悬着一块随时可能落下的巨石。其名衍生出</div>
+</a>
+<a class="entry-item" href="埃俄罗斯.html">
+  <div class="noun">埃俄罗斯</div>
+  <div class="snippet">埃俄罗斯（Aeolus）是希腊神话中的风神。在荷马《奥德赛》中，他是希波忒斯之子，居住在漂浮的小岛上，掌管诸风。他曾赠予奥德修斯一个装有除西风外所有风的风袋，但船员私自打开，狂风将船只吹回原地。歌德注解中将其描述为控制幽禁在地球内部气体的风</div>
+</a>
+<a class="entry-item" href="埃及的马利亚.html">
+  <div class="noun">埃及的马利亚</div>
+  <div class="snippet">埃及的马利亚（Maria Aegyptiaca）是《浮士德》终场中出现的三位圣经悔罪女之一，其事迹出自基督教圣徒传（《圣徒传》/《黄金传奇》）。据传她12岁离家至亚历山大城为妓，后往耶路撒冷朝圣时被神秘力量阻挡于圣十字架教堂门外，因而悔改，</div>
+</a>
+<a class="entry-item" href="埃斯克勒庇俄斯.html">
+  <div class="noun">埃斯克勒庇俄斯</div>
+  <div class="snippet">希腊神话中的医神，太阳神阿波罗与科洛尼斯之子。从半人马喀戎学医，拥有起死回生之力。因复活太多人而被宙斯以雷电击毙，后升为蛇夫座。蛇杖是其标志，至今为世界卫生组织的标志。在《浮士德》注解中被提及为曼托之父。</div>
+</a>
+<a class="entry-item" href="埃阿斯.html">
+  <div class="noun">埃阿斯</div>
+  <div class="snippet">大埃阿斯（Ajax），希腊神话中忒拉蒙之子，特洛伊战争中的希腊猛将，仅次于阿喀琉斯。身材魁梧、作战勇猛，曾与赫克托耳单挑不分胜负。阿喀琉斯死后，因与奥德修斯争夺其铠甲失败而发狂自杀。在《浮士德》中，福耳库阿斯以其盾牌上的盘蛇纹章为例说明纹章</div>
+</a>
+<a class="entry-item" href="基督.html">
+  <div class="noun">基督</div>
+  <div class="snippet">基督教的核心人物，亦称耶稣基督。基督教认为他是上帝的儿子、人类的救世主，在公元1世纪于巴勒斯坦地区传道，后被钉十字架，第三日复活。他是基督教信仰的根基，对西方文化、艺术、哲学产生了深远影响。在歌德《浮士德》中，基督的复活成为城门外民众庆祝的</div>
+</a>
+<a class="entry-item" href="塔勒亚.html">
+  <div class="noun">塔勒亚</div>
+  <div class="snippet">塔勒亚（希腊语：Θαλία，Thalia，意为&quot;宴飨&quot;、&quot;荣华&quot;、&quot;开花&quot;）是希腊神话中美惠三女神中最年长的一位，代表宴飨与荣华。在赫西俄德《神谱》中为三位美惠女神之一（阿格莱亚、欧佛洛绪涅、塔勒亚）。需注意希腊神话中有两位同名的塔勒亚：此</div>
+</a>
+<a class="entry-item" href="塔西陀.html">
+  <div class="noun">塔西陀</div>
+  <div class="snippet">普布利乌斯·科尔涅利乌斯·塔西陀（约56-约120年），古罗马伟大历史学家，曾任执政官、元老院元老。代表作有《编年史》《历史》《日耳曼尼亚志》等，以简练有力的文风和批判态度著称，与西塞罗并称古罗马伟大文体家。歌德在《浮士德》中引用塔西陀关于</div>
+</a>
+<a class="entry-item" href="塞勒诺斯.html">
+  <div class="noun">塞勒诺斯</div>
+  <div class="snippet">希腊神话中的山林之神，酒神狄俄倪索斯的养父和导师，萨提尔之首。形象为秃顶、肥胖的老年男性，长有马或驴的耳朵和尾巴，以醉酒和智慧著称。</div>
+</a>
+<a class="entry-item" href="塞壬.html">
+  <div class="noun">塞壬</div>
+  <div class="snippet">希腊神话中的危险生物，最初形象为人首鸟身（美人鸟），以天籁般的歌声引诱水手导致航船触礁沉没。居住在西西里岛附近海域的岛屿上。荷马史诗《奥德赛》中记载了俄底修斯抵御塞壬歌声的故事。</div>
+</a>
+<a class="entry-item" href="塞斯摩斯.html">
+  <div class="noun">塞斯摩斯</div>
+  <div class="snippet">希腊神话中专门掌管地震的神祇，其名在希腊语中即为&quot;地震&quot;之意。现代科学术语&quot;地震学&quot;（seismology）即源于此名。在《浮士德》中，塞斯摩斯在地底喃喃叫嚷，以肩膀扛起大地，塑造山川。</div>
+</a>
+<a class="entry-item" href="墨杜萨.html">
+  <div class="noun">墨杜萨</div>
+  <div class="snippet">希腊神话中的蛇发女妖，戈耳工三姐妹之一。看到她面容的人会化为石头。后被珀耳修斯斩下首级。歌德在《浮士德》中将其与格蕾辛的幻影联系，象征死亡与毁灭之美。</div>
+</a>
+<a class="entry-item" href="墨涅拉俄斯.html">
+  <div class="noun">墨涅拉俄斯</div>
+  <div class="snippet">希腊神话中的斯巴达国王，阿特柔斯之子，阿伽门农之弟，海伦的丈夫。海伦被特洛伊王子帕里斯诱拐后，墨涅拉俄斯与兄长阿伽门农召集希腊联军远征特洛伊，历时十年攻陷该城。战后携海伦返回斯巴达。在《浮士德》中，他先遣海伦回宫准备献祭，但未明言祭品为何，</div>
+</a>
+<a class="entry-item" href="墨涅拉斯.html">
+  <div class="noun">墨涅拉斯</div>
+  <div class="snippet">即墨涅拉俄斯（Menelaus），希腊神话中的斯巴达国王，阿伽门农之弟，海伦之夫。海伦被特洛伊王子帕里斯拐走后，墨涅拉俄斯与阿伽门农召集希腊联军远征特洛伊，引发了长达十年的特洛伊战争。在《浮士德》第三幕中，海伦回到斯巴达的墨涅拉斯宫殿前。</div>
+</a>
+<a class="entry-item" href="墨该拉.html">
+  <div class="noun">墨该拉</div>
+  <div class="snippet">古希腊神话中三位复仇女神（厄里倪厄斯）之一，名字意为&quot;忌恨&quot;。专门惩罚婚姻不忠等罪行，善于破坏夫妻间的幸福，使人得陇望蜀、永不知足。</div>
+</a>
+<a class="entry-item" href="复仇女神.html">
+  <div class="noun">复仇女神</div>
+  <div class="snippet">古希腊神话中的三位复仇女神（厄里倪厄斯），即阿勒克托、墨该拉和提西福涅。她们是仇恨与复仇的化身，惩罚罪行，维护血亲伦理。在《浮士德》假面舞会中，她们以年轻和蔼但阴险的形象出现。</div>
+</a>
+<a class="entry-item" href="夏娃.html">
+  <div class="noun">夏娃</div>
+  <div class="snippet">《圣经》中上帝用亚当肋骨造成的女性，亚当的第二任妻子。在伊甸园中受蛇诱惑偷吃禁果，导致人类被逐出乐园。在莉莉特传说中，夏娃顶替了莉莉特的位置。</div>
+</a>
+<a class="entry-item" href="外乡佬.html">
+  <div class="noun">外乡佬</div>
+  <div class="snippet">《浮士德》第五幕中出现在老夫妇家中的一位陌生客人。三勇士奉命驱逐老夫妇时，外乡佬试图抵抗搏斗，被三勇士打倒杀害。他是浮士德扩张计划的连带牺牲品，象征着暴力征服中对无辜者的波及。</div>
+</a>
+<a class="entry-item" href="多里斯.html">
+  <div class="noun">多里斯</div>
+  <div class="snippet">希腊神话中的海洋女神，大洋神俄刻阿诺斯与泰西丝之女，与海神涅柔斯结婚，生有五十位海中仙女（涅瑞伊得斯）。</div>
+</a>
+<a class="entry-item" href="大主教.html">
+  <div class="noun">大主教</div>
+  <div class="snippet">浮士德中身兼宰相的大主教，是皇帝身边最重要的宗教与政治顾问。在皇帝封赏四位世俗诸侯之后，大主教独自留下，沉痛告诫皇帝与魔鬼结盟的罪孽，警告教皇将用追放的电光惩罚这有罪的国度。</div>
+</a>
+<a class="entry-item" href="大卫.html">
+  <div class="noun">大卫</div>
+  <div class="snippet">《圣经》中的以色列国王。他手下有&quot;三勇士&quot;等英勇战士，帮助他们击杀非利士人。歌德在《浮士德》注释中以大卫的三勇士比喻梅非斯特挑选的三名山民勇士。</div>
+</a>
+<a class="entry-item" href="大块头.html">
+  <div class="noun">大块头</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中登场的一个角色，象征搞破坏者，以粗笨的手脚和蛮横的力量为特征，被蒲克要求不要乱踩。</div>
+</a>
+<a class="entry-item" href="大法官.html">
+  <div class="noun">大法官</div>
+  <div class="snippet">浮士德中皇帝赋予五位忠良的司法权力。作为大法官，领主可在自己领土内作出最后判决，不容许上诉，体现封建制度下领主在其领地内拥有最高司法权的特权。</div>
+</a>
+<a class="entry-item" href="大洋神俄刻阿诺斯.html">
+  <div class="noun">大洋神俄刻阿诺斯</div>
+  <div class="snippet">希腊神话中的提坦神，十二提坦神中的长兄，天神乌拉诺斯与地母盖亚之子。司掌环绕大地的&quot;大洋河&quot;。与妹妹泰西斯生下3000个河神和3000个海洋女神。英语&quot;Ocean&quot;一词即源于他的名字。在《浮士德》注解中被提及为刻戎之母的父亲。</div>
+</a>
+<a class="entry-item" href="大酒正.html">
+  <div class="noun">大酒正</div>
+  <div class="snippet">浮士德中皇帝战后封赏的第四位元勋。皇帝任命其为大酒正（酒官），负责管理酒窖，确保藏满上等美酒。其名借鉴自《周礼》天官中的&quot;酒正&quot;一职，为掌管酒政的最高长官。</div>
+</a>
+<a class="entry-item" href="天使.html">
+  <div class="noun">天使</div>
+  <div class="snippet">天国使者，在《浮士德》结尾登场，撒下玫瑰花化为火焰驱走魔鬼梅非斯特，拯救浮士德的灵魂升入天堂。天使合唱贯穿全剧终场，代表神恩与救赎的力量。文中天使被称为&quot;天国的乡亲们&quot;。</div>
+</a>
+<a class="entry-item" href="奥伯朗.html">
+  <div class="noun">奥伯朗</div>
+  <div class="snippet">莎士比亚喜剧《仲夏夜之梦》中的小仙王，在《浮士德》瓦尔普吉斯之夜的梦（奥伯朗与蒂妲尼霞的金婚纪念）中出场，与仙后蒂妲尼霞为争夺偷来的孩子争吵后言归于好。</div>
+</a>
+<a class="entry-item" href="奥洛拉.html">
+  <div class="noun">奥洛拉</div>
+  <div class="snippet">罗马神话中的曙光女神（Aurora，又译欧若拉），对应希腊神话中的厄俄斯（Eos）。每天早晨飞向天空，用光芒驱散黑夜，引导太阳神的日车进入天际。在《浮士德》中歌德将她比拟为格蕾辛。</div>
+</a>
+<a class="entry-item" href="威廉·琼斯.html">
+  <div class="noun">威廉·琼斯</div>
+  <div class="snippet">威廉·琼斯爵士（1746—1794），英国语言学家、东方学家，通晓28种语言，被称为&quot;东方琼斯&quot;。1784年在加尔各答创立孟加拉亚洲学会。1786年提出梵语与希腊语、拉丁语具有同源关系，成为历史比较语言学的奠基人。他翻译的梵文戏剧《沙恭达罗</div>
+</a>
+<a class="entry-item" href="学士.html">
+  <div class="noun">学士</div>
+  <div class="snippet">歌德《浮士德》中的角色，在第一部中是一名初入大学的学生，曾向浮士德（实为梅非斯特假扮）求教。多年后以学士（Baccalaureus）身份归来，成为狂妄自大、蔑视一切权威的青年代表。他宣称&quot;世界本不存在，得由我把它创造&quot;，否定一切经验与传统，</div>
+</a>
+<a class="entry-item" href="守塔人林叩斯.html">
+  <div class="noun">守塔人林叩斯</div>
+  <div class="snippet">歌德《浮士德》中的人物，为浮士德宫城望楼的守塔人。林叩斯（Lynceus）以其敏锐的视力著称，生来为观察万物。他在第五幕&quot;深夜&quot;中先唱出赞美世界之美的颂歌，随后目睹浮士德下令驱逐老夫妇导致的小屋火灾，从赞美转为悲叹，成为这场悲剧的见证者。</div>
+</a>
+<a class="entry-item" href="安东尼厄斯.html">
+  <div class="noun">安东尼厄斯</div>
+  <div class="snippet">帕多瓦的圣安东尼（Saint Anthony of Padua，1195-1231），拉丁名Antonius，出生于葡萄牙里斯本，天主教圣人、教会圣师。原为奥斯定修会修士，后加入方济各会，成为该会首位神学导师。以卓越的讲道才能闻名，1231</div>
+</a>
+<a class="entry-item" href="安德洛墨达.html">
+  <div class="noun">安德洛墨达</div>
+  <div class="snippet">希腊神话中的埃塞俄比亚公主，国王克甫斯与王后卡西奥佩娅之女。因母亲炫耀其美貌触怒海神，被锁于礁石献祭海怪。英雄珀耳修斯斩杀美杜莎归来后救下她，娶其为妻。死后化为仙女座。在《浮士德》注解中被提及。</div>
+</a>
+<a class="entry-item" href="安泰.html">
+  <div class="noun">安泰</div>
+  <div class="snippet">安泰俄斯（Antaeus），希腊神话中的巨人，海神波塞冬与大地女神盖亚之子。他力大无穷，只要与大地（母亲盖亚）保持接触，就能持续获取无限的力量。英雄赫拉克勒斯发现其秘密后将他举到空中，使其脱离大地最终扼死。在《浮士德》中，浮士德到达希腊后感</div>
+</a>
+<a class="entry-item" href="宙斯.html">
+  <div class="noun">宙斯</div>
+  <div class="snippet">希腊神话中的最高神祇，奥林匹斯十二主神之首，掌管天空、雷电与命运。他以善变著称，常化身为各种形态追求凡间女子。在《浮士德》第二部中，浮士德梦见了宙斯化身为天鹅与勒达相会的情景，这是海伦诞生的神话前奏。</div>
+</a>
+<a class="entry-item" href="实在论者.html">
+  <div class="noun">实在论者</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中讽刺的经验论者，拒不相信通过感觉认识到的现实事物以外的存在，在妖魔世界的反常现象面前感到立足不稳。</div>
+</a>
+<a class="entry-item" href="宫内大臣.html">
+  <div class="noun">宫内大臣</div>
+  <div class="snippet">《浮士德》中负责宫廷内务的大臣，在帝国会议上哀叹每天节省反而增加费用。虽实物贡品（野味、家禽等）尚不匮乏，但葡萄酒已经短缺，酒窖为贵族喝光。债务沉重，犹太商人催债，国库寅吃卯粮，连床上的被褥都已送进当铺。</div>
+</a>
+<a class="entry-item" href="宰相.html">
+  <div class="noun">宰相</div>
+  <div class="snippet">《浮士德》第二部第一幕中出场的大臣角色，在皇帝的宫城金殿上主持朝议。他在御前会议上率先发言，论述&quot;正义&quot;是皇帝最高的德行，强调皇帝应当以正义治理国家。宰相代表了传统封建制度中的官僚与道德权威，他的发言揭示了帝国面临的深层次危机——虽有良善之</div>
+</a>
+<a class="entry-item" href="小爱神.html">
+  <div class="noun">小爱神</div>
+  <div class="snippet">小爱神厄洛斯（Eros）在希腊神话中是最古老的神之一，为混沌所生，掌管生命形态的发生和种属繁殖。后被称为小爱神，阿佛洛狄忒之子，有翼手执弓箭，相当于罗马的丘比特（Cupid）。歌德采自柏拉图的《饷宴篇》。</div>
+</a>
+<a class="entry-item" href="尤利斯.html">
+  <div class="noun">尤利斯</div>
+  <div class="snippet">即奥德修斯（Odysseus）的拉丁文名Ulysses的中译。希腊神话中伊萨卡国王，特洛伊战争中的英雄，以木马计攻克特洛伊。战后漂泊十年才返回家乡，荷马史诗《奥德赛》即讲述其漂泊故事。</div>
+</a>
+<a class="entry-item" href="尤诺.html">
+  <div class="noun">尤诺</div>
+  <div class="snippet">罗马神话中的天后，婚姻与母性之神，对应希腊神话中的赫拉。萨图恩与俄普斯之女，朱庇特之妻，掌管婚姻、生育、女性与国运。圣物为孔雀和石榴。在《浮士德》中梅非斯特提及雕刻家常制作她的雕像。</div>
+</a>
+<a class="entry-item" href="尼古拉.html">
+  <div class="noun">尼古拉</div>
+  <div class="snippet">克里斯托夫·弗里德里希·尼古拉（1733-1811），德国启蒙思想家、出版人、评论家。自称因脑部淤血见到幽灵鬼怪，后以肛门贴水蛭放血治愈。曾模仿歌德《少年维特之烦恼》写《少年维特之喜乐》，遭歌德不满。歌德在《浮士德》中以&quot;肛门幻视者&quot;角色讽</div>
+</a>
+<a class="entry-item" href="尼喀亚斯.html">
+  <div class="noun">尼喀亚斯</div>
+  <div class="snippet">尼喀亚斯（希腊语：Νικίας，Nikias，与雅典将军尼喀亚斯非同一人）是西西里古镇恩古伊翁的一位有影响的市民。据普鲁塔克《马尔凯路斯传》记载，他倾向罗马而被政敌指控为卖国贼，拟被引渡给迦太基人。尼喀亚斯机智地佯装发狂，在公民大会上突然倒</div>
+</a>
+<a class="entry-item" href="尼普顿.html">
+  <div class="noun">尼普顿</div>
+  <div class="snippet">即罗马神话中的海神 Neptune（希腊神话中的波塞冬）。在《浮士德》第五幕中，梅非斯特以旁白方式提到海神尼普顿，讽刺浮士德的填海造陆工程最终不过是给海神准备了一场盛宴——大海终将吞噬一切人类造物。歌德本人也是地质学&quot;水成论&quot;（Neptun</div>
+</a>
+<a class="entry-item" href="尼科得穆斯.html">
+  <div class="noun">尼科得穆斯</div>
+  <div class="snippet">Nicodemus，又译尼哥底母，圣经·新约中的人物，法利赛人，犹太公会议员。曾在夜间秘密拜访耶稣求问重生之道（约翰福音3章），后在公会中为耶稣辩护，耶稣受难后与亚利马太人约瑟一同安葬耶稣，带来约33公斤没药和沉香。代表寻求真理的知识分子形</div>
+</a>
+<a class="entry-item" href="山精俄瑞阿斯.html">
+  <div class="noun">山精俄瑞阿斯</div>
+  <div class="snippet">希腊神话中的山岳宁芙（Oread/Oreas），掌管山脉、山谷和岩洞的精灵，狩猎女神阿耳忒弥斯的侍女。在《浮士德》中作为古老山岳的化身登场，象征亘古不变的自然力量。</div>
+</a>
+<a class="entry-item" href="山鲁亚尔.html">
+  <div class="noun">山鲁亚尔</div>
+  <div class="snippet">山鲁亚尔（波斯语：شهريار，Shahryar，意为&quot;国王&quot;或&quot;统治者&quot;）是阿拉伯民间故事集《一千零一夜》开篇中的波斯萨桑王国国王。因发现王后不忠，变得仇恨所有女性，每日娶一名少女、翌日晨即将其杀害。宰相长女山鲁佐德自愿嫁给他，每夜讲述扣</div>
+</a>
+<a class="entry-item" href="山鲁佐德.html">
+  <div class="noun">山鲁佐德</div>
+  <div class="snippet">山鲁佐德（波斯语：شهرزاد，Scheherazade，又译雪赫拉莎德、桑鲁卓）是阿拉伯民间故事集《一千零一夜》（《天方夜谭》）中的核心人物和故事叙述者。她是萨桑王国宰相的长女，知书识礼、博览群书，为拯救无辜女子自愿嫁给每日杀妻的国王山鲁</div>
+</a>
+<a class="entry-item" href="崇拜马利亚的博士.html">
+  <div class="noun">崇拜马利亚的博士</div>
+  <div class="snippet">崇拜马利亚的博士（Doctor Marianus，拉丁语意为&quot;马利亚的学者&quot;）是《浮士德》第二部第五幕终场&quot;山谷&quot;场景中出现的重要角色。他居于最高最清净的石室中，代表中世纪神秘主义传统中专注于圣母马利亚的学者/神学家（典型如明谷的伯尔纳）。</div>
+</a>
+<a class="entry-item" href="巨人.html">
+  <div class="noun">巨人</div>
+  <div class="snippet">欧洲神话中的巨型生物，在歌德《浮士德》第二部假面舞会中作为登 场角色出现，被描述为来自德国哈尔茨山的&quot;野蛮的男人&quot;——天生 裸体、身强力壮，手持枞树棍子，系枝叶编成的围裙。巨人形象源自 哈尔茨山地区的民间传说，与布罗肯峰的巫术传说和山中巨灵</div>
+</a>
+<a class="entry-item" href="希罗多德.html">
+  <div class="noun">希罗多德</div>
+  <div class="snippet">古希腊历史学家，约公元前484年—约公元前425年，被西塞罗誉为&quot;历史之父&quot;。代表作《历史》是西方第一部完整流传下来的历史著作，记述希波战争及诸多民族的风俗地理。在《浮士德》注解中被引用于记载中亚巨种蚂蚁掘金之事。</div>
+</a>
+<a class="entry-item" href="帕拉塞尔苏斯.html">
+  <div class="noun">帕拉塞尔苏斯</div>
+  <div class="snippet">帕拉塞尔苏斯（Paracelsus，约1493-1541），文艺复兴时期瑞士医生、炼金术士和占星师，本名德奥弗拉斯特·冯·霍恩海姆。他创立了医疗化学（Iatrochemistry），提出三元素理论（硫、汞、盐），被誉为&quot;毒理学之父&quot;。他反对</div>
+</a>
+<a class="entry-item" href="帕拉斯.html">
+  <div class="noun">帕拉斯</div>
+  <div class="snippet">帕拉斯·雅典娜（Pallas Athena），希腊神话中的智慧女神、战争女神、雅典守护神。宙斯之女，从宙斯头颅中全副武装诞生。其别名&quot;帕拉斯&quot;源于童年挚友特里同之女帕拉斯——雅典娜在一次比武中误杀好友后，为自己加上了这个名字以表纪念。在《浮</div>
+</a>
+<a class="entry-item" href="帕拉斯·雅典娜.html">
+  <div class="noun">帕拉斯·雅典娜</div>
+  <div class="snippet">希腊神话中的智慧女神、战略女神、工艺女神，奥林匹斯十二主神之一。她是宙斯与墨提斯之女，从宙斯头颅中全副武装跃出。象征物为猫头鹰、橄榄枝和神盾。在《浮士德》注解中提及她曾化身门托耳指点忒勒玛科斯。</div>
+</a>
+<a class="entry-item" href="帕特洛克罗斯.html">
+  <div class="noun">帕特洛克罗斯</div>
+  <div class="snippet">希腊神话中的英雄，阿喀琉斯的挚友和伴侣。其父墨诺提俄斯是阿尔戈号船员之一，与阿喀琉斯一同师从半人马喀戎。特洛伊战争中，他穿上阿喀琉斯的盔甲代友出战，被特洛伊王子赫克托尔所杀，从而促使阿喀琉斯重返战场为其复仇。在《浮士德》中，海伦坦言帕特洛克</div>
+</a>
+<a class="entry-item" href="帕里斯.html">
+  <div class="noun">帕里斯</div>
+  <div class="snippet">希腊神话中的特洛伊王子，普里阿摩斯国王与赫卡柏之子。因在&quot;金苹果事件&quot;中将苹果判给阿佛洛狄忒，得到世上最美女子海伦为妻，遂将其拐至特洛伊，直接引发了特洛伊战争。在《浮士德》第二部中，浮士德奉皇帝之命召唤帕里斯与海伦的形貌。</div>
+</a>
+<a class="entry-item" href="席勒.html">
+  <div class="noun">席勒</div>
+  <div class="snippet">弗里德里希·席勒（1759—1805），德国伟大的诗人、剧作家，与歌德并称德国文学的&quot;双子星&quot;。代表作包括戏剧《强盗》《阴谋与爱情》《威廉·退尔》以及诗歌《欢乐颂》（被贝多芬谱入《第九交响曲》）。席勒与歌德建立了深厚友谊，共同开创了魏玛古典</div>
+</a>
+<a class="entry-item" href="庇里透斯.html">
+  <div class="noun">庇里透斯</div>
+  <div class="snippet">希腊神话中拉庇泰人（Lapiths）之王，以与雅典英雄忒修斯的深厚友谊闻名。曾与忒修斯一同从斯巴达拐走海伦，后因狂妄地企图绑架冥后珀耳塞福涅而被困冥府永不得脱。</div>
+</a>
+<a class="entry-item" href="库普里斯.html">
+  <div class="noun">库普里斯</div>
+  <div class="snippet">爱与美女神阿佛洛狄忒（Aphrodite）的别称，因诞生于塞浦路斯（Cyprus）附近海面泡沫中而得名。在《浮士德》中提及她抛弃了信徒。 --- 希腊爱与美女神阿佛洛狄忒（Aphrodite）的别称，意为&quot;塞浦路斯的女士&quot;。源于希腊神话中阿</div>
+</a>
+<a class="entry-item" href="庞培.html">
+  <div class="noun">庞培</div>
+  <div class="snippet">格奈乌斯·庞培（Gnaeus Pompeius Magnus，前106-前48年），古罗马统帅和政治家，与凯撒争权，在前48年的法尔萨洛斯战役中被凯撒击败，逃往埃及后被杀。在《浮士德》中作为历史人物被山精俄瑞阿斯提及。</div>
+</a>
+<a class="entry-item" href="康德.html">
+  <div class="noun">康德</div>
+  <div class="snippet">伊曼努尔·康德（Immanuel Kant，1724-1804），德国古典哲学创始人。在《浮士德》瓦尔普吉斯之夜中，教条主义者的台词大呼批判被注释放为影射康德的批判哲学。</div>
+</a>
+<a class="entry-item" href="廷达瑞俄斯.html">
+  <div class="noun">廷达瑞俄斯</div>
+  <div class="snippet">希腊神话中的斯巴达国王，妻子勒达。被兄弟希波科翁篡位流亡，后由赫拉克勒斯帮助复位。其著名的&quot;廷达瑞俄斯誓言&quot;要求所有求婚者发誓保卫海伦的婚姻选择，这一誓言日后成为特洛伊战争的合法性依据。在《浮士德》中，福耳库阿斯提到&quot;廷达瑞俄斯王宫周围的地</div>
+</a>
+<a class="entry-item" href="建筑师.html">
+  <div class="noun">建筑师</div>
+  <div class="snippet">《浮士德》第二部第一幕中皇帝宫廷的建筑师。当星士赞美古代神殿的宏伟时，建筑师批评古典风格&quot;笨重而累赘&quot;，推崇哥特式的细长支柱和尖形拱顶，认为后者更能振奋精神。这场争论反映了歌德时代古典主义与哥特式的审美之争。</div>
+</a>
+<a class="entry-item" href="弄臣.html">
+  <div class="noun">弄臣</div>
+  <div class="snippet">《浮士德》中宫廷里的小丑角色，在皇帝发放纸币的场景中出现。弄臣拿到纸币后欣喜若狂，打算用钱吃喝享乐、购买田产城堡。他称纸币为&quot;魔术票子&quot;，体现了他既愚笨又天真的性格。在欧洲宫廷传统中，弄臣可以嬉笑怒骂、直言不讳，是剧中揭示人性贪婪与荒诞的重</div>
+</a>
+<a class="entry-item" href="弥尔顿.html">
+  <div class="noun">弥尔顿</div>
+  <div class="snippet">约翰·弥尔顿（1608—1674），英国诗人、政论家，清教徒文学的代表。晚年双目失明，以口述方式完成不朽巨著《失乐园》，以圣经《创世记》为基础，讲述了撒旦反抗上帝、引诱人类堕落的史诗故事。《失乐园》与《荷马史诗》《神曲》并称为西方三大诗歌。</div>
+</a>
+<a class="entry-item" href="弥诺斯.html">
+  <div class="noun">弥诺斯</div>
+  <div class="snippet">希腊神话中的克里特国王，宙斯与欧罗巴之子，以公正严明著称，死后成为冥界三判官之一。他因未向波塞冬献祭公牛而遭报复，其妻帕西法厄与公牛生下牛首人身的弥诺陶洛斯。弥诺斯令代达罗斯建造迷宫囚禁怪物，并要求雅典每九年进贡童男童女。古希腊的米诺斯文明</div>
+</a>
+<a class="entry-item" href="彼得·斯昆茨.html">
+  <div class="noun">彼得·斯昆茨</div>
+  <div class="snippet">源自莎士比亚喜剧《仲夏夜之梦》中的木匠彼得·昆斯（Peter Quince），是六位雅典工匠业余剧团的召集人和导演。此角色后传入德国，名字德语化为彼得·斯昆茨（Peter Squenz），德国巴洛克诗人安德烈亚斯·格吕菲乌斯创作了喜剧《彼得</div>
+</a>
+<a class="entry-item" href="彼得·昆士.html">
+  <div class="noun">彼得·昆士</div>
+  <div class="snippet">莎士比亚喜剧《仲夏夜之梦》中的角色，身份是木匠。在剧中担任业余剧团的导演兼编剧，组织一群手工艺人排演《皮拉摩斯和提斯柏》。歌德在《浮士德》注释中用此角色比喻梅非斯特挑选山民演员。</div>
+</a>
+<a class="entry-item" href="得墨忒耳.html">
+  <div class="noun">得墨忒耳</div>
+  <div class="snippet">希腊神话中的农业与谷物女神，掌管大地丰饶。其女珀耳塞福涅被冥王哈得斯掳走后，得墨忒耳悲伤不已，导致大地荒芜。保婆曾以淫猥之言为其解闷。</div>
+</a>
+<a class="entry-item" href="忒俄佛拉斯托斯.html">
+  <div class="noun">忒俄佛拉斯托斯</div>
+  <div class="snippet">Theophrastus（约前371-约前287），古希腊哲学家和植物学家，亚里士多德的弟子和继承人，被誉为&quot;植物学之父&quot;。在《浮士德》中，幻想花束称连忒俄佛拉斯托斯也叫不出它的名字，用以强调其新奇独特。</div>
+</a>
+<a class="entry-item" href="忒修斯.html">
+  <div class="noun">忒修斯</div>
+  <div class="snippet">希腊神话中的雅典国王与英雄，父亲为雅典国王埃勾斯（一说海神波塞冬）。主要事迹包括：在前往雅典途中完成六次除害、进入米诺斯迷宫斩杀牛首人身怪物米诺陶洛斯、统一阿提卡地区建立泛雅典节。因忘记将黑帆换成白帆导致父亲投海而死，爱琴海因此得名。</div>
+</a>
+<a class="entry-item" href="忒勒玛科斯.html">
+  <div class="noun">忒勒玛科斯</div>
+  <div class="snippet">荷马史诗《奥德赛》中的人物，奥德修斯与珀涅罗珀之子。在父亲外出征战期间，他在女神雅典娜帮助下寻父，后与父亲合力杀死求婚者。</div>
+</a>
+<a class="entry-item" href="忒尔喀涅斯族.html">
+  <div class="noun">忒尔喀涅斯族</div>
+  <div class="snippet">希腊神话中罗得岛的第一批居民，半人半水族的冶金大师，曾为波塞冬锻造三叉戟，是最早为众神塑像的种族。在《浮士德》中他们骑着海马和海龙出场。</div>
+</a>
+<a class="entry-item" href="忒提斯.html">
+  <div class="noun">忒提斯</div>
+  <div class="snippet">忒提斯（希腊语：Θέτις，Thetis）是希腊神话中的海洋女神，为海神涅柔斯（Nereus）与多里斯（Doris）之女，是五十位海中仙女（涅瑞伊得斯）之首。她嫁给了凡人英雄珀琉斯（Peleus），生下了特洛伊战争中最伟大的希腊英雄阿喀琉斯</div>
+</a>
+<a class="entry-item" href="忒瑞西阿斯.html">
+  <div class="noun">忒瑞西阿斯</div>
+  <div class="snippet">希腊神话中底比斯的盲人预言家，拥有非凡的预言能力。曾因手杖击打交配中的蛇而先后变为女性和男性，后宙斯与赫拉争论男女欢爱快感时请他裁决，赫拉怒其回答而将他弄瞎，宙斯补偿他预言能力。在《俄狄浦斯王》中揭示了俄狄浦斯弑父娶母的真相。在《浮士德》中</div>
+</a>
+<a class="entry-item" href="忒耳西忒斯.html">
+  <div class="noun">忒耳西忒斯</div>
+  <div class="snippet">忒耳西忒斯（希腊语：Θερσίτης，Thersites）是荷马史诗《伊利昂纪》（《伊利亚特》）中特洛伊战争期间希腊联军的一名普通士兵，被描绘为希腊军中最丑的人：弓形腿、跛脚、驼背、尖头顶、头发稀疏。他代表平民对贵族统帅的质疑，在希腊联军集</div>
+</a>
+<a class="entry-item" href="忒萨利亚的魔女.html">
+  <div class="noun">忒萨利亚的魔女</div>
+  <div class="snippet">古希腊忒萨利亚（Thessaly，又译色萨利、帖撒利亚）地区的女巫群体，以能够&quot;拖下月亮&quot;（draw down the moon）而闻名。忒萨利亚在古希腊被视为巫术和草药魔法的中心。最著名的忒萨利亚女巫是阿格莱奥妮丝（Aglaonice），</div>
+</a>
+<a class="entry-item" href="忧愁.html">
+  <div class="noun">忧愁</div>
+  <div class="snippet">歌德《浮士德》中的拟人化人物，代表人类无法逃避的焦虑、困苦与不确定性。在第五幕中，忧愁降临于年迈的浮士德面前，对其施加精神折磨，最终向浮士德的眼睛吹了一口气，使其失明。但浮士德的肉眼失明反而象征其心灵之眼的开启。</div>
+</a>
+<a class="entry-item" href="怀疑主义者.html">
+  <div class="noun">怀疑主义者</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中讽刺的休谟派哲学家，怀疑一切知识和真理。歌词利用德语中疑惑（Zweifel）与恶魔（Teufel）押韵的特点。</div>
+</a>
+<a class="entry-item" href="总管.html">
+  <div class="noun">总管</div>
+  <div class="snippet">原文Servibilis，歌德创造的新词，相当于舞台监督或换布景者的角色。可能暗讽魏玛高等学校校长贝蒂格，他是《豪华与流行之杂志》的编者。</div>
+</a>
+<a class="entry-item" href="恩浦萨.html">
+  <div class="noun">恩浦萨</div>
+  <div class="snippet">希腊神话中的变形女妖，赫卡忒的随从，标志性特征为一条铜腿和一条驴腿。在《浮士德》中自称是梅非斯特的表妹，戴着驴头登场，属于古典瓦尔普吉斯之夜中的怪诞角色。 --- 希腊神话中一种变形吸血女妖/幽灵，属于冥界女神赫卡忒的侍从。标志性特征为一条</div>
+</a>
+<a class="entry-item" href="恩狄弥翁.html">
+  <div class="noun">恩狄弥翁</div>
+  <div class="snippet">希腊神话中的美少年，厄利斯国王或牧羊人。月神塞勒涅（罗马名路娜）对他一见钟情，宙斯允他选择死亡或永葆青春的沉睡，他选择了后者，永眠于拉特摩斯山山洞中，月神每夜前来相会。在《浮士德》中，诗人借恩狄弥翁与路娜的神话比喻海伦与青年的场景。 ---</div>
+</a>
+<a class="entry-item" href="恺撒.html">
+  <div class="noun">恺撒</div>
+  <div class="snippet">盖乌斯·尤利乌斯·恺撒（Gaius Julius Caesar，公元前100年—前44年），罗马共和国末期的军事统帅、政治家、作家，被誉为罗马的&quot;国父&quot;。公元前49年率军渡过卢比孔河引发内战，公元前48年在法尔萨洛斯战役（Battle of</div>
+</a>
+<a class="entry-item" href="悔罪女.html">
+  <div class="noun">悔罪女</div>
+  <div class="snippet">悔罪女（Una Poenitentium，拉丁语&quot;一位忏悔者&quot;）是《浮士德》终场中赎罪女性群体的总称，其中最重要的一位即旧名格蕾辛（Gretchen）者。在《浮士德》第一部中，格蕾辛因被浮士德引诱而导致家庭悲剧，最终被判死刑，但因忏悔而得救</div>
+</a>
+<a class="entry-item" href="所罗门.html">
+  <div class="noun">所罗门</div>
+  <div class="snippet">所罗门（Solomon，约前990-前931），以色列联合王国第三位国王，大卫之子，以超凡智慧闻名。圣经记载他向神求智慧治理百姓，著名故事包括智断婴案。他在耶路撒冷建造了第一圣殿，统治时期是以色列的黄金时代。据犹太传统著有《箴言》《传道书》</div>
+</a>
+<a class="entry-item" href="抢夺快.html">
+  <div class="noun">抢夺快</div>
+  <div class="snippet">浮士德第二部中皇帝的士兵之一，与&quot;先下手&quot;同为贪婪的士兵角色。在抢夺黄金时被沉重的箱子压伤，围裙又破洞洒落财宝，最终在近卫兵的斥责下狼狈离开。</div>
+</a>
+<a class="entry-item" href="抹大拉的马利亚.html">
+  <div class="noun">抹大拉的马利亚</div>
+  <div class="snippet">圣经新约中的重要女性人物，来自加利利地区的抹大拉镇。耶稣曾从她身上赶出七个鬼，此后她成为耶稣忠实的追随者，用自己的财物资助耶稣传道。她在耶稣被钉十字架时守候在旁，并在复活清晨成为第一个见证耶稣空坟墓和复活的人，被早期教会称为&quot;使徒中的使徒&quot;</div>
+</a>
+<a class="entry-item" href="拉刻西斯.html">
+  <div class="noun">拉刻西斯</div>
+  <div class="snippet">古希腊神话中三位命运女神（摩伊拉）之一，名字意为&quot;分配者&quot;。手持杆子或线团，负责丈量生命之线的长短，分配命运的吉凶。对应罗马神话中的得客玛（Decima）。</div>
+</a>
+<a class="entry-item" href="拉弥亚.html">
+  <div class="noun">拉弥亚</div>
+  <div class="snippet">希腊神话中的女妖，上半身为美女、下半身为蛇身。原为利比亚女王，是宙斯的情妇，因天后赫拉嫉妒而失去了孩子，从此变成专门偷食他人孩子、吸吮少年鲜血的怪物，被视为西方最早的吸血鬼原型之一。</div>
+</a>
+<a class="entry-item" href="拉斐尔.html">
+  <div class="noun">拉斐尔</div>
+  <div class="snippet">拉斐尔（希伯来语意为&quot;神治愈了&quot;），天主教译作辣法厄尔或辣法耳，是《圣经》中记载的天使长之一，侍立于天主台前的七位总领天使之一。其事迹主要见于《旁经·多比雅传》（即《多俾亚传》），乔装青年帮助多俾亚驱魔并医治其父眼疾。在弥尔顿《失乐园》中也</div>
+</a>
+<a class="entry-item" href="拉瓦特.html">
+  <div class="noun">拉瓦特</div>
+  <div class="snippet">约翰·卡斯帕尔·拉瓦特（1741-1801），瑞士苏黎世的牧师、神学家和作家，面相学（生理面相学）的创始人，代表作《相面术片段》（1775-1778）在欧洲影响广泛。他相信通过面部特征可以判断人的性格。拉瓦特与歌德曾是好友，歌德曾参与其著作</div>
+</a>
+<a class="entry-item" href="拜伦.html">
+  <div class="noun">拜伦</div>
+  <div class="snippet">乔治·戈登·拜伦（1788—1824），第六代拜伦男爵，英国浪漫主义诗人，代表作《唐璜》《恰尔德·哈罗尔德游记》。他塑造了著名的&quot;拜伦式英雄&quot;形象——高傲孤独、反抗权威、具有强烈的叛逆精神。拜伦本人投身希腊民族独立战争并病逝于军中，成为为自</div>
+</a>
+<a class="entry-item" href="提柏里乌斯.html">
+  <div class="noun">提柏里乌斯</div>
+  <div class="snippet">提比略·恺撒·奥古斯都（前42-37年），罗马帝国第二位皇帝，公元14至37年在位。他是奥古斯都的养子，杰出的军事统帅，晚年隐居卡普里岛。据塔西陀记载，提柏里乌斯的养子日耳曼尼库斯曾前往萨摩特拉刻岛查询腓尼基人的密教。</div>
+</a>
+<a class="entry-item" href="提瑞西阿斯.html">
+  <div class="noun">提瑞西阿斯</div>
+  <div class="snippet">希腊神话中忒拜城的盲人预言家。有从男变女再变回男的独特经历。因裁决宙斯与赫拉之争触怒赫拉而失明，宙斯补偿其预言能力。在《浮士德》注解中被提及为曼托之父。</div>
+</a>
+<a class="entry-item" href="提西福涅.html">
+  <div class="noun">提西福涅</div>
+  <div class="snippet">古希腊神话中三位复仇女神（厄里倪厄斯）之一，名字意为&quot;报施&quot;。专向谋杀者复仇，是地狱塔耳塔洛斯的守卫者。以毒液和利刃惩罚背叛爱情之人，冷酷无情。</div>
+</a>
+<a class="entry-item" href="摩洛.html">
+  <div class="noun">摩洛</div>
+  <div class="snippet">迦南神话中的火神，祭拜时需要焚烧儿童作为献祭。其名源自希伯来语词根&quot;王&quot;（melek），犹太人故意插入&quot;耻辱&quot;的元音以贬低此神。圣经《列王纪上》记载所罗门王曾为摩洛建筑丘坛，《申命记》严厉禁止&quot;使儿女经火&quot;的献祭仪式。在歌德《浮士德》中，摩</div>
+</a>
+<a class="entry-item" href="撒旦.html">
+  <div class="noun">撒旦</div>
+  <div class="snippet">基督教和犹太教中的堕落天使、魔鬼之王。在《浮士德》中，乌良（Urian）是撒旦的别名，梅非斯特作为魔鬼使者，引导浮士德经历各种奇幻场景。</div>
+</a>
+<a class="entry-item" href="撒玛利亚妇人.html">
+  <div class="noun">撒玛利亚妇人</div>
+  <div class="snippet">撒玛利亚妇人（Mulier Samaritana）是《浮士德》终场中出现的三位圣经悔罪女之一，原型出自《约翰福音》第4章。经文记载耶稣在雅各井旁与撒玛利亚妇人对话，揭示自己就是&quot;活水&quot;之源，妇人因此信服并回城传道。在《浮士德》终场中，她凭古</div>
+</a>
+<a class="entry-item" href="教条主义者.html">
+  <div class="noun">教条主义者</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中讽刺的哲学流派，指康德以前的本体论者（独断论者），由概念的存在而证明物体本身的存在。</div>
+</a>
+<a class="entry-item" href="教皇.html">
+  <div class="noun">教皇</div>
+  <div class="snippet">罗马天主教的最高领袖。在《浮士德》中，司仪讲述神圣罗马帝国皇帝前往罗马跪在教皇脚下，从教皇处求得执政统治的权利后戴着皇冠回国的历史典故。</div>
+</a>
+<a class="entry-item" href="斗得狠.html">
+  <div class="noun">斗得狠</div>
+  <div class="snippet">歌德《浮士德》第二部第四幕中梅非斯特召唤的三勇士之一，德文原名Raufebold，意为&quot;斗得很凶狠&quot;。三勇士分别代表暴力掠夺、贪婪夺取和牢牢占有三种特质，是梅非斯特用魔法召唤的凶悍战士，实际是寓意性角色而非真实人物。斗得狠被描述为&quot;年轻，轻</div>
+</a>
+<a class="entry-item" href="斯宾诺莎.html">
+  <div class="noun">斯宾诺莎</div>
+  <div class="snippet">巴鲁赫·斯宾诺莎（1632-1677），荷兰理性主义哲学家，近代西方哲学两大理性主义者之一。他提出实体即自然、思维与广延是同一实体的两种属性的泛神论思想，认为上帝即自然，对歌德的哲学思想和文学创作产生了深远影响。《浮士德》中格蕾辛悲剧部分的</div>
+</a>
+<a class="entry-item" href="斯维登保.html">
+  <div class="noun">斯维登保</div>
+  <div class="snippet">伊曼纽·斯威登堡（1688-1772），瑞典科学家、哲学家、神秘主义者，早年在天文、解剖学等领域成就卓著，1745年后自称灵魂可自由出入灵界，著有《天堂与地狱》等神秘主义著作。</div>
+</a>
+<a class="entry-item" href="方济各.html">
+  <div class="noun">方济各</div>
+  <div class="snippet">亚西西的圣方济各（1181-1226），天主教方济各会（小兄弟会）创始人，放弃富裕家庭过使徒式清贫生活，热爱自然万物，1224年获赐耶稣五伤圣痕，被誉为&quot;第二位基督&quot;。</div>
+</a>
+<a class="entry-item" href="施托尔贝克.html">
+  <div class="noun">施托尔贝克</div>
+  <div class="snippet">弗里德里希·莱奥波德·施托尔贝克（Friedrich Leopold zu Stolberg-Stolberg，1750-1819），德国哥廷根派诗人、荷马译者、歌德之友，后放弃自由思想改信天主教，曾从正教立场批评席勒的抒情诗《希腊群神》。</div>
+</a>
+<a class="entry-item" href="施托尔贝克兄弟.html">
+  <div class="noun">施托尔贝克兄弟</div>
+  <div class="snippet">指克里斯蒂安·施托尔贝格-施托尔贝格伯爵（1748-1821）和弗里德里希·利奥波德·施托尔贝格-施托尔贝格伯爵（1750-1819）兄弟二人，均为18世纪德国诗人，属于狂飙突进运动和早期浪漫主义时期的代表人物。1772年加入&quot;格丁根林苑派</div>
+</a>
+<a class="entry-item" href="施维尔莱因.html">
+  <div class="noun">施维尔莱因</div>
+  <div class="snippet">歌德《浮士德》中未出场但被提及的角色，全名施维尔莱因（Schwerdtlein），玛尔太的丈夫。一名水手/海盗，长年在外漂泊、酗酒、赌博、寻花问柳。据梅非斯特编造的谎言，他死于那不勒斯，葬在帕多瓦。其&quot;死亡证明&quot;成为梅非斯特安排浮士德与格蕾</div>
+</a>
+<a class="entry-item" href="旅人.html">
+  <div class="noun">旅人</div>
+  <div class="snippet">《浮士德》第五幕&quot;旷野&quot;场景中登场的人物。他曾遭遇海难，被菲勒蒙和包喀斯老夫妇救助。多年后重返故地，发现沧海变桑田，浮士德的填海工程已将海洋变成花园。</div>
+</a>
+<a class="entry-item" href="日耳曼尼库斯.html">
+  <div class="noun">日耳曼尼库斯</div>
+  <div class="snippet">日耳曼尼库斯·尤利乌斯·恺撒（前15-19年），罗马帝国著名将领，罗马皇帝卡利古拉之父、尼禄之外祖父。曾率军击败日耳曼领袖阿米尼乌斯，夺回条顿堡森林战役中遗失的军团鹰旗，被罗马人视为&quot;最后一位英雄&quot;。据塔西陀记载，他公元17年东行途中曾在萨</div>
+</a>
+<a class="entry-item" href="星士.html">
+  <div class="noun">星士</div>
+  <div class="snippet">《浮士德》中皇帝的宫廷占星师，由梅非斯特提词发言。他以占星术语言将行星对应金属，讲述太阳为纯金、水星博取酬劳、金星使人迷醉等天象预言，断言金银会合将带来快乐世界。后劝皇帝先举行快乐游戏、克己向天主祈祷，方能获得下界之宝。</div>
+</a>
+<a class="entry-item" href="普利尼.html">
+  <div class="noun">普利尼</div>
+  <div class="snippet">普利尼（Pliny the Elder，公元23-79年）是古罗马博物学者，代表作《博物志》共37卷，涵盖宇宙、地理、动物学、植物学、药物学、矿物学，是西方古代百科全书的代表作。他在维苏威火山爆发时前去观察，不幸被毒气窒息而死。</div>
+</a>
+<a class="entry-item" href="普尔奇内拉.html">
+  <div class="noun">普尔奇内拉</div>
+  <div class="snippet">普尔奇内拉（意大利语：Pulcinella，英语：Punchinello，法语：Polichinelle）是17世纪起源于意大利即兴喜剧（Commedia dell&#x27;Arte）的经典假面丑角角色，后成为那不勒斯木偶剧的固定角色。其典型形象为</div>
+</a>
+<a class="entry-item" href="普洛透斯.html">
+  <div class="noun">普洛透斯</div>
+  <div class="snippet">希腊神话中的早期海神，被称为&quot;海洋老人&quot;，拥有预知未来和随意变形的能力，可化为狮子、蛇、树木、流水等各种形态。英语&quot;protean&quot;（千变万化的）即源于其名。在《浮士德》第二部中，善于变形的海神普洛透斯建议小人回到海洋中重新开始生命的进化过</div>
+</a>
+<a class="entry-item" href="普绪罗人.html">
+  <div class="noun">普绪罗人</div>
+  <div class="snippet">普绪罗人（Psylli）是古代北非利比亚的土著柏柏尔部落，以弄蛇闻名。他们被认为天生对蛇毒免疫，能够徒手操纵毒蛇。他们用蛇来检验子嗣是否纯正。老普林尼说他们被邻族征服，几近消灭。</div>
+</a>
+<a class="entry-item" href="普罗米修斯.html">
+  <div class="noun">普罗米修斯</div>
+  <div class="snippet">希腊神话中的泰坦神，名字意为&quot;先见之明&quot;。他与雅典娜共同用黏土塑造人类。因同情人类，从太阳神阿波罗的太阳车偷取火种送给人类，触怒宙斯。宙斯命火神将其锁在高加索山的悬崖上，每日派秃鹰啄食其肝脏，肝脏夜间又重生，痛苦永无止境。后为英雄赫拉克勒斯</div>
+</a>
+<a class="entry-item" href="普路同.html">
+  <div class="noun">普路同</div>
+  <div class="snippet">普路同（希腊语：Πλούτων，Plouton，意为&quot;富有者&quot;；罗马名：Pluto）是希腊罗马神话中的冥王，对应希腊神话中的哈得斯（Hades）。他统治冥界和地下所有矿产宝藏，是克洛诺斯与瑞亚之子，宙斯和波塞冬之兄。三兄弟推翻克洛诺斯后抽签</div>
+</a>
+<a class="entry-item" href="普路托斯.html">
+  <div class="noun">普路托斯</div>
+  <div class="snippet">希腊神话中的财富之神，农业女神得墨忒耳与英雄伊阿西翁之子。在古典艺术中常被描绘为手持丰饶角的形象。在《浮士德》第二部的化装游行中，浮士德化装为财富之神普路托斯，以隐藏身份进入皇帝宫廷的狂欢庆典。</div>
+</a>
+<a class="entry-item" href="普鲁塔克.html">
+  <div class="noun">普鲁塔克</div>
+  <div class="snippet">罗马帝国时期的希腊作家、历史学家（约46-120年），代表作《希腊罗马名人传》（又称《比较列传》）包含五十篇人物传记，开创了西方纪传体历史著作的先河，被誉为&quot;传记之王&quot;。歌德创作《浮士德》中&quot;母亲之国&quot;的概念正是从普鲁塔克的记载中获得的灵感</div>
+</a>
+<a class="entry-item" href="普鲁士弗里德里希大王.html">
+  <div class="noun">普鲁士弗里德里希大王</div>
+  <div class="snippet">普鲁士国王腓特烈二世（Friedrich der Große，1712-1786），又称弗里德里希大王、腓特烈大帝，开明专制君主，军事家、长笛演奏家、作曲家。在波茨坦建造了无忧宫（Sanssouci）。</div>
+</a>
+<a class="entry-item" href="曼托.html">
+  <div class="noun">曼托</div>
+  <div class="snippet">希腊神话中的女预言者，底比斯盲人先知忒瑞西阿斯之女。名字意为&quot;先知&quot;，精通占卜术。在《浮士德》第二部中，马人刻戎指引浮士德去找女预言者曼托，曼托又指点浮士德前往冥府求冥后放回海伦。意大利城市曼托瓦（Mantua）的名字据说来源于她。</div>
+</a>
+<a class="entry-item" href="月神.html">
+  <div class="noun">月神</div>
+  <div class="snippet">希腊神话中的月亮女神塞勒涅（Selene），罗马名卢娜（Luna），泰坦神许珀里翁与忒亚之女，太阳神赫利俄斯之妹。在《浮士德》古典瓦普几斯之夜中美人鸟们向其致敬。</div>
+</a>
+<a class="entry-item" href="林叩斯.html">
+  <div class="noun">林叩斯</div>
+  <div class="snippet">希腊神话中的人物，主要有两个身份：一是阿尔戈斯国王，达那俄斯之女许珀耳涅斯特拉的丈夫，因妻子未在新婚夜杀死他而幸存并夺取王位；二是阿耳戈船英雄之一，拥有全世界最敏锐的视力，曾参加卡吕冬狩猎和取金羊毛的远征。在《浮士德》中，林叩斯作为守塔人在</div>
+</a>
+<a class="entry-item" href="柏拉图.html">
+  <div class="noun">柏拉图</div>
+  <div class="snippet">柏拉图（Plato，约公元前427-前347年）是古希腊伟大的哲学家，苏格拉底的学生，亚里士多德的老师。创立雅典学园，以理念论为核心。著作以对话录流传，包括《理想国》、《会饮篇》（饷宴篇）等。歌德注解中说明厄洛斯的概念来自其《饷宴篇》。</div>
+</a>
+<a class="entry-item" href="格吕菲乌斯.html">
+  <div class="noun">格吕菲乌斯</div>
+  <div class="snippet">安德烈亚斯·格吕菲乌斯（Andreas Gryphius，1616-1664），德国巴洛克时期最重要的诗人和剧作家。创作了喜剧《彼得·斯昆茨先生》，仿效莎士比亚《仲夏夜之梦》中彼得·昆士这一角色，讽刺自以为是的手工艺人业余剧团。</div>
+</a>
+<a class="entry-item" href="格蕾辛.html">
+  <div class="noun">格蕾辛</div>
+  <div class="snippet">玛加蕾特（Margarete）的昵称，德语亲昵爱称。中文又译作葛丽卿、甘泪卿、格雷琴。她是《浮士德》第一部中的女主人公，纯洁虔诚的平民少女，被浮士德引诱后经历爱情悲剧。她的命运在西方音乐中有深远影响，尤其是舒伯特的艺术歌曲《纺车旁的格蕾辛》</div>
+</a>
+<a class="entry-item" href="格赖埃.html">
+  <div class="noun">格赖埃</div>
+  <div class="snippet">希腊神话中共用一只眼睛和一颗牙齿的三姐妹神灵，海神福耳库斯与刻托之女，戈耳工三姐妹的姊妹。名字意为&quot;老妇人&quot;或&quot;灰巫女&quot;。她们生来白发，三人轮流使用唯一的眼睛和牙齿。在珀尔修斯斩杀美杜莎的传说中，珀尔修斯夺走她们的眼睛迫使她们说出宁芙仙女的</div>
+</a>
+<a class="entry-item" href="梅非斯特.html">
+  <div class="noun">梅非斯特</div>
+  <div class="snippet">歌德诗剧《浮士德》中的魔鬼形象，又译靡菲斯特、墨菲斯托。他是否定的恶灵，代表&quot;为成就大恶而行善的力量&quot;。梅非斯特与上帝打赌，试图引诱浮士德堕落，但在歌德的笔下，他主观作恶、客观造善，反而成为激发浮士德不断向上的动力。这一形象是西方文学中最复</div>
+</a>
+<a class="entry-item" href="棕色女郎.html">
+  <div class="noun">棕色女郎</div>
+  <div class="snippet">《浮士德》第二部第一幕中出现在皇帝宫廷的棕发贵妇。她因脚上生冻疮妨碍跳舞行走而向梅非斯特求医。梅非斯特以&quot;以同类治疗同类&quot;为名踩了她一脚，她痛呼感觉像马蹄，冻疮遂被&quot;治好&quot;。</div>
+</a>
+<a class="entry-item" href="樵夫.html">
+  <div class="noun">樵夫</div>
+  <div class="snippet">化装舞会中登场的一群莽撞粗鲁的伐木工角色。他们的唱词强调体力劳动的价值——若没有粗人在国内辛勤，高贵的诸公再动脑筋也没有用；不流汗，别人就要受冻，以此讽刺社会阶级分工。</div>
+</a>
+<a class="entry-item" href="欧佛洛绪涅.html">
+  <div class="noun">欧佛洛绪涅</div>
+  <div class="snippet">古希腊神话中美惠三女神（卡里忒斯）之一，名字意为&quot;欢乐&quot;。司掌欢乐、节庆与欢宴。在《浮士德》假面舞会场景中，作为唱颂感恩与优美的角色登场。</div>
+</a>
+<a class="entry-item" href="欧律斯透斯.html">
+  <div class="noun">欧律斯透斯</div>
+  <div class="snippet">希腊神话中的梯林斯和迈锡尼国王。因赫拉的诡计比赫拉克勒斯提前出生，抢先获得王位继承权，成为赫拉克勒斯必须服从的主人。命赫拉克勒斯完成十二项不可能的任务。在《浮士德》注解中被提及为赫拉克勒斯应叫他叔父。</div>
+</a>
+<a class="entry-item" href="欧福里翁.html">
+  <div class="noun">欧福里翁</div>
+  <div class="snippet">希腊神话中阿喀琉斯与海伦之子，长有翅膀、容貌俊美。在歌德《浮士德》第二部中，欧福里翁是浮士德与海伦所生的儿子，象征奔放不羁的诗的化身。他洋溢着生命活力，不断向上翱翔，最终坠亡。歌德以欧福里翁影射英国诗人拜伦，悼念拜伦参加希腊独立战争而死。</div>
+</a>
+<a class="entry-item" href="歌德.html">
+  <div class="noun">歌德</div>
+  <div class="snippet">约翰·沃尔夫冈·冯·歌德（1749—1832），德国最伟大的文学家、思想家，与荷马、但丁、莎士比亚并称世界四大文豪。他出身于法兰克福的富裕家庭，早年创作《少年维特的烦恼》轰动欧洲，后应魏玛公爵邀请从政，与席勒共创魏玛古典主义。其毕生巨著《浮</div>
+</a>
+<a class="entry-item" href="毕达哥拉斯.html">
+  <div class="noun">毕达哥拉斯</div>
+  <div class="snippet">毕达哥拉斯（约公元前580—前500年），古希腊哲学家、数学家，毕达哥拉斯学派的创始人。他提出&quot;万物皆数&quot;的哲学思想，认为数是宇宙万物的本原，并创立了毕达哥拉斯定理（勾股定理）。他将数学引入音乐研究，发现弦长比例与音程的关系，提出&quot;天体调和</div>
+</a>
+<a class="entry-item" href="民伕.html">
+  <div class="noun">民伕</div>
+  <div class="snippet">被征募的劳工、民工。在《浮士德》第五幕中，浮士德听到铲锹声以为是&quot;为我服役的民伕&quot;在围海造田，便命令梅非斯特用酒饭和严规招募大批民伕。浮士德将民伕视为实现其自由土地理想的建设者，但实际上挖掘的是鬼怪而非民伕。</div>
+</a>
+<a class="entry-item" href="水精.html">
+  <div class="noun">水精</div>
+  <div class="snippet">即希腊神话中的宁芙（Nymph），又译水仙女、水精灵，是自然幻化 的女性精灵，栖息于泉水、河流、海洋等水域，以美丽少女的形象出 现，擅长歌舞。在歌德《浮士德》第二部假面舞会中，水精们以合唱 团形式围绕大神潘歌唱，描写潘神入睡时万籁俱寂、水精</div>
+</a>
+<a class="entry-item" href="江湖医生.html">
+  <div class="noun">江湖医生</div>
+  <div class="snippet">魔女在丹房中的行径被刻画为江湖医生式的骗术。浮士德厌恶地说话，梅非斯特则说她做医生总要耍点手法。歌德借此讽刺中世纪炼金术士和江湖郎中以玄虚仪式蒙骗病人的行为。</div>
+</a>
+<a class="entry-item" href="沃当.html">
+  <div class="noun">沃当</div>
+  <div class="snippet">日耳曼神话中的最高神，对应北欧神话的奥丁（Odin）。司掌预言、王权、智慧、诗歌、战争等。独眼形象，手持永恒之枪冈格尼尔。星期三（Wednesday）即源于沃当之名。在《浮士德》注解中提及他从高空住处观看下界。</div>
+</a>
+<a class="entry-item" href="沉思教父.html">
+  <div class="noun">沉思教父</div>
+  <div class="snippet">即 Pater Profundus，三位圣隐修士之一，居于低处，代表通过对大自然的深沉沉思来领悟神性。他观察森林、岩壁、流水、闪电等自然万象，认为这些都是&quot;全能之爱&quot;创造和哺育一切的证明，体现歌德的泛神论自然观。</div>
+</a>
+<a class="entry-item" href="沙玛.html">
+  <div class="noun">沙玛</div>
+  <div class="snippet">圣经中大卫王的三大勇士之一，哈拉人亚基的儿子。据《撒母耳记下》23:11-12记载，当非利士人进攻时，以色列人逃跑，沙玛独自站在长满红豆的田间击杀非利士人，救护了那田。歌德在《浮士德》注释中提及。</div>
+</a>
+<a class="entry-item" href="波利齐涅罗.html">
+  <div class="noun">波利齐涅罗</div>
+  <div class="snippet">意大利即兴喜剧（Commedia dell&#x27;Arte）中的经典丑角角色（Pulcinella），源自那不勒斯传统，形象为驼背、大鼻子、穿白色衣服，性格狡猾幽默。在《浮士德》化装舞会中，波利齐涅罗以粗鲁几乎愚蠢的形象出场，自夸伶俐轻巧、无忧无</div>
+</a>
+<a class="entry-item" href="波吕丢刻斯.html">
+  <div class="noun">波吕丢刻斯</div>
+  <div class="snippet">希腊神话中的英雄，宙斯之子，拥有永生，擅长拳击。与卡斯托耳合称狄奥斯库里兄弟。宙斯将二人升为天上的双子座。参加了阿尔戈英雄远征。在《浮士德》注解中与卡斯托耳并提。</div>
+</a>
+<a class="entry-item" href="波塞冬.html">
+  <div class="noun">波塞冬</div>
+  <div class="snippet">希腊神话中的奥林匹斯十二主神之一，掌管大海、风暴、地震和马匹。他是克洛诺斯与瑞亚之子，宙斯和哈迪斯的兄弟，象征为三叉戟。在《浮士德》注解中，波塞冬与大地女神该亚生下巨人安泰。</div>
+</a>
+<a class="entry-item" href="波路克斯.html">
+  <div class="noun">波路克斯</div>
+  <div class="snippet">希腊神话中的英雄，与孪生兄弟卡斯托耳合称狄俄斯库里兄弟（宙斯之子），是海伦的异父兄弟。波路克斯的父亲是宙斯，拥有永生；卡斯托耳的父亲是斯巴达国王廷达柔斯，为凡人。兄弟二人从忒修斯手中救出了年幼的海伦。死后化为双子座。在《浮士德》中，福耳库阿</div>
+</a>
+<a class="entry-item" href="泰勒斯.html">
+  <div class="noun">泰勒斯</div>
+  <div class="snippet">古希腊第一位哲学家（约前624-前546年），米利都学派创始人，&quot;希腊七贤&quot;之一，被尊为&quot;科学和哲学之祖&quot;。提出&quot;水是万物本原&quot;的命题，曾准确预测日食，用几何学测量金字塔高度。在《浮士德》第二部中，泰勒斯作为水成说的代表人物出现，与代表火成</div>
+</a>
+<a class="entry-item" href="洪堡尔特.html">
+  <div class="noun">洪堡尔特</div>
+  <div class="snippet">指德国洪堡尔特家族，其家族府邸位于柏林郊区忒格尔。1797年传说府邸中有幽灵出现。该家族的威廉·冯·洪堡是著名语言学家、教育改革家，其弟亚历山大·冯·洪堡是著名自然科学家。</div>
+</a>
+<a class="entry-item" href="流星.html">
+  <div class="noun">流星</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中登场的一个角色，与鬼火相对，象征昙花一现、转瞬即逝的下台政客。耀眼却短暂，缺乏持久的价值和实质。</div>
+</a>
+<a class="entry-item" href="浮士德.html">
+  <div class="noun">浮士德</div>
+  <div class="snippet">欧洲中世纪传说中的著名人物，原为15至16世纪德国的一位炼金术师和占星家。传说中浮士德与魔鬼订立契约，以自己的灵魂换取知识和力量。这一传说后来被歌德改编为诗剧《浮士德》，成为世界文学经典。浮士德从此成为西方文化中追求无限知识、永不满足的象征</div>
+</a>
+<a class="entry-item" href="海中的美惠女神.html">
+  <div class="noun">海中的美惠女神</div>
+  <div class="snippet">指涅柔斯与多里斯的女儿们——涅瑞伊得斯（Nereids），即海中仙女/内海女神，共约五十位。歌德在《浮士德》中将其诗意地称为海中的美惠女神。</div>
+</a>
+<a class="entry-item" href="海伦.html">
+  <div class="noun">海伦</div>
+  <div class="snippet">希腊神话中世间最美的女子，宙斯与勒达之女，斯巴达王墨涅拉俄斯之妻。她被特洛伊王子帕里斯拐走，成为特洛伊战争的直接导火索。在《浮士德》第二部中，浮士德经历格蕾辛悲剧后转向对古典美的追求，海伦正是这一追求的核心目标，代表了希腊古典美的最高典范。</div>
+</a>
+<a class="entry-item" href="海国女郎.html">
+  <div class="noun">海国女郎</div>
+  <div class="snippet">《浮士德》中对海中仙女/海洋女性的诗意称呼，美人鸟们在岩石高处眺望远方时看到的乘风破浪而来的圣洁海国女郎。</div>
+</a>
+<a class="entry-item" href="海女.html">
+  <div class="noun">海女</div>
+  <div class="snippet">即海中仙女、涅瑞伊得斯（Nereids）或相关海中的女性神怪。在《浮士德》中特指接替库普里斯（阿佛洛狄忒）之位的伽拉忒亚。</div>
+</a>
+<a class="entry-item" href="涅斯托耳.html">
+  <div class="noun">涅斯托耳</div>
+  <div class="snippet">希腊神话中皮洛斯（皮罗斯）的国王，特洛伊战争期间希腊联军中最年长睿智的将领，以善于辞令和富有经验著称，曾调解阿伽门农与阿喀琉斯的争端。在西方文化中，&quot;涅斯托耳&quot;一名常代指经验丰富的长者。 --- 希腊神话中皮罗斯的国王，特洛伊战争中希腊联军</div>
+</a>
+<a class="entry-item" href="涅普图努斯.html">
+  <div class="noun">涅普图努斯</div>
+  <div class="snippet">罗马神话中的海神，对应希腊神话的波塞冬（Poseidon）。在《浮士德》中作为海神被提及，内海神女们跳到其海马坐骑上。</div>
+</a>
+<a class="entry-item" href="涅柔斯.html">
+  <div class="noun">涅柔斯</div>
+  <div class="snippet">希腊神话中最初的海洋之神之一，蓬托斯与盖亚之子，被称为&quot;海洋老人&quot;。他代表大海友善温和的一面，拥有变化形体和预知未来的能力。他有五十位女儿（涅瑞伊得斯），其中最著名的是忒提丝（阿喀琉斯之母）。在《浮士德》中，泰勒斯带小人前去向老海神涅柔斯寻</div>
+</a>
+<a class="entry-item" href="淮阿喀亚人.html">
+  <div class="noun">淮阿喀亚人</div>
+  <div class="snippet">淮阿喀亚人（Phaeacians）是荷马史诗《奥德赛》中记载的传奇民族，以高超的航海技术和热情好客闻名。他们居住在斯刻里亚岛。国王阿尔喀诺俄斯热情款待了奥德修斯，最后用神速船只护送他返回伊萨卡。</div>
+</a>
+<a class="entry-item" href="潘.html">
+  <div class="noun">潘</div>
+  <div class="snippet">希腊神话中的牧神、山林之神，半人半羊形象，长着山羊的腿和角。他是赫耳墨斯之子，以擅长吹奏排箫而闻名。英语&quot;panic&quot;（恐慌）一词即源于他的名号。在《浮士德》第二部的化装游行中，罗马帝国皇帝化装为大神潘参与庆典。</div>
+</a>
+<a class="entry-item" href="潘塔利斯.html">
+  <div class="noun">潘塔利斯</div>
+  <div class="snippet">希腊神话中海伦的侍女，在歌德《浮士德》第二部第三幕中被塑造为合唱队的队长。她带领被俘的特洛伊妇女组成的合唱队随侍海伦返回斯巴达。在剧终时，其他合唱队少女化为自然元素，而潘塔利斯选择返回冥界陪伴海伦，体现其忠诚的高贵品格。名字意为&quot;百花盛开者</div>
+</a>
+<a class="entry-item" href="潘神.html">
+  <div class="noun">潘神</div>
+  <div class="snippet">希腊神话中的牧神、自然之神，赫耳墨斯之子。半人半羊形象，长有羊腿、羊角和羊耳。掌管森林、田地和羊群，能引发恐惧（英语&quot;panic&quot;一词即源于其名）。擅长吹奏排箫（潘笛）。</div>
+</a>
+<a class="entry-item" href="爱丽尔.html">
+  <div class="noun">爱丽尔</div>
+  <div class="snippet">莎士比亚《暴风雨》中的精灵，在《浮士德》瓦尔普吉斯之夜的梦中引导众精灵前往蔷薇山。</div>
+</a>
+<a class="entry-item" href="爱德华三世.html">
+  <div class="noun">爱德华三世</div>
+  <div class="snippet">英格兰国王（1327-1377在位），百年战争的发动者。相传在一次舞会上为情妇拾起蓝色袜带，后于1348年创立嘉德勋章。歌德在《浮士德》注释中以此典故解释嘉德勋章的起源。</div>
+</a>
+<a class="entry-item" href="特里同.html">
+  <div class="noun">特里同</div>
+  <div class="snippet">希腊神话中的海神信使，波塞冬与安菲特里忒之子，形象为人首鱼尾，手持海螺号角。在《浮士德》中与内海神女一同唱赞歌迎接卡柏洛诸神。</div>
+</a>
+<a class="entry-item" href="狂喜教父.html">
+  <div class="noun">狂喜教父</div>
+  <div class="snippet">即 Pater Ecstaticus，三位圣隐修士之一，代表通过狂喜与出神体验接近神圣的路径。他的唱词充满烈火、利箭、闪电等激烈意象，表达灵魂渴望被神之爱彻底穿透和净化的极致状态。其形象后被马勒用于《第八交响曲》。</div>
+</a>
+<a class="entry-item" href="狄俄倪索斯.html">
+  <div class="noun">狄俄倪索斯</div>
+  <div class="snippet">希腊神话中的酒神，奥林匹斯十二主神之一，宙斯与塞墨勒之子。他教导人类种植葡萄和酿酒，代表迷醉、狂喜与艺术创造力。罗马名称为巴克斯（Bacchus）。</div>
+</a>
+<a class="entry-item" href="狄俄涅斯·拉厄尔蒂俄斯.html">
+  <div class="noun">狄俄涅斯·拉厄尔蒂俄斯</div>
+  <div class="snippet">狄俄涅斯·拉厄尔蒂俄斯（Diogenes Laertius，约公元3世纪）是古希腊哲学史家，以《名哲言行录》闻名。该书共10卷，涵盖200余位哲学家，是研究古希腊哲学最全面的古代史料汇编。歌德注解中引用他说阿那克萨戈拉曾预言太阳陨石。</div>
+</a>
+<a class="entry-item" href="狄安娜.html">
+  <div class="noun">狄安娜</div>
+  <div class="snippet">罗马神话中的月亮女神、狩猎女神，对应希腊神话中的阿尔忒弥斯（阿耳忒弥斯）。朱庇特与拉托娜之女，阿波罗的孪生姐姐，奥林匹斯十二主神之一，司掌月亮、狩猎、贞洁与分娩。在《浮士德》中，阿那克萨戈拉向月神呼告时将其作为月神的三重化身之一。</div>
+</a>
+<a class="entry-item" href="独眼巨人.html">
+  <div class="noun">独眼巨人</div>
+  <div class="snippet">希腊神话中的独眼巨人族（Cyclopes），荷马《奥德赛》中奥德修斯遭遇的波吕斐摩斯即为其一。在《浮士德》中，泰勒斯提及自己曾警告尤利斯（奥德修斯）关于独眼巨人的危险。</div>
+</a>
+<a class="entry-item" href="独眼族人.html">
+  <div class="noun">独眼族人</div>
+  <div class="snippet">独眼巨人（Cyclops/库克罗普斯），希腊神话中额前正中长有一只眼睛的巨人种族。有两个版本：赫西俄德《神谱》中的三位初代独眼巨人（布戎忒斯、斯特洛珀斯、阿尔革斯）是工匠神，为宙斯锻造雷电；荷马《奥德赛》中的波吕斐摩斯则是野蛮食人的独眼巨人</div>
+</a>
+<a class="entry-item" href="玛加蕾特.html">
+  <div class="noun">玛加蕾特</div>
+  <div class="snippet">《浮士德》第一部中的女主人公，昵称格蕾辛（又译葛丽卿、甘泪卿）。她是出身平民阶层的纯洁少女，浮士德在街道上与她不期而遇后一见钟情。她先后经历误杀母亲、兄长被杀、溺婴悲剧，最终被处死但灵魂获得救赎。她是永恒之女性的第一层面——市民之爱的代表。</div>
+</a>
+<a class="entry-item" href="玛尔太.html">
+  <div class="noun">玛尔太</div>
+  <div class="snippet">歌德《浮士德》第一部中的配角，格蕾辛的女邻居，寡妇（丈夫已失踪多年）。在该文本段中第十场&quot;邻妇之家&quot;登场。玛尔太为人热心但略嫌势利、爱慕虚荣。梅非斯特利用她接近格蕾辛，先假报她丈夫死讯骗取信任，再借她家花园撮合浮士德与格蕾辛相会，她无意中成</div>
+</a>
+<a class="entry-item" href="玻瑞阿斯.html">
+  <div class="noun">玻瑞阿斯</div>
+  <div class="snippet">希腊神话中的北风神，四大风神之一。父亲为星空神阿斯特赖俄斯，母亲为晨光女神厄俄斯。曾抢夺雅典公主俄瑞提亚为妻，生下仄忒斯和卡拉伊斯二子（合称玻瑞阿代，生有双翅，参加了阿尔戈英雄远征）。在《浮士德》注解中被提及。</div>
+</a>
+<a class="entry-item" href="珀利得斯.html">
+  <div class="noun">珀利得斯</div>
+  <div class="snippet">古希腊语父名称谓，意为&quot;佩琉斯之子&quot;，是希腊神话英雄阿喀琉斯（Achilles）的史诗称号。阿喀琉斯是色萨利国王佩琉斯与海洋女神忒提斯之子，特洛伊战争中最著名的希腊主将，除脚踵外全身刀枪不入。在《浮士德》中，海伦提及帕特洛克罗斯酷似珀利得斯</div>
+</a>
+<a class="entry-item" href="珀拉斯戈斯人.html">
+  <div class="noun">珀拉斯戈斯人</div>
+  <div class="snippet">珀拉斯戈斯人（Pelasgians）是古希腊作家用来指代在希腊人到来之前就居住在希腊地区的先住民族的统称。他们是希腊最早的居民，约公元前3000年以前进入希腊。在印欧语系的希腊人南下后，经历了一个漫长的相互融合过程，最终形成了古典时代的希腊</div>
+</a>
+<a class="entry-item" href="珀涅俄斯河神.html">
+  <div class="noun">珀涅俄斯河神</div>
+  <div class="snippet">希腊神话中塞萨利亚地区珀涅俄斯河的河神，大洋神俄刻阿诺斯与泰西斯之子。其女达佛涅（Daphne）被阿波罗追求时，珀涅俄斯将其变成月桂树，从此月桂成为阿波罗的圣树（桂冠的由来）。</div>
+</a>
+<a class="entry-item" href="珀琉斯.html">
+  <div class="noun">珀琉斯</div>
+  <div class="snippet">珀琉斯（希腊语：Πηλεύς，Peleus，亦译佩琉斯）是希腊神话中的英雄，色萨利国王，密尔弥冬人之王。他是宙斯之孙、埃阿科斯之子，忒拉蒙之兄弟。他曾随伊阿宋参加阿尔戈英雄远征，并在众神帮助下以勇力征服海洋女神忒提斯并与之结婚。二人之子即特</div>
+</a>
+<a class="entry-item" href="珀耳修斯.html">
+  <div class="noun">珀耳修斯</div>
+  <div class="snippet">希腊神话中的著名英雄，宙斯之子。他斩杀了蛇发女妖墨杜萨，从墨杜萨的脖颈中跳出飞马珀伽索斯。歌德在《浮士德》中借珀耳修斯斩下墨杜萨头颅的故事来解释格蕾辛幻影脖子上的红绳。</div>
+</a>
+<a class="entry-item" href="珀耳塞福涅.html">
+  <div class="noun">珀耳塞福涅</div>
+  <div class="snippet">希腊神话中的冥后，宙斯与德墨忒耳之女。被冥王哈迪斯强行掳至冥界为后，因吃了冥界的石榴籽而每年须返回冥界四个月，由此产生四季更替。在《浮士德》注解中提及她窃听阳世人捎信。</div>
+</a>
+<a class="entry-item" href="瑞阿.html">
+  <div class="noun">瑞阿</div>
+  <div class="snippet">即瑞亚（Rhea），希腊神话中的第二代神后、十二提坦巨神之一，掌管时光流逝与母性。盖亚与乌拉诺斯之女，克洛诺斯之妻，宙斯、赫拉、哈迪斯、波塞冬等神祇之母。用石头代替宙斯让克洛诺斯吞下，救下幼子。在《浮士德》中梅非斯特提及自己曾向她致敬。</div>
+</a>
+<a class="entry-item" href="瓦伦廷.html">
+  <div class="noun">瓦伦廷</div>
+  <div class="snippet">瓦伦廷（Valentin）是格蕾辛的哥哥，一名军人。他参军在外时常向战友夸耀妹妹的纯洁美德。返乡得知妹妹被浮士德引诱失身后，在格蕾辛窗下与浮士德决斗，被浮士德刺死。临死前非但没有原谅妹妹，反而当众诅咒她，令格蕾辛的命运急转直下。他是格蕾辛悲</div>
+</a>
+<a class="entry-item" href="瓦尔普吉斯.html">
+  <div class="noun">瓦尔普吉斯</div>
+  <div class="snippet">圣瓦尔普吉斯（约710-779年），出生于英国威塞克斯的本笃会修女，在德国埃希施台特任海登海姆修道院院长。卒于779年，被天主教会封为圣女和魔法的主保，瞻礼日为5月1日。德国民间将4月30日至5月1日之夜称为瓦尔普吉斯之夜。</div>
+</a>
+<a class="entry-item" href="瓦格纳.html">
+  <div class="noun">瓦格纳</div>
+  <div class="snippet">歌德诗剧《浮士德》中的人物，浮士德的学生和助手，代表典型的书斋学者形象。他勤奋但迂腐，满足于从故纸堆中挖掘书本知识，与浮士德追求实践和真理的精神形成鲜明对比。浮士德评价他&quot;用贪婪的手将宝藏挖掘，挖到蚯蚓，也觉得高兴非常&quot;。在剧作后半部分，瓦</div>
+</a>
+<a class="entry-item" href="男园丁.html">
+  <div class="noun">男园丁</div>
+  <div class="snippet">化装舞会中的花匠角色，以忒俄尔柏（双颈大琵琶）伴奏唱歌。他们自称面孔晒黑，供应樱桃、桃子和李子等果实，与制花女郎们形成对照——花供观赏，果供食用。</div>
+</a>
+<a class="entry-item" href="白贝辛.html">
+  <div class="noun">白贝辛</div>
+  <div class="snippet">白贝辛（Bärbelchen，芭芭拉的昵称，意为&quot;小芭芭拉&quot;）是《浮士德》第一部中提及的次要人物。在&quot;井边&quot;场景中，莉思辛告诉格蕾辛，白贝辛因未婚先孕被情人抛弃。她曾与男朋友散步、跳舞、享乐，现在却落得抬不起头的下场。白贝辛的遭遇是格蕾辛自</div>
+</a>
+<a class="entry-item" href="皇帝.html">
+  <div class="noun">皇帝</div>
+  <div class="snippet">《浮士德》第二部中的角色，一位神圣罗马帝国的皇帝。在第二部第一幕第二场&quot;皇帝的宫城 金殿&quot;中，皇帝升座召开御前会议，听取宰相、财政大臣等汇报帝国危机。梅非斯特化装成弄臣混入宫廷，以魔法治愈了皇帝的财政危机（制造纸币）。此后皇帝又命令浮士德召</div>
+</a>
+<a class="entry-item" href="瞎子.html">
+  <div class="noun">瞎子</div>
+  <div class="snippet">即失明后的浮士德。被忧愁吹瞎眼睛后，浮士德成为瞎子，但他不以肉眼的失明为意，反而宣称&quot;心中却有光明在照耀&quot;。这一形象化用语强调了浮士德精神的转变——肉眼虽盲，心灵之眼却更加明亮。</div>
+</a>
+<a class="entry-item" href="知天使.html">
+  <div class="noun">知天使</div>
+  <div class="snippet">即Cherubim（基路伯/智天使），圣经中的超自然生命体，在天使九级中属上三级第二位，象征神的智慧。旧约记载智天使守护伊甸园生命树（创世记3:24），装饰约柜施恩座（出埃及记25:18-20），四脸四翼、浑身布满眼睛（以西结书10章）。在</div>
+</a>
+<a class="entry-item" href="礼部大臣.html">
+  <div class="noun">礼部大臣</div>
+  <div class="snippet">浮士德中皇帝战后封赏的四位元勋之首。皇帝授予其宝剑，封为礼部大臣，掌管朝廷礼仪、军队编制等事务。其名借鉴中国古代礼部尚书官职。</div>
+</a>
+<a class="entry-item" href="福兰特公子.html">
+  <div class="noun">福兰特公子</div>
+  <div class="snippet">魔鬼的古老德语别称（Junker Voland）。Junker意为贵族公子，Voland源于中古德语，意为骗子、阴险之人，早在古代作家笔下就已赋予魔鬼的含义。苏联作家布尔加科夫在《大师与玛格丽特》中借用此名创造了魔鬼沃兰德（Woland）。</div>
+</a>
+<a class="entry-item" href="福坡斯.html">
+  <div class="noun">福坡斯</div>
+  <div class="snippet">又译福玻斯（Phoebus），希腊神话中太阳神阿波罗的别名，意为&quot;发光者&quot;或&quot;光辉灿烂的&quot;。在《浮士德》中，海伦称&quot;可怕的黑夜的产物总会被爱美的朋友福坡斯赶进洞中或者将她制服&quot;，意指光明之神阿波罗能将黑夜的恐怖造物驱逐。福坡斯·阿波罗是奥林</div>
+</a>
+<a class="entry-item" href="福斯.html">
+  <div class="noun">福斯</div>
+  <div class="snippet">福斯（Johann Heinrich Voss，1751-1826）是德国古典学者、诗人和翻译家。最著名的成就是荷马史诗德译本，包括1781年的《奥德赛》和1793年的《伊利亚特》，使荷马史诗在德语世界获得经典地位。其田园诗启发歌德创作。</div>
+</a>
+<a class="entry-item" href="福斯特.html">
+  <div class="noun">福斯特</div>
+  <div class="snippet">约翰·格奥尔格·亚当·福斯特（1754—1794），德国自然科学家、探险家、旅行作家、翻译家和革命家。曾参加库克船长的第二次太平洋航行，出版畅销游记。他将迦梨陀娑的《沙恭达罗》从英译本转译为德文，使歌德等德国文豪能够接触这部印度经典。他后来</div>
+</a>
+<a class="entry-item" href="福耳喀得斯.html">
+  <div class="noun">福耳喀得斯</div>
+  <div class="snippet">福耳喀得斯（Phorcides），通称格赖埃（Graeae），是希腊神话中的三位白发老妪，为老海神福耳库斯和海妖刻托所生。三人共有一目一齿，要吃要看时互相借用。牙齿比野猪的獠牙还大，手是铜手。她们住在不见日光月光之处。</div>
+</a>
+<a class="entry-item" href="福耳库斯的女儿.html">
+  <div class="noun">福耳库斯的女儿</div>
+  <div class="snippet">希腊神话中的格赖埃三姐妹（Graeae），海神福耳库斯与刻托之女，戈耳工三姐妹的姊妹。三人共用一只眼睛和一颗牙齿，生来满头白发，为老妪形象。在《浮士德》中，树精指引梅非斯特与她们相遇，梅非斯特借其形貌变为福耳库阿斯。</div>
+</a>
+<a class="entry-item" href="福耳库阿斯.html">
+  <div class="noun">福耳库阿斯</div>
+  <div class="snippet">即福耳库斯（Phorcys），希腊神话中的原始海神，代表大海的隐藏危险与愤怒，与刻托生下了戈耳工三姐妹（含美杜莎）、格赖埃三姐妹等众多怪物，被称为&quot;众怪之父&quot;。在《浮士德》第二部中，梅非斯特借用福耳库阿斯的丑怪形相作为伪装，以管家身份出现在</div>
+</a>
+<a class="entry-item" href="科采布.html">
+  <div class="noun">科采布</div>
+  <div class="snippet">奥古斯特·冯·科策布（August von Kotzebue，1761—1819），18世纪末至19世纪初德国最受欢迎的剧作家，一生创作200多部剧本。政治立场保守，1819年被激进学生刺杀，该事件促成梅特涅推动《卡尔斯巴德决议》。歌德在《</div>
+</a>
+<a class="entry-item" href="米丁.html">
+  <div class="noun">米丁</div>
+  <div class="snippet">约翰·马丁·米丁（Johann Martin Mieding，1725-1782），魏玛业余剧场的舞台装饰家和舞台监督，歌德曾为他创作悼念诗《Auf Miedings Tod》。</div>
+</a>
+<a class="entry-item" href="米迦勒.html">
+  <div class="noun">米迦勒</div>
+  <div class="snippet">米迦勒（希伯来语意为&quot;谁像神？&quot;），亦译圣弥额尔，是《圣经》中唯一被明确称为&quot;天使长&quot;的天使。《犹大书》记载他为摩西的尸首与魔鬼争辩。他是善神之首、总领天神，在天界战争中率天使击败撒但。在《浮士德》中，米迦勒为三位天使长之首，歌颂空界。</div>
+</a>
+<a class="entry-item" href="约伯.html">
+  <div class="noun">约伯</div>
+  <div class="snippet">圣经《旧约·约伯记》中的义人，遭受魔鬼试探而失去一切，却始终坚守信仰。歌德在《浮士德》开篇的&quot;天上序曲&quot;中直接借鉴了《约伯记》的结构：上帝与魔鬼打赌，考验义人。文中梅非斯特自比约伯，全身被玫瑰之火烧出水泡。</div>
+</a>
+<a class="entry-item" href="约翰·施皮斯.html">
+  <div class="noun">约翰·施皮斯</div>
+  <div class="snippet">16世纪德国法兰克福的书商和出版家。1587年，他在美因河畔法兰克福出版了第一部系统整理浮士德传说的通俗故事书《魔术师浮士德博士传》（Historia von D. Johann Fausten），将浮士德塑造为一个不信神的反面典型。该书颇</div>
+</a>
+<a class="entry-item" href="维兰.html">
+  <div class="noun">维兰</div>
+  <div class="snippet">指克里斯多夫·马丁·维兰（1733-1813），德国启蒙运动时期的作家和诗人，被认为是德国洛可可文学的代表人物。歌德在《浮士德》注释中提及他可能作为启蒙主义作家的代表被讽刺。 --- 克里斯托夫·马丁·维兰德（Christoph Marti</div>
+</a>
+<a class="entry-item" href="维吉尔.html">
+  <div class="noun">维吉尔</div>
+  <div class="snippet">维吉尔（拉丁语：Publius Vergilius Maro，公元前70—前19年）是古罗马奥古斯都时代最伟大的诗人，被奉为罗马的&quot;国民诗人&quot;。代表作《埃涅阿斯纪》（Aeneid）共12卷约12,000行，讲述特洛伊英雄埃涅阿斯漂泊至意大利</div>
+</a>
+<a class="entry-item" href="维多利亚.html">
+  <div class="noun">维多利亚</div>
+  <div class="snippet">罗马神话中的胜利女神，对应希腊神话中的尼刻（Nike）。在《浮士德》中，她站在巨兽驮着的高堡雉堞之上，舒展翅膀，向四方辉映荣耀光华，被称颂为&quot;一切活动的女神&quot;。</div>
+</a>
+<a class="entry-item" href="维尔纳.html">
+  <div class="noun">维尔纳</div>
+  <div class="snippet">亚伯拉罕·戈特洛布·维尔纳（1749-1817），德国矿物学家和地质学家，1775年起任弗赖堡矿业学院教授，地质学系统化研究的奠基者。他创立了水成说（Neptunism）理论体系，认为所有岩石在水中沉积形成，其学说在其时代盛极一时。歌德本人</div>
+</a>
+<a class="entry-item" href="维特.html">
+  <div class="noun">维特</div>
+  <div class="snippet">指歌德著名小说《少年维特之烦恼》中的主人公维特。尼古拉曾模仿该作品写作《少年维特之喜乐》，引起歌德强烈不满，成为歌德在《浮士德》和《克塞尼集》中讽刺尼古拉的动机之一。</div>
+</a>
+<a class="entry-item" href="维纳斯.html">
+  <div class="noun">维纳斯</div>
+  <div class="snippet">罗马神话中的爱与美女神，对应希腊神话的阿佛洛狄忒，罗马十二主神之一。传说她出生于海中的泡沫，是罗马人公认的始祖（凯撒自称其后裔）。在艺术史上被视为女性美的最高象征，米洛斯的维纳斯（断臂维纳斯）藏于卢浮宫。在《浮士德》中，伽拉忒亚接替维纳斯作</div>
+</a>
+<a class="entry-item" href="罪孽深重的女人.html">
+  <div class="noun">罪孽深重的女人</div>
+  <div class="snippet">罪孽深重的女人（Magna Peccatrix，拉丁语&quot;大罪人&quot;）是《浮士德》终场中出现的三位圣经悔罪女之一，原型出自《路加福音》第7章第36-50节。经文记载一个被视为罪人的女人在法利赛人家中用眼泪洗耶稣的脚、用头发擦干、并用香膏抹脚，耶</div>
+</a>
+<a class="entry-item" href="翁法勒.html">
+  <div class="noun">翁法勒</div>
+  <div class="snippet">希腊神话中小亚细亚吕狄亚（吕底亚）的女王。赫拉克勒斯因杀害朋友被罚卖身为奴给她三年。期间赫拉克勒斯穿女装做女红，翁法勒则披狮皮持木棒，形成性别角色反转的经典情节。在《浮士德》注解中提及赫拉克勒斯曾为她服役。</div>
+</a>
+<a class="entry-item" href="耶可比.html">
+  <div class="noun">耶可比</div>
+  <div class="snippet">弗里德里希·海因里希·雅可比（1743-1819），德国哲学家、作家，德国古典哲学时期的重要人物。他创立了&quot;信仰哲学&quot;，强调信仰相对于知识的优先性，认为理性无法认识绝对者，只有通过信仰才能把握。他首次将&quot;虚无主义&quot;概念引入现代哲学话语，并因</div>
+</a>
+<a class="entry-item" href="耶稣.html">
+  <div class="noun">耶稣</div>
+  <div class="snippet">基督教信仰中的救世主，被钉死在十字架上为人类赎罪。在《浮士德》中，注释明确指出&quot;第一个当着永远赦罪者的眼前忍受了翻身打滚的死的痛苦&quot;指的就是死在十字架上的耶稣。耶稣的牺牲精神与梅非斯特的冷酷无情形成鲜明对比，是全剧救赎主题的神学根基。</div>
+</a>
+<a class="entry-item" href="肛门幻视者.html">
+  <div class="noun">肛门幻视者</div>
+  <div class="snippet">歌德在《浮士德》中创造的角色，原型为德国启蒙主义评论家、作家克里斯托夫·弗里德里希·尼古拉（1733-1811）。尼古拉自称得过幻视症见到幽灵鬼怪，认为由于脑部淤血所致，后在肛门部贴水蛭放血后痊愈。歌德借此讽刺其过度理性主义的自大。</div>
+</a>
+<a class="entry-item" href="膳部总管.html">
+  <div class="noun">膳部总管</div>
+  <div class="snippet">浮士德中皇帝战后封赏的第三位元勋。皇帝选其担任膳部总管，负责管理狩猎、菜园、家禽饲养及御膳供应，按四季时令为皇帝调制精美饮食。</div>
+</a>
+<a class="entry-item" href="舒伯特.html">
+  <div class="noun">舒伯特</div>
+  <div class="snippet">弗朗茨·舒伯特（Franz Schubert，1797-1828），奥地利作曲家，浪漫主义早期代表人物。17岁时（1814年）为歌德《浮士德》中格蕾辛的恋歌谱曲，创作了艺术歌曲《纺车旁的格蕾辛》（Gretchen am Spinnrade，</div>
+</a>
+<a class="entry-item" href="芳恩.html">
+  <div class="noun">芳恩</div>
+  <div class="snippet">罗马神话中的森林与田野精灵，又译弗恩、法翁，对应希腊神话 中的萨堤洛斯。形象为半人半鹿（或半人半羊），长有鹿腿、鹿耳 和短尾，面容俊美，性情温和，喜欢音乐和舞蹈。在歌德《浮士德》 第二部假面舞会场景中，芳恩们以橡叶为冠、细耳塌鼻的造型登场，</div>
+</a>
+<a class="entry-item" href="苏利曼.html">
+  <div class="noun">苏利曼</div>
+  <div class="snippet">苏利曼（苏莱曼一世，土耳其语：I. Süleyman，1494—1566年），全称苏莱曼大帝，奥斯曼帝国第十位苏丹，在位46年（1520—1566年），将奥斯曼帝国推向极盛。他武功卓著——攻克贝尔格莱德、罗德岛，兵围维也纳，称霸地中海；文治</div>
+</a>
+<a class="entry-item" href="荣光圣母.html">
+  <div class="noun">荣光圣母</div>
+  <div class="snippet">荣光圣母（Mater Gloriosa）是歌德《浮士德》第二部结尾出现的至高神圣人物，象征天主教传统中的圣母玛利亚。在全剧终场，她飘荡而来，接受悔罪女们的祈祷，最终应允格蕾辛的请求，允许她引导浮士德的灵魂升天。在歌德笔下，荣光圣母被赋予了更</div>
+</a>
+<a class="entry-item" href="荷蒙库路斯.html">
+  <div class="noun">荷蒙库路斯</div>
+  <div class="snippet">歌德《浮士德》中由瓦格纳在实验室中用化学方法制造的人工生命体（Homunculus），又称&quot;瓶中小人&quot;。他是一个装在玻璃烧瓶中的透明小人，是纯粹的精神存在，具有超凡的感知能力。他称瓦格纳为&quot;爸爸&quot;，称梅非斯特为&quot;叔叔&quot;，诞生后立即要求活动并</div>
+</a>
+<a class="entry-item" href="荷马.html">
+  <div class="noun">荷马</div>
+  <div class="snippet">约公元前9至8世纪的古希腊盲诗人，被认为是史诗《伊利亚特》和《奥德赛》的作者，合称《荷马史诗》。荷马史诗是西方文学最古老的奠基之作，具有&quot;永久的魅力&quot;，对后世西方文学、宗教、文化产生了深远影响。荷马与维吉尔、但丁、弥尔顿并称欧洲四大史诗诗人</div>
+</a>
+<a class="entry-item" href="莉思辛.html">
+  <div class="noun">莉思辛</div>
+  <div class="snippet">莉思辛（Lieschen）是《浮士德》第一部中格蕾辛的邻居或熟人，出现在&quot;井边&quot;场景。她与格蕾辛各持水壶在井边相遇，莉思辛谈起镇上白贝辛未婚先孕被抛弃的丑闻，言辞刻薄地加以谴责。她的议论令格蕾辛内心深受震撼，因为格蕾辛自己也已经失身于浮士德</div>
+</a>
+<a class="entry-item" href="莉莉特.html">
+  <div class="noun">莉莉特</div>
+  <div class="snippet">希伯来拉比传说中的亚当第一任妻子，与亚当同时被创造，因不愿居于亚当之下而离开伊甸园，后成为夜之魔女。歌德在《浮士德·瓦尔普吉斯之夜》中将其描绘为以美丽头发诱惑青年的魔女形象。</div>
+</a>
+<a class="entry-item" href="莎士比亚.html">
+  <div class="noun">莎士比亚</div>
+  <div class="snippet">威廉·莎士比亚（1564—1616），英国文艺复兴时期最杰出的戏剧家、诗人，被誉为&quot;人类文学奥林匹斯山上的宙斯&quot;。一生创作37部戏剧、154首十四行诗，代表作包括四大悲剧《哈姆雷特》《奥赛罗》《李尔王》《麦克白》以及《罗密欧与朱丽叶》等。其</div>
+</a>
+<a class="entry-item" href="莫扎特.html">
+  <div class="noun">莫扎特</div>
+  <div class="snippet">沃尔夫冈·阿玛多伊斯·莫扎特（1756—1791），奥地利作曲家，维也纳古典乐派代表人物之一。自幼被誉为&quot;音乐神童&quot;，在短短35年生命中创作了600余部作品，涵盖几乎所有音乐体裁，代表作包括歌剧《费加罗的婚礼》《唐璜》《魔笛》及《安魂曲》等</div>
+</a>
+<a class="entry-item" href="莱布尼茨.html">
+  <div class="noun">莱布尼茨</div>
+  <div class="snippet">戈特弗里德·威廉·莱布尼茨（1646—1716），德国哲学家、数学家，与笛卡尔、斯宾诺莎并称17世纪三大理性主义哲学家。他独立于牛顿发明了微积分，创立二进制算法，提出&quot;单子论&quot;和&quot;前定和谐&quot;学说。在神学领域著有《神正论》，提出&quot;所有可能世界</div>
+</a>
+<a class="entry-item" href="莱辛.html">
+  <div class="noun">莱辛</div>
+  <div class="snippet">戈特霍尔德·埃弗拉伊姆·莱辛（1729—1781），德国启蒙运动时期最重要的作家、文艺理论家，德国民族文学的奠基人。代表作包括戏剧《智者纳旦》《爱米丽雅·迦洛蒂》、美学论著《拉奥孔》和《汉堡剧评》。他第一个从哲学高度提出浮士德的拯救问题，对</div>
+</a>
+<a class="entry-item" href="菲勒蒙.html">
+  <div class="noun">菲勒蒙</div>
+  <div class="snippet">希腊神话中一对虔诚善良的老夫妇中的丈夫。在《浮士德》第五幕&quot;旷野&quot;场景中，菲勒蒙和包喀斯这对老夫妇住在海边沙丘上的小屋里，曾救助过遇难的旅人。浮士德填海造田后，他们拒绝搬迁，最终被强行迁移。</div>
+</a>
+<a class="entry-item" href="菲吕拉.html">
+  <div class="noun">菲吕拉</div>
+  <div class="snippet">希腊神话中的大洋神女（俄刻阿尼得斯），俄刻阿诺斯与泰西斯之女。与泰坦巨神克洛诺斯生下著名的半人马智者刻戎（Chiron），因见儿子半人半马的怪异模样而将其遗弃，后变为一棵椴树。</div>
+</a>
+<a class="entry-item" href="萨土尔奴斯.html">
+  <div class="noun">萨土尔奴斯</div>
+  <div class="snippet">萨土尔奴斯（Saturnus）是罗马神话中的农业之神（农神），对应希腊神话的克洛诺斯（Cronus），朱庇特之父。被推翻后逃到意大利的拉丁姆地区，教会人民耕种，带来黄金时代。罗马农神节在12月17日至24日举行。</div>
+</a>
+<a class="entry-item" href="萨堤洛斯.html">
+  <div class="noun">萨堤洛斯</div>
+  <div class="snippet">古希腊神话中的森林之神，半人半羊形象，长有公羊角、羊腿和尾巴， 是酒神狄俄尼索斯的随从。性格放纵不羁，喜好音乐、舞蹈和饮酒， 象征创造力与原始生命力，也代表淫欲与恐慌。在歌德《浮士德》第 二部中作为假面舞会角色登场，被描绘为细腿、羊脚、喜爱</div>
+</a>
+<a class="entry-item" href="萨比尼人.html">
+  <div class="noun">萨比尼人</div>
+  <div class="snippet">古代意大利的重要民族（Sabines），居住在罗马东北部至亚平宁高地一带。自古即以出魔术师和预言者出名，罗马文献中常被描绘为具有巫术力量的民族。</div>
+</a>
+<a class="entry-item" href="萨穆埃尔·哈涅曼.html">
+  <div class="noun">萨穆埃尔·哈涅曼</div>
+  <div class="snippet">Samuel Hahnemann，德国医生（1755—1843），顺势疗法的创始人。他对当时盛行的放血、泻药等疗法极为反感，通过让健康人服用金鸡纳树皮的自身实验提出&quot;以同治同&quot;的理念，并于1790年正式确立顺势疗法理论体系。</div>
+</a>
+<a class="entry-item" href="萨达那巴.html">
+  <div class="noun">萨达那巴</div>
+  <div class="snippet">古希腊文献中对亚述末代国王的称呼，实为三位亚述统治者的形象融合（亚述巴尼拔、沙马什-舒姆-乌金、辛-沙尔-伊什昆）。希腊历史记载中的萨达那巴以奢靡享乐、生活腐化而闻名，最终被困宫中自焚而死。而历史上的原型亚述巴尼拔实为杰出的军事家和学者，建</div>
+</a>
+<a class="entry-item" href="蒂妲尼霞.html">
+  <div class="noun">蒂妲尼霞</div>
+  <div class="snippet">莎士比亚《仲夏夜之梦》中的小仙后，在《浮士德》瓦尔普吉斯之夜的梦中与奥伯朗庆祝金婚纪念。</div>
+</a>
+<a class="entry-item" href="蒲克.html">
+  <div class="noun">蒲克</div>
+  <div class="snippet">莎士比亚《仲夏夜之梦》中的伶俐狡猾的精灵，也称好人罗宾。在《浮士德》瓦尔普吉斯之夜的梦中登场，以粗笨顽皮的形象出现。</div>
+</a>
+<a class="entry-item" href="蛇发女妖.html">
+  <div class="noun">蛇发女妖</div>
+  <div class="snippet">即希腊神话中的戈耳工（Gorgon），三姐妹丝西娜、尤瑞艾莉和美杜莎，长有尖牙、头生毒蛇、身长羽翼。看到她们面容的人会化为石头。歌德在《浮士德》中借墨杜萨的形象象征死亡与毁灭。</div>
+</a>
+<a class="entry-item" href="蝇主.html">
+  <div class="noun">蝇主</div>
+  <div class="snippet">即别西卜（Beelzebub），原为非利士人的神祇，在犹太教和基督教传统中被视为鬼王。其名在希伯来语中意为&quot;苍蝇之主&quot;，新约圣经中将其称为鬼王。在基督教恶魔学中地位仅次于路西法，常对应七宗罪中的暴食。</div>
+</a>
+<a class="entry-item" href="西庇太.html">
+  <div class="noun">西庇太</div>
+  <div class="snippet">圣经新约中的人物，加利利的渔夫，是耶稣十二门徒中雅各和约翰的父亲，妻子是撒罗米。他的家庭与耶稣有亲属关系，船上有雇工，说明渔业生意具有一定规模。当耶稣召唤雅各和约翰时，二人立即舍船跟随了耶稣。西庇太的名字在四福音书中多次作为雅各和约翰的父亲</div>
+</a>
+<a class="entry-item" href="西比勒.html">
+  <div class="noun">西比勒</div>
+  <div class="snippet">西比勒（Sibylle）是《浮士德》第一部中提及的次要人物。在&quot;井边&quot;场景中，莉思辛告诉格蕾辛：&quot;西比勒今天对我讲！&quot;——西比勒是镇上消息的传播者，将白贝辛未婚先孕被抛弃的丑闻告诉了莉思辛。她在剧中充当社会舆论传播链的一环，间接促使格蕾辛面</div>
+</a>
+<a class="entry-item" href="该亚.html">
+  <div class="noun">该亚</div>
+  <div class="snippet">希腊神话中的大地女神，从混沌中诞生，是第一位超原始神明。她单性诞下天空之神乌拉诺斯、海神蓬托斯等，是众神之母、宙斯的祖母。在《浮士德》注解中，该亚与波塞冬生下巨人安泰。</div>
+</a>
+<a class="entry-item" href="诺尔齐亚的巫师.html">
+  <div class="noun">诺尔齐亚的巫师</div>
+  <div class="snippet">一位来自意大利诺尔齐亚（Norcia）的萨比尼人通灵者/招魂术士。他曾被皇帝从火刑中救出（事件发生于罗马），此后忠心为皇帝服务，从事占星和勘探地府的活动。浮士德在他推荐下前来支援皇帝作战。</div>
+</a>
+<a class="entry-item" href="诺斯特拉达姆斯.html">
+  <div class="noun">诺斯特拉达姆斯</div>
+  <div class="snippet">米歇尔·德·诺特雷达姆（1503—1566），法国犹太裔预言家、医生和占星家，以预言集《百诗集》（常误译为《诸世纪》）闻名于世。他在《浮士德》中被提及为浮士德打开其神秘书籍以观看大宇宙灵符的人物，反映了文艺复兴时期神秘主义和占星术对知识分子</div>
+</a>
+<a class="entry-item" href="谢林.html">
+  <div class="noun">谢林</div>
+  <div class="snippet">弗里德里希·威廉·约瑟夫·冯·谢林（1775-1854），德国古典哲学主要代表之一，与康德、费希特、黑格尔并称四大家。提出&quot;同一哲学&quot;体系，主张主体与客体在&quot;绝对者&quot;中达到无差别的同一。歌德在《浮士德》中提及谢林与克劳埃采等人对卡柏洛密教的</div>
+</a>
+<a class="entry-item" href="贝蒂格.html">
+  <div class="noun">贝蒂格</div>
+  <div class="snippet">卡尔·奥古斯特·贝蒂格（1760-1835），德国考古学家与古典学家，曾任魏玛文理中学校长、《豪华与流行之杂志》编者。歌德在《浮士德》中以&quot;总管&quot;（Servibilis）角色暗讽他。</div>
+</a>
+<a class="entry-item" href="财政大臣.html">
+  <div class="noun">财政大臣</div>
+  <div class="snippet">《浮士德》中皇帝的财政顾问，在帝国会议上痛陈国库空虚的窘境。他指出各地新贵自立门户、权利尽失、政党不可信、黄金大门已被遮断，人人搜刮自肥。但他认同梅非斯特关于发掘地下无主金银的建议，认为这属于皇帝自古以来的权利。</div>
+</a>
+<a class="entry-item" href="贪吝.html">
+  <div class="noun">贪吝</div>
+  <div class="snippet">《浮士德》假面舞会中瘦子角色（梅菲斯特的化身）的新名。前身是阴性拉丁名&quot;阿瓦里蒂娅&quot;（Avaritia），后因社会风气变化，妇女不再节俭，他便改作阳性德语名&quot;贪吝&quot;（Geiz）。他在舞会上将黄金当作黏土捏成各种形状，用伤风败俗的噱头骚扰妇女</div>
+</a>
+<a class="entry-item" href="贵妇人.html">
+  <div class="noun">贵妇人</div>
+  <div class="snippet">《浮士德》第二部第一幕中出现在宫廷的一位贵妇。她因爱人变心、内心痛苦而向梅非斯特求助。梅非斯特给她一根从火刑柴堆拣来的木炭，教她在变心情郎的衣物上画黑线，对方便会后悔回头。</div>
+</a>
+<a class="entry-item" href="费希特.html">
+  <div class="noun">费希特</div>
+  <div class="snippet">约翰·戈特利布·费希特（1762-1814），德国古典哲学的重要代表人物，主观唯心主义哲学家。他创立&quot;知识学&quot;体系，以&quot;自我设定自身&quot;为第一原理。在《浮士德》第二部中，歌德通过青年大学生的形象嘲讽了费希特和叔本华的主观唯心主义哲学。</div>
+</a>
+<a class="entry-item" href="贺拉斯.html">
+  <div class="noun">贺拉斯</div>
+  <div class="snippet">贺拉斯（Horace，公元前65-前8年）是古罗马诗人，与维吉尔、奥维德并称古罗马三大诗人。代表作《诗艺》、《颂诗集》等。歌德注解中引用其《卡尔米那》第一卷第十五歌。</div>
+</a>
+<a class="entry-item" href="赫利俄斯.html">
+  <div class="noun">赫利俄斯</div>
+  <div class="snippet">希腊神话中的太阳神，提坦神许珀里翁与忒亚之子。每日清晨驾驶四匹焰马拉动的太阳车穿越天空，被称为&quot;全视者&quot;。常被后世与阿波罗混同，但实际为不同神祇。</div>
+</a>
+<a class="entry-item" href="赫卡忒.html">
+  <div class="noun">赫卡忒</div>
+  <div class="snippet">希腊神话中的魔法女神、冥界女神、岔路女神，提坦神族之一。珀耳塞斯与阿斯忒瑞亚之女，掌管魔法、黑夜、鬼魂、巫术与命运。常以三头三身形象出现，象征能洞悉一切。在《浮士德》中与狄安娜、路娜并列为月神的三重化身。</div>
+</a>
+<a class="entry-item" href="赫德里希.html">
+  <div class="noun">赫德里希</div>
+  <div class="snippet">赫德里希（Benjamin Hederich，1675-1748）是德国词典编纂学家，其1724年出版的《详细神话词典》是18世纪德语区必备的神话参考书。歌德在创作《浮士德》时将其作为主要神话参考工具书。</div>
+</a>
+<a class="entry-item" href="赫拉.html">
+  <div class="noun">赫拉</div>
+  <div class="snippet">赫拉（Hera）是希腊神话中的第三代天后，奥林匹斯十二主神之一，宙斯的姐姐和正式妻子。她掌管婚姻、生育和妇女保护，象征物为孔雀、石榴和王冠。其罗马对应神为朱诺（Juno）。她以善妒著称。</div>
+</a>
+<a class="entry-item" href="赫拉克勒斯.html">
+  <div class="noun">赫拉克勒斯</div>
+  <div class="snippet">希腊神话中最伟大的英雄，主神宙斯与凡女阿尔克墨涅之子。因发疯误杀妻儿，为赎罪完成了著名的十二项功绩（十二试炼），死后升天成为大力神，即罗马神话中的赫丘利（Hercules）。</div>
+</a>
+<a class="entry-item" href="赫柏.html">
+  <div class="noun">赫柏</div>
+  <div class="snippet">希腊神话中的青春女神，宙斯与赫拉之女，原为奥林匹斯山的斟酒官，为众神斟倒令其永葆青春的神酒。后嫁给升天的英雄赫拉克勒斯，斟酒之职由伽倪墨得斯接替。罗马名为朱文塔斯（Juventas），尤文图斯足球俱乐部之名即来源于此。</div>
+</a>
+<a class="entry-item" href="赫淮斯托斯.html">
+  <div class="noun">赫淮斯托斯</div>
+  <div class="snippet">赫淮斯托斯（Hephaestus，又译赫菲斯托斯）是希腊神话中的火神、锻造之神、工匠之神，奥林匹斯十二主神之一，罗马神话中对应武尔坎努斯（Vulcan）。他是宙斯与赫拉之子（一说赫拉独自所生），出生时因相貌丑陋被赫拉从奥林匹斯山扔下，摔成瘸</div>
+</a>
+<a class="entry-item" href="赫耳墨斯.html">
+  <div class="noun">赫耳墨斯</div>
+  <div class="snippet">希腊神话中的神使，奥林匹斯十二主神之一，宙斯与迈亚之子。司掌商业、旅行、畜牧、雄辩、偷窃等，是亡灵接引者。脚穿插翼凉鞋，手持双蛇杖。发明了里拉琴。在《浮士德》注解中被提及为神的使者。</div>
+</a>
+<a class="entry-item" href="赫耳弥俄涅.html">
+  <div class="noun">赫耳弥俄涅</div>
+  <div class="snippet">希腊神话中斯巴达国王墨涅拉俄斯与海伦的独生女，斯巴达公主。特洛伊战争前被祖父廷达瑞俄斯许配给奥瑞斯特斯（阿伽门农之子），战争期间墨涅拉俄斯又将她许配给阿喀琉斯之子奈奥普托勒姆斯。奈奥普托勒姆斯死后，她与奥瑞斯特斯再婚，生子提萨墨诺斯。《哈利</div>
+</a>
+<a class="entry-item" href="赫西俄德.html">
+  <div class="noun">赫西俄德</div>
+  <div class="snippet">赫西俄德（希腊语：Ἡσίοδος，Hesiod，约公元前8世纪）是古希腊诗人，与荷马并称为古希腊最早的两大诗人，被称为&quot;希腊训谕诗之父&quot;。他的代表作《神谱》（Theogony，1022行）是最早系统记叙古希腊诸神谱系的史诗，从混沌（卡俄斯）</div>
+</a>
+<a class="entry-item" href="赫革摩涅.html">
+  <div class="noun">赫革摩涅</div>
+  <div class="snippet">赫革摩涅（希腊语：Ηγεμονη，Hegemone，意为&quot;女王&quot;、&quot;统治权&quot;）是希腊神话中美惠女神之一，在雅典被崇拜为两位最初的美惠女神之一（与奥克索并列），执掌秋季与丰收。古代雅典人崇拜奥克索（春季）和赫革摩涅（秋季）作为丰饶女神。在《浮</div>
+</a>
+<a class="entry-item" href="超自然主义者.html">
+  <div class="noun">超自然主义者</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中出现的承认神灵存在的哲学家，从恶魔的存在推论出一定有善灵存在。</div>
+</a>
+<a class="entry-item" href="路卡努斯.html">
+  <div class="noun">路卡努斯</div>
+  <div class="snippet">古罗马诗人（公元39年—65年），全名马库斯·安奈乌斯·卢卡努斯。代表作《法沙利亚》（又名《内战记》），描写凯撒与庞培的内战。因卷入反尼禄阴谋被迫自杀。在《浮士德》注解中被引用于厄里克托的描述。</div>
+</a>
+<a class="entry-item" href="路娜.html">
+  <div class="noun">路娜</div>
+  <div class="snippet">古罗马神话中的月亮女神，对应希腊神话的塞勒涅（Selene）。与太阳神索尔（Sol）、黎明女神奥罗拉（Aurora）为兄妹。最著名的传说是与牧羊人恩狄弥翁的爱情故事。在《浮士德》中，诗人用路娜与恩狄弥翁的典故来描绘海伦与青年的情景。 ---</div>
+</a>
+<a class="entry-item" href="路易十四.html">
+  <div class="noun">路易十四</div>
+  <div class="snippet">法国波旁王朝国王（1638-1715），号称&quot;太阳王&quot;，在位72年，是世界历史上在位时间最长的主权国家君主。他修建凡尔赛宫，将贵族集中宫中加以控制，建立绝对君主制。歌德在《浮士德》注释中提及凡尔赛宫为其所建。</div>
+</a>
+<a class="entry-item" href="车童.html">
+  <div class="noun">车童</div>
+  <div class="snippet">歌德《浮士德》第二部假面舞会中的角色，自称&quot;慷慨豪奢&quot;和&quot;诗&quot;，是诗的人格化象征。他驾乘普路托斯的龙车，向四周弹指抛撒珍珠、金冠、戒指等珍宝，但这些赠品随后化为甲虫、蝴蝶等幻象飞走。他代表诗歌的创造力和挥霍精神，与财神普路托斯相辅相成。</div>
+</a>
+<a class="entry-item" href="迈耶.html">
+  <div class="noun">迈耶</div>
+  <div class="snippet">迈耶（Maeon，古希腊语Μαίων）是古希腊传说中的传奇人物，据古希腊文献记载被认为是伟大诗人荷马（Homer）之父。荷马在诗歌中常被称为&quot;Maeonides&quot;（迈耶之子），这个称呼在拉丁文学（贺拉斯、奥维德等）中成为荷马的代称。据传有一</div>
+</a>
+<a class="entry-item" href="近卫兵.html">
+  <div class="noun">近卫兵</div>
+  <div class="snippet">浮士德中皇帝的近卫军士兵，负责保护皇帝和维护战场秩序。他们对趁乱抢夺战利品的散兵游勇进行斥责，认为既做兵士又做强人不可接受，强调效忠皇帝的士兵应当正直。</div>
+</a>
+<a class="entry-item" href="迦梨陀娑.html">
+  <div class="noun">迦梨陀娑</div>
+  <div class="snippet">约公元4至5世纪古印度笈多王朝时期的梵语诗人和剧作家，被誉为&quot;印度的莎士比亚&quot;。代表作《沙恭达罗》是古印度梵文文学的最高典范，描写国王豆扇陀与净修女沙恭达罗的爱情故事。该剧通过威廉·琼斯的英译本和福斯特的德译本传入欧洲，对歌德等人产生了重要</div>
+</a>
+<a class="entry-item" href="醉汉.html">
+  <div class="noun">醉汉</div>
+  <div class="snippet">化装舞会中的酒鬼角色，神志不清。其唱词充满狂放——只管痛饮碰杯，女人骂他是衣裳架子也不在乎，老板不欠账老板娘会欠，女招待会打圆场，体现了狂欢节中酒神式的放纵精神。</div>
+</a>
+<a class="entry-item" href="金发女郎.html">
+  <div class="noun">金发女郎</div>
+  <div class="snippet">《浮士德》第二部第一幕中出现在皇帝宫廷的金发贵妇。她因夏天脸上会长褐色斑点（雀斑/黄褐斑）而向梅非斯特求药，梅非斯特给出荒诞的青蛙卵和蛤蟆舌药方。</div>
+</a>
+<a class="entry-item" href="长尾猿.html">
+  <div class="noun">长尾猿</div>
+  <div class="snippet">《浮士德》魔女丹房场景中出现的猴子角色，包括雌长尾猿（在锅旁撇去浮泡）、雄长尾猿和小猿们。它们表演掷骰子、滚球（象征世界）、拿筛子、捧王冠等滑稽动作。长尾猿象征着低级、愚昧、原始的人类本能，是人类自身的滑稽镜像，暗示人类在追求知识、财富、爱</div>
+</a>
+<a class="entry-item" href="阿勒克托.html">
+  <div class="noun">阿勒克托</div>
+  <div class="snippet">古希腊神话中三位复仇女神（厄里倪厄斯）之一，名字意为&quot;不安&quot;。永无休止地追逐罪犯，代表永不消停的复仇。擅长用谄媚的方式接近情侣并挑拨离间。</div>
+</a>
+<a class="entry-item" href="阿喀琉斯.html">
+  <div class="noun">阿喀琉斯</div>
+  <div class="snippet">阿喀琉斯（希腊语：Ἀχιλλεύς，Achilles，又译阿基里斯、阿基琉斯）是希腊神话中的半神英雄，被誉为&quot;希腊第一勇士&quot;。他是凡人英雄珀琉斯与海洋女神忒提斯之子。母亲忒提斯为使他不死而将其浸入冥河，但脚踵未能浸到，成为唯一致命弱点，即著</div>
+</a>
+<a class="entry-item" href="阿尔喀得斯.html">
+  <div class="noun">阿尔喀得斯</div>
+  <div class="snippet">又译阿尔喀德斯（Alcides），希腊神话英雄赫拉克勒斯出生时的原名。赫拉克勒斯因赫拉的诅咒发疯杀害自己的孩子后，前往德尔斐求问神谕，女祭司首次称他为&quot;赫拉克勒斯&quot;——在此之前他被称为阿尔喀得斯。</div>
+</a>
+<a class="entry-item" href="阿尔喀诺俄斯.html">
+  <div class="noun">阿尔喀诺俄斯</div>
+  <div class="snippet">阿尔喀诺俄斯（Alcinous）是希腊神话中淮阿喀亚人的国王，统治斯刻里亚岛。祖父为海神波塞冬。在《奥德赛》中热情接待了奥德修斯，倾听其历险故事后慷慨赠送礼物并派船护送其返回伊萨卡。</div>
+</a>
+<a class="entry-item" href="阿德墨托斯.html">
+  <div class="noun">阿德墨托斯</div>
+  <div class="snippet">希腊神话中色萨利地区斐赖城的国王，阿尔戈英雄之一。阿波罗曾因受罚下凡为他牧羊，两人结下深厚情谊。阿波罗帮助他娶得阿尔刻提斯，其妻代死和赫拉克勒斯救妻的故事成为欧里庇得斯悲剧的素材。</div>
+</a>
+<a class="entry-item" href="阿斯摩狄.html">
+  <div class="noun">阿斯摩狄</div>
+  <div class="snippet">犹太教与基督教传说中的恶魔，又名阿斯蒙蒂斯。出自《旧约·次经·多俾亚传》，因爱慕女子撒辣而连续杀害她的七任丈夫。在中世纪被认定为七宗罪中&quot;色欲&quot;的代表魔王，亦为所罗门七十二柱魔神之一。词源来自波斯琐罗亚斯德教的&quot;愤怒之魔&quot;。</div>
+</a>
+<a class="entry-item" href="阿格莱亚.html">
+  <div class="noun">阿格莱亚</div>
+  <div class="snippet">阿格莱亚（希腊语：Αγλαια，Aglaea，意为&quot;光辉&quot;、&quot;壮丽&quot;）是希腊神话中美惠三女神之一，代表光辉与壮丽。在赫西俄德《神谱》中为三位美惠女神中最年轻的一位，后嫁给火神赫菲斯托斯，生下欧克勒亚（好名声）、欧斐墨（称赞）、欧忒尼亚（景气</div>
+</a>
+<a class="entry-item" href="阿波罗.html">
+  <div class="noun">阿波罗</div>
+  <div class="snippet">希腊神话中的奥林匹斯十二主神之一，宙斯与勒托之子，阿尔忒弥斯的孪生兄弟。别称福玻斯，掌管光明、预言、音乐、医药、射箭等众多领域，是缪斯女神的领袖。其神谕所在德尔斐，被视为古希腊最重要的宗教中心之一。在现代流行文化中被视为太阳神（古希腊正统太</div>
+</a>
+<a class="entry-item" href="阿特拉斯.html">
+  <div class="noun">阿特拉斯</div>
+  <div class="snippet">希腊神话中的泰坦神，因反抗宙斯而被罚用肩膀支撑天空。在《浮士德》中被星士用作比喻，形容神殿圆柱的宏伟——&quot;仿佛阿特拉斯擎天一样&quot;，极言其高大雄壮、承载万钧之力。 --- Atlas，希腊神话中的泰坦神族之一，擎天神。泰坦之战败于奥林匹斯神族</div>
+</a>
+<a class="entry-item" href="阿特洛波斯.html">
+  <div class="noun">阿特洛波斯</div>
+  <div class="snippet">古希腊神话中三位命运女神（摩伊拉）中最年长的一位，名字意为&quot;不可逃避的&quot;。手持剪刀，负责剪断生命之线，掌管死亡。对应罗马神话中的墨尔塔（Morta）。</div>
+</a>
+<a class="entry-item" href="阿玛宗人.html">
+  <div class="noun">阿玛宗人</div>
+  <div class="snippet">阿玛宗人（Amazons，又译亚马逊人、亚马逊女战士）是古希腊神话中由全女性战士构成的民族。传说她们是战神阿瑞斯的后代，主要活动于小亚细亚、黑海沿岸地区，都城位于特弥斯库拉（今土耳其泰尔梅附近）。词源&quot;Amazon&quot;可能来自古伊朗语&quot;战士&quot;</div>
+</a>
+<a class="entry-item" href="阿瑞斯.html">
+  <div class="noun">阿瑞斯</div>
+  <div class="snippet">希腊神话中的战神，奥林匹斯十二主神之一，宙斯与赫拉之子。象征血腥战斗与暴乱，性格嗜血好战。罗马对应神为玛尔斯（火星）。在《浮士德》注解中被提及为战神身份。</div>
+</a>
+<a class="entry-item" href="阿耳忒弥斯.html">
+  <div class="noun">阿耳忒弥斯</div>
+  <div class="snippet">希腊神话中的狩猎女神、月亮女神，奥林匹斯十二主神之一。宙斯与勒托之女，阿波罗的双胞胎姐姐（或妹妹）。三大处女神之一，以弓箭为武器。在《浮士德》注解中与勒托在得罗斯岛分娩的故事相关。</div>
+</a>
+<a class="entry-item" href="阿那克萨戈拉.html">
+  <div class="noun">阿那克萨戈拉</div>
+  <div class="snippet">古希腊哲学家（约前500-前428年），最早将哲学带到雅典的人，伯里克利之师。提出&quot;种子说&quot;和&quot;奴斯说&quot;，认为万物由无数性质各异的种子组成，由理性的&quot;奴斯&quot;推动运动。他正确解释了日食和月食的成因，因主张太阳是炽热石头被控不敬神。在《浮士德》</div>
+</a>
+<a class="entry-item" href="阿里曼.html">
+  <div class="noun">阿里曼</div>
+  <div class="snippet">阿里曼（Ahriman），又称安哥拉·曼纽（Angra Mainyu），是琐罗亚斯德教（拜火教/祆教）中的恶界最高神，代表一切罪恶、黑暗、死亡与不洁之源。与善神阿胡拉·马兹达形成二元对立，双方持续斗争构成该教核心教义。据《班达喜兴》记载，善</div>
+</a>
+<a class="entry-item" href="阿里马斯波族.html">
+  <div class="noun">阿里马斯波族</div>
+  <div class="snippet">阿里马斯波人（Arimaspi），古希腊文献中记载的独眼民族，居住在北方阿尔泰山区。名称源自斯基泰语&quot;arima&quot;（一）+ &quot;spou&quot;（眼），意为&quot;独目人&quot;。传说他们与守护黄金的格里芬（狮鹫）不断交战以夺取黄金。最早见于公元前7世纪希腊诗</div>
+</a>
+<a class="entry-item" href="陆军大臣.html">
+  <div class="noun">陆军大臣</div>
+  <div class="snippet">《浮士德》中皇帝的军事顾问，在帝国会议上报告了内乱四起、佣兵哗变的军事危机。朝臣们在互相残杀，骑士盘踞山岩巢穴对抗中央，佣兵因欠饷而暴跳如雷，半壁河山已经沦陷。</div>
+</a>
+<a class="entry-item" href="雅典娜.html">
+  <div class="noun">雅典娜</div>
+  <div class="snippet">雅典娜（Athena）是希腊神话中的智慧女神、战争策略女神，奥林匹斯十二主神之一。她是从宙斯头颅中全副武装诞生的，代表防御性、策略性的战争。其罗马对应神为密涅瓦（Minerva）。她是三大处女神之一。</div>
+</a>
+<a class="entry-item" href="雅各.html">
+  <div class="noun">雅各</div>
+  <div class="snippet">圣经人物，以撒之子、亚伯拉罕之孙，以红豆汤换得长子名分，后与天使摔跤获赐名&quot;以色列&quot;，成为以色列十二支派的直接祖先，雅各井是《约翰福音》中耶稣与撒玛利亚妇人对话的地点。</div>
+</a>
+<a class="entry-item" href="非利士人.html">
+  <div class="noun">非利士人</div>
+  <div class="snippet">《圣经》中记载的古代民族，是以色列人的主要敌人，居住在迦南沿海地区。属于公元前12世纪&quot;海上民族&quot;的一部分。圣经中大卫等人的著名事迹多涉及与非利士人的战斗。歌德在《浮士德》注释中提及三勇士击杀非利士人的典故。</div>
+</a>
+<a class="entry-item" href="食客.html">
+  <div class="noun">食客</div>
+  <div class="snippet">化装舞会中的寄生者角色，谄媚而垂涎。唱词说即使天降火种也要有木柴煤炭才能烧煮，真正的食客闻肉香嗅鱼腥在主人桌上大显本领，是对寄生阶层的讽刺。</div>
+</a>
+<a class="entry-item" href="马克森提乌斯.html">
+  <div class="noun">马克森提乌斯</div>
+  <div class="snippet">马克森提乌斯（拉丁语：Marcus Aurelius Valerius Maxentius，约283—312年）是罗马帝国西部皇帝，在位306—312年。他是前皇帝马克西米安之子，与君士坦丁大帝同时代的统治者。312年，君士坦丁在米尔维安大</div>
+</a>
+<a class="entry-item" href="马洛.html">
+  <div class="noun">马洛</div>
+  <div class="snippet">克里斯托弗·马洛（1564—1593），英国伊丽莎白时期最重要的剧作家之一，与莎士比亚同年出生，29岁时因斗殴被刺身亡。他创立了以无韵诗为标准的英国戏剧典范，代表作《浮士德博士的悲剧》取材于德国民间传说，讲述浮士德与魔鬼签订契约、最终灵魂被</div>
+</a>
+<a class="entry-item" href="马耳西人.html">
+  <div class="noun">马耳西人</div>
+  <div class="snippet">马耳西人（Marsi）是古意大利中部的原生民族，以独特的蛇崇拜传统闻名，被称为舞蛇者。其传统与女神安吉提亚密切相关。维吉尔在《埃涅阿斯之歌》第七歌中提及他们。歌德将其与非洲的普绪罗人并提。</div>
+</a>
+<a class="entry-item" href="骑士.html">
+  <div class="noun">骑士</div>
+  <div class="snippet">《浮士德》第二部第一幕中出现在皇帝宫廷的骑士们。他们对召唤出的帕里斯幻影发表评论，认为帕里斯像个牧童而非贵公子，缺乏宫廷作风，并希望看到他披上戎装。骑士代表了宫廷中崇尚武勇与礼仪的保守派视角。</div>
+</a>
+<a class="entry-item" href="鬼怪.html">
+  <div class="noun">鬼怪</div>
+  <div class="snippet">原文源自拉丁语 Lemures，指古罗马宗教中的亡灵、鬼魂。在《浮士德》第二部第五幕中，梅非斯特召唤来这些鬼怪为浮士德挖掘坟墓。它们一边用铲锹挖土，一边唱着从年青恋爱到老年面对死亡的讽刺歌曲，构成全剧经典的黑色幽默与戏剧反讽。</div>
+</a>
+<a class="entry-item" href="鲁伊斯布罗克.html">
+  <div class="noun">鲁伊斯布罗克</div>
+  <div class="snippet">约翰·凡·鲁伊斯布罗克（1293-1381），佛兰德（今比利时）中世纪神秘主义思想家，以荷兰语写作，代表作《属灵婚配的荣光》，创立格罗嫩达尔修道院，影响&quot;现代灵修&quot;运动。</div>
+</a>
+<a class="entry-item" href="鸣铃小丑.html">
+  <div class="noun">鸣铃小丑</div>
+  <div class="snippet">德语Schellennarr，指古代欧洲宫廷中供帝王娱乐的小丑，衣帽上系有小铃，走动时发出响声。在《浮士德》中，浮士德告诫瓦格纳&quot;别学鸣铃小丑的模样&quot;，讽刺那些没有真才实学、只靠花言巧语和浮华辞藻哗众取宠的人，强调成功要走正当途径，靠诚实的</div>
+</a>
+<a class="entry-item" href="黑夜.html">
+  <div class="noun">黑夜</div>
+  <div class="snippet">希腊神话中的黑夜女神倪克斯（Nyx），五大创世神之一，由混沌之神卡俄斯诞生。她身披黑衣，每日乘黑马拉的战车飞上夜空。与哥哥厄瑞玻斯（黑暗）生下太空之神埃忒耳和白昼女神赫墨拉。独自生育了死神塔纳托斯、睡神许普诺斯、不和女神厄里斯等众多拟人化神</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>

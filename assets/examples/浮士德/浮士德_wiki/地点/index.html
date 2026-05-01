@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地点 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">地点 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+地点
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">132 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="万神庙.html">
+  <div class="noun">万神庙</div>
+  <div class="snippet">又称万神殿、潘提翁，位于意大利罗马，是古罗马建筑技术的巅峰之作。初建于公元前27年，公元118—125年由哈德良皇帝重建。穹顶直径和高度均为43.3米，为世界上最大的无钢筋混凝土穹顶。顶部有直径8.9米的圆形开口&quot;穹顶之眼&quot;作为唯一自然采光</div>
+</a>
+<a class="entry-item" href="三块巨岩.html">
+  <div class="noun">三块巨岩</div>
+  <div class="snippet">指德国哈尔茨山脉布罗肯山附近的花岗岩岩石地貌，位于希尔克附近。《浮士德》中浮士德和梅非斯特在攀登布罗肯山途中途经此处。</div>
+</a>
+<a class="entry-item" href="下萨克森州.html">
+  <div class="noun">下萨克森州</div>
+  <div class="snippet">德国北部的一个联邦州，哈尔茨山脉位于该州境内。布罗肯山是下萨克森州的最高峰。歌德在《浮士德》注释中作为哈尔茨山的所在位置提及。</div>
+</a>
+<a class="entry-item" href="中峰.html">
+  <div class="noun">中峰</div>
+  <div class="snippet">布罗肯山的山顶，在《浮士德》中被称为中峰（der Brocken）。梅非斯特在此告诉浮士德可眺望玛门在山中发光，是瓦尔普吉斯之夜女巫集会的中心地点。</div>
+</a>
+<a class="entry-item" href="亨利峰.html">
+  <div class="noun">亨利峰</div>
+  <div class="snippet">布罗肯山附近的一座山峰（Heinrichshöhe），海拔约1044米，是哈尔茨山的第二高峰。据传说古代撒克逊皇帝亨利曾和伊尔泽公主在她的岩宫中享乐。在《浮士德》注解中被提及。</div>
+</a>
+<a class="entry-item" href="伊利俄斯.html">
+  <div class="noun">伊利俄斯</div>
+  <div class="snippet">又译伊利昂（Ilion / Ilium），特洛伊城在希腊语中的原始名称。其名来源于神话中的建城者伊洛斯（Ilus）。与&quot;特洛伊&quot;（源于祖先特罗斯Tros）为同一座城的两个名称，在荷马史诗中交替使用。荷马史诗《伊利亚特》（意为&quot;伊利昂之歌&quot;）</div>
+</a>
+<a class="entry-item" href="伊尔森斯坦.html">
+  <div class="noun">伊尔森斯坦</div>
+  <div class="snippet">德国哈尔茨山脉靠近伊尔森堡的一座著名花岗岩岩层（Ilsenstein/Ilsestein），海拔约473米。从峰顶可眺望布罗肯山。歌德在《浮士德》第一部瓦尔普吉斯之夜场景中提及此岩。 --- 布罗肯山以北相距数英里的高岩，位于德国哈尔茨山脉</div>
+</a>
+<a class="entry-item" href="伊甸园.html">
+  <div class="noun">伊甸园</div>
+  <div class="snippet">《圣经·创世记》中记载的上帝为人类始祖亚当和夏娃创造的乐园。园中有生命树和分别善恶的树。因亚当夏娃受蛇诱惑吃禁果被逐出。在《浮士德》注解中被提及与人类始祖的关系。</div>
+</a>
+<a class="entry-item" href="伯罗奔尼撒.html">
+  <div class="noun">伯罗奔尼撒</div>
+  <div class="snippet">伯罗奔尼撒（Peloponnese）是希腊南部的一个大型半岛，通过科林斯地峡与希腊本土相连，科林斯运河将其与大陆分隔。名称来源于传说英雄帕罗普斯（Pelops）与希腊语&quot;nisos&quot;（岛屿），意为&quot;帕罗普斯之岛&quot;，古称摩里亚半岛。面积约21</div>
+</a>
+<a class="entry-item" href="佛律癸亚.html">
+  <div class="noun">佛律癸亚</div>
+  <div class="snippet">又译弗里吉亚（Phrygia），古代小亚细亚中西部的一个地区（今土耳其中西部），首府为戈尔迪乌姆。著名的神话传说包括弥达斯国王的点石成金和驴耳朵故事，以及亚历山大大帝斩断的戈尔迪乌姆之结。特洛伊战争期间佛律癸亚人支持特洛伊一方。&quot;佛律癸亚的</div>
+</a>
+<a class="entry-item" href="佛罗伦萨.html">
+  <div class="noun">佛罗伦萨</div>
+  <div class="snippet">意大利中部城市（Florence），文艺复兴的发源地。在《浮士德》化装舞会中，制花女郎们自称是&quot;年轻的佛罗伦萨女郎&quot;，象征着意大利文艺复兴式的优雅与艺术传统被带入德国宫廷。</div>
+</a>
+<a class="entry-item" href="俄林波斯.html">
+  <div class="noun">俄林波斯</div>
+  <div class="snippet">希腊神话中众神居住的神山，位于希腊北部色萨利地区，最高峰米蒂卡斯峰海拔2917米。以宙斯为首的奥林匹斯十二主神居于此山。歌德在《浮士德》中借诗人发问&quot;谁奠定俄林波斯，使群神毕集&quot;，以强调诗人创造神话、奠定神界的伟力。</div>
+</a>
+<a class="entry-item" href="俄林波斯山.html">
+  <div class="noun">俄林波斯山</div>
+  <div class="snippet">希腊北部最高山峰（海拔2917米），希腊神话中众神的居所。宙斯率领奥林匹斯十二主神在此统治世界，山上有金色宫殿。现代常译作奥林匹斯山。在《浮士德》注解中被提及为神山及通往冥府的入口之处。</div>
+</a>
+<a class="entry-item" href="俄萨山.html">
+  <div class="noun">俄萨山</div>
+  <div class="snippet">希腊色萨利地区的山脉，位于奥林匹斯山与珀利翁山之间，海拔约1978米，现代名为基索沃山。在希腊神话中，阿罗伊代兄弟（俄托斯与厄菲阿尔特斯）企图将俄萨山垒在奥林匹斯山上，再将珀利翁山垒在俄萨山上，以此攻入天庭。&quot;把珀利翁山垒在俄萨山上&quot;成为西</div>
+</a>
+<a class="entry-item" href="傍晚.html">
+  <div class="noun">傍晚</div>
+  <div class="snippet">《浮士德》第一部第八场的场景名称，地点在玛加蕾特的小巧整洁的房间。浮士德在梅非斯特引导下潜入玛加蕾特的闺房，被房间的整洁、朴素和纯洁气氛深深打动，内心产生敬畏与羞愧。</div>
+</a>
+<a class="entry-item" href="光明的岛上.html">
+  <div class="noun">光明的岛上</div>
+  <div class="snippet">指希腊神话中的至福乐土（Elysium）或神佑群屿（Fortunate Isles / Isles of the Blessed），位于大地西端尽头大洋河畔的福地。英雄和受神眷顾者死后在此享受永生幸福，四季如春，不需劳作。这一概念后与现实中</div>
+</a>
+<a class="entry-item" href="克里特岛.html">
+  <div class="noun">克里特岛</div>
+  <div class="snippet">希腊最大的岛屿，位于地中海中东部，爱琴海最南端，是欧洲最早文明——米诺斯文明的发源地。岛上克诺索斯王宫遗址与希腊神话中弥诺斯迷宫传说密切相关，1900年被英国考古学家阿瑟·埃文斯发掘。克里特岛在希腊神话中也是宙斯出生地，传说宙斯在该岛的洞穴</div>
+</a>
+<a class="entry-item" href="冥府.html">
+  <div class="noun">冥府</div>
+  <div class="snippet">希腊神话中死者灵魂居住的阴间，由冥王哈迪斯统治。位于西方大洋河彼岸，灵魂需经冥河由摆渡人卡戎运送，由三头狗刻耳柏洛斯看守。分为普通灵魂之地阿斯珀德罗斯、英雄福地厄吕西翁和惩罚之地塔耳塔洛斯。在《浮士德》中，合唱队在雾气中感到迷茫，担心被赫耳</div>
+</a>
+<a class="entry-item" href="凡尔赛宫.html">
+  <div class="noun">凡尔赛宫</div>
+  <div class="snippet">法国巴黎西南郊外的宏伟宫殿，由路易十四在17世纪大规模扩建，1682年正式成为法国宫廷所在地。1979年被联合国教科文组织列为世界文化遗产。歌德在《浮士德》中以之比喻奢华的宫廷享乐。</div>
+</a>
+<a class="entry-item" href="刑场.html">
+  <div class="noun">刑场</div>
+  <div class="snippet">处决犯人的场所，在《浮士德》中指次日将要处决格蕾辛的行刑地点。第二十三场&quot;夜旷野&quot;中，浮士德与梅非斯特骑马经过刑场，看到有人在周围举行仪式，梅非斯特称其为&quot;一群魔女&quot;。该场景暗示了格蕾辛即将面对的死亡命运。</div>
+</a>
+<a class="entry-item" href="半岛.html">
+  <div class="noun">半岛</div>
+  <div class="snippet">指伯罗奔尼撒半岛，位于希腊南部，以科林斯地峡与希腊大陆相连。是古希腊神话与历史的中心舞台，斯巴达、科林斯、阿尔戈斯等著名城邦均位于此。在《浮士德》中，浮士德将此地献给海伦作为女王领土。</div>
+</a>
+<a class="entry-item" href="厄利斯.html">
+  <div class="noun">厄利斯</div>
+  <div class="snippet">又译伊利斯、埃利斯，古希腊伯罗奔尼撒半岛西北部的一个地区及城邦。以其境内的奥林匹亚闻名——公元前776年首届古代奥林匹克运动会即在此创办，此后每四年举办一届。在《浮士德》中由法兰克人征伐。</div>
+</a>
+<a class="entry-item" href="厄琉西斯.html">
+  <div class="noun">厄琉西斯</div>
+  <div class="snippet">古希腊城镇，位于雅典西北约30公里处，今名埃莱夫西纳。以厄琉西斯秘仪而闻名，该秘仪是古希腊最重要的秘密宗教仪式，崇拜农业女神得墨忒耳与其女珀耳塞福涅，持续约两千年，直至公元392年被罗马皇帝狄奥多西一世下令关闭。</div>
+</a>
+<a class="entry-item" href="反逆皇帝的军帐.html">
+  <div class="noun">反逆皇帝的军帐</div>
+  <div class="snippet">《浮士德》第二部第四幕第三场的场景标题，即伪帝（虚假的帝国篡位者）的军帐。皇帝的宝座四周陈设华丽，场景开头即为&quot;先下手。抢夺快。&quot;，暗示伪帝阵营的贪婪与混乱。这是皇帝平定伪帝叛乱战争中的关键场景。</div>
+</a>
+<a class="entry-item" href="古城墙.html">
+  <div class="noun">古城墙</div>
+  <div class="snippet">历史悠久的老城墙。在《浮士德》第十四场中，梅非斯特向浮士德描述格蕾辛倚窗眺望的寂寞景象，古城的墙垣和飘浮的白云衬托出她等待心上人归来的焦灼与苦闷。</div>
+</a>
+<a class="entry-item" href="品多斯.html">
+  <div class="noun">品多斯</div>
+  <div class="snippet">品多斯山脉（Pindus），位于希腊中部和北部的山脉，是忒萨利亚地区珀涅俄斯河的发源地。在《浮士德》中作为古典瓦尔普吉斯之夜的地理背景出现。</div>
+</a>
+<a class="entry-item" href="哈尔茨.html">
+  <div class="noun">哈尔茨</div>
+  <div class="snippet">德国中部的山脉（Harz），最高峰为布罗肯山（Brocken），海拔1141米。在德国民间传说中是女巫和魔鬼的聚集地，瓦尔普吉斯之夜的传统地点。歌德在《浮士德》中将其作为北方魔幻世界的象征。</div>
+</a>
+<a class="entry-item" href="哈尔茨山.html">
+  <div class="noun">哈尔茨山</div>
+  <div class="snippet">德国中部最大的山脉，位于下萨克森州、萨克森-安哈尔特州和图林根州境内，最高峰为布罗肯山（1142米）。哈尔茨山以女巫传说闻名，尤其是与瓦尔普吉斯之夜相关的民俗传统。在《浮士德》中，梅非斯特将浮士德引诱到哈尔茨山山顶参加魔女的欢会。 --- </div>
+</a>
+<a class="entry-item" href="园亭.html">
+  <div class="noun">园亭</div>
+  <div class="snippet">《浮士德》第一部第十二、十三场的场景名称，指花园中的凉亭或亭子。玛加蕾特在此处做卜花游戏（撕花瓣占卜爱情），后又与浮士德在此拥吻。该场景是浮士德与格蕾辛爱情发展的重要转折点。</div>
+</a>
+<a class="entry-item" href="图勒.html">
+  <div class="noun">图勒</div>
+  <div class="snippet">欧洲古代传说中的极北之国（Ultima Thule），古希腊罗马地理学中位于世界最北端的未知岛屿，常被用作遥远、神秘之地的象征。歌德《图勒王》谣曲取材于赫尔德所译北欧民歌Kämpeviser，将图勒设为故事背景。在德语文化中&quot;Thule&quot;成</div>
+</a>
+<a class="entry-item" href="土耳其.html">
+  <div class="noun">土耳其</div>
+  <div class="snippet">地跨亚欧两洲的国家，主要领土位于小亚细亚半岛。在《浮士德》创作的16至19世纪，奥斯曼土耳其帝国是欧洲的重要政治和军事力量，多次与欧洲各国发生战争。歌德在此处借市民之口提及土耳其的战争，反映了当时欧洲社会对奥斯曼帝国扩张的普遍关注。</div>
+</a>
+<a class="entry-item" href="埃伦特.html">
+  <div class="noun">埃伦特</div>
+  <div class="snippet">德国哈尔茨山脉布罗肯山以南的村庄，与希尔克相邻。歌德在《浮士德·瓦尔普吉斯之夜》中以&quot;哈尔茨山，希尔克与埃伦特区&quot;为场景标题。</div>
+</a>
+<a class="entry-item" href="埃希施台特.html">
+  <div class="noun">埃希施台特</div>
+  <div class="snippet">德国巴伐利亚的城市，是天主教教区所在地。圣瓦尔普吉斯在此地担任海登海姆修道院院长，该地属于埃希施台特教区。</div>
+</a>
+<a class="entry-item" href="城垣.html">
+  <div class="noun">城垣</div>
+  <div class="snippet">即城墙，古代城市的防御性建筑。在《浮士德》第十四场中，梅非斯特描述格蕾辛站在窗边思念浮士德时，提到她看见浮云在城垣上空移行，暗示格蕾辛被困在狭小的生活空间中，以此撩拨浮士德的愧疚与怜爱之情。</div>
+</a>
+<a class="entry-item" href="城堡.html">
+  <div class="noun">城堡</div>
+  <div class="snippet">《浮士德》第二部第三幕中福耳库阿斯向海伦描述的中世纪城堡，位于斯巴达以北的深山之中，由一个勇敢的种族（浮士德的势力）所建。城墙砌工精良、高耸云霄，内部有宽敞庭院、圆柱、拱顶、阳台和走廊，大厅悬挂纹章。海伦最终决定前往该城堡，城堡内院成为浮士</div>
+</a>
+<a class="entry-item" href="塔宇革同山.html">
+  <div class="noun">塔宇革同山</div>
+  <div class="snippet">希腊伯罗奔尼撒半岛南部山脉，位于斯巴达以西，最高峰为先知埃利亚斯山。山脉得名于希腊神话中的普勒阿得斯姐妹之一塔宇革忒（宙斯所爱，生拉刻代蒙，即斯巴达的建立者）。在《浮士德》中，福耳库阿斯提到斯巴达北部高地背倚此山。</div>
+</a>
+<a class="entry-item" href="墨塞涅.html">
+  <div class="noun">墨塞涅</div>
+  <div class="snippet">又译美塞尼亚、麦西尼，古希腊伯罗奔尼撒半岛西南部的重要城邦。公元前369年由底比斯名将伊巴密浓达建立，拥有全希腊最精美的城墙。该地区曾经历三次美塞尼亚战争，被斯巴达征服，居民沦为希洛人。在《浮士德》中由萨克森人应战。</div>
+</a>
+<a class="entry-item" href="墨西拿海峡.html">
+  <div class="noun">墨西拿海峡</div>
+  <div class="snippet">位于意大利半岛与西西里岛之间的狭窄海峡（Strait of Messina），连接第勒尼安海与爱奥尼亚海。因特殊的温度逆温层条件，上空常出现被称为&quot;法塔·莫尔加娜&quot;的复杂海市蜃楼现象。歌德在《浮士德》注释中提及该现象。</div>
+</a>
+<a class="entry-item" href="夜旷野.html">
+  <div class="noun">夜旷野</div>
+  <div class="snippet">《浮士德》第一部第二十三场的场景标题，位于&quot;阴郁的日子&quot;与&quot;牢狱&quot;之间，是一个极短的过渡性场景。浮士德与梅非斯特骑黑马在夜色中疾驰经过刑场，画面充满紧迫感和命运感，预示了格蕾辛即将被处决的悲惨结局。</div>
+</a>
+<a class="entry-item" href="奥林匹斯.html">
+  <div class="noun">奥林匹斯</div>
+  <div class="snippet">奥林匹斯山（希腊语：Όλυμπος，Olympus/Olympos，意为&quot;光之处&quot;）是希腊最高峰（海拔2,917米），位于希腊北部色萨利与马其顿之间。在希腊神话中，奥林匹斯山被视为众神居住的神山，是天地相接之处，以宙斯为首的十二主神在此居住</div>
+</a>
+<a class="entry-item" href="奥艾尔巴赫地下酒室.html">
+  <div class="noun">奥艾尔巴赫地下酒室</div>
+  <div class="snippet">即莱比锡的奥尔巴赫酒窖（Auerbachs Keller），是德国最古老和最著名的酒馆之一，历史可追溯到1438年。歌德在莱比锡大学求学时常光顾此地，并在《浮士德》第一部中将其作为唯一真实存在的地点写入了剧本（&quot;莱比锡奥艾尔巴赫地下酒室&quot;一</div>
+</a>
+<a class="entry-item" href="好客的海岸.html">
+  <div class="noun">好客的海岸</div>
+  <div class="snippet">指荷马《奥德赛》中法伊阿基亚人（Phaeacians）的斯刻里亚岛（Scheria），以好客著称。奥德修斯在海上漂流后在此获救。</div>
+</a>
+<a class="entry-item" href="威丁堡.html">
+  <div class="noun">威丁堡</div>
+  <div class="snippet">又译维滕贝格，正式名称为&quot;路德城维滕贝格&quot;，位于德国萨克森-安哈尔特州易北河畔。1517年，马丁·路德在此地城堡教堂大门上张贴《九十五条论纲》，拉开了宗教改革的序幕。这里是浮士德传说中主人公的居住地，也是威丁堡大学的所在地。1996年路德纪</div>
+</a>
+<a class="entry-item" href="实验室.html">
+  <div class="noun">实验室</div>
+  <div class="snippet">《浮士德》第二部第二幕的场景，标题为&quot;中世纪风格的实验室&quot;。场景布置为中世纪式，有种种散乱的笨拙器械，供幻想的目的之用。瓦格纳在此进行人造人实验，通过数百种物质的调和与蒸馏，成功在长颈烧瓶中创造出荷蒙库路斯。梅非斯特在瓦格纳实验过程中来访并</div>
+</a>
+<a class="entry-item" href="宫中大院.html">
+  <div class="noun">宫中大院</div>
+  <div class="snippet">《浮士德》第二部第五幕第五场的场景名称，又称&quot;宫中宽广的前庭&quot;。这是全剧的高潮与终结场景所在，火炬照耀。年迈失明的浮士德在此走出宫殿，听到鬼怪挖掘声误以为是围海造田的工程声，说出&quot;停一停吧，你真美丽&quot;后倒地而亡。该场景是浮士德一生追求的终极</div>
+</a>
+<a class="entry-item" href="密索隆基.html">
+  <div class="noun">密索隆基</div>
+  <div class="snippet">又译迈索隆吉翁，希腊西希腊大区埃托洛阿卡纳尼亚专区的首府，南临帕特雷湾。在希腊独立战争（1821-1829）中具有极其重要的地位，被称为&quot;圣城&quot;。1824年，英国诗人拜伦在此地病逝，心脏长眠于该城的英雄花园中。1826年该城遭遇奥斯曼军队惨</div>
+</a>
+<a class="entry-item" href="山峡.html">
+  <div class="noun">山峡</div>
+  <div class="snippet">《浮士德》全剧终场&quot;第六场&quot;的场景设定——山峡、森林、岩石、荒凉之地。这是圣隐修士们隐居修行的场所，位于高山幽谷之中，远离尘世。险峻壮丽的自然环境象征着灵性修炼的艰难与神圣，狮子在此也变得和蔼，是连接尘世与天国的中介空间。</div>
+</a>
+<a class="entry-item" href="布罗肯.html">
+  <div class="noun">布罗肯</div>
+  <div class="snippet">德国哈尔茨山脉最高峰（海拔1141米），德国北部最高峰。在德国民间传说中，每年瓦尔普吉斯之夜（4月30日至5月1日），女巫们在此与魔鬼举行狂欢集会。歌德在《浮士德》中将其描绘为魔女集会的核心地点。</div>
+</a>
+<a class="entry-item" href="布罗肯山.html">
+  <div class="noun">布罗肯山</div>
+  <div class="snippet">德国哈尔茨山脉的最高峰（1142米），德国北部最高点，以终年多雾著称，易产生&quot;布罗肯幽灵&quot;光学现象。传说中女巫每年4月30日晚（瓦尔普吉斯之夜）聚集于此与魔鬼跳舞狂欢，歌德在《浮士德》第一部的瓦尔普吉斯之夜场景中使其闻名世界。 --- 德国</div>
+</a>
+<a class="entry-item" href="希尔克.html">
+  <div class="noun">希尔克</div>
+  <div class="snippet">德国哈尔茨山脉布罗肯山以南的村庄，是攀登布罗肯山的起点之一。歌德在《浮士德·瓦尔普吉斯之夜》中以&quot;哈尔茨山，希尔克与埃伦特区&quot;为场景标题。</div>
+</a>
+<a class="entry-item" href="希腊.html">
+  <div class="noun">希腊</div>
+  <div class="snippet">古希腊文明的核心地域，位于巴尔干半岛南部，爱琴海沿岸。希腊神话是欧洲最早的文学形式和西方文明的基石，对后世文学、艺术、哲学产生了深远影响。在《浮士德》中，希腊象征古典美的理想国度，浮士德追求海伦即追求希腊之美的象征。</div>
+</a>
+<a class="entry-item" href="帕多瓦.html">
+  <div class="noun">帕多瓦</div>
+  <div class="snippet">意大利北部威尼托大区的城市（Padua，意大利语Padova），帕多瓦省首府，临巴基廖内河，东距威尼斯约35公里。建于公元前320年，是意大利最古老的城市之一。拥有1222年建立的帕多瓦大学，是欧洲最古老的大学之一。圣安东尼奥教堂是该城重要</div>
+</a>
+<a class="entry-item" href="帕尔纳索斯山.html">
+  <div class="noun">帕尔纳索斯山</div>
+  <div class="snippet">希腊中部的神山（海拔2459米），希腊神话中太阳神阿波罗和缪斯女神的居住地，是艺术与诗歌灵感的源泉。山麓有著名的德尔斐遗址。在西方文化中成为&quot;诗坛&quot;的代名词。在《浮士德》注解中被提及为阿波罗和缪斯女神所居之神山。</div>
+</a>
+<a class="entry-item" href="帕福斯.html">
+  <div class="noun">帕福斯</div>
+  <div class="snippet">塞浦路斯西南部的古城，阿佛洛狄忒崇拜的中心圣地。传说她从海中诞生后首先登陆此处并建立神庙。在《浮士德》中伽拉忒亚在此被尊为女神。</div>
+</a>
+<a class="entry-item" href="帕耳那索斯山.html">
+  <div class="noun">帕耳那索斯山</div>
+  <div class="snippet">希腊中部的著名神山，海拔约2457米，在希腊神话中被视为太阳神阿波罗与九位缪斯女神的居所，是艺术与诗歌的象征。山下有德尔斐神谕所，被视为&quot;世界的中心&quot;。大洪水后，丢卡利翁与皮拉的船也停泊于此。</div>
+</a>
+<a class="entry-item" href="库勒涅山.html">
+  <div class="noun">库勒涅山</div>
+  <div class="snippet">位于希腊伯罗奔尼撒半岛阿耳卡狄亚地区的高山（海拔约2374米），为伯罗奔尼撒第二高峰。希腊神话中赫耳墨斯诞生于此山的山洞中，故赫耳墨斯又名库勒尼俄斯。</div>
+</a>
+<a class="entry-item" href="库忒拉.html">
+  <div class="noun">库忒拉</div>
+  <div class="snippet">又译库忒瑞亚，希腊伯罗奔尼撒半岛南端的一个岛屿，是古希腊祭祀爱与美之神阿佛洛狄忒（罗马名维纳斯）的重要圣地。阿佛洛狄忒从海浪泡沫中诞生后首先靠近此岛，故得别名&quot;库忒瑞亚&quot;（Cytherea）。在《浮士德》中，海伦回忆自己曾去库忒拉的神殿朝拜</div>
+</a>
+<a class="entry-item" href="库普洛斯岛.html">
+  <div class="noun">库普洛斯岛</div>
+  <div class="snippet">库普洛斯岛（Cyprus）即塞浦路斯岛，是地中海东部的一个岛屿。在希腊神话中是爱与美女神阿佛洛狄忒（维纳斯）的诞生地。岛上的帕福斯（Paphos）是维纳斯的圣地。鸽子是维纳斯的神禽。</div>
+</a>
+<a class="entry-item" href="得尔福.html">
+  <div class="noun">得尔福</div>
+  <div class="snippet">位于希腊福基斯地区帕尔纳索斯山南麓的古城，古名皮托（Pytho），古希腊人认为这里是世界的中心。以阿波罗神庙和德尔斐神谕闻名，女祭司皮提亚传达神谕长达千年。</div>
+</a>
+<a class="entry-item" href="得罗斯岛.html">
+  <div class="noun">得罗斯岛</div>
+  <div class="snippet">爱琴海基克拉泽斯群岛中的一座小岛，面积约3.4平方公里，今已无人居住。在希腊神话中，勒托在此岛生下太阳神阿波罗与月亮女神阿尔忒弥斯，因而被视为圣岛，古代禁止在岛上出生或死亡。历史上曾为提洛同盟的金库所在地，今为联合国教科文组织世界文化遗产。</div>
+</a>
+<a class="entry-item" href="御花园.html">
+  <div class="noun">御花园</div>
+  <div class="snippet">歌德《浮士德》第二部第一幕中的场景，即神圣罗马帝国皇帝行宫的 御花园。在假面舞会的火灾平息之后，场景转入旭日初升的御花园， 皇帝与众廷臣上朝，浮士德与梅非斯特更换装束后跪拜参见皇帝。在 此场景中，浮士德和梅非斯特以纸币发行方案帮助皇帝解决帝</div>
+</a>
+<a class="entry-item" href="忒拜.html">
+  <div class="noun">忒拜</div>
+  <div class="snippet">又译底比斯，希腊中部的古城邦，与雅典、斯巴达并称古希腊三大城邦。在希腊神话中是俄狄浦斯悲剧、七将攻忒拜等故事的发生地。在《浮士德》注解中被提及为人面狮和预言盲人提瑞西阿斯等相关的地点。</div>
+</a>
+<a class="entry-item" href="忒格尔.html">
+  <div class="noun">忒格尔</div>
+  <div class="snippet">柏林郊区地名。1797年洪堡尔特家族府邸中传说有幽灵出现，尼古拉在报告中曾加以评论。歌德在《浮士德》中借肛门幻视者之口提及此事。</div>
+</a>
+<a class="entry-item" href="忒萨利亚.html">
+  <div class="noun">忒萨利亚</div>
+  <div class="snippet">希腊中部偏北的传统区域（又译色萨利/塞萨利），在希腊神话中具有重要地位，是英雄阿喀琉斯和伊阿宋的故乡，奥林匹斯山位于其北部。歌德在《浮士德》第二部中让梅非斯特带着昏迷的浮士德飞往忒萨利亚，作为古典的瓦尔普吉斯之夜的发生地。</div>
+</a>
+<a class="entry-item" href="恩古伊翁.html">
+  <div class="noun">恩古伊翁</div>
+  <div class="snippet">恩古伊翁（拉丁语：Engium/Engyon，古希腊语：Ἔγγυον）是西西里岛内陆的一座古希腊古城，以供奉&quot;众神之母&quot;（母亲女神）的古老神庙而闻名。据狄奥多罗斯记载，该城由克里特移民建立。普鲁塔克在《马尔凯路斯传》中记载了该城的&quot;母亲女神</div>
+</a>
+<a class="entry-item" href="恶魔桥.html">
+  <div class="noun">恶魔桥</div>
+  <div class="snippet">欧洲多座被称为&quot;魔鬼桥&quot;（Devil&#x27;s Bridge/Teufelsbrücke）的古桥的统称，散布在瑞士、德国、法国、意大利等国家。最著名的是瑞士乌里州安德马特的魔鬼桥，传说13世纪居民因建桥困难与魔鬼交易，建好后用山羊欺骗魔鬼，魔鬼怒</div>
+</a>
+<a class="entry-item" href="拉刻代蒙.html">
+  <div class="noun">拉刻代蒙</div>
+  <div class="snippet">又译拉克代蒙（Lacedaemon），古希腊斯巴达城邦的正式名称。在希腊神话中，拉刻代蒙是宙斯与塔宇革忒之子，拉科尼亚地区的国王，该地区因而得名。对外关系中斯巴达人通常自称&quot;拉刻代蒙人&quot;。在《浮士德》中，墨涅拉俄斯吩咐海伦沿欧洛塔斯河前行，</div>
+</a>
+<a class="entry-item" href="撒哈拉沙漠.html">
+  <div class="noun">撒哈拉沙漠</div>
+  <div class="snippet">位于非洲北部，是世界最大的沙质荒漠，面积约906万至960万平方公里，约占非洲总面积的32%。名称源自阿拉伯语&quot;aṣ-Ṣaḥrāʾ&quot;，意为&quot;大荒漠&quot;。撒哈拉沙漠东西长约5600公里，南北宽约1300至2000公里，横贯非洲大陆北部，将非洲分</div>
+</a>
+<a class="entry-item" href="散步路.html">
+  <div class="noun">散步路</div>
+  <div class="snippet">《浮士德》第一部第九场场景名（德语Der Spaziergang），绿原译本作&quot;散步路&quot;，亦有译本作&quot;散步&quot;或&quot;散步处&quot;。该场为过渡性短场，浮士德在散步路上沉思，梅非斯特气愤地赶来报告——送给格蕾辛的首饰被她母亲发现后交给了神父。他转述神父</div>
+</a>
+<a class="entry-item" href="斐赖.html">
+  <div class="noun">斐赖</div>
+  <div class="snippet">古希腊色萨利地区佩拉斯吉奥提斯东南部的一座重要古城，遗址位于今希腊马格尼西亚州的韦莱斯蒂诺镇附近。以阿德墨托斯的居所闻名，其子欧墨洛斯在特洛伊战争中率11艘战船参战。在《浮士德》中提及阿喀琉斯在此超越时间与海伦相遇。</div>
+</a>
+<a class="entry-item" href="斯巴达.html">
+  <div class="noun">斯巴达</div>
+  <div class="snippet">古希腊最著名的城邦之一，位于伯罗奔尼撒半岛南部的拉哥尼亚平原。以严酷的军事化社会制度、寡头政治和精锐的陆军闻名。温泉关战役中列奥尼达率三百勇士阻击波斯大军的故事流传千古。在《浮士德》第三幕中，海伦从冥府回到人世，来到斯巴达的王宫之前。 --</div>
+</a>
+<a class="entry-item" href="斯库提亚.html">
+  <div class="noun">斯库提亚</div>
+  <div class="snippet">又译斯基泰、西徐亚，古代活跃于欧亚草原的游牧民族，约公元前8世纪至公元前3世纪活动于黑海北岸至中亚一带。以骑射闻名，被希罗多德记载于《历史》中。在《浮士德》注解中提及阿里马斯波族人住在斯库提亚的北方。</div>
+</a>
+<a class="entry-item" href="斯瓦比亚.html">
+  <div class="noun">斯瓦比亚</div>
+  <div class="snippet">又译施瓦本或士瓦本，德国西南部的一个历史、文化和语言区域，大致包括今巴登-符腾堡州南部和巴伐利亚州西南部。源自中世纪的斯瓦比亚公国，是神圣罗马帝国的五大部落公国之一。该地区的居民历史上被称为阿勒曼尼人，拥有独特的施瓦本方言和文化传统。</div>
+</a>
+<a class="entry-item" href="无忧宫.html">
+  <div class="noun">无忧宫</div>
+  <div class="snippet">普鲁士国王弗里德里希大王（腓特烈大帝）在波茨坦建造的洛可可风格宫殿，法语名Sanssouci意为无忧无虑。在《浮士德》中无忧代指该宫，由善处世者提及。</div>
+</a>
+<a class="entry-item" href="普拉特.html">
+  <div class="noun">普拉特</div>
+  <div class="snippet">18世纪时维也纳郊外著名的游乐园，1766年向公众开放，包含摩天轮等游乐设施。歌德在《浮士德》中将瓦尔普吉斯之夜的热闹场景比作普拉特游乐园。</div>
+</a>
+<a class="entry-item" href="普罗旺斯.html">
+  <div class="noun">普罗旺斯</div>
+  <div class="snippet">法国东南部地区，毗邻地中海，与意大利接壤。古罗马时期为罗马帝国的一个行省，18世纪末法国大革命时成为行政省份。现属普罗旺斯-阿尔卑斯-蓝色海岸大区，主要城市包括马赛、艾克斯、阿维尼翁、阿尔勒等。在歌德《浮士德》注释中，提及1525年普罗旺斯</div>
+</a>
+<a class="entry-item" href="杜平根大学.html">
+  <div class="noun">杜平根大学</div>
+  <div class="snippet">全称埃伯哈德·卡尔斯·蒂宾根大学，位于德国巴登-符腾堡州蒂宾根，成立于1477年，是德国最古老的大学之一。德国精英大学和U15大学联盟成员。知名校友包括黑格尔、谢林、荷尔德林、开普勒、教皇本笃十六世等，共产生9位诺贝尔奖得主。以人文科学、神</div>
+</a>
+<a class="entry-item" href="极乐岛.html">
+  <div class="noun">极乐岛</div>
+  <div class="snippet">极乐岛（Fortunate Isles / Isles of the Blessed），又称至福乐土（Elysium），是古希腊罗马神话中的幸福之地，位于大地极西尽头的大洋河沿岸，英雄和好人死后在此享福。荷马《奥德赛》描述此地无风雪暴雨、常</div>
+</a>
+<a class="entry-item" href="格蕾辛的住房.html">
+  <div class="noun">格蕾辛的住房</div>
+  <div class="snippet">《浮士德》第一部第十五场的场景名称。格蕾辛（Margarete）独坐在自己房间的纺车旁，因思念浮士德而心绪不宁，唱出著名的抒情诗《我失去安宁》（Meine Ruh&#x27; ist hin）。此场景后被舒伯特谱曲成为经典艺术歌曲《纺车旁的格丽卿》。</div>
+</a>
+<a class="entry-item" href="森林和山洞.html">
+  <div class="noun">森林和山洞</div>
+  <div class="snippet">《浮士德》第一部第十四场的场景名称。浮士德独自一人身处森林与山洞中，向地灵倾诉内心的矛盾与感恩之情。此场包含浮士德对自然的赞美、对良心的自省，以及梅非斯特如何用格蕾辛的思念来引诱他回去。该场景融入了歌德的泛神论自然哲学思想。</div>
+</a>
+<a class="entry-item" href="欧洛塔斯河.html">
+  <div class="noun">欧洛塔斯河</div>
+  <div class="snippet">又译埃夫罗塔斯河（Eurotas），希腊伯罗奔尼撒半岛南部的主要河流，发源于塔伊耶托斯山脉，全长约82公里，流经拉科尼亚平原，经过斯巴达城西侧，注入拉科尼亚湾。欧洛塔斯河是斯巴达城邦的生命之河，为河谷平原提供灌溉水源。神话中宙斯曾化作天鹅在</div>
+</a>
+<a class="entry-item" href="欧罗塔斯河.html">
+  <div class="noun">欧罗塔斯河</div>
+  <div class="snippet">希腊伯罗奔尼撒半岛南部的一条河流，流经著名的斯巴达谷地。希腊神话中，海伦的母亲勒达在此河边被化身天鹅的宙斯亲近，生下了海伦。</div>
+</a>
+<a class="entry-item" href="沼泽.html">
+  <div class="noun">沼泽</div>
+  <div class="snippet">《浮士德》第五幕中描述的自然地貌——&quot;有一片沼泽横亘在山麓，污染了一切已开拓之地&quot;。浮士德将其视为必须排除的&quot;臭水浜&quot;，将其视为&quot;功亏一篑的大事&quot;。排除沼泽、改良土地是浮士德晚年改造自然工程的重要组成部分。</div>
+</a>
+<a class="entry-item" href="法兰克福.html">
+  <div class="noun">法兰克福</div>
+  <div class="snippet">正式全称为美因河畔法兰克福，德国黑森州最大城市，德国第五大城市，是欧洲最重要的金融中心之一，拥有欧洲中央银行和法兰克福证券交易所。法兰克福是大文豪歌德的出生地，歌德故居是重要旅游景点。该城还拥有法兰克福大学和世界最大的法兰克福书展，是德国重</div>
+</a>
+<a class="entry-item" href="法尔萨洛斯.html">
+  <div class="noun">法尔萨洛斯</div>
+  <div class="snippet">古希腊色萨利地区的重要城市，因公元前48年恺撒与庞培之间的法尔萨洛斯战役而闻名于世。在《浮士德》第二部的&quot;古典的瓦尔普吉斯之夜&quot;中，浮士德一行人首先到达法尔萨洛斯的旷野，在珀涅俄斯河上游开始寻找海伦的踪迹。</div>
+</a>
+<a class="entry-item" href="海登海姆.html">
+  <div class="noun">海登海姆</div>
+  <div class="snippet">德国境内的地点，圣瓦尔普吉斯在此担任本笃会双修道院院长。修道院同时容纳修士和修女，是中世纪德国重要的宗教中心。</div>
+</a>
+<a class="entry-item" href="爱奥尼亚.html">
+  <div class="noun">爱奥尼亚</div>
+  <div class="snippet">爱奥尼亚（Ionia，又译伊奥尼亚）是古希腊时代对小亚细亚（今土耳其）安纳托利亚西南海岸地区的称呼，其范围北端约至今伊兹密尔，南至哈利卡尔那索斯以北，还包括希俄斯岛和萨摩斯岛等爱琴海岛屿。名称源于古希腊四大部族之一的爱奥尼亚人（Ionian</div>
+</a>
+<a class="entry-item" href="爱琴海.html">
+  <div class="noun">爱琴海</div>
+  <div class="snippet">地中海东部的一部分，位于希腊半岛与小亚细亚半岛之间，面积约21.4万平方公里。拥有约2500个岛屿，绝大部分属于希腊。名称源于希腊神话：雅典国王埃勾斯误以为儿子忒修斯遇难而投海自尽，该海遂以他命名。是欧洲文明摇篮——米诺斯文明、迈锡尼文明和</div>
+</a>
+<a class="entry-item" href="牢狱.html">
+  <div class="noun">牢狱</div>
+  <div class="snippet">《浮士德》第一部终场的场景，即格蕾辛因溺杀私生子被囚禁并判处死刑的监狱。浮士德在梅非斯特帮助下深夜持钥匙与灯潜入牢狱，试图营救格蕾辛，但格蕾辛拒绝逃亡，选择接受上帝的审判。最终天上传來&quot;获救了&quot;的声音，格蕾辛的灵魂得救。</div>
+</a>
+<a class="entry-item" href="特洛亚.html">
+  <div class="noun">特洛亚</div>
+  <div class="snippet">即特洛伊（Troy），小亚细亚西北部的古城，今土耳其希沙利克遗址。因荷马史诗《伊利亚特》记载的特洛伊战争而闻名于世。1871年由谢里曼发掘证实其历史真实性，有九层文化叠压，1998年被列为世界文化遗产。在《浮士德》中将时代追溯到特洛亚陷落的</div>
+</a>
+<a class="entry-item" href="狄斯城.html">
+  <div class="noun">狄斯城</div>
+  <div class="snippet">但丁《神曲·地狱篇》中地狱第六至九层的所在之城，冥府的首府，是地狱上下两层的分界点，上层惩罚无节制之轻罪，下层惩罚蓄意作恶的重罪，由堕天使守卫，需天使降临方可入内。</div>
+</a>
+<a class="entry-item" href="珀利翁山.html">
+  <div class="noun">珀利翁山</div>
+  <div class="snippet">希腊色萨利东南部马格内西亚半岛上的山脉，海拔约1618米。在希腊神话中，半人马（肯陶洛斯）族居住于此，阿尔戈号也以此山木材建造。阿罗伊代兄弟曾试图将其垒在俄萨山上以登天。&quot;把珀利翁山垒在俄萨山上&quot;成为著名习语。</div>
+</a>
+<a class="entry-item" href="珀涅俄斯河.html">
+  <div class="noun">珀涅俄斯河</div>
+  <div class="snippet">希腊色萨利地区的主要河流（又译皮尼奥斯河），发源于品都斯山脉，流经著名的坦佩谷，注入爱琴海。在希腊神话中，珀涅俄斯河神是达芙妮的父亲，达芙妮被阿波罗追逐时向父亲求救，被变为月桂树。在《浮士德》第二部中，法尔萨洛斯的旷野位于珀涅俄斯河上游。</div>
+</a>
+<a class="entry-item" href="琉刻岛.html">
+  <div class="noun">琉刻岛</div>
+  <div class="snippet">希腊神话中的&quot;白岛&quot;，位于黑海，现代称为蛇岛（属乌克兰）。据神话传说，阿喀琉斯死后被母亲忒提斯带至该岛获得永生，与帕特罗克洛斯等英雄的灵魂在此居住。岛上曾建有阿喀琉斯神庙。在《浮士德》注解中被提及为阿喀琉斯和海伦的结婚之地。</div>
+</a>
+<a class="entry-item" href="皮得纳.html">
+  <div class="noun">皮得纳</div>
+  <div class="snippet">又译彼得那，马其顿王国境内的古城，位于今希腊北部。公元前168年在此发生的彼得那战役中，罗马军队在马其顿国王珀耳修斯被击败，马其顿王国灭亡，标志着希腊化时代的终结。在《浮士德》注解中被提及为马其顿王珀耳修斯战败之地。</div>
+</a>
+<a class="entry-item" href="皮罗斯.html">
+  <div class="noun">皮罗斯</div>
+  <div class="snippet">又译皮洛斯，古希腊伯罗奔尼撒半岛西南部麦西尼亚地区的港口城镇，是荷马史诗中涅斯托耳王国的所在地。该地以迈锡尼文明的宫殿遗址（&quot;涅斯托耳的宫殿&quot;）和1827年纳瓦里诺海战而闻名。 --- 位于希腊伯罗奔尼撒半岛西南部墨塞涅地区的重要海港城市。</div>
+</a>
+<a class="entry-item" href="矿山.html">
+  <div class="noun">矿山</div>
+  <div class="snippet">浮士德中皇帝赋予五位忠良的经济特权之一，指采矿权。领主可在自己封地内开采矿产资源，这是封建制度下最重要的经济特权之一，体现了皇帝对五位功臣的极大赏赐。</div>
+</a>
+<a class="entry-item" href="神殿.html">
+  <div class="noun">神殿</div>
+  <div class="snippet">通过魔术魔力在骑士大厅中显现的巍峨古代神殿。拥有圆柱排列、仿佛阿特拉斯擎天般的宏伟结构。其建筑风格引发了星士（赞美古典）与建筑师（推崇哥特式）之间的审美争论。</div>
+</a>
+<a class="entry-item" href="科林斯.html">
+  <div class="noun">科林斯</div>
+  <div class="snippet">古希腊最重要城邦之一，位于伯罗奔尼撒半岛东北部，扼守科林斯地峡这一战略要冲。商业繁荣，创造了&quot;科林斯柱式&quot;，曾是阿佛洛狄忒崇拜中心。在《浮士德》中由日耳曼人筑垒防守。</div>
+</a>
+<a class="entry-item" href="纽伦堡.html">
+  <div class="noun">纽伦堡</div>
+  <div class="snippet">德国巴伐利亚州第二大城市，中世纪时曾是神圣罗马帝国重要的帝国自由市和皇帝加冕地。著名画家丢勒的故乡，欧洲&quot;玩具都城&quot;。20世纪成为纳粹党年度党代会会址，二战后在此举行了对纳粹战犯的纽伦堡审判。城内有皇帝堡、日耳曼国家博物馆等著名历史遗迹。</div>
+</a>
+<a class="entry-item" href="维也纳.html">
+  <div class="noun">维也纳</div>
+  <div class="snippet">奥地利首都，哈布斯堡王朝的文化中心。18世纪时维也纳郊外的普拉特是著名的游乐园。歌德在《浮士德》中借梅非斯特之口将瓦尔普吉斯之夜的热闹比作普拉特游乐园。</div>
+</a>
+<a class="entry-item" href="罗得岛.html">
+  <div class="noun">罗得岛</div>
+  <div class="snippet">罗得岛（Rhodes）是希腊爱琴海东南部的一个岛屿。罗得港曾有一尊巨大的太阳神赫利俄斯青铜巨像，高达34米，为古代世界七大奇观之一。其原始民族精于铜铁匠技艺，曾为海神锻造三叉戟，也是最初将神像雕成人形的民族。</div>
+</a>
+<a class="entry-item" href="美因河畔法兰克福.html">
+  <div class="noun">美因河畔法兰克福</div>
+  <div class="snippet">德国西部城市，位于黑森州美因河下游，简称法兰克福，是德国乃至欧洲重要的金融、工业和交通中心。全名为&quot;美因河畔法兰克福&quot;（Frankfurt am Main），以区别于德国东部的奥得河畔法兰克福。该城是德国伟大诗人歌德的出生地和故乡，歌德故居</div>
+</a>
+<a class="entry-item" href="美因河畔的法兰克福.html">
+  <div class="noun">美因河畔的法兰克福</div>
+  <div class="snippet">德国第五大城市，黑森州最大城市，正式名称为美因河畔法兰克福。它是德国乃至欧洲最重要的金融中心、交通枢纽和会展之都，拥有欧洲中央银行总部和法兰克福证券交易所。法兰克福也是德国最伟大文学家歌德的出生地，拥有歌德故居、法兰克福大学（歌德大学）等重</div>
+</a>
+<a class="entry-item" href="腾珀.html">
+  <div class="noun">腾珀</div>
+  <div class="snippet">希腊忒萨利亚北部的一条著名峡谷，夹在俄林波斯山与俄萨山之间，全长约10千米，皮尼奥斯河穿谷而过。古希腊诗人誉为&quot;阿波罗和缪斯喜爱的去处&quot;。在《浮士德》注解中提及庞培兵败后由腾珀往海路而逃。</div>
+</a>
+<a class="entry-item" href="莱比锡.html">
+  <div class="noun">莱比锡</div>
+  <div class="snippet">德国萨克森州最大城市，以博览会、音乐和图书出版闻名于世，被歌德称为&quot;小巴黎&quot;。约翰·塞巴斯蒂安·巴赫在圣托马斯教堂担任乐长27年。莱比锡还是1989年东德和平革命的发源地。莱比锡大学成立于1409年，是德语区最古老的大学之一。歌德曾在此学习</div>
+</a>
+<a class="entry-item" href="萨摩特拉刻.html">
+  <div class="noun">萨摩特拉刻</div>
+  <div class="snippet">希腊爱琴海北部的岛屿，古希腊世界仅次于厄琉息斯的第二大密教中心。岛上有&quot;大神圣地&quot;（伟神之圣地），举行神秘的入教仪式，入教者被认为获得航海安全的庇护。著名雕塑《萨莫色雷斯的胜利女神》即发现于此岛。歌德在《浮士德》中借用了该岛的卡柏洛密教崇拜</div>
+</a>
+<a class="entry-item" href="蒙特塞拉特山.html">
+  <div class="noun">蒙特塞拉特山</div>
+  <div class="snippet">西班牙加泰罗尼亚的奇峰山脉，距巴塞罗那约50公里，由砾岩构成锯齿状山貌。山顶有本笃会修道院，供奉黑圣母像，是加泰罗尼亚最重要的朝圣地，歌德在写作《浮士德》时受其景色启发。</div>
+</a>
+<a class="entry-item" href="蔷薇山.html">
+  <div class="noun">蔷薇山</div>
+  <div class="snippet">根据德国作家维兰的长篇叙事诗《奥伯朗》，仙王的宫殿坐落在此山上。在《浮士德》中为理想国的象征，爱丽尔引领精灵们前往的目的地。</div>
+</a>
+<a class="entry-item" href="街道.html">
+  <div class="noun">街道</div>
+  <div class="snippet">《浮士德》第一部第七场的场景名称。浮士德在街道上遇见从教堂归来的玛加蕾特，被她美貌吸引而搭讪，但被对方拒绝。这场戏是玛加蕾特悲剧的开端，标志着浮士德从书斋走入了世俗生活。</div>
+</a>
+<a class="entry-item" href="诺尔齐亚.html">
+  <div class="noun">诺尔齐亚</div>
+  <div class="snippet">意大利翁布里亚大区的城市（拉丁名Nursia，现名Norcia/诺尔恰），是古意大利萨比尼人最北端的城市。圣本笃（本笃会创始人）即出生于此。</div>
+</a>
+<a class="entry-item" href="贫苦村.html">
+  <div class="noun">贫苦村</div>
+  <div class="snippet">德国哈尔茨山脉中的村庄，对应Elend村（德语意为&quot;贫困、苦难&quot;），靠近Schierke和鼾息岩（Schnarcherklippen），是通往鼾息岩途中的地点。 --- 德国哈尔茨山布罗肯山南面的村庄，德文名Elend（埃伦德），意为&quot;贫困</div>
+</a>
+<a class="entry-item" href="赫拉斯.html">
+  <div class="noun">赫拉斯</div>
+  <div class="snippet">赫拉斯（Hellas，古希腊语Ἑλλάς）是古希腊人对希腊地区的自称，现代希腊人仍用此词称呼自己的国家（读作Ellas）。据希腊神话，Hellas得名于希腊人的共同始祖希伦（Hellen），他是普罗米修斯之孙、丢卡利翁之子。最初Hellas</div>
+</a>
+<a class="entry-item" href="迈安德洛斯河.html">
+  <div class="noun">迈安德洛斯河</div>
+  <div class="snippet">土耳其西南部的一条河流，现代名称为大门德雷斯河（Büyük Menderes）。以其极度蜿蜒曲折的河道闻名，英语词汇&quot;meander&quot;（蜿蜒）即源于此河之名。两岸分布着米利都等古希腊重要城邦。</div>
+</a>
+<a class="entry-item" href="那不勒斯.html">
+  <div class="noun">那不勒斯</div>
+  <div class="snippet">意大利南部坎帕尼亚大区首府（Naples，意大利语Napoli），位于第勒尼安海那不勒斯湾北岸，人口约100万，是意大利第三大都会区。拥有超过2500年历史，古希腊人最初在此建城。以披萨发源地、维苏威火山、庞贝古城、圣卡尔洛剧院等闻名。在《</div>
+</a>
+<a class="entry-item" href="邻妇之家.html">
+  <div class="noun">邻妇之家</div>
+  <div class="snippet">《浮士德》第一部第十场场景名（德语Der Nachbarin Haus），即格蕾辛的女邻居玛尔太的家。该文本段末尾仅出现标题&quot;第十场 邻妇之家 玛尔太，独自一人&quot;，后续情节中梅非斯特假扮报丧者前来告知玛尔太其丈夫死讯，借此接近并利用玛尔太促</div>
+</a>
+<a class="entry-item" href="里帕赫.html">
+  <div class="noun">里帕赫</div>
+  <div class="snippet">德国萨克森-安哈尔特州布尔根兰县吕岑附近的一个村庄，位于魏森费尔斯通往莱比锡的旧驿道上。里帕赫曾是旅人从魏森费尔斯前往莱比锡的最后一个驿站，当地有一家名为&quot;Zum Weißen Schwan&quot;（白天鹅客栈）的历史客栈。歌德在《浮士德》第一部</div>
+</a>
+<a class="entry-item" href="金字塔.html">
+  <div class="noun">金字塔</div>
+  <div class="snippet">古埃及法老（国王）的陵墓，主要建于古王国时期（约公元前2686-前1786年），因外形似汉字&quot;金&quot;字而得名。最著名的是吉萨三大金字塔（胡夫金字塔、哈夫拉金字塔、门卡乌拉金字塔），其中胡夫金字塔为古代世界七大奇迹之一。</div>
+</a>
+<a class="entry-item" href="阿尔卑斯山.html">
+  <div class="noun">阿尔卑斯山</div>
+  <div class="snippet">欧洲最大的山脉，横跨法国、意大利、瑞士、德国、奥地利等多国，最高峰为勃朗峰（4808米）。在《浮士德》第二部开头，经历了格蕾辛悲剧的浮士德来到瑞士阿尔卑斯山风景优美之处，投入大自然的怀抱，治愈心头的创伤，象征着从&quot;小世界&quot;走向&quot;大世界&quot;的转</div>
+</a>
+<a class="entry-item" href="阿尔卑斯草地.html">
+  <div class="noun">阿尔卑斯草地</div>
+  <div class="snippet">阿尔卑斯山脉中的高山草甸地带。在《浮士德》第十四场中，浮士德在独白中将自己在尘世中不安定的漂泊与格蕾辛在阿尔卑斯草地小屋中宁静的家务生活进行对比，表达了自己的愧疚与矛盾心理。</div>
+</a>
+<a class="entry-item" href="阿开亚.html">
+  <div class="noun">阿开亚</div>
+  <div class="snippet">又译亚该亚，位于伯罗奔尼撒半岛北部的一个历史地区。在荷马史诗中常用&quot;阿开亚人&quot;统称全体希腊人。公元前4世纪该地城邦组成&quot;亚该亚同盟&quot;，罗马时期设亚该亚行省。在《浮士德》中由哥特人征战。</div>
+</a>
+<a class="entry-item" href="阿提卡.html">
+  <div class="noun">阿提卡</div>
+  <div class="snippet">希腊中东部的一个半岛区域，伸入爱琴海。是雅典城邦的核心区域，古希腊文明的中心地带。历史可追溯至迈锡尼文明时期。在《浮士德》注解中被提及为海伦被忒修斯拐至的阿提卡海岸城市附近地区。</div>
+</a>
+<a class="entry-item" href="阿福花草地.html">
+  <div class="noun">阿福花草地</div>
+  <div class="snippet">希腊神话中冥界的一部分，又称水仙平原，是那些生前既无伟大功绩也无重大罪孽的平凡灵魂所去之处。在《浮士德》中，合唱队描述自己身处阿福花草地的低僻之处。</div>
+</a>
+<a class="entry-item" href="阿耳卡狄亚.html">
+  <div class="noun">阿耳卡狄亚</div>
+  <div class="snippet">希腊伯罗奔尼撒半岛中部的一个历史地理区域，在西方文化中被广泛用作&quot;世外桃源&quot;的代名词。古希腊和罗马的田园诗将其描绘成牧歌式的理想乡。在《浮士德》第二部中，浮士德和海伦在阿耳卡狄亚度过快乐的婚后生活，生下欧福里翁。</div>
+</a>
+<a class="entry-item" href="阿耳戈利斯.html">
+  <div class="noun">阿耳戈利斯</div>
+  <div class="snippet">又译阿尔戈利斯，古希腊伯罗奔尼撒半岛东北部的一个历史地区，是迈锡尼文明的核心区域，拥有迈锡尼、梯林斯等著名遗址。荷马史诗中阿伽门农的都城迈锡尼即在此地。在《浮士德》中由诺尔曼人扩充地盘。</div>
+</a>
+<a class="entry-item" href="阿菲德诺斯.html">
+  <div class="noun">阿菲德诺斯</div>
+  <div class="snippet">希腊阿提卡地区的城镇阿菲德纳（Aphidna）的国王和同名英雄。忒修斯劫持年幼的海伦后，将她与自己的母亲埃特拉一同托付给阿菲德诺斯看管。海伦的兄长卡斯托耳和波路克斯攻破阿菲德纳，救出海伦并俘获埃特拉。在《浮士德》中，海伦回答福耳库阿斯关于忒</div>
+</a>
+<a class="entry-item" href="马耳他海岸.html">
+  <div class="noun">马耳他海岸</div>
+  <div class="snippet">马耳他岛的海岸。马耳他是地中海中部的岛国，素有&quot;地中海心脏&quot;之称，由马耳他岛、戈佐岛等组成。海岸线长约180-197公里，多天然良港，西南海岸多陡壁悬崖。在《浮士德》中，玛尔太的丈夫自称在马耳他海岸为妻子儿女祈祷。</div>
+</a>
+<a class="entry-item" href="骑士大厅.html">
+  <div class="noun">骑士大厅</div>
+  <div class="snippet">德语Rittersaal，是《浮士德》第二部第一幕中的场景，位于皇帝宫廷内。皇帝和廷臣们在此观看浮士德表演魔术，墙壁打开后显现出古代神殿，帕里斯和海伦的幻影在此登场。</div>
+</a>
+<a class="entry-item" href="魏玛.html">
+  <div class="noun">魏玛</div>
+  <div class="snippet">德国图林根州的一座小城，被誉为&quot;德国的雅典&quot;和德国古典文化的中心。歌德在此生活了57年，创作了《浮士德》等巨著；席勒也在此完成了重要作品。魏玛还曾是李斯特、巴赫、尼采等文化名人活跃之地。1919年德国第一部共和宪法在此制定，故称《魏玛宪法》</div>
+</a>
+<a class="entry-item" href="魔女丹房.html">
+  <div class="noun">魔女丹房</div>
+  <div class="snippet">歌德《浮士德》第一部第六场的场景名称，魔女调制返老还童药酒的地方。场景中设有矮灶、大锅、魔镜和各种怪异器具，猿猴作为仆役在场。浮士德在此饮下药酒恢复青春，并在魔镜中看到美女幻影（海伦的预兆）。该场景象征非理性、混乱、原始欲望的空间，与书斋的</div>
+</a>
+<a class="entry-item" href="魔女的丹房.html">
+  <div class="noun">魔女的丹房</div>
+  <div class="snippet">歌德《浮士德》第一部第六场场景，即女巫的厨房/炼药房。浮士德在梅非斯特引导下至此，喝下魔女汤药返老还童，并在魔镜中看到完美女性形象，标志着浮士德从理性书斋走向感官世界的转折点。该场景充满荒诞混乱的象征元素（长尾猿、魔镜、魔锅等），是对中世纪</div>
+</a>
+<a class="entry-item" href="鼾息岩.html">
+  <div class="noun">鼾息岩</div>
+  <div class="snippet">位于德国哈尔茨山脉的岩石地貌（Schnarcherklippen），海拔约671米，因东南风吹过岩石缝隙时发出类似打鼾的声响而得名。歌德在1784年游历哈尔茨时曾造访此地，并将其写入《浮士德》。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>

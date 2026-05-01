@@ -1,0 +1,457 @@
+{
+  "book_name": "浮士德",
+  "source_file": "E:\\ebook-kb\\浮士德\\浮士德.epub",
+  "total_chunks": 64,
+  "chunk_size": 5000,
+  "overlap": 100,
+  "chunks": [
+    {
+      "seq": 1,
+      "filename": "浮士德_1.txt",
+      "char_count": 4937,
+      "status": "completed",
+      "keyword_count": 35
+    },
+    {
+      "seq": 2,
+      "filename": "浮士德_2.txt",
+      "char_count": 4997,
+      "status": "completed",
+      "keyword_count": 54
+    },
+    {
+      "seq": 3,
+      "filename": "浮士德_3.txt",
+      "char_count": 4903,
+      "status": "completed",
+      "keyword_count": 27
+    },
+    {
+      "seq": 4,
+      "filename": "浮士德_4.txt",
+      "char_count": 4866,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 5,
+      "filename": "浮士德_5.txt",
+      "char_count": 4797,
+      "status": "completed",
+      "keyword_count": 19
+    },
+    {
+      "seq": 6,
+      "filename": "浮士德_6.txt",
+      "char_count": 4795,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 7,
+      "filename": "浮士德_7.txt",
+      "char_count": 2882,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 8,
+      "filename": "浮士德_8.txt",
+      "char_count": 3331,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 9,
+      "filename": "浮士德_9.txt",
+      "char_count": 4604,
+      "status": "completed",
+      "keyword_count": 19
+    },
+    {
+      "seq": 10,
+      "filename": "浮士德_10.txt",
+      "char_count": 4886,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 11,
+      "filename": "浮士德_11.txt",
+      "char_count": 4875,
+      "status": "completed",
+      "keyword_count": 10
+    },
+    {
+      "seq": 12,
+      "filename": "浮士德_12.txt",
+      "char_count": 4006,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 13,
+      "filename": "浮士德_13.txt",
+      "char_count": 4247,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 14,
+      "filename": "浮士德_14.txt",
+      "char_count": 4170,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 15,
+      "filename": "浮士德_15.txt",
+      "char_count": 2797,
+      "status": "completed",
+      "keyword_count": 7
+    },
+    {
+      "seq": 16,
+      "filename": "浮士德_16.txt",
+      "char_count": 4722,
+      "status": "completed",
+      "keyword_count": 30
+    },
+    {
+      "seq": 17,
+      "filename": "浮士德_17.txt",
+      "char_count": 2826,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 18,
+      "filename": "浮士德_18.txt",
+      "char_count": 4291,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 19,
+      "filename": "浮士德_19.txt",
+      "char_count": 4969,
+      "status": "completed",
+      "keyword_count": 28
+    },
+    {
+      "seq": 20,
+      "filename": "浮士德_20.txt",
+      "char_count": 4662,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 21,
+      "filename": "浮士德_21.txt",
+      "char_count": 4311,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 22,
+      "filename": "浮士德_22.txt",
+      "char_count": 3171,
+      "status": "completed",
+      "keyword_count": 19
+    },
+    {
+      "seq": 23,
+      "filename": "浮士德_23.txt",
+      "char_count": 4448,
+      "status": "completed",
+      "keyword_count": 63
+    },
+    {
+      "seq": 24,
+      "filename": "浮士德_24.txt",
+      "char_count": 4515,
+      "status": "completed",
+      "keyword_count": 38
+    },
+    {
+      "seq": 25,
+      "filename": "浮士德_25.txt",
+      "char_count": 4097,
+      "status": "completed",
+      "keyword_count": 14
+    },
+    {
+      "seq": 26,
+      "filename": "浮士德_26.txt",
+      "char_count": 4348,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 27,
+      "filename": "浮士德_27.txt",
+      "char_count": 4935,
+      "status": "completed",
+      "keyword_count": 24
+    },
+    {
+      "seq": 28,
+      "filename": "浮士德_28.txt",
+      "char_count": 4455,
+      "status": "completed",
+      "keyword_count": 22
+    },
+    {
+      "seq": 29,
+      "filename": "浮士德_29.txt",
+      "char_count": 3341,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 30,
+      "filename": "浮士德_30.txt",
+      "char_count": 4991,
+      "status": "completed",
+      "keyword_count": 17
+    },
+    {
+      "seq": 31,
+      "filename": "浮士德_31.txt",
+      "char_count": 3522,
+      "status": "completed",
+      "keyword_count": 9
+    },
+    {
+      "seq": 32,
+      "filename": "浮士德_32.txt",
+      "char_count": 4714,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 33,
+      "filename": "浮士德_33.txt",
+      "char_count": 4939,
+      "status": "completed",
+      "keyword_count": 16
+    },
+    {
+      "seq": 34,
+      "filename": "浮士德_34.txt",
+      "char_count": 4985,
+      "status": "completed",
+      "keyword_count": 5
+    },
+    {
+      "seq": 35,
+      "filename": "浮士德_35.txt",
+      "char_count": 4981,
+      "status": "completed",
+      "keyword_count": 32
+    },
+    {
+      "seq": 36,
+      "filename": "浮士德_36.txt",
+      "char_count": 4935,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 37,
+      "filename": "浮士德_37.txt",
+      "char_count": 4084,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 38,
+      "filename": "浮士德_38.txt",
+      "char_count": 4990,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 39,
+      "filename": "浮士德_39.txt",
+      "char_count": 3688,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 40,
+      "filename": "浮士德_40.txt",
+      "char_count": 4735,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 41,
+      "filename": "浮士德_41.txt",
+      "char_count": 4969,
+      "status": "completed",
+      "keyword_count": 20
+    },
+    {
+      "seq": 42,
+      "filename": "浮士德_42.txt",
+      "char_count": 3122,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 43,
+      "filename": "浮士德_43.txt",
+      "char_count": 4182,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 44,
+      "filename": "浮士德_44.txt",
+      "char_count": 2548,
+      "status": "completed",
+      "keyword_count": 4
+    },
+    {
+      "seq": 45,
+      "filename": "浮士德_45.txt",
+      "char_count": 4987,
+      "status": "completed",
+      "keyword_count": 47
+    },
+    {
+      "seq": 46,
+      "filename": "浮士德_46.txt",
+      "char_count": 4408,
+      "status": "completed",
+      "keyword_count": 35
+    },
+    {
+      "seq": 47,
+      "filename": "浮士德_47.txt",
+      "char_count": 4810,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 48,
+      "filename": "浮士德_48.txt",
+      "char_count": 4803,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 49,
+      "filename": "浮士德_49.txt",
+      "char_count": 4164,
+      "status": "completed",
+      "keyword_count": 12
+    },
+    {
+      "seq": 50,
+      "filename": "浮士德_50.txt",
+      "char_count": 4868,
+      "status": "completed",
+      "keyword_count": 3
+    },
+    {
+      "seq": 51,
+      "filename": "浮士德_51.txt",
+      "char_count": 3517,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 52,
+      "filename": "浮士德_52.txt",
+      "char_count": 4990,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 53,
+      "filename": "浮士德_53.txt",
+      "char_count": 3371,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 54,
+      "filename": "浮士德_54.txt",
+      "char_count": 3511,
+      "status": "completed",
+      "keyword_count": 19
+    },
+    {
+      "seq": 55,
+      "filename": "浮士德_55.txt",
+      "char_count": 4930,
+      "status": "completed",
+      "keyword_count": 11
+    },
+    {
+      "seq": 56,
+      "filename": "浮士德_56.txt",
+      "char_count": 2811,
+      "status": "completed",
+      "keyword_count": 6
+    },
+    {
+      "seq": 57,
+      "filename": "浮士德_57.txt",
+      "char_count": 4569,
+      "status": "completed",
+      "keyword_count": 18
+    },
+    {
+      "seq": 58,
+      "filename": "浮士德_58.txt",
+      "char_count": 4338,
+      "status": "completed",
+      "keyword_count": 33
+    },
+    {
+      "seq": 59,
+      "filename": "浮士德_59.txt",
+      "char_count": 4340,
+      "status": "completed",
+      "keyword_count": 30
+    },
+    {
+      "seq": 60,
+      "filename": "浮士德_60.txt",
+      "char_count": 3939,
+      "status": "completed",
+      "keyword_count": 13
+    },
+    {
+      "seq": 61,
+      "filename": "浮士德_61.txt",
+      "char_count": 4035,
+      "status": "completed",
+      "keyword_count": 24
+    },
+    {
+      "seq": 62,
+      "filename": "浮士德_62.txt",
+      "char_count": 4548,
+      "status": "completed",
+      "keyword_count": 15
+    },
+    {
+      "seq": 63,
+      "filename": "浮士德_63.txt",
+      "char_count": 3884,
+      "status": "completed",
+      "keyword_count": 8
+    },
+    {
+      "seq": 64,
+      "filename": "浮士德_64.txt",
+      "char_count": 3640,
+      "status": "completed",
+      "keyword_count": 30
+    }
+  ]
+}

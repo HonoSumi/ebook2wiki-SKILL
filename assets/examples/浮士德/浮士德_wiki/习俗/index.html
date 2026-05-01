@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>习俗 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">习俗 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+习俗
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">16 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="九柱戏.html">
+  <div class="noun">九柱戏</div>
+  <div class="snippet">德国传统滚球游戏，德语称Kegelspiel或Kegeln，是现代保龄球的前身。起源于公元3至4世纪的德国，最初是天主教教堂内的宗教仪式，教徒用石头滚地击柱以象征赎罪消灾。14世纪演变为民间体育运动。游戏中竖立9根柱子（而非现代保龄球的10</div>
+</a>
+<a class="entry-item" href="假腿肚.html">
+  <div class="noun">假腿肚</div>
+  <div class="snippet">18世纪欧洲的一种时尚，爱打扮的人在裤脚管内装假腿肚以塑造良好体型。在《浮士德》中梅非斯特以此遮掩自己的马蹄足，假腿肚既是时尚潮流的体现，也是魔鬼伪装自己的手段，歌德借此对当时社会风尚进行了讽刺。</div>
+</a>
+<a class="entry-item" href="卜花词.html">
+  <div class="noun">卜花词</div>
+  <div class="snippet">指用花瓣占卜爱情吉凶的民间习俗，源自西方少女撕花瓣念&quot;他爱我/他不爱我&quot;（he loves me / he loves me not）的爱情占卜游戏。在《浮士德》第十二场园亭中，玛加蕾特采一朵翠菊，将花瓣一片片剥下，口中念着&quot;他爱我——不爱</div>
+</a>
+<a class="entry-item" href="圣安得烈节前夕.html">
+  <div class="noun">圣安得烈节前夕</div>
+  <div class="snippet">指每年11月29日晚（圣安得烈节11月30日的前夕），在德语区被称为Andreasnacht。这是一个具有特殊魔法意义的夜晚，民间传说中年轻女性在这一夜举行各种仪式以预见未来丈夫的模样。常见占卜方式包括熔铅占卜、午夜摆设双人餐桌、抛木鞋等。</div>
+</a>
+<a class="entry-item" href="复活节.html">
+  <div class="noun">复活节</div>
+  <div class="snippet">基督教最重要的节日之一，纪念耶稣基督被钉十字架受死后第三日复活。日期定于每年春分月圆之后的第一个星期日。名称源于盎格鲁-撒克逊春天女神Eostre，早期教会将异教春季节日赋予基督教含义。在《浮士德》中，瓦格纳在与浮士德深夜讨论后告辞，提及明</div>
+</a>
+<a class="entry-item" href="安息日.html">
+  <div class="noun">安息日</div>
+  <div class="snippet">亚伯拉罕诸教中专门用于休息和敬拜的日子。根据《创世记》记载，上帝用六日创造天地，第七日安息，定为圣日。在犹太教中安息日为星期六（周五日落至周六日落），基督教主流派别则改以星期日（主日）作为敬拜日，纪念耶稣基督的复活。在浮士德中，浮士德回忆童</div>
+</a>
+<a class="entry-item" href="密教仪式.html">
+  <div class="noun">密教仪式</div>
+  <div class="snippet">密教仪式（Mystery cult）指古希腊的秘密宗教仪式，其中萨摩特拉刻秘仪与厄琉西斯秘仪齐名。该秘仪崇拜伟大诸神，承诺保护航海者免受海上危险。仪式在夜间举行，入会者经历类似死亡的经验，最终看到神圣光芒。具有惊人的包容性。</div>
+</a>
+<a class="entry-item" href="弥撒.html">
+  <div class="noun">弥撒</div>
+  <div class="snippet">弥撒（Missa，又称感恩祭）是天主教最主要的宗教仪式和礼仪生活的中心。拉丁文原意&quot;遣散&quot;，源自仪式结束语&quot;Ite, missa est&quot;。弥撒以不流血的方式重演耶稣在十字架上的祭献，经祝圣的饼和酒被视为耶稣的体和血。分圣道礼仪（读经、讲道</div>
+</a>
+<a class="entry-item" href="犹太商人.html">
+  <div class="noun">犹太商人</div>
+  <div class="snippet">《浮士德》中宫内大臣提到在宫廷财政崩溃时，犹太商人前来催债，要求以税收作抵押，导致年年寅吃卯粮。这一细节反映了中世纪欧洲宫廷经济对犹太金融资本的依赖，以及反犹主义的历史背景。在早期浮士德民间传说中也有犹太放债人向浮士德逼债的情节。歌德此处的</div>
+</a>
+<a class="entry-item" href="献祭.html">
+  <div class="noun">献祭</div>
+  <div class="snippet">古希腊宗教中最重要的仪式活动，核心流程包括净化、祈祷、宰杀牺牲、焚烧不可食部分献神、分食祭肉等步骤。牺牲通常为牛、羊、猪等家畜。献祭类型分为感恩祭、赎罪祭、祈求祭等。神话起源为普罗米修斯分祭肉的故事。在《浮士德》中，墨涅拉俄斯命海伦准备鼎、</div>
+</a>
+<a class="entry-item" href="瑞典发式.html">
+  <div class="noun">瑞典发式</div>
+  <div class="snippet">《浮士德》中梅非斯特注意到学士模仿的一种流行发型。梅非斯特说&quot;今天瞧你是瑞典发式&quot;，以嘲讽的口吻评论学士的外表，暗示当时德国大学里受瑞典或北欧风格影响的某种时尚发型。歌德通过这一细节刻画了学士追逐时髦、自以为是的性格特征——他不仅在思想上激</div>
+</a>
+<a class="entry-item" href="瓦尔普吉斯之夜.html">
+  <div class="noun">瓦尔普吉斯之夜</div>
+  <div class="snippet">每年4月30日晚至5月1日在中北欧国家（特别是德国）庆祝的传统节日。传说中女巫们会在德国哈尔茨山布罗肯峰举行盛大狂欢。该节日得名于英国传教士修女圣瓦尔普吉斯（约710—779年），融合了异教迎春习俗与基督教圣徒纪念日。歌德在《浮士德》中专门</div>
+</a>
+<a class="entry-item" href="白砂.html">
+  <div class="noun">白砂</div>
+  <div class="snippet">德国及北欧地区的一种传统家务习俗。在木地板上撒上干净的白色细沙，用扫帚将其扫出波纹状或装饰性图案，既起到清洁和防滑作用，也是一种朴素的装饰。浮士德在玛加蕾特房间中看到这种布置，感叹她的勤劳美德。</div>
+</a>
+<a class="entry-item" href="筛子盗贼.html">
+  <div class="noun">筛子盗贼</div>
+  <div class="snippet">16-17世纪德国的一种民间巫术——筛卜（Coscinomancy），用筛子和剪刀侦查盗贼。做法是由女巫用两个中指夹住筛子念咒，逐一念出嫌疑人姓名，念到真犯时筛子旋转。《浮士德》中魔女丹房的公猿取下筛子说倘使你是个贼子我立即把你认识清楚。</div>
+</a>
+<a class="entry-item" href="观脐派.html">
+  <div class="noun">观脐派</div>
+  <div class="snippet">基督教东正教静修主义（Hesychasm）的贬称，指通过注视肚脐、控制呼吸、不断诵念耶稣祷文来寻求与神合一的神秘主义修行者，14世纪盛行于希腊阿索斯山，圣格里高利·帕拉马斯为其神学辩护。</div>
+</a>
+<a class="entry-item" href="隐修士.html">
+  <div class="noun">隐修士</div>
+  <div class="snippet">基督教传统中远离世俗、独居修行的修道者，源自希腊语&quot;沙漠居住者&quot;。起源于3世纪埃及沙漠，以圣安当（圣安东尼）为代表，追求通过祈祷、守斋和苦行实现与天主的契合。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>

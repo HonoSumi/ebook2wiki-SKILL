@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>格蕾辛 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">格蕾辛 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">人物</a>
+<span>/</span>
+格蕾辛
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>格蕾辛</h1>
+  <span class="meta-tag">人物</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>玛加蕾特（Margarete）的昵称，德语亲昵爱称。中文又译作葛丽卿、甘泪卿、格雷琴。她是《浮士德》第一部中的女主人公，纯洁虔诚的平民少女，被浮士德引诱后经历爱情悲剧。她的命运在西方音乐中有深远影响，尤其是舒伯特的艺术歌曲《纺车旁的格蕾辛》。<br>---<br>玛加蕾特（Margarete）的德语爱称（指小词），剧中浮士德和梅非斯特多以格蕾辛称呼她。早期中文译本音译为&quot;甘泪卿&quot;，兼具&quot;甘美&quot;与&quot;泪水&quot;之意，暗合其悲剧命运。在该文本段第九场中，梅非斯特向浮士德报告首饰被神父拿走一事，称&quot;给格蕾辛弄的首饰，却落到了神父手里&quot;，浮士德得知她&quot;思念首饰，昼夜不分，尤其思念送礼的人&quot;。<br>---<br>玛加蕾特（Margarete）的德语昵称（Gretchen），歌德《浮士德》中女主人公。纯朴善良的平民少女，浮士德的爱人。因与浮士德的恋情导致未婚先孕，最终被社会抛弃，因杀婴罪被判处火刑。她的悲剧反映了当时德国社会对女性道德的严苛标准，其灵魂最终因纯洁的爱情得到上帝救赎。<br>---<br>玛加蕾特（Margarete）的德语昵称，中文常音译为格蕾辛或格丽卿。在《浮士德》第十五场&quot;格蕾辛的住房&quot;中，该名称用于标示角色，她独坐在纺车旁吟唱思念浮士德的著名诗篇《我失去安宁》。格蕾辛是德语文学中最著名的悲剧女性形象之一。<br>---<br>格蕾辛（Gretchen）是玛加蕾特（Margarete）的昵称，歌德诗剧《浮士德》第一部中的女主人公。她是一位纯洁虔诚的平民少女，出身普通家庭，日常操持家务、纺织。浮士德在街上偶遇她后一见钟情，在魔鬼梅非斯特的帮助下展开追求。格蕾辛深陷爱情，后因误杀母亲、哥哥被刺死、溺死私生子而走向悲剧结局，最终在牢狱中死去，但灵魂获得天主赦免。她是世界文学史上最动人的女性悲剧形象之一。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>天呀，这孩子真是美丽！我从没见过这样的仙姿。<br>---<br>想一想，给格蕾辛弄的首饰，却落到了神父手里！<br>---<br>格蕾辛不久就被您弄到。今晚可在玛尔太家中跟她相逢。<br>---<br>格 蕾 辛  我失去安宁，内心沉闷；要找回安宁，永远不能。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://searchworks.stanford.edu/articles/cmedm__21186683" target="_blank" rel="noopener">https://searchworks.stanford.edu/articles/cmedm__21186683</a>
+<a class="source-url-item" href="https://www.wikiwand.com/zh-cn/articles/%E6%B5%AE%E5%A3%AB%E5%BE%B7%E2%85%A0" target="_blank" rel="noopener">https://www.wikiwand.com/zh-cn/articles/%E6%B5%AE%E5%A3%AB%E5%BE%B7%E2%85%A0</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/zh-cn/%E6%B5%AE%E5%A3%AB%E5%BE%B7I" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-cn/%E6%B5%AE%E5%A3%AB%E5%BE%B7I</a>
+<a class="source-url-item" href="https://zh.wiktionary.org/zh-hans/Gretchen" target="_blank" rel="noopener">https://zh.wiktionary.org/zh-hans/Gretchen</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>

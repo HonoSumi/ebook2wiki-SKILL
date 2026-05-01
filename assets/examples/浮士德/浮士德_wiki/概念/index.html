@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概念 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">概念 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+概念
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">320 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="《圣经》.html">
+  <div class="noun">《圣经》</div>
+  <div class="snippet">基督教的经典，分为《旧约》和《新约》。在《浮士德》中，《圣经》被多次引用和提及，包括《创世记》的六天创世、《雅歌》的双生鹿比喻、《约伯记》的天上赌约结构等。浮士德翻译《约翰福音》&quot;太初有道&quot;为&quot;太初有为&quot;是全书最著名的哲学转折之一。注释中还</div>
+</a>
+<a class="entry-item" href="《旧约全书》.html">
+  <div class="noun">《旧约全书》</div>
+  <div class="snippet">基督教圣经的前半部分，原为犹太教经典，主要用希伯来文写成。基督新教共39卷，分为律法书（摩西五经）、历史书、诗歌智慧书和先知书四部分。记载从上帝创造天地到以色列民族回归重建的历史，时间跨度约1500年。&quot;旧约&quot;指上帝与以色列民族在西奈山所立</div>
+</a>
+<a class="entry-item" href="《沙恭达罗》.html">
+  <div class="noun">《沙恭达罗》</div>
+  <div class="snippet">古印度梵语诗人迦梨陀娑创作的七幕戏剧，全称《凭信物与沙恭达罗团圆记》。描写国王豆扇陀与净修女沙恭达罗的爱情故事，情节扣人心弦、诗意盎然。1789年威廉·琼斯首次译为英文，后由福斯特转译为德文，歌德读后极为赞赏，并在创作《浮士德》时借鉴了其序</div>
+</a>
+<a class="entry-item" href="《浮士德初稿》.html">
+  <div class="noun">《浮士德初稿》</div>
+  <div class="snippet">歌德约1772至1775年（狂飙突进时期）创作的《浮士德》最早版本，德文称Urfaust，共22幕1141行。内容主要围绕学者浮士德与少女格蕾辛的爱情悲剧展开，尚未加入后来版本中上帝与魔鬼打赌、正式缔约等核心框架。原稿一度失落，1887年才</div>
+</a>
+<a class="entry-item" href="《浮士德博士的悲剧故事》.html">
+  <div class="noun">《浮士德博士的悲剧故事》</div>
+  <div class="snippet">英国剧作家克里斯托弗·马洛于1588年左右创作的戏剧，改编自德国民间故事书。讲述浮士德博士对传统学识感到厌倦，与魔鬼靡非斯特签订契约，以灵魂换取24年绝对权力，最终被拖入地狱的悲剧。马洛首创无韵诗体的戏剧形式，将浮士德塑造为巨人式的人文主义</div>
+</a>
+<a class="entry-item" href="《神曲》.html">
+  <div class="noun">《神曲》</div>
+  <div class="snippet">意大利诗人但丁（1265—1321）创作的史诗，原名《喜剧》，后由薄伽丘冠以&quot;神圣的&quot;称号。全诗分为《地狱》《炼狱》《天堂》三篇，共100曲，14233行。以意大利托斯卡纳方言写成，奠定了现代意大利语的基础。作品融合神学、哲学、历史与政治，</div>
+</a>
+<a class="entry-item" href="《约伯记》.html">
+  <div class="noun">《约伯记》</div>
+  <div class="snippet">《圣经·旧约》中的一卷书，属于诗歌智慧书，全书共42章。探讨的核心神学问题是&quot;义人为何受苦&quot;（神义论）。故事讲述敬虔的富人在约伯接连失去财产、儿女和健康后，仍坚守信仰。上帝最终加倍赐福于他。《约伯记》中以撒但在上帝面前控告约伯并获准试探他的</div>
+</a>
+<a class="entry-item" href="《约翰福音》.html">
+  <div class="noun">《约翰福音》</div>
+  <div class="snippet">《新约圣经》的第四部福音书，共21章，传统认为作者为使徒约翰，约公元90至100年间写成。与前三部福音书（对观福音）不同，《约翰福音》约92%的内容为独有资料，侧重耶稣的神性，以&quot;太初有道&quot;（In the beginning was the</div>
+</a>
+<a class="entry-item" href="《雅歌》.html">
+  <div class="noun">《雅歌》</div>
+  <div class="snippet">《圣经·旧约》中的一卷书，又称《所罗门之歌》或《歌中之歌》，是圣经中唯一的爱情诗歌集，以男女对唱形式歌颂爱情。在《浮士德》第十四场中，梅非斯特引用《雅歌》第4章第5节的&quot;双生鹿&quot;意象来调侃浮士德。</div>
+</a>
+<a class="entry-item" href="七大罪.html">
+  <div class="noun">七大罪</div>
+  <div class="snippet">七大罪（Seven Deadly Sins），也称七罪宗，是天主教教义中对人类恶行的分类，包括：骄傲、悭吝（贪婪）、迷色（色欲）、嫉妒、愤怒、贪饕（暴食）、懒惰。这七种恶行被认为是能够直接形成其他不道德行为的根源。</div>
+</a>
+<a class="entry-item" href="三位一体.html">
+  <div class="noun">三位一体</div>
+  <div class="snippet">三位一体（Trinity）是基督教的核心教义，主张上帝独一但包含三个不同位格：圣父、圣子和圣灵，三者本质相同、同尊同荣、同为永恒。此词由拉丁教父特土良首次使用，325年尼西亚大公会议确立圣子与圣父同质，381年君士坦丁堡公会议完善教义。虽&quot;</div>
+</a>
+<a class="entry-item" href="三段论法.html">
+  <div class="noun">三段论法</div>
+  <div class="snippet">传统形式逻辑的核心演绎推理方法，由古希腊哲学家亚里士多德系统创立。由大前提（一般性原则）、小前提（特殊陈述）和结论（推出的新判断）三部分组成，包含大项、中项、小项三个词项。经典范例：所有人都会死（大前提），苏格拉底是人（小前提），所以苏格拉</div>
+</a>
+<a class="entry-item" href="三联韵体诗.html">
+  <div class="noun">三联韵体诗</div>
+  <div class="snippet">意大利语称terza rima，意为&quot;第三韵&quot;，是一种起源于意大利的诗歌形式，由但丁在《神曲》中发明并确立。核心押韵格式为aba, bcb, cdc, ded的连环韵（chain rhyme），每三行一节，诗节数量不限。这种连环押韵结构使诗</div>
+</a>
+<a class="entry-item" href="三诫.html">
+  <div class="noun">三诫</div>
+  <div class="snippet">歌德《浮士德》第二部中土精们提到的道德概念，指代圣经十诫中与 偷盗、奸淫、杀人相关的三条核心诫命。土精们感叹自己挖出的黄金 被世人用于偷盗奸淫和杀戮，指出&quot;凡是不守三诫的人，对其他诫命 也不会遵循&quot;。这一表述体现了歌德对物质财富与道德沦丧之</div>
+</a>
+<a class="entry-item" href="三陇板.html">
+  <div class="noun">三陇板</div>
+  <div class="snippet">古希腊建筑术语（Triglyph/Triglyphe），是多立克柱式檐壁上的特征构件，刻有三条竖向凹槽的长方形石板，与排档间饰（metope）交替排列。在《浮士德》中作为神殿建筑细节被提及，与圆柱一同在音乐中鸣响。</div>
+</a>
+<a class="entry-item" href="不义之财.html">
+  <div class="noun">不义之财</div>
+  <div class="snippet">《浮士德》第一部第九场中的核心讽刺概念。格蕾辛的母亲发现梅非斯特送来的首饰后，认定其为&quot;不义之财&quot;，认为&quot;对灵魂有损，对血液有害&quot;，于是请来神父处理。神父却宣称&quot;我们的教会胃口很好……只有教会能够消化不义之财&quot;，欣然收下。歌德借此辛辣讽刺教</div>
+</a>
+<a class="entry-item" href="不劳而获.html">
+  <div class="noun">不劳而获</div>
+  <div class="snippet">魔女在丹房中以模拟教士口吻朗诵的咒语内容：唯弗思之徒，始能受赠与，彼将不劳而获之。讽刺那些不经过思考就能轻易获得知识或成果的人，也讽刺了宗教中因信称义等不需理性思辨即可获得救赎的教条。</div>
+</a>
+<a class="entry-item" href="不朽的灵魂.html">
+  <div class="noun">不朽的灵魂</div>
+  <div class="snippet">浮士德死后脱离肉体的不灭灵魂，是魔鬼与天使争夺的核心对象。梅非斯特称其为&quot;抵押给我的这个高尚的灵魂&quot;，而天使将其从魔鬼手中夺走，带入天国。这体现了歌德的核心信念：不断努力进取的人终将获得灵魂的救赎。</div>
+</a>
+<a class="entry-item" href="世袭领土.html">
+  <div class="noun">世袭领土</div>
+  <div class="snippet">浮士德中皇帝将从叛臣手中没收的领土赏赐给五位忠良作为可世袭继承的封地。这些领土附带了铸钱、采矿、煮盐、关税等广泛经济特权，领主在领土内拥有最高司法权。</div>
+</a>
+<a class="entry-item" href="业余作者.html">
+  <div class="noun">业余作者</div>
+  <div class="snippet">《浮士德·瓦尔普吉斯之夜之梦》插剧的编剧者身份。歌德以此暗示该插剧是由非专业作者编写，作为瓦尔普吉斯之夜狂欢的一部分。</div>
+</a>
+<a class="entry-item" href="业余演员.html">
+  <div class="noun">业余演员</div>
+  <div class="snippet">《浮士德·瓦尔普吉斯之夜之梦》插剧的表演者身份。歌德以此暗示该插剧由非专业演员表演，增添狂欢节气氛。</div>
+</a>
+<a class="entry-item" href="两个灵魂.html">
+  <div class="noun">两个灵魂</div>
+  <div class="snippet">歌德《浮士德》中最著名的诗句之一，出自第一部&quot;城门前&quot;场景。德文原文为&quot;Zwei Seelen wohnen, ach! in meiner Brust&quot;。浮士德对瓦格纳说，有两个灵魂居住在他胸中，一个怀着强烈的情欲攀附着现世，另一个拼命脱</div>
+</a>
+<a class="entry-item" href="中世纪.html">
+  <div class="noun">中世纪</div>
+  <div class="snippet">欧洲历史上的封建时代（约5世纪至15世纪）。在《浮士德》中，梅非斯特召唤出古代骑士的幽灵，使中世纪的情景栩栩如生地再现。这些幽灵穿着盔甲，仿佛尘世之主，歌德借此对中世纪骑士制度和封建王权进行历史批判。</div>
+</a>
+<a class="entry-item" href="主观唯心主义.html">
+  <div class="noun">主观唯心主义</div>
+  <div class="snippet">唯心主义哲学的基本形式之一，主张个人的主观精神（如感觉、心灵、意识、意志）是世界的本原。其典型命题包括贝克莱的&quot;存在即被感知&quot;和费希特的&quot;自我创造非我&quot;。在《浮士德》第二部中，歌德通过梅非斯特之口对服膺费希特和叔本华主观唯心论的青年学士进行</div>
+</a>
+<a class="entry-item" href="乌鸦.html">
+  <div class="noun">乌鸦</div>
+  <div class="snippet">在《浮士德》中，梅非斯特的两只乌鸦充当其信使。乌鸦原为北欧大神奥丁（Wotan）的两个随从，后转义为魔鸟，为梅非斯特所有。梅非斯特派遣乌鸦前往水精处借水波之影制造假洪水，又派它们去侏儒的打铁场索取火种制造爆炸和混乱。浮士德明确指出：鸽子是为</div>
+</a>
+<a class="entry-item" href="乌鸦信使.html">
+  <div class="noun">乌鸦信使</div>
+  <div class="snippet">源自北欧神话。主神奥丁（Odin，峨丁大神）有两只乌鸦，名Huginn（思想）和Muninn（记忆），每天飞往人间观察并回报奥丁。在民间传说中它们由神鸟转为恶魔之鸟（魔鸟），在《浮士德》中成为梅非斯特的信使和跟随。</div>
+</a>
+<a class="entry-item" href="乐园.html">
+  <div class="noun">乐园</div>
+  <div class="snippet">即《圣经·创世记》中的伊甸园，上帝为亚当和夏娃所设的完美花园。亚当和夏娃因偷吃禁果被逐出乐园。歌德在《浮士德》中借魔女之口提及乐园，以苹果象征诱惑。</div>
+</a>
+<a class="entry-item" href="亚当的前妻.html">
+  <div class="noun">亚当的前妻</div>
+  <div class="snippet">指莉莉特。根据希伯来拉比传说，《创世记》第1章第27节中上帝造男造女，这个女的名叫莉莉特，是亚当的第一任妻子。后因不从亚当而离开，变为鬼怪，被夏娃（由亚当肋骨所造）顶替。</div>
+</a>
+<a class="entry-item" href="人相学.html">
+  <div class="noun">人相学</div>
+  <div class="snippet">人相学（Physiognomy，又见面相学）是一种通过人的面部特征推断其内在性格与道德品质的学说。18世纪末瑞士牧师拉瓦特（Johann Caspar Lavater）是其最具影响力的倡导者，著有《人相学片断》（Physiognomisch</div>
+</a>
+<a class="entry-item" href="人类的冠冕.html">
+  <div class="noun">人类的冠冕</div>
+  <div class="snippet">浮士德追求的最高人生目标，象征人类智慧、力量与尊严的巅峰。德语原文为&quot;Der Menschheit Krone&quot;。浮士德渴望通过不断奋斗与探索，争取戴上这项冠冕，将小我扩展为人类的大我，体现了歌德笔下浮士德精神的核心——永不满足、永远进取的</div>
+</a>
+<a class="entry-item" href="人类的手.html">
+  <div class="noun">人类的手</div>
+  <div class="snippet">指凡人的双手，在《浮士德》注释中说明恶魔不能直接加害或干预人类审判，也不能用魔术将格蕾辛带出牢房，只能通过浮士德的凡人之手来营救。这一设定体现了人类的自由意志和行动在救赎中的关键作用，恶魔的力量存在边界。</div>
+</a>
+<a class="entry-item" href="人造人.html">
+  <div class="noun">人造人</div>
+  <div class="snippet">指人类通过非自然方式创造的生命体。在《浮士德》中体现为瓦格纳在实验室中用化学方法合成的荷蒙库路斯（Homunculus）。该概念源自古希腊和中世纪炼金术传统，帕拉塞尔苏斯提出在烧瓶中用精液和马粪发酵制造人造人的方法。在文学史上，歌德的荷蒙库</div>
+</a>
+<a class="entry-item" href="什一税.html">
+  <div class="noun">什一税</div>
+  <div class="snippet">欧洲基督教会向居民征收的一种宗教捐税，要求信徒将本人各项收入的十分之一缴纳给教会。源于《圣经·旧约》，中世纪时在西欧全面普及。歌德在《浮士德》中借大主教之口提及教会索取土地什一税，讽刺教会的贪婪。</div>
+</a>
+<a class="entry-item" href="仙女.html">
+  <div class="noun">仙女</div>
+  <div class="snippet">指古希腊罗马神话和传说中半神半人的女性自然精灵，常出没于山林水泽之间。在《浮士德》第十四场中，浮士德在森林与山洞中冥想时，看到从潮湿丛林里浮现出&quot;太古时代的银白色的仙姿&quot;，那是太古神话时代便存在的精灵，译者注释指出此处指山精（山灵）和树精（</div>
+</a>
+<a class="entry-item" href="以同类治疗同类.html">
+  <div class="noun">以同类治疗同类</div>
+  <div class="snippet">拉丁语similia similibus curantur，是顺势疗法的基本原则。在《浮士德》中，梅非斯特用此戏谑原则为棕色女郎治疗冻疮——用踩脚（制造疼痛）来治脚，声称&quot;用脚医脚&quot;。这反映了梅非斯特式黑色幽默与以毒攻毒的荒诞逻辑。</div>
+</a>
+<a class="entry-item" href="以弗所书.html">
+  <div class="noun">以弗所书</div>
+  <div class="snippet">《圣经·新约》的一卷书，相传为使徒保罗在罗马狱中所写。第二章第二节称恶魔为&quot;空中掌权者的首领&quot;，歌德在《浮士德》中引用此典故，指涉梅非斯特的恶魔身份。</div>
+</a>
+<a class="entry-item" href="以赛亚书.html">
+  <div class="noun">以赛亚书</div>
+  <div class="snippet">《圣经·旧约》的第23卷书，大先知书中的第一卷，共66章。传统认为由先知以赛亚在公元前8世纪写成。全书包含审判与拯救两大主题，第53章&quot;受苦仆人&quot;预言被认为是弥赛亚预言的高峰。歌德在《浮士德》中引用其中的玛黑珥沙拉勒哈施罢斯典故。</div>
+</a>
+<a class="entry-item" href="伊利昂纪.html">
+  <div class="noun">伊利昂纪</div>
+  <div class="snippet">又称《伊利亚特》，古希腊盲诗人荷马所作的长篇史诗，共15693行，分为24卷。叙述特洛伊战争第十年中51天内发生的故事，核心主题是&quot;阿喀琉斯的愤怒&quot;。与《奥德赛》合称《荷马史诗》，是西方文学最重要的源头之一。</div>
+</a>
+<a class="entry-item" href="伊索寓言.html">
+  <div class="noun">伊索寓言</div>
+  <div class="snippet">源自古希腊的一系列寓言故事集，相传由伊索（Aesop）创作，是世界上影响最大的寓言集。以动物为主角，通过拟人化手法讲述故事，每则故事末尾多附有劝谕性总结。代表作包括《龟兔赛跑》《农夫和蛇》《狐狸和葡萄》等。</div>
+</a>
+<a class="entry-item" href="何西阿书.html">
+  <div class="noun">何西阿书</div>
+  <div class="snippet">《圣经·旧约》第28卷，十二小先知书之首，由先知何西阿在公元前8世纪写成，以先知本人的婚姻比喻神与以色列的盟约关系，&quot;慈绳爱索&quot;（11:4）是核心名句，表达神永不放弃的爱。</div>
+</a>
+<a class="entry-item" href="你们便如上帝，能知道善恶.html">
+  <div class="noun">你们便如上帝，能知道善恶</div>
+  <div class="snippet">出自《圣经·旧约·创世记》第3章第5节，是蛇（撒但）引诱夏娃吃分别善恶树上果子时所说的话。在《浮士德》中，魔鬼梅非斯特在学生纪念册上题写此句，化用圣经中蛇引诱人类的典故，暗示知识追求将带来如神般的荣耀与随之而来的烦恼。歌德在此处使用拉丁文书</div>
+</a>
+<a class="entry-item" href="使徒.html">
+  <div class="noun">使徒</div>
+  <div class="snippet">基督教中指被耶稣基督亲自拣选并差派出去传播福音、建立教会的特殊门徒。希腊文apostolos意为&quot;受差遣者&quot;。狭义上特指耶稣的十二门徒（彼得、安得烈、雅各、约翰等），犹大死后马提亚替补其位；广义上也包括保罗、巴拿巴等人。使徒必须具备亲眼见过</div>
+</a>
+<a class="entry-item" href="侏儒.html">
+  <div class="noun">侏儒</div>
+  <div class="snippet">日耳曼神话和希腊神话中矮小的精怪种族。在《浮士德》注解中，皮格迈俄族（希腊神话侏儒）被与日耳曼神话中挖掘地下金矿的侏儒混同。侏儒在德国民间传说中有特定形象，常出现在木偶戏和童话中。</div>
+</a>
+<a class="entry-item" href="俄瑞穆斯.html">
+  <div class="noun">俄瑞穆斯</div>
+  <div class="snippet">拉丁语&quot;Oremus&quot;的音译，意为&quot;让我们祈祷&quot;。拉丁语动词ōrō（祈祷）的虚拟式第一人称复数形式。在罗马天主教弥撒中常用于集祷经、奉献礼、天主经及领圣体后经之前，邀请会众祈祷。</div>
+</a>
+<a class="entry-item" href="保皇党.html">
+  <div class="noun">保皇党</div>
+  <div class="snippet">即Ghibellines（吉伯林派），中世纪意大利政治派别，支持神圣罗马帝国皇帝，与支持教皇的教皇党（Guelphs）相对立。在《浮士德》中，财政大臣慨叹&quot;什么保皇党或是教皇党，都贪图安逸，息影林下&quot;，意指在帝国危难之际，无论哪个党派都只顾</div>
+</a>
+<a class="entry-item" href="假像.html">
+  <div class="noun">假像</div>
+  <div class="snippet">虚假的影像与幻象，是《浮士德》第四幕战争中的核心魔法主题。梅非斯特利用各种假像欺骗敌军：包括水精制造的水波影子（假水）、雾带显现的幻影、闪电之光的妖异现象等。假像意味着魔鬼的欺骗本质，与梅非斯特&quot;永在否定的精灵&quot;的身份相契合，体现了现象与本</div>
+</a>
+<a class="entry-item" href="假水.html">
+  <div class="noun">假水</div>
+  <div class="snippet">梅非斯特让乌鸦请水精们借出的水波影子，只是一种魔法幻象，并非真实的水。这种幻象使敌人以为被洪水淹没，惊慌失措地做出游泳姿势奔逃，实际上身处干燥的陆地。只有凡人的肉眼受它欺骗。这是梅非斯特利用魔法制造的心理战手段。</div>
+</a>
+<a class="entry-item" href="停一停吧你真美丽.html">
+  <div class="noun">停一停吧你真美丽</div>
+  <div class="snippet">德语原文&quot;Verweile doch, du bist so schön!&quot;，是《浮士德》全剧最著名的台词，也是全剧的灵魂关节。这句话具有双重性：第一次出现在第一部书斋赌约中——浮士德与魔鬼约定，一旦他对某个瞬间感到满足说出此话，灵魂即归魔</div>
+</a>
+<a class="entry-item" href="偶然得诗.html">
+  <div class="noun">偶然得诗</div>
+  <div class="snippet">魔女丹房中诸猿坦白承认它们诗中的思想乃偶然得来。此处歌德借以讽刺雕琢词句、言之无物的诗人。猿猴的诗句看似深奥实则空洞，歌德以此批评那些追求表面华丽而缺乏真实思想的诗歌创作风气。</div>
+</a>
+<a class="entry-item" href="克塞尼.html">
+  <div class="noun">克塞尼</div>
+  <div class="snippet">歌德和席勒在1796年合作创作的一组讽刺短诗集，希腊语原意为赠礼。共414首对句警句诗，讽刺当时文坛上的敌对者，发表于1797年席勒主编的《缪斯年鉴》。</div>
+</a>
+<a class="entry-item" href="克塞尼集.html">
+  <div class="noun">克塞尼集</div>
+  <div class="snippet">歌德与席勒于1796年合著的讽刺短诗集，以两行体对当时文学界和社会现象进行辛辣讽刺。其名称源自希腊语&quot;xenia&quot;（待客的礼物），因该诗集的影响，该词在德语中获得了&quot;讽刺短诗&quot;的新义。</div>
+</a>
+<a class="entry-item" href="全能之爱.html">
+  <div class="noun">全能之爱</div>
+  <div class="snippet">创造万物、养育万物的宇宙根本力量，是歌德在《浮士德》终场提出的核心神学概念。沉思教父在观察自然万象后感叹&quot;全能之爱也就像这样，它创造一切，哺育一切&quot;。这与结尾&quot;永恒女性&quot;意象相呼应，将爱提升为宇宙的本原和创造力。</div>
+</a>
+<a class="entry-item" href="公审判.html">
+  <div class="noun">公审判</div>
+  <div class="snippet">天主教末世论核心概念，与末日审判、最后审判同义。指世界末日时天主（耶稣基督）在光荣中再度来临，对所有复活之人进行最终公开的审判，决定其永恒命运——永生或永罚。与&quot;私审判&quot;（个人死后灵魂即刻接受审判）相对：私审判仅涉及灵魂，公审判在世界末日发</div>
+</a>
+<a class="entry-item" href="六天创世.html">
+  <div class="noun">六天创世</div>
+  <div class="snippet">源自《圣经·创世记》中上帝用六天创造天地的神学概念。在《浮士德》第十四场中，浮士德在独白中称自己&quot;以想象之力发掘大地的精髓，胸中深感六天创世的伟业&quot;，表达了他通过地灵的启示获得类似创世者的感受，体现了浮士德追求超越凡人境界的雄心。</div>
+</a>
+<a class="entry-item" href="兽印记.html">
+  <div class="noun">兽印记</div>
+  <div class="snippet">出自《启示录》第13章，指&quot;兽&quot;强迫所有人右手或额上接受的印记，未有者不得做买卖，兽名数目为666，象征敌基督对世界的控制，后世有多种解读（指尼禄、政治制度等）。</div>
+</a>
+<a class="entry-item" href="列王纪上.html">
+  <div class="noun">列王纪上</div>
+  <div class="snippet">《圣经·旧约》的一卷书，记载以色列王国从大卫之死到亚哈谢统治的历史。第11章提到亚扪人的国神米勒公（摩洛），歌德在《浮士德》注释中引以说明好战的山精形象来源。 --- 《圣经·旧约》中的一卷书，记载了以色列王国从大卫王晚年到亚哈谢在位期间的</div>
+</a>
+<a class="entry-item" href="创世记.html">
+  <div class="noun">创世记</div>
+  <div class="snippet">《创世记》是《圣经》首卷，也是《摩西五经》（妥拉）的第一卷，希伯来名意为&quot;起初&quot;。全书共50章，分为远古历史（世界的创造、人类堕落、大洪水、巴别塔）和族长历史（亚伯拉罕、以撒、雅各、约瑟的故事）。《创世记》第3章记载了蛇引诱夏娃和亚当偷食禁</div>
+</a>
+<a class="entry-item" href="刺环游戏.html">
+  <div class="noun">刺环游戏</div>
+  <div class="snippet">中世纪欧洲骑士的一种比武游戏（tilting at the ring），骑士骑在马上用长矛刺穿悬挂在横杆上的铁环。相比古时骑士相互冲刺的比赛更为安全，在17世纪非常流行。歌德在《浮士德》中以之比喻比武。</div>
+</a>
+<a class="entry-item" href="勒耳那水蛇.html">
+  <div class="noun">勒耳那水蛇</div>
+  <div class="snippet">即勒拿九头蛇（Lernaean Hydra），希腊神话中栖息在勒拿沼泽的九头水蛇精怪，堤丰与厄喀德那所生。每砍掉一个头会再生出两个，赫拉克勒斯在侄子伊俄拉俄斯帮助下用火烧灼断颈才将其杀死，作为十二功绩中的第二项。后化为长蛇座。</div>
+</a>
+<a class="entry-item" href="北方神话.html">
+  <div class="noun">北方神话</div>
+  <div class="snippet">即北欧神话，是古代斯堪的纳维亚地区（今北欧各国）的神话体系，以北欧地区的日耳曼人为中心流传。核心神话包括主神奥丁、雷神托尔、火神洛基等，世界由世界树尤克特拉希尔连接九界，最终将迎来诸神黄昏（Ragnarok）的终结之战。北方神话以雾霭、冰雪</div>
+</a>
+<a class="entry-item" href="南欧小说.html">
+  <div class="noun">南欧小说</div>
+  <div class="snippet">原文注释中指诲淫的法国小说或意大利小说。梅非斯特嘲讽浮士德急于得手时引用，暗示南欧小说中教导的循序渐进引诱女性的套路。这反映了18世纪欧洲文学中的地域刻板印象。</div>
+</a>
+<a class="entry-item" href="占星术.html">
+  <div class="noun">占星术</div>
+  <div class="snippet">通过观测日月星辰的位置及其变化来预测人事祸福的古代方术。在《浮士德》中，星士（由梅非斯特提词）以占星术语言向皇帝和朝臣解说天象，将太阳、水星、金星、月姑、火星、木星、土星等对应金属与人事，预言金银会合将带来财富。历史上的浮士德原型本身也是一</div>
+</a>
+<a class="entry-item" href="卡柏洛.html">
+  <div class="noun">卡柏洛</div>
+  <div class="snippet">又译卡比里、众卡比洛斯（Cabeiri），古希腊的一组神秘地下神祇，以密教崇拜形式流传。崇拜中心在萨摩特拉刻岛，其秘密仪式是古希腊世界第二大密仪，仅次于厄琉息斯秘仪。入教者被认为获得海上航行安全等福佑。在19世纪初德国学者中引发大量考证和猜</div>
+</a>
+<a class="entry-item" href="卡柏洛神.html">
+  <div class="noun">卡柏洛神</div>
+  <div class="snippet">卡柏洛（Cabeiri）是古希腊神话中最古老的一组神祇，最初崇祀于萨摩特拉刻岛及其附近岛屿，可能为农神、土地神。其起源可能包含前希腊元素，与火神赫菲斯托斯的崇拜密切相关。卡柏洛神被奉为航海者的守护神。</div>
+</a>
+<a class="entry-item" href="厄瑞玻斯.html">
+  <div class="noun">厄瑞玻斯</div>
+  <div class="snippet">希腊神话中的原始神祇之一，是永久黑暗的化身。由混沌神卡俄斯直接诞生，是其妹黑夜女神倪克斯的丈夫，生有太空之神埃忒尔和白昼女神赫墨拉。同时，厄瑞玻斯也指地下世界中介于大地与冥土之间的黑暗区域，亡灵必须穿越这片黑暗才能抵达冥界。在《浮士德》中，</div>
+</a>
+<a class="entry-item" href="原形植物.html">
+  <div class="noun">原形植物</div>
+  <div class="snippet">歌德提出的植物学概念（德语Urpflanze，又译原植物/原型植物），指所有植物从最初形态演变的理想原型。歌德在1787年意大利旅行期间形成这一思想，认为所有植物器官是同一器官即叶子的变形，植物按螺旋倾向与垂直倾向共同形成。歌德将这种原型观</div>
+</a>
+<a class="entry-item" href="原罪.html">
+  <div class="noun">原罪</div>
+  <div class="snippet">基督教基本教义之一，指人类因始祖亚当和夏娃违背上帝命令（偷食分别善恶树之果）而陷入的与生俱来的罪恶状态。原罪通过自然繁衍传递给后代，是人类一切罪恶与灾难的根源。这一教义由圣奥古斯丁系统阐述，圣经主要依据为《罗马书》5:12。在浮士德中，天使</div>
+</a>
+<a class="entry-item" href="参谋本部.html">
+  <div class="noun">参谋本部</div>
+  <div class="snippet">军队中辅助统帅进行作战指挥和参谋筹划的军事机构。近代参谋制度起源于法国大革命后（1795年贝尔蒂埃创立参谋系统，拿破仑推广），成熟于普鲁士（1814年建立中央总参谋部），成为各国军队的蓝本。在中国，清末1909年仿德国设立军谘府为雏形，民国</div>
+</a>
+<a class="entry-item" href="双生子.html">
+  <div class="noun">双生子</div>
+  <div class="snippet">指希腊神话中的狄俄斯库里（Dioscuri）——卡斯托尔（Castor）与波鲁克斯（Pollux），宙斯的孪生儿子。他们是航海者的保护神，以圣埃尔摩之火的形式显现，救助遇难船员。在《浮士德》中，浮士德以此比喻战场上枪尖闪现的奇异火光，将其解</div>
+</a>
+<a class="entry-item" href="双生鹿.html">
+  <div class="noun">双生鹿</div>
+  <div class="snippet">出自《圣经·雅歌》第4章第5节的比喻意象：&quot;你的两乳，好像百合花中吃草的一对小鹿，就是母鹿双生的。&quot;在《浮士德》第十四场中，梅非斯特引用此典故意有所指地调侃浮士德对格蕾辛的肉欲眷恋，原文注记路德的德译本《圣经》中将&quot;百合花&quot;译为&quot;玫瑰&quot;。</div>
+</a>
+<a class="entry-item" href="变形.html">
+  <div class="noun">变形</div>
+  <div class="snippet">歌德自然观中的重要基本概念。歌德在《植物变形记》中提出，花和果都不过是变形的叶子，动物和植物都存在一种&quot;原形态&quot;。他首创了&quot;形态学&quot;（Morphology）这一术语。在《浮士德》注解中被提及为歌德自然观的核心概念。</div>
+</a>
+<a class="entry-item" href="古典的.html">
+  <div class="noun">古典的</div>
+  <div class="snippet">歌德文艺理论中的重要概念，与&quot;浪漫的&quot;形成对立。歌德在《格言与反省》中提出：&quot;古典的是健全的，浪漫的是病态的。&quot;在《浮士德》注解中，古典的指古希腊式的理性、和谐、形式完美的艺术风格，象征健康与健全。</div>
+</a>
+<a class="entry-item" href="古忒萨利亚妖婆.html">
+  <div class="noun">古忒萨利亚妖婆</div>
+  <div class="snippet">古希腊传说中色萨利（忒萨利亚）地区的女巫，以精通巫术、能操控月亮而闻名。在《浮士德》中指代古希腊巫术传统，海伦的侍女们称自己摆脱了其精神枷锁。</div>
+</a>
+<a class="entry-item" href="合唱歌.html">
+  <div class="noun">合唱歌</div>
+  <div class="snippet">古希腊戏剧中穿插在剧情各场次之间的歌队演唱段落，拉丁文称Stasimon，意为&quot;站立的歌&quot;。合唱歌在古希腊戏剧中承担叙事、抒情、评论等功能，歌队通过歌唱和舞蹈表达对剧情的反应、预示未来或传达道德教诲。在《浮士德》第二部第三幕中，歌德继承古希</div>
+</a>
+<a class="entry-item" href="合唱队.html">
+  <div class="noun">合唱队</div>
+  <div class="snippet">古希腊戏剧（尤其是悲剧）的重要组成部分，起源于酒神祭奠仪式。在《浮士德》第二部第三幕中，合唱队由被俘的特洛伊侍女组成，她们伴随海伦，以歌唱和舞蹈表达情感、评论剧情、烘托气氛。该幕中合唱队与福耳库阿斯对话，表达恐惧、希望和赞美，是推动剧情的重</div>
+</a>
+<a class="entry-item" href="吉兆.html">
+  <div class="noun">吉兆</div>
+  <div class="snippet">好运的预兆。在《浮士德》中，浮士德将雄鹰击败狮鹰的天象解读为吉兆：狮鹰是幻想的禽鸟不自量力与真正的雄鹰为敌，结果被击败坠落山林。皇帝对此半信半疑，但愿吉兆能成真。这场天象对决预示皇帝一方将获胜。</div>
+</a>
+<a class="entry-item" href="吗哪.html">
+  <div class="noun">吗哪</div>
+  <div class="snippet">《圣经》典故，原指上帝在旷野中赐予以色列人的天降灵粮（《出埃及记》第16章）。在《浮士德》该文本段中，格蕾辛的母亲要将首饰献给圣母马利亚，认为&quot;倒会恩赐我们吗哪&quot;。原文注释指出此典出自《启示录》第2章第17节：&quot;得胜的，我必将那隐藏的吗哪赐</div>
+</a>
+<a class="entry-item" href="启示.html">
+  <div class="noun">启示</div>
+  <div class="snippet">神学术语，希腊文apokalypsis，原意为&quot;揭开面纱&quot;，指神或超越者向人自我揭示真理。基督教神学将启示分为普遍启示（通过自然万象揭示神的存在）和特殊启示（通过圣经、耶稣基督道成肉身等特定途径）。在歌德《浮士德》中，浮士德在书斋中渴望&quot;启</div>
+</a>
+<a class="entry-item" href="启示录.html">
+  <div class="noun">启示录</div>
+  <div class="snippet">《圣经·新约》最后一卷，传统认为由使徒约翰在拔摩岛流放期间写成（约公元96年），以异象和象征手法揭示末日审判、基督最终得胜、新天新地降临等预言，书中出现&quot;兽印记&quot;、&quot;火湖&quot;等重要概念。</div>
+</a>
+<a class="entry-item" href="启蒙.html">
+  <div class="noun">启蒙</div>
+  <div class="snippet">18世纪欧洲思想文化运动，强调理性、科学和进步。普鲁士弗里德里希大王召见伏尔泰，提倡启蒙运动。歌德在《浮士德》中借肛门幻视者之口讽刺启蒙主义者的自以为是与刻板。</div>
+</a>
+<a class="entry-item" href="命令下得快，执行太快.html">
+  <div class="noun">命令下得快，执行太快</div>
+  <div class="snippet">浮士德在《浮士德》第五幕&quot;深夜&quot;中的一句独白。他本欲以和平方式交换老夫妇的房屋，但三勇士却以暴力手段纵火烧屋导致老夫妇死亡。浮士德在阳台上看到火光后的忏悔之词，表达了对部下过度执行命令的不满和自己对权力失控的无奈，反映了目的与手段之间的深刻</div>
+</a>
+<a class="entry-item" href="命运三女神.html">
+  <div class="noun">命运三女神</div>
+  <div class="snippet">命运三女神（希腊语：Μοῖραι，Moirai，意为&quot;分配者&quot;；罗马对应：Parcae）是希腊神话中掌管万物命运的三位女神，分别为克罗托（Clotho，纺生命之线）、拉刻西斯（Lachesis，量生命之线）和阿特洛波斯（Atropos，剪生</div>
+</a>
+<a class="entry-item" href="命运如玻璃.html">
+  <div class="noun">命运如玻璃</div>
+  <div class="snippet">源自德国谚语&quot;Glück und Glas, wie leicht bricht das&quot;（幸福和玻璃，多么容易破碎）。在《浮士德》魔女丹房场景中，长尾猿滚着大球说这是世界，声如玻璃，容易破裂，里面是空心，以玻璃喻命运的脆弱无常。</div>
+</a>
+<a class="entry-item" href="哈耳皮埃.html">
+  <div class="noun">哈耳皮埃</div>
+  <div class="snippet">希腊神话中的鸟身女妖，最初为风之精灵，后演变为丑陋怪物——长女人头却有秃鹫的身体、翅膀和利爪。名字意为&quot;掠夺者&quot;。在阿尔戈英雄传说中，它们折磨菲纽斯，被玻瑞阿代兄弟驱逐。在《浮士德》注解中被提及为折磨菲纽斯的鸟身女妖。</div>
+</a>
+<a class="entry-item" href="哥林多前书.html">
+  <div class="noun">哥林多前书</div>
+  <div class="snippet">《新约圣经》中的一卷书，相传为使徒保罗在公元53-57年间写给希腊哥林多城教会的一封信。全书共16章，内容涉及教会纷争、道德问题、复活真理等。第11章论及圣餐礼，第15章系统论述基督复活的神学意义，是基督教神学的重要文献。</div>
+</a>
+<a class="entry-item" href="哥特人.html">
+  <div class="noun">哥特人</div>
+  <div class="snippet">古代日耳曼人的一支，起源于斯堪的纳维亚南部，后迁徙至东欧和南欧。公元3-5世纪多次入侵罗马帝国，最终导致西罗马帝国灭亡。在《浮士德》中，浮士德命哥特人前往多峡谷的阿开亚作战。</div>
+</a>
+<a class="entry-item" href="哥特式.html">
+  <div class="noun">哥特式</div>
+  <div class="snippet">哥特式建筑是一种兴盛于12至16世纪的欧洲建筑风格，发源于法国，以尖肋拱顶、飞扶壁、彩色玻璃花窗和束柱为核心特征，追求高耸向上的视觉效果。文艺复兴时期被贬称为&quot;哥特式&quot;（暗指哥特人的野蛮风格）。《浮士德》第一场中浮士德的书房被描述为&quot;高拱顶</div>
+</a>
+<a class="entry-item" href="哥特式建筑.html">
+  <div class="noun">哥特式建筑</div>
+  <div class="snippet">兴盛于欧洲中世纪高峰与末期（约12—16世纪）的建筑风格，由罗曼式建筑发展而来。主要特点包括尖肋拱顶、飞扶壁、花窗玻璃、束柱和十字平面。第一座哥特式教堂为1143年建成的巴黎圣丹尼教堂，代表作有巴黎圣母院、科隆大教堂等。</div>
+</a>
+<a class="entry-item" href="四大元素.html">
+  <div class="noun">四大元素</div>
+  <div class="snippet">古希腊哲学中的四元素说，认为万物由地、水、火、风（气）四种基本元素构成。恩培多克勒首次系统提出此说，后由柏拉图和亚里士多德发展完善，统治西方思想界近两千年，直至17世纪被波义耳以现代化学观念取代。歌德在《浮士德》中以此象征诗人驱遣自然万物的</div>
+</a>
+<a class="entry-item" href="四大精灵.html">
+  <div class="noun">四大精灵</div>
+  <div class="snippet">四大精灵是西方神秘学中代表四种自然元素的精灵，由文艺复兴时期炼金术士帕拉塞尔苏斯系统分类：火精Salamander（沙罗曼达）、水精Undine（温蒂妮）、风精Sylphe（希尔芙）、土精Kobold（科波尔德/诺姆）。这些精灵由单一元素构</div>
+</a>
+<a class="entry-item" href="四大（地水火风）.html">
+  <div class="noun">四大（地水火风）</div>
+  <div class="snippet">佛教及古印度哲学中的四种构成物质世界的基本元素——地（坚固性）、水（湿性）、火（暖性）、风（动性）。佛教认为一切物质（色法）均由四大和合而成，四大分散则意味着死亡。古希腊亦有恩培多克勒提出的类似四元素说。在《浮士德》中，结尾合唱以&quot;四大&quot;统</div>
+</a>
+<a class="entry-item" href="因库布斯.html">
+  <div class="noun">因库布斯</div>
+  <div class="snippet">Incubus的音译，中文常译为&quot;梦魔&quot;或&quot;男魅魔&quot;，是西方民间传说中的男性形态恶魔。传说它在女性睡眠时降临，与之发生性关系，源自拉丁语 incubare（压在……上面），与医学上的&quot;梦魇&quot;现象相关。与之对应的女性形态恶魔称为Succubu</div>
+</a>
+<a class="entry-item" href="圆光.html">
+  <div class="noun">圆光</div>
+  <div class="snippet">原为佛教、基督教等宗教艺术中圣像头部周围的光环（nimbus/halo），象征神圣与庄严。在《浮士德》中，宰相在御前会议上用此比喻来赞颂皇帝的德行，说&quot;最高的德行，仿佛圣人的圆光围住皇帝的头颅&quot;，将皇帝的正义之德比作圣人的光环。这一比喻既体</div>
+</a>
+<a class="entry-item" href="土星.html">
+  <div class="noun">土星</div>
+  <div class="snippet">即占星学中的土星（Saturn），以农业之神萨图尔努斯命名。在炼金术—占星传统中，土星对应铅。星士说&quot;土星很大，看上去却又小又远&quot;，又补充&quot;作为金属，我们并不重视它，它的分量很重而价值不大&quot;，指南铅虽重但不如金银珍贵。土星在占星学中主限制、</div>
+</a>
+<a class="entry-item" href="圣体.html">
+  <div class="noun">圣体</div>
+  <div class="snippet">基督教圣事之一，即圣餐礼中的面饼（圣体），天主教认为经过祝圣后即化为基督的真实身体。在《浮士德》第十四场中，浮士德表达了对格蕾辛强烈的眷恋，称即使她的嘴唇接触天主的圣体，他也会感到嫉妒，足见其爱欲之深之烈。</div>
+</a>
+<a class="entry-item" href="圣埃尔摩之火.html">
+  <div class="noun">圣埃尔摩之火</div>
+  <div class="snippet">一种在大气中发生的电晕放电现象（St. Elmo&#x27;s Fire），雷暴天气中强大电场使尖锐物体周围的空气分子电离形成等离子体而发光。得名于海员的守护圣人圣伊拉斯莫。成对出现时称卡斯托耳和波路克斯。</div>
+</a>
+<a class="entry-item" href="圣徒传.html">
+  <div class="noun">圣徒传</div>
+  <div class="snippet">拉丁文Acta Sanctorum，由耶稣会士博兰德学派（Bollandists）编纂的基督教圣人传记百科全书，1643年起出版，共68卷对开本，按圣人纪念日顺序编排，研究中世纪史的重要文献。</div>
+</a>
+<a class="entry-item" href="圣洁的单纯.html">
+  <div class="noun">圣洁的单纯</div>
+  <div class="snippet">拉丁语Sancta Simplicitas，意为&quot;神圣的单纯&quot;。源自15世纪捷克宗教改革家扬·胡斯（Jan Hus，约1372-1415）被处火刑时的著名感叹。传说胡斯被绑在火刑柱上时，看到一位老妇人虔诚地拿木柴添加到他的火刑柴堆上，便感叹</div>
+</a>
+<a class="entry-item" href="圣灰礼仪日.html">
+  <div class="noun">圣灰礼仪日</div>
+  <div class="snippet">基督教节日，即圣灰星期三（Ash Wednesday），四旬期的第一天，也是狂欢节的结束日。在《浮士德》中，皇帝宣布圣灰礼仪日即将来临，要在之前举行盛大的化装舞会。</div>
+</a>
+<a class="entry-item" href="地下宝藏.html">
+  <div class="noun">地下宝藏</div>
+  <div class="snippet">《浮士德》中梅非斯特为解帝国财政危机而提出的方案核心。他声称从罗马时代以来，人们在异族入侵的恐怖时期将最心爱的财宝埋在土中，&quot;土地属于皇帝，合该挖出来使用&quot;。他描绘农民耕地挖出金罐、墙根刨出金币、地窖中发现金盆金碟红玉酒杯等场景，以此说服皇</div>
+</a>
+<a class="entry-item" href="地灵.html">
+  <div class="noun">地灵</div>
+  <div class="snippet">歌德《浮士德》第一部中出现的精灵，是支配地球上一切现象的生命力化身。浮士德在苦闷时召唤地灵，地灵自称&quot;生命的浪潮，事业的狂风&quot;。当浮士德认为自已与地灵相似时，地灵却给予当头棒喝：&quot;你肖似你所理解的精灵，不像我！&quot;地灵的概念源自16世纪自然哲</div>
+</a>
+<a class="entry-item" href="地狱.html">
+  <div class="noun">地狱</div>
+  <div class="snippet">天主教教义中魔鬼和恶人永远受苦的终极归宿，是与天主永远分离的永恒状态。地狱并非天主主动惩罚人的地方，而是人因自由意志选择拒绝天主之爱、永远与天主隔绝的结果。其最大痛苦在于永远不能面见天主。在《浮士德》中常被提及，梅非斯特作为地狱之火的友伴，</div>
+</a>
+<a class="entry-item" href="地狱篇.html">
+  <div class="noun">地狱篇</div>
+  <div class="snippet">但丁《神曲》的第一部，描写诗人维吉尔带领但丁穿越地狱九层的旅程，地狱形如漏斗状深坑，分为九层，罪人按其罪行轻重受罚。与《炼狱篇》《天堂篇》合称《神曲》。</div>
+</a>
+<a class="entry-item" href="填海造陆.html">
+  <div class="noun">填海造陆</div>
+  <div class="snippet">歌德《浮士德》第二部第四幕中浮士德的核心行动计划。经历了海伦悲剧后，浮士德从追求美转向改造自然的宏大事业。他站在高山之巅俯瞰大海，厌弃海水&quot;漫无目的的力量&quot;的反复无常，决心征服大海、将海水赶回自己的窝巢，从而获得可贵的土地。这是浮士德从&quot;追</div>
+</a>
+<a class="entry-item" href="复仇的精灵.html">
+  <div class="noun">复仇的精灵</div>
+  <div class="snippet">徘徊在被害者墓地上空的复仇亡灵。梅非斯特用复仇的精灵来恐吓浮士德，提醒他手上沾有格蕾辛之兄瓦伦廷的血，若返回城中营救格蕾辛将面临复仇精灵的追索。这一意象象征了罪恶感与道德审判的如影随形。</div>
+</a>
+<a class="entry-item" href="大苏丹.html">
+  <div class="noun">大苏丹</div>
+  <div class="snippet">奥斯曼帝国苏丹的尊称之一（Grand Sultan，土耳其语Sultan-ı Azam），是对奥斯曼帝国最高统治者的正式称谓。其完整头衔体系还包含帕迪沙（万王之王）、哈里发（伊斯兰精神领袖）、可汗等。在《浮士德》中指奥斯曼帝国的苏丹，玛尔太</div>
+</a>
+<a class="entry-item" href="天主.html">
+  <div class="noun">天主</div>
+  <div class="snippet">天主（God，即上帝）在《浮士德》中是天主教信仰的核心概念。第十六场&quot;玛尔太的庭园&quot;中格蕾辛追问浮士德&quot;你可信天主&quot;，浮士德以泛神论思想作答，认为天主即包罗万有的自然本身，&quot;感情最要紧，名称不过是笼罩天火的声响和烟雾&quot;。这段对话体现了歌德受</div>
+</a>
+<a class="entry-item" href="天体调和.html">
+  <div class="noun">天体调和</div>
+  <div class="snippet">天体调和（又称天体和谐论、音乐宇宙、Harmony of the Spheres）是毕达哥拉斯学派提出的哲学学说，认为太阳、月亮和行星在轨道运行时发出与音乐音程成比例的声音，构成一曲人耳听不到的&quot;天体音乐&quot;。该学说将数学、音乐与天文学统一起</div>
+</a>
+<a class="entry-item" href="天使长.html">
+  <div class="noun">天使长</div>
+  <div class="snippet">又称大天使或总领天使，是基督教、犹太教、伊斯兰教等宗教传统中地位较高的天使。词源来自希腊文αρχαγγελος，意为&quot;首要的信使&quot;。圣经中提及的天使长包括米迦勒、加百列等。在伪狄奥尼修斯的天使等级体系中，天使长位列第八级。歌德在《浮士德·天</div>
+</a>
+<a class="entry-item" href="天国.html">
+  <div class="noun">天国</div>
+  <div class="snippet">天堂，灵魂的最终归宿。在《浮士德》结尾，浮士德的灵魂被天使带入天国，天使唱道&quot;只有爱能将热爱者领进她的天国&quot;。天国代表着神圣之爱、宽恕与永恒的福祉，是歌德笔下人性不断追求向上的终极指向。</div>
+</a>
+<a class="entry-item" href="天堂篇.html">
+  <div class="noun">天堂篇</div>
+  <div class="snippet">但丁《神曲》的第三部，描写但丁在贝缇丽彩的带领下逐层穿越九重天，最终得见上帝三位一体的奥秘，象征灵魂趋近神圣光明的历程。</div>
+</a>
+<a class="entry-item" href="天鹅.html">
+  <div class="noun">天鹅</div>
+  <div class="snippet">希腊神话中与宙斯化身相关的著名意象。宙斯为追求斯巴达王后丽达（Leda），化身为一只白天鹅，与其结合后生下两颗天鹅蛋，孵出了绝世美女海伦（特洛伊战争的导火索）和波吕克斯（双子座之一）等。西方艺术史上&quot;丽达与天鹅&quot;是反复描绘的经典题材。</div>
+</a>
+<a class="entry-item" href="天鹅之歌.html">
+  <div class="noun">天鹅之歌</div>
+  <div class="snippet">源于古希腊的传说，谓天鹅平素不唱歌，但在临死前会引颈高歌一曲，其歌声哀婉动听。后世用以比喻诗人、艺术家临终前的最后杰作或告别演出。</div>
+</a>
+<a class="entry-item" href="太初有为.html">
+  <div class="noun">太初有为</div>
+  <div class="snippet">出自歌德《浮士德》第一部第三场&quot;书斋&quot;。浮士德翻译《新约·约翰福音》时，经过&quot;太初有言&quot;&quot;太初有思&quot;&quot;太初有力&quot;三次推敲，最终写下&quot;太初有为&quot;。德文原文为&quot;Am Anfang war die Tat&quot;。&quot;为&quot;即行动、实践，这一翻译选择标志着</div>
+</a>
+<a class="entry-item" href="太初有言.html">
+  <div class="noun">太初有言</div>
+  <div class="snippet">出自歌德《浮士德》第一部第三场&quot;书斋&quot;。浮士德翻译《新约·约翰福音》时，对希腊原文&quot;Ev apxη fv o Λ6yoς&quot;（太初有道/太初有言）进行推敲。&quot;太初有言&quot;对应马丁·路德德文译本&quot;Im Anfang war das Wort&quot;，是</div>
+</a>
+<a class="entry-item" href="太古时代的银白色的仙姿.html">
+  <div class="noun">太古时代的银白色的仙姿</div>
+  <div class="snippet">《浮士德》第十四场中浮士德在月光下的森林中所见的幻象，指太古神话时代便存在的自然精灵，在月光映照下呈现银白色。译者注指出此指&quot;山精和树精&quot;（山灵与树灵）。这一意象体现了歌德将古典神话元素融入德国浪漫主义自然描写的创作手法。</div>
+</a>
+<a class="entry-item" href="太平盛世.html">
+  <div class="noun">太平盛世</div>
+  <div class="snippet">浮士德中皇帝对国家未来的美好期望。皇帝通过封赏功臣、确立皇位继承制度，希望使战后动荡的局势归于太平盛世，体现了君主对国家安定繁荣的理想追求。</div>
+</a>
+<a class="entry-item" href="太阳女神.html">
+  <div class="noun">太阳女神</div>
+  <div class="snippet">歌德在《浮士德》中将太阳拟人化为女性形象，源于德语中&quot;太阳&quot;（die Sonne）为阴性名词。在《浮士德》第一部中，浮士德面对夕阳抒发情怀，将太阳称为女神，象征光明、生命与永恒追求。这一拟人化处理体现了日耳曼文化传统（如日耳曼神话中的太阳女</div>
+</a>
+<a class="entry-item" href="太阳纯金.html">
+  <div class="noun">太阳纯金</div>
+  <div class="snippet">出自星士（由梅非斯特提词）的占星术预言。在文艺复兴时期的炼金术—占星学传统中，七大行星各对应一种金属：太阳对应黄金，月亮对应白银，水星对应水银，金星对应铜，火星对应铁，木星对应锡，土星对应铅。&quot;太阳本身，它是一块纯金&quot;正是这一传统的诗意表达</div>
+</a>
+<a class="entry-item" href="失乐园.html">
+  <div class="noun">失乐园</div>
+  <div class="snippet">《失乐园》是英国诗人弥尔顿的不朽史诗，1667年首次出版，共12卷、超过一万行无韵诗。以《圣经·创世记》为基础，讲述堕落天使撒旦反抗上帝失败后潜入伊甸园、引诱人类始祖堕落的故事，旨在&quot;辩证神对人类的所作所为&quot;。与《荷马史诗》《神曲》并称为西</div>
+</a>
+<a class="entry-item" href="妖精.html">
+  <div class="noun">妖精</div>
+  <div class="snippet">欧洲民间传说和文学中的精灵，通常体型小巧、具有超自然能力。在《浮士德》第二部第一幕&quot;幽雅的境地&quot;中，一群形态娇小优美的妖精在爱丽尔（Ariel）的带领下，围绕沉睡的浮士德唱歌舞蹈，用忘川之水的露珠抚慰他的痛苦，帮助他从格蕾辛悲剧的愧疚中恢复</div>
+</a>
+<a class="entry-item" href="守塔人.html">
+  <div class="noun">守塔人</div>
+  <div class="snippet">守塔人（Watchman / Tower Keeper）是古代城堡、城邦或宫殿中负责在高塔上瞭望警戒的职务。在歌德《浮士德》中，浮士德派守塔人林叩斯（Lynceus）守在高塔上瞭望四方，侦察远方天空与辽阔大地的动静。林叩斯这一角色借用希腊神</div>
+</a>
+<a class="entry-item" href="宝藏.html">
+  <div class="noun">宝藏</div>
+  <div class="snippet">梅非斯特以地下宝藏引诱浮士德的工具之一。原文中梅非斯特提议用宝物（珠宝匣）引诱玛加蕾特，称知道许多美好的地方有从前埋下的宝藏。在第一部中特指梅非斯特寻找地下宝藏作为礼物送给玛加蕾特以获取其好感。</div>
+</a>
+<a class="entry-item" href="宫殿.html">
+  <div class="noun">宫殿</div>
+  <div class="snippet">《浮士德》第二部第五幕第二场的场景名称（Palace）。场面为广大的花园，笔直的大运河。年迈的浮士德在此沉思徘徊，展现他晚年对事业的追求与反思。</div>
+</a>
+<a class="entry-item" href="密耳弥冬人.html">
+  <div class="noun">密耳弥冬人</div>
+  <div class="snippet">希腊神话中居住在色萨利的传奇部落，意为&quot;蚂蚁人&quot;。据奥维德《变形记》所述，由宙斯将蚂蚁变成人类。在特洛伊战争中是英雄阿喀琉斯的精锐部下。在《浮士德》中出现在皮格迈俄族之后。</div>
+</a>
+<a class="entry-item" href="对口答话.html">
+  <div class="noun">对口答话</div>
+  <div class="snippet">对口答话（Stichomythia，希腊语στιχομυθία，由στίχος&quot;诗行&quot;和μῦθος&quot;言语&quot;组成）是古希腊悲剧中一种标志性的诗体对话形式，指两名角色交替念出单行诗句进行快速交锋。通常用于表现激烈争辩、情感张力或对抗反驳，人物以</div>
+</a>
+<a class="entry-item" href="对强权要唯唯诺诺.html">
+  <div class="noun">对强权要唯唯诺诺</div>
+  <div class="snippet">《浮士德》第五幕中三勇士合唱的&quot;古话&quot;内容，意为面对强权时只能顺从屈服，否则性命难保。这里引用古训既是三勇士对自身暴力行为的开脱，也反映了强权政治下弱者生存的无奈法则。与浮士德永不满足、不断扩张的意志形成鲜明对照。</div>
+</a>
+<a class="entry-item" href="封地.html">
+  <div class="noun">封地</div>
+  <div class="snippet">浮士德中皇帝战后将叛臣的世袭领土赏赐给五位忠良作为封地，赋予继承、购买和交换以扩充范围的权利，以及领主应有的各项特权。皇帝规定封地不可分割，须原封不动传给长子，体现封建长子继承制。</div>
+</a>
+<a class="entry-item" href="小宇宙.html">
+  <div class="noun">小宇宙</div>
+  <div class="snippet">源于古希腊哲学的&quot;微观宇宙&quot;（Microcosm）概念，认为人作为小宇宙反映了大宇宙（Macrocosm）的结构与规律。在歌德《浮士德》中，梅非斯特讽刺性地称浮士德为&quot;小宇宙先生&quot;，暗指浮士德试图将人类各种高贵品质集于一身的野心，体现了文艺</div>
+</a>
+<a class="entry-item" href="尘世.html">
+  <div class="noun">尘世</div>
+  <div class="snippet">即人间的、世俗的世界。在《浮士德》第五幕中，浮士德宣称&quot;尘世的一切我已充分看穿，再不存什么指望要超升彼岸&quot;。浮士德拒绝彼岸世界的幻想，坚持立足尘世、积极行动的人生态度。他的&quot;尘世生涯的痕迹&quot;不会消逝，体现了他对现世意义的肯定。</div>
+</a>
+<a class="entry-item" href="山精.html">
+  <div class="noun">山精</div>
+  <div class="snippet">又称山灵，指居住在山中的自然精灵。在《浮士德》第十四场中，浮士德在森林与山洞中看到的月光下的银色仙姿，译者注指出&quot;山精和树精&quot;，即太古神话中的山林自然精灵。这一意象源自日耳曼和希腊神话传统。</div>
+</a>
+<a class="entry-item" href="岩石郎中.html">
+  <div class="noun">岩石郎中</div>
+  <div class="snippet">歌德《浮士德》中土精们（Gnomes）的自称，德语对应Bergarzt（山医）。 土精们将开矿采掘比喻为给高山做外科手术——&quot;给高山放血，从饱满 的脉管里抽吸&quot;，将采矿行为诗意化为医治山体的医学行为。这一独特 意象体现了歌德对自然资源开采双</div>
+</a>
+<a class="entry-item" href="布施羹汤.html">
+  <div class="noun">布施羹汤</div>
+  <div class="snippet">《浮士德》中讽刺内容浅薄、投合公众趣味的无聊作品的隐喻。原指修道院布施给贫民和乞丐的薄羹汤。歌德在1797年7月26日致席勒信中曾批评当时一部流行戏为真正的布施羹汤。恩格斯后来也在著作中引用此意象批评杜林哲学。</div>
+</a>
+<a class="entry-item" href="希望.html">
+  <div class="noun">希望</div>
+  <div class="snippet">在《浮士德》&quot;假面舞会&quot;场景中被拟人化的角色（角色名为&quot;希望&quot;），代表对美好未来的期盼。与&quot;恐惧&quot;一同登场，称化妆表演终将结束，人们可在晴朗的白日自由生活。</div>
+</a>
+<a class="entry-item" href="希腊的悲剧.html">
+  <div class="noun">希腊的悲剧</div>
+  <div class="snippet">即古希腊悲剧，起源于公元前5世纪雅典祭祀酒神狄奥尼索斯的庆典活动（&quot;山羊歌&quot;tragōidia）。以埃斯库罗斯、索福克勒斯、欧里庇得斯三大悲剧诗人为代表，作品取材于神话与英雄传说，表现人与命运的抗争。亚里士多德在《诗学》中提出悲剧的核心作用</div>
+</a>
+<a class="entry-item" href="帕耳那索斯.html">
+  <div class="noun">帕耳那索斯</div>
+  <div class="snippet">希腊神话中阿波罗和缪斯女神们居住的圣山，为诗歌、音乐和文学艺术的象征。在《浮士德》中被用来比喻德国文坛，布罗肯山被称为德国灵山。</div>
+</a>
+<a class="entry-item" href="幻影.html">
+  <div class="noun">幻影</div>
+  <div class="snippet">由雾带（Fata Morgana）显现出的奇妙景象，包括城市忽隐忽露、花园忽沉忽浮。在《浮士德》中，浮士德以此解释战场上的奇异视觉现象，暗示梅非斯特利用海市蜃楼般的魔法迷惑敌军。幻影是整个第四幕战争场景中魔法与欺骗主题的重要意象。</div>
+</a>
+<a class="entry-item" href="幻身.html">
+  <div class="noun">幻身</div>
+  <div class="snippet">歌德在《浮士德》中借用的希腊神话概念，指海伦具有两个化身的传说——一个在特洛伊（伊利俄斯），一个在埃及。海伦在剧中自称&quot;不过是幻象&quot;，暗示古典美的虚幻性以及现代人无法真正回归古希腊的理想。这一概念源自欧里庇得斯等希腊作家的变体传说：真正的海</div>
+</a>
+<a class="entry-item" href="幽灵.html">
+  <div class="noun">幽灵</div>
+  <div class="snippet">在《浮士德》中，幽灵指由魔法召唤出的幻影和超自然存在。在本场景中，浮士德通过钥匙和母亲们的三脚香炉召唤出海伦与帕里斯的幽灵形象，上演了一场&quot;海伦的抢夺&quot;的幻景。幽灵最终在爆炸中化为烟雾而消逝，浮士德也因试图抓住幽灵而倒地昏迷。幽灵构成了现实</div>
+</a>
+<a class="entry-item" href="弥撒仪式.html">
+  <div class="noun">弥撒仪式</div>
+  <div class="snippet">天主教的圣体圣事礼仪。歌德在魔女丹房场景中刻意模拟弥撒仪式——魔女画圈如圣坛、念咒如诵经、药酒如圣餐——以此戏仿和讽刺天主教的宗教仪式。梅非斯特更直接嘲讽三位一体教义。</div>
+</a>
+<a class="entry-item" href="形相之国.html">
+  <div class="noun">形相之国</div>
+  <div class="snippet">母亲们所在的领域，又称&quot;被解放的形相之国&quot;，是歌德融合柏拉图理型世界与自身形态学思想的创造。这里保存着一切曾经存在过之物的纯粹形相（原型），是动态的、不断生成与流变的本源空间，而非静止不变的理念世界。</div>
+</a>
+<a class="entry-item" href="彩虹.html">
+  <div class="noun">彩虹</div>
+  <div class="snippet">《浮士德》第二部第一幕中的重要象征意象。浮士德在苏醒后远望瀑布，看到飞泉形成的彩虹，悟出&quot;彩虹反映出人类的努力上进&quot;这一哲理。歌德通过&quot;万变之不变&quot;（Wechsel-Dauer）的概念描绘彩虹——它在水雾中时刻变化却又持续存在。这一意象象征</div>
+</a>
+<a class="entry-item" href="御膳.html">
+  <div class="noun">御膳</div>
+  <div class="snippet">浮士德中皇帝赐予膳部总管管理的宫廷饮食事务，指皇帝的日常膳食，由膳部总管按照四季时令精心调制。</div>
+</a>
+<a class="entry-item" href="德国百科丛书.html">
+  <div class="noun">德国百科丛书</div>
+  <div class="snippet">尼古拉编辑出版的百科类丛书，他通过该丛书发表文学批评。歌德在《浮士德》注释中将尼古拉的出版社比喻为老磨坊，暗示其将过时内容改头换面重新出版。</div>
+</a>
+<a class="entry-item" href="德意志神话.html">
+  <div class="noun">德意志神话</div>
+  <div class="snippet">雅各布·格林所著的《德意志神话学》（Deutsche Mythologie），系统研究古代日耳曼人的神话、民间信仰和习俗。其中记载了魔女口中跳出红色老鼠等巫术信仰。歌德在《浮士德》注释中引用该书。</div>
+</a>
+<a class="entry-item" href="必然.html">
+  <div class="noun">必然</div>
+  <div class="snippet">歌德《浮士德》中的哲学概念，出自普路托斯的台词&quot;法令强有力，而&#x27;必然&#x27;却更加有力&quot;。此处&quot;必然&quot;（Necessity/Notwendigkeit）指客观的、无可抗拒的力量，超越人为制定的法令。这句话呼应了拉丁谚语&quot;Necessitas no</div>
+</a>
+<a class="entry-item" href="忏悔.html">
+  <div class="noun">忏悔</div>
+  <div class="snippet">玛加蕾特在遇见浮士德之前刚从教堂向神父忏悔出来，表明她是一位虔诚的天主教徒。梅非斯特自称对纯洁无罪的她无能为力，因为她与神有约。忏悔在此处象征玛加蕾特的宗教虔诚，也预示她日后因罪孽而精神崩溃的悲剧。 --- 忏悔（又称告解、和好圣事）是天主</div>
+</a>
+<a class="entry-item" href="忘川.html">
+  <div class="noun">忘川</div>
+  <div class="snippet">希腊神话中冥界的河流勒忒（Lethe），亡灵饮其水后会忘却生前一切记忆。歌德在《浮士德》第二部第一幕中借用此典故：爱丽尔命令众妖精以&quot;忘川之水的露珠&quot;沐浴浮士德，使他忘却格蕾辛悲剧带来的痛苦与愧疚，从而获得精神上的重生，得以继续在第二部中追</div>
+</a>
+<a class="entry-item" href="恐惧.html">
+  <div class="noun">恐惧</div>
+  <div class="snippet">在《浮士德》&quot;假面舞会&quot;场景中被拟人化的角色（角色名为&quot;恐惧&quot;），被铁链锁住，夹在假面之中，代表人类内心的恐惧与不安。与&quot;希望&quot;一同被&quot;智慧&quot;视为人类最大的两个敌人。</div>
+</a>
+<a class="entry-item" href="恶灵.html">
+  <div class="noun">恶灵</div>
+  <div class="snippet">《浮士德》第一部第二十场&quot;教堂&quot;中出现在格蕾辛身后的形象，是格蕾辛良心谴责的象征。恶灵并非魔鬼梅非斯特，而是格蕾辛内心罪愆意识和自我审判的具象化，通过低语控诉其毒死母亲、哥哥被杀、溺死私生子等罪行，与合唱团演唱的《愤怒之日》（Dies Ir</div>
+</a>
+<a class="entry-item" href="恶魔.html">
+  <div class="noun">恶魔</div>
+  <div class="snippet">与上帝对抗的邪恶灵体，在《浮士德》中指梅非斯特及地狱的群魔。格蕾辛在牢狱中陷入疯狂时，幻觉中看到地狱沸腾、恶魔怒气填膺。在基督教传统中，恶魔是引诱人类犯罪、与救恩对抗的势力，歌德笔下的恶魔更复杂，是&quot;作恶造善的力之一体&quot;。</div>
+</a>
+<a class="entry-item" href="惩罚者.html">
+  <div class="noun">惩罚者</div>
+  <div class="snippet">指掌握审判与惩罚权柄的上帝或天界力量。梅非斯特自称不能解掉&quot;惩罚者&quot;的绳索与门闩，表明魔鬼的力量受限于更高的神圣秩序。这一概念体现了《浮士德》中的基督教宇宙观：恶魔虽能诱惑，但最终审判权在上帝手中。</div>
+</a>
+<a class="entry-item" href="愤怒之日.html">
+  <div class="noun">愤怒之日</div>
+  <div class="snippet">拉丁文&quot;Dies Irae&quot;的中文翻译，又称&quot;震怒之日&quot;或&quot;末日经&quot;。13世纪时托马·德·塞拉努（Thomas of Celano，约1190-1260）所作的拉丁文圣诗（继叙咏），用于天主教追思弥撒（安魂弥撒）中。全诗共18节，生动描绘末</div>
+</a>
+<a class="entry-item" href="慷慨豪奢.html">
+  <div class="noun">慷慨豪奢</div>
+  <div class="snippet">歌德《浮士德》中车童的自我称谓，也是他面具角色的本质——代表无度的施舍与挥霍。车童自称&quot;慷慨豪奢&quot;，与财神普路托斯的财富积累形成互补：普路托斯拥有财富，车童则负责挥洒和分配。这体现了歌德对诗歌创作本质的思考——诗人挥霍自我以完成创作。</div>
+</a>
+<a class="entry-item" href="我失去安宁.html">
+  <div class="noun">我失去安宁</div>
+  <div class="snippet">格蕾辛在《浮士德》第一部第十五场纺车旁独唱的名诗首句，德文原文为&quot;Meine Ruh&#x27; ist hin&quot;。这首诗表达少女热恋中焦虑不安的心理，语言短促简洁，富有民歌风味。后被舒伯特谱曲为艺术歌曲《纺车旁的格丽卿》（Op. 2, D. 118</div>
+</a>
+<a class="entry-item" href="战争、贸易和海盗行为.html">
+  <div class="noun">战争、贸易和海盗行为</div>
+  <div class="snippet">梅非斯特在《浮士德》第五幕中提出的&quot;三位一体&quot;概念，即战争、贸易和海盗行为不可分割，体现了近代早期海洋帝国崛起的丛林法则。梅非斯特以此为其海盗式掠夺辩护，反映了资本主义原始积累时期暴力与商业结合的历史现实。</div>
+</a>
+<a class="entry-item" href="押韵.html">
+  <div class="noun">押韵</div>
+  <div class="snippet">诗歌中在句末使用韵母相同或相近的字以增强节奏感和音乐性的修辞手法。古希腊诗歌不使用押韵，押韵是中世纪以后由东方传入欧洲的诗歌技巧。</div>
+</a>
+<a class="entry-item" href="拇指族.html">
+  <div class="noun">拇指族</div>
+  <div class="snippet">即达克堤洛族（Dactyls），希腊神话中的铁匠小神族，意为&quot;手指&quot;。在《浮士德》中作为小人族之一出现，与皮格迈俄族结盟，充当劳动力铸造锁链。</div>
+</a>
+<a class="entry-item" href="拉皮条.html">
+  <div class="noun">拉皮条</div>
+  <div class="snippet">贬义汉语词语，指在男女不正当关系中牵线搭桥，替性工作者招揽生意，或媒合不正当性关系的行为。引申义指通过非正规渠道从中牵线搭桥谋取不法利益。词源说法之一来自清代北京红灯区&quot;皮条营&quot;，人力车夫拉客去皮条营做皮肉生意，被称作&quot;拉皮条的&quot;。在《浮士</div>
+</a>
+<a class="entry-item" href="拿伯的葡萄园古已有之.html">
+  <div class="noun">拿伯的葡萄园古已有之</div>
+  <div class="snippet">梅非斯特在《浮士德》第五幕中的一句台词，引用《圣经·列王纪上》第21章拿伯葡萄园的典故，说明强权霸占他人财产是古已有之的历史现象。歌德借此将浮士德驱逐老夫妇的行为与亚哈王杀害拿伯的行径相类比，揭示权力扩张和贪欲的普遍性与永恒性。</div>
+</a>
+<a class="entry-item" href="挽歌.html">
+  <div class="noun">挽歌</div>
+  <div class="snippet">挽歌（Elegy，源自希腊语ἐλεγεία，意为&quot;哀伤之歌&quot;）是一种起源于古希腊的抒情诗体，以严肃语气和文词典雅为特征。形式上最初采用六音步诗行与五音步诗行交替组成的双行体（即哀歌体/埃勒格体），主要用于葬礼悼念表达对逝者的哀思。公元前7世</div>
+</a>
+<a class="entry-item" href="提坦族.html">
+  <div class="noun">提坦族</div>
+  <div class="snippet">希腊神话中古老的神族，由天神乌拉诺斯与地神盖亚所生，共六男六女，在奥林匹斯神系之前统治世界。克罗诺斯为首代神王，后其子宙斯领导奥林匹斯众神发动十年提坦之战将其推翻。提坦时代被视为&quot;黄金时代&quot;。英语&quot;titan&quot;一词即源于此，意为&quot;巨大的&quot;。</div>
+</a>
+<a class="entry-item" href="撒母耳记下第二十三章.html">
+  <div class="noun">撒母耳记下第二十三章</div>
+  <div class="snippet">圣经旧约《撒母耳记下》第23章，分为两大部分：（1）大卫的遗言（1-7节），强调公义统治和神与之立的永约；（2）大卫勇士名录（8-39节）。其中第8节开始记载&quot;三勇士&quot;——约设巴设（一次击杀八百人）、以利亚撒（独战非利士人至手粘剑柄）、沙玛</div>
+</a>
+<a class="entry-item" href="故乡的小鸟.html">
+  <div class="noun">故乡的小鸟</div>
+  <div class="snippet">指德国民歌《假使我化为小鸟》的首句意象，出自一首广为流传的德国民歌（&quot;Wenn ich ein Vöglein wär&#x27;&quot;，意为&quot;假使我是一只小鸟&quot;）。在《浮士德》第十四场中，梅非斯特引用此民歌来形容格蕾辛苦恋浮士德时的思念心境。</div>
+</a>
+<a class="entry-item" href="教父.html">
+  <div class="noun">教父</div>
+  <div class="snippet">基督教早期至8世纪具有权威的宗教作家及宣教师统称，分希腊教父和拉丁教父，特征为年代古远、正统教义、圣洁生活、教会嘉许。其著作构成教会传统的重要组成部分。</div>
+</a>
+<a class="entry-item" href="教皇党.html">
+  <div class="noun">教皇党</div>
+  <div class="snippet">即Guelphs（归尔甫派），中世纪意大利政治派别，支持教皇，与支持皇帝的保皇党（Ghibellines）相对立。在《浮士德》中，财政大臣感叹各党派只顾自保，无人过问国事。歌德借这一典故批判了由于党派纷争导致的帝国分裂与衰落，暗示古代德国的</div>
+</a>
+<a class="entry-item" href="新约.html">
+  <div class="noun">新约</div>
+  <div class="snippet">基督教圣经的两大部分之一，与旧约相对。新约指耶稣基督以自己的宝血和受死为全人类所立的永远的新盟约。新约圣经共27卷，包括四福音书、使徒行传、保罗书信、大公书信和启示录，记载耶稣的生平、教训、受死与复活，以及初期教会的发展。在浮士德中，复活节</div>
+</a>
+<a class="entry-item" href="方济各会.html">
+  <div class="noun">方济各会</div>
+  <div class="snippet">天主教托钵修会之一，拉丁文名Ordo Fratrum Minorum（意为&quot;小兄弟会&quot;），因会士穿灰色会服又称&quot;灰衣修士&quot;。1209年由意大利人圣方济各·亚西西（St. Francis of Assisi）获教宗英诺森三世批准成立。提倡清贫</div>
+</a>
+<a class="entry-item" href="方阵.html">
+  <div class="noun">方阵</div>
+  <div class="snippet">古代步兵密集队形战术，源自古希腊重步兵方阵（Phalanx）。在《浮士德》的战争场景中，我军密接方阵的长矛全有灵活的火花飞跳，方阵的坚固先锋向右方移动像电击长空，攻进敌人薄弱的地方。歌德在此融合了古典军事理论与近代战争经验。</div>
+</a>
+<a class="entry-item" href="无主金银.html">
+  <div class="noun">无主金银</div>
+  <div class="snippet">梅非斯特为说服皇帝和朝臣而提出的核心概念。他声称从罗马帝国时代以来，因战乱恐惧，无数财宝被埋藏地下而无人认领，成为法律上的&quot;无主之物&quot;。由于&quot;土地属于皇帝&quot;，这些无主金银合该由皇帝发掘使用。这一概念为梅非斯特后续发行以地下宝藏为担保的纸币提</div>
+</a>
+<a class="entry-item" href="日神.html">
+  <div class="noun">日神</div>
+  <div class="snippet">希腊神话中的太阳神，在《浮士德》中指驾驶太阳车的神明（阿波罗/赫利俄斯）。在第二部第一幕太阳升起的场景中，歌德以宏大的笔触描绘日神的车轮辚辚滚来、岩门豁然洞开的景象，象征光明与新生。日神意象贯穿《浮士德》始终，代表着光明、理性与神圣秩序，与</div>
+</a>
+<a class="entry-item" href="日耳曼人.html">
+  <div class="noun">日耳曼人</div>
+  <div class="snippet">古代欧洲中北部的一支民族群体，是今德意志、奥地利、英格兰、荷兰等日耳曼语族民族的祖先。在《浮士德》中，浮士德将日耳曼人分配到科林斯海港筑垒防守，象征北方日耳曼精神与南方古典文明的融合。</div>
+</a>
+<a class="entry-item" href="旧酵.html">
+  <div class="noun">旧酵</div>
+  <div class="snippet">源自《圣经·哥林多前书》5:6-8的比喻，&quot;酵&quot;在犹太文化中象征罪恶与腐败，&quot;旧酵&quot;指人旧有的罪恶本性和腐败的旧生命。保罗教导信徒应当除去旧酵（罪恶），成为无酵的新面团。歌德在《浮士德》中借梅非斯特之口引用此典故，比喻人类与生俱来的原罪与无</div>
+</a>
+<a class="entry-item" href="时代精神.html">
+  <div class="noun">时代精神</div>
+  <div class="snippet">亨宁格斯主编的杂志名，后改名《十九世纪精神》。在《浮士德》瓦尔普吉斯之夜中被提及，讽刺当时文坛的肤浅风气。</div>
+</a>
+<a class="entry-item" href="时序女神.html">
+  <div class="noun">时序女神</div>
+  <div class="snippet">希腊神话中掌管季节、时间和人间秩序的女神（Horae，又译&quot;荷赖&quot;），通常为三位：欧诺弥亚（秩序女神）、狄刻（正义女神）和厄瑞涅（和平女神），是宙斯与忒弥斯之女。在《浮士德》第二部第一幕&quot;幽雅的境地&quot;的结尾，太阳即将升起时，爱丽尔提到&quot;时序</div>
+</a>
+<a class="entry-item" href="旷野.html">
+  <div class="noun">旷野</div>
+  <div class="snippet">《浮士德》第二部第五幕第一场的场景名称，即开阔地带（Open Country）。在此场景中，旅人与菲勒蒙、包喀斯夫妇对话，展现浮士德填海造田后人地关系的巨变。</div>
+</a>
+<a class="entry-item" href="普绪刻.html">
+  <div class="noun">普绪刻</div>
+  <div class="snippet">希腊神话中人类灵魂的化身，常被描绘为生有蝴蝶翅膀的少女。希腊语 Psyche（Ψυχή）兼有&quot;灵魂&quot;与&quot;蝴蝶&quot;双重含义。在《浮士德》中，梅非斯特用普绪刻比喻浮士德的灵魂，称其&quot;长着翅膀&quot;，拔掉翅膀就变成丑陋的毛虫。 --- 希腊神话中人类灵</div>
+</a>
+<a class="entry-item" href="普绪罗族.html">
+  <div class="noun">普绪罗族</div>
+  <div class="snippet">古代北非利比亚地区的原住民柏柏尔部落，居住在大锡尔特湾沿岸。据希罗多德《历史》记载，该族因沙漠热风吹干水源而全体出征与风作战，结果被风沙活埋。老普林尼则称其在与纳萨莫尼斯人的战争中几乎灭绝。以天生对蛇毒免疫、擅长弄蛇术而闻名，传说屋大维曾征</div>
+</a>
+<a class="entry-item" href="智慧.html">
+  <div class="noun">智慧</div>
+  <div class="snippet">在《浮士德》&quot;假面舞会&quot;场景中被拟人化的角色（角色名为&quot;智慧&quot;），制服了&quot;恐惧&quot;和&quot;希望&quot;，引导着驮着胜利女神高堡的巨兽。这里象征着理性与智慧对人类原始情感的驾驭。</div>
+</a>
+<a class="entry-item" href="暴发户.html">
+  <div class="noun">暴发户</div>
+  <div class="snippet">法国大革命时期因社会动荡而迅速崛起的新贵阶层，常受旧贵族和知识分子的鄙视。歌德在《浮士德》中将其作为瓦尔普吉斯之夜被讽刺的对象之一。</div>
+</a>
+<a class="entry-item" href="暴风雨.html">
+  <div class="noun">暴风雨</div>
+  <div class="snippet">莎士比亚晚年的传奇剧作品。爱丽尔（Ariel）即出自此剧，是一个被魔法师普洛斯彼罗囚禁后为其效力的精灵。</div>
+</a>
+<a class="entry-item" href="月姑.html">
+  <div class="noun">月姑</div>
+  <div class="snippet">即占星学中的月亮（Moon），在中国传统星象学中亦指月孛或太阴。在西方炼金术—占星传统中，月亮对应白银。星士说&quot;贞洁的月姑心情变化无常&quot;，指月亮的阴晴圆缺变化。后又预言&quot;当月姑跟太阳相亲相爱，金银会合&quot;，即月亮（银）与太阳（金）相遇的天象，</div>
+</a>
+<a class="entry-item" href="有罪国度.html">
+  <div class="noun">有罪国度</div>
+  <div class="snippet">浮士德中大主教对皇帝统治的国家的定性谴责。大主教认为皇帝与魔鬼结盟背叛了天主和教皇，因此整个国家都成为有罪之邦，将面临教皇追放电光的毁灭性惩罚，反映了中世纪教会与世俗王权之间的冲突。</div>
+</a>
+<a class="entry-item" href="木星.html">
+  <div class="noun">木星</div>
+  <div class="snippet">即占星学中的木星（Jupiter），以众神之王朱庇特命名。在炼金术—占星传统中，木星对应锡。星士说&quot;木星是最美的光，至今不变&quot;，形容木星在占星学中代表幸运、扩张与尊贵，其光芒被视为最美且恒久不变。木星在古代被视为&quot;岁星&quot;，其运行周期约十二年</div>
+</a>
+<a class="entry-item" href="末日审判.html">
+  <div class="noun">末日审判</div>
+  <div class="snippet">天主教/基督教末世论核心概念，亦称&quot;公审判&quot;或&quot;最后审判&quot;，指在世界末日之时，耶稣基督在光荣中再度来临，审判所有生者与死者，决定每个人的永恒命运——义人进入永生，恶人进入永罚。圣经依据主要为《玛窦福音》25:31-46（分开绵羊和山羊）。在</div>
+</a>
+<a class="entry-item" href="本笃会.html">
+  <div class="noun">本笃会</div>
+  <div class="snippet">天主教修会之一，由圣本笃于6世纪创立，以&quot;祈祷与工作&quot;为座右铭。圣瓦尔普吉斯所属的海登海姆修院即属本笃会。在《浮士德》注释中作为圣瓦尔普吉斯的宗教背景介绍。</div>
+</a>
+<a class="entry-item" href="柏拉图理念世界.html">
+  <div class="noun">柏拉图理念世界</div>
+  <div class="snippet">柏拉图哲学中的核心概念，认为在可感知的现象世界之外，存在一个永恒、不变、完美的理念世界。现实世界是理念世界的投影或摹本。理念是客观存在的超验实体，如&quot;美本身&quot;&quot;正义本身&quot;。这一理论开创了西方形而上学传统。</div>
+</a>
+<a class="entry-item" href="树精.html">
+  <div class="noun">树精</div>
+  <div class="snippet">又称树灵，源自希腊神话中的Dryad（得律阿德斯），是栖居在树木中的自然精灵，与树木同生共死。在《浮士德》第十四场中，浮士德在月光下森林中所见的太古仙姿被注释为&quot;山精和树精&quot;，象征自然万物的灵性，体现了歌德泛神论的自然观。</div>
+</a>
+<a class="entry-item" href="树脂的香气.html">
+  <div class="noun">树脂的香气</div>
+  <div class="snippet">树脂的香气在歌德原文中为der harzige Dunst，与哈尔茨（Harz）山同字。哈尔茨山以古老森林和传说闻名。梅非斯特说哈尔茨山的树脂香气闻起来有沥青和硫磺味，让他想到地狱的气息。在希腊闻不到此气味，体现他与古典世界的格格不入。</div>
+</a>
+<a class="entry-item" href="格林童话.html">
+  <div class="noun">格林童话</div>
+  <div class="snippet">雅各布·格林和威廉·格林兄弟收集整理的德国民间童话集，是世界文学经典。雅各布·格林还著有《德意志神话学》，其中记载了从魔女口中跳出红色老鼠的民间信仰。歌德在《浮士德》注释中引用格林的发现。</div>
+</a>
+<a class="entry-item" href="梦幻之国.html">
+  <div class="noun">梦幻之国</div>
+  <div class="snippet">《浮士德》中浮士德、梅非斯特与鬼火交互歌唱时提到的诗意概念，指瓦尔普吉斯之夜前往布罗肯山途中所进入的超自然领域，象征现实与幻想交织的魔法世界。</div>
+</a>
+<a class="entry-item" href="森林之神.html">
+  <div class="noun">森林之神</div>
+  <div class="snippet">森林之神在古希腊神话中指萨提尔（Satyr，又译萨堤尔、萨梯、萨蒂尔），是半人半兽的森林精灵，长有公羊角、羊腿和尾巴。他们性格轻松欢快、耽于淫欲，喜好饮酒、音乐和舞蹈，常在森林中追逐宁芙仙女，作为酒神狄俄倪索斯（Dionysus）的随从参与</div>
+</a>
+<a class="entry-item" href="樫鸟.html">
+  <div class="noun">樫鸟</div>
+  <div class="snippet">松鸦（Eurasian jay），在《浮士德》瓦尔普吉斯之夜场景中与田凫、猫头鹰一同出现，作为夜间神秘氛围的衬托。松鸦在德语地区被称为森林守护者，以其警觉的报警鸣叫著称，在民间传说中常与橡树播种、警示危险相关联。</div>
+</a>
+<a class="entry-item" href="母亲.html">
+  <div class="noun">母亲</div>
+  <div class="snippet">歌德《浮士德》独创的神秘女神，称为&quot;母亲们&quot;（Die Mütter）。她们庄严地君临寂境之间，周围没有空间也没有时间，掌管一切造物的原型与形相，类似柏拉图式的理念世界。浮士德为召唤古希腊美女海伦，必须手持魔钥下到母亲们的领域取回三脚香炉。母</div>
+</a>
+<a class="entry-item" href="母亲之国.html">
+  <div class="noun">母亲之国</div>
+  <div class="snippet">歌德在《浮士德》第二部中独创的神秘空间概念（德文Reich der Mütter），一个超越时空、没有生命但有万物形相的虚无缥缈之境。浮士德从梅非斯特手中接过钥匙，前往&quot;母亲之国&quot;取回宝鼎以召唤海伦和帕里斯的形貌。歌德从普鲁塔克的记载中采来</div>
+</a>
+<a class="entry-item" href="母亲们.html">
+  <div class="noun">母亲们</div>
+  <div class="snippet">歌德《浮士德》第二部中神秘的女神群体，居于无涯之境、时间与空间尚未分化的原初状态。她们是一切生命形相（原型）的保存者与派遣者，代表宇宙本源的母性创造力，处于存在与虚无之间的本体论交界。浮士德必须下降到母亲们那里取得宝鼎，才能召唤海伦和帕里斯</div>
+</a>
+<a class="entry-item" href="水成论.html">
+  <div class="noun">水成论</div>
+  <div class="snippet">18世纪地质学关于岩石成因的学说（Neptunism），认为岩石由原始海洋中的水分沉积形成。在《浮士德》中由泰勒斯代表，主张水为万物本源，强调自然的渐进演化而非剧烈变革。</div>
+</a>
+<a class="entry-item" href="水成说.html">
+  <div class="noun">水成说</div>
+  <div class="snippet">地质学理论（又称水成论、Neptunism），主张地球上所有岩石都是在水中沉积形成的，不承认火成岩的存在。创始人为德国弗赖堡矿业学院教授亚伯拉罕·戈特洛布·维尔纳，他按沉积顺序将地层分为原始层、过渡层、层状岩和冲积层。在《浮士德》中，泰勒斯</div>
+</a>
+<a class="entry-item" href="水星使者.html">
+  <div class="noun">水星使者</div>
+  <div class="snippet">即占星学中的水星（Mercury），在古希腊罗马神话中为众神信使，掌管商业、旅行与沟通。在炼金术传统中，水星对应水银（汞），被视为金属变化的中介。星士说&quot;水星使者博取酬劳和宠幸&quot;，意指水星主掌商业与交际，能带来财富与恩宠。</div>
+</a>
+<a class="entry-item" href="水螅.html">
+  <div class="noun">水螅</div>
+  <div class="snippet">希腊神话中的九头蛇（Hydra/许德拉），堤丰和厄客德娜所生，有九个头，砍掉一个会再生两个。赫拉克勒斯十二项试炼的第二项就是斩杀九头蛇。在《浮士德》中，水螅被用作比喻，形容树根像水螅触手般伸展捕获行人。</div>
+</a>
+<a class="entry-item" href="永恒.html">
+  <div class="noun">永恒</div>
+  <div class="snippet">超越时间的存在状态。《浮士德》中多次涉及&quot;永恒&quot;主题：浮士德追求精神的不朽与永恒的价值；梅非斯特则站在虚无主义的立场宣称&quot;永恒的创造于我们何补！被创造的又使它复归于无！&quot;。浮士德的灵魂最终升入永恒，使永恒战胜了虚无。</div>
+</a>
+<a class="entry-item" href="永恒之女性.html">
+  <div class="noun">永恒之女性</div>
+  <div class="snippet">歌德在《浮士德》结尾提出的核心哲学概念，德语Das Ewig-Weibliche，指一种超越具体女性形象的永恒阴性原则——通过爱、救赎与引领使人类灵魂从世俗沉沦中升华。全剧终句&quot;永恒之女性，引领我们向上&quot;是西方文学对女性力量最高贵的礼赞之一</div>
+</a>
+<a class="entry-item" href="永恒的女性.html">
+  <div class="noun">永恒的女性</div>
+  <div class="snippet">德语Das Ewig-Weibliche，是歌德在《浮士德》第二部结尾&quot;神秘之群合唱&quot;中首创的概念，结尾句为&quot;Das Ewig-Weibliche / Zieht uns hinan&quot;（永恒的女性，引领我们上升）。它代表了超越世俗爱欲的精神</div>
+</a>
+<a class="entry-item" href="沥青和硫磺.html">
+  <div class="noun">沥青和硫磺</div>
+  <div class="snippet">沥青和硫磺（Pech und Schwefel）是中世纪基督教观念中地狱之火的典型燃料。德语中由此衍生出Pech haben（倒霉）的表达。在歌德《浮士德》中，梅非斯特作为地狱魔鬼，喜爱沥青和硫磺的气味。</div>
+</a>
+<a class="entry-item" href="法令.html">
+  <div class="noun">法令</div>
+  <div class="snippet">歌德《浮士德》中与&quot;必然&quot;对举的概念，出自普路托斯的台词&quot;法令强有力，而&#x27;必然&#x27;却更加有力&quot;。法令（Law/Gesetz）代表人类社会制定的规则和秩序，虽具有强制力，但终究不及客观必然性（必然）强大。这体现了歌德对自然法则高于人为法律的哲学</div>
+</a>
+<a class="entry-item" href="法兰克人.html">
+  <div class="noun">法兰克人</div>
+  <div class="snippet">古代日耳曼人的一支，于公元5-6世纪建立法兰克王国，鼎盛时期（查理大帝时代）统治西欧大部分地区，是现代法兰西民族和德意志民族的重要渊源之一。在《浮士德》中，浮士德命法兰克人开往厄利斯。</div>
+</a>
+<a class="entry-item" href="泛神论.html">
+  <div class="noun">泛神论</div>
+  <div class="snippet">一种将神与自然等同起来的哲学宗教思想，认为神内在于自然万物之中，而非超然于世界之外。斯宾诺莎是近代泛神论最具代表性的哲学家，他的&quot;神即自然&quot;命题对歌德、谢林等德国思想界产生了深远影响。歌德在《浮士德》第一部的独白中融入了泛神论思想。</div>
+</a>
+<a class="entry-item" href="流亡者.html">
+  <div class="noun">流亡者</div>
+  <div class="snippet">法国大革命期间流亡到德国的旧时代人物，包括贵族、将军、大臣等。歌德在《浮士德》中以他们来讽刺保守的旧时代遗老。</div>
+</a>
+<a class="entry-item" href="流萤.html">
+  <div class="noun">流萤</div>
+  <div class="snippet">萤火虫（firefly），在《浮士德》的瓦尔普吉斯之夜场景中，乱飞的流萤结成大群令人们目眩神迷。在欧洲民间传说中，萤火虫常被视为精灵之火、亡灵之魂或死亡预兆，在不同文化中兼有浪漫与恐惧的双重象征意义。</div>
+</a>
+<a class="entry-item" href="浪漫的.html">
+  <div class="noun">浪漫的</div>
+  <div class="snippet">歌德文艺理论中的重要概念，与&quot;古典的&quot;形成对立。在《浮士德》注解中，浪漫的指中世纪以来注重情感、幻想、个性的艺术风格。歌德认为浪漫的是&quot;病态的&quot;，而古典的是&quot;健全的&quot;。</div>
+</a>
+<a class="entry-item" href="海市蜃楼.html">
+  <div class="noun">海市蜃楼</div>
+  <div class="snippet">又称蜃景（Mirage），一种因光的折射和全反射而形成的自然光学现象。当光线穿过密度不同的空气层时发生弯曲，使人眼看到偏离实际位置的虚像。分为上现蜃景、下现蜃景等类型。</div>
+</a>
+<a class="entry-item" href="混沌.html">
+  <div class="noun">混沌</div>
+  <div class="snippet">源自希腊神话中的原始神卡俄斯（Chaos），赫西俄德《神谱》中将其描述为宇宙最初的虚空或裂隙，是一切存在诞生的起点。后经罗马诗人奥维德改造，演变为&quot;无序混乱的物质&quot;这一现代常见含义。</div>
+</a>
+<a class="entry-item" href="混沌之女.html">
+  <div class="noun">混沌之女</div>
+  <div class="snippet">指希腊神话中从混沌（卡俄斯）诞生的原始神祇，尤其指黑夜女神倪克斯（Nyx）。倪克斯威力极大，连宙斯也对她心存敬畏。在《浮士德》中，福耳库阿斯自称&quot;混沌之女&quot;（daughter of Chaos），梅非斯特亦自称&quot;混沌的钟爱的儿子&quot;。</div>
+</a>
+<a class="entry-item" href="漂石.html">
+  <div class="noun">漂石</div>
+  <div class="snippet">地质学术语，又称漂砾（glacial erratic），指由冰川搬运而来的巨大石块，直径可达10-20米以上，是冰川作用的重要标志物。歌德在1829年就已指出漂石是由冰川的作用所致，显示了他对地质学的深刻关注。</div>
+</a>
+<a class="entry-item" href="火成论.html">
+  <div class="noun">火成论</div>
+  <div class="snippet">18世纪地质学关于岩石成因的学说（Plutonism），认为岩石由地下火成活动形成。在《浮士德》中由阿那克萨戈拉代表，以火山爆发和地震解释山脉的突然形成，影射法国大革命的剧烈变革。</div>
+</a>
+<a class="entry-item" href="火成说.html">
+  <div class="noun">火成说</div>
+  <div class="snippet">地质学理论（又称火成论、Plutonism），主张地球内部热能是地质作用的主要动力，认为花岗岩和玄武岩是岩浆冷却结晶的产物。代表人物为苏格兰地质学家詹姆斯·赫顿。18世纪末与19世纪初，火成说与水成说之间发生了地质学史上著名的&quot;水火之争&quot;，</div>
+</a>
+<a class="entry-item" href="火星.html">
+  <div class="noun">火星</div>
+  <div class="snippet">即占星学中的火星（Mars），以战神玛尔斯命名。在炼金术—占星传统中，火星对应铁。星士说&quot;火星烧不着你们，却势不可当&quot;，意指火星虽主战火与冲突，但在当前天象下对皇帝一方并无直接损害，却仍有强大威力。充分体现了占星术的模棱两可与刻意奉迎。</div>
+</a>
+<a class="entry-item" href="火湖.html">
+  <div class="noun">火湖</div>
+  <div class="snippet">圣经《启示录》中的末世论概念，指&quot;烧着硫磺的火湖&quot;，是魔鬼、兽、假先知和名字不在生命册上者的最终归宿，被定义为&quot;第二次的死&quot;，象征对罪恶的最终审判与刑罚。</div>
+</a>
+<a class="entry-item" href="火焰.html">
+  <div class="noun">火焰</div>
+  <div class="snippet">在《浮士德》中火被视为恶魔的伴友和元素。浮士德举杯饮药时杯口迸发轻微火焰，梅非斯特说你和恶魔以尔我相称还要对火焰感到惊慌。火焰象征恶魔的力量和元素属性，也暗示浮士德与魔鬼结盟后已不再是人间的普通人。</div>
+</a>
+<a class="entry-item" href="火焰车.html">
+  <div class="noun">火焰车</div>
+  <div class="snippet">圣经旧约中记载的神圣异象，出自《列王纪下》2:11，描述先知以利亚被火车火马接往天上的景象。火焰车象征上帝的大能与荣耀，代表神圣的护卫与超越性的力量。在文学作品中常用来比喻灵魂升天或神圣的拯救。浮士德在此引用火焰车意象，表达其渴望摆脱尘世束</div>
+</a>
+<a class="entry-item" href="火精.html">
+  <div class="noun">火精</div>
+  <div class="snippet">火精（Salamander，沙拉曼达/沙罗曼蛇）是欧洲中古迷信传说中四大元素精灵之一，对应火元素。由16世纪炼金术士帕拉塞尔苏斯提出。相传火精住在火中，不会被烧坏，本身也能燃烧。其现实原型为火蝾螈——因常冬眠于腐木中，当木头被当柴火烧时从火</div>
+</a>
+<a class="entry-item" href="灵魂.html">
+  <div class="noun">灵魂</div>
+  <div class="snippet">《浮士德》中最核心的概念之一，贯穿全剧。本段中瓦格纳提到&quot;灵魂和肉体这样巧妙地调和，紧紧结合，好像永不要离分，却为什么每天总不能安分&quot;，道出了灵与肉的永恒矛盾。浮士德著名的&quot;两个灵魂&quot;之叹揭示人心中崇高与世俗的冲突。灵魂在歌德笔下不是静态的</div>
+</a>
+<a class="entry-item" href="炼狱.html">
+  <div class="noun">炼狱</div>
+  <div class="snippet">天主教神学概念，指信徒死后、灵魂在进入天堂之前接受净化的过渡状态或过程。拉丁语Purgatorium意为&quot;洗涤之地&quot;。炼狱概念在12世纪正式诞生，1274年里昂大公会议首次正式定义。不同于地狱，炼狱中的灵魂已确定得救，但需炼净小罪或暂罚后方</div>
+</a>
+<a class="entry-item" href="炼金术.html">
+  <div class="noun">炼金术</div>
+  <div class="snippet">中世纪的一种化学哲学思想，被视为近代化学的雏形。炼金术的主要目标包括将贱金属转化为贵金属（点石成金）、炼制长生不老的万能药，以及寻找哲人之石。炼金术起源于古埃及和希腊化时期的亚历山大城，经阿拉伯世界传承，12世纪传入欧洲。歌德在《浮士德》的</div>
+</a>
+<a class="entry-item" href="煮盐.html">
+  <div class="noun">煮盐</div>
+  <div class="snippet">浮士德中皇帝赋予五位忠良的经济特权之一。在古代盐是重要的生活物资和税收来源，煮盐（盐业生产）权是封建君主赐予的最高经济特权之一。</div>
+</a>
+<a class="entry-item" href="爱火.html">
+  <div class="noun">爱火</div>
+  <div class="snippet">神圣之爱的火焰，在《浮士德》结尾特指天使的玫瑰之火。梅非斯特被爱火烧灼，痛苦地喊道&quot;比地狱之火更加灼痛&quot;。爱火具有双重作用：对魔鬼是灼烧驱逐的力量，对浮士德的灵魂则是净化拯救的媒介，是神恩的象征。</div>
+</a>
+<a class="entry-item" href="爱索.html">
+  <div class="noun">爱索</div>
+  <div class="snippet">出自《何西阿书》第11章第4节&quot;我用慈绳爱索牵引他们&quot;，比喻神用温柔慈爱引导其子民，如同慈父牵引学步幼儿，与强制和粗暴的高压手段相对，是神对人类之爱的生动写照。</div>
+</a>
+<a class="entry-item" href="牧神.html">
+  <div class="noun">牧神</div>
+  <div class="snippet">即希腊神话中的潘（Pan），半人半羊形象的山林之神，掌管森林、田地和羊群，居住在阿耳卡狄亚。以潘笛（排箫）为象征，英语&quot;panic&quot;（恐慌）一词源于其名。在《浮士德》阿耳卡狄亚场景中作为自然守护者出现。</div>
+</a>
+<a class="entry-item" href="犹大书.html">
+  <div class="noun">犹大书</div>
+  <div class="snippet">《犹大书》是《新约圣经》第26卷，仅1章25节，作者是耶稣的兄弟犹大。该书写作目的是揭露混入教会的假教师，劝勉信徒&quot;为真道竭力争辩&quot;。其中第9节记载&quot;天使长米迦勒为摩西的尸首与魔鬼争辩&quot;，这是《圣经》中唯一一次直接使用&quot;天使长&quot;称号描述米迦</div>
+</a>
+<a class="entry-item" href="犹太.html">
+  <div class="noun">犹太</div>
+  <div class="snippet">正文中基督教（正教徒）语境下涉及希伯来/犹太传统元素。在《浮士德》瓦尔普吉斯之夜中，正教徒角色引用犹太-基督教传统来批评希腊群神为魔鬼。</div>
+</a>
+<a class="entry-item" href="狂欢佳节.html">
+  <div class="noun">狂欢佳节</div>
+  <div class="snippet">即Carnival（嘉年华/狂欢节），源自意大利的节日传统。在《浮士德》中，皇帝从罗马远征归来后将意大利的狂欢节文化带回德国宫廷，举行盛大的化装假面舞会。</div>
+</a>
+<a class="entry-item" href="狂飙突进.html">
+  <div class="noun">狂飙突进</div>
+  <div class="snippet">狂飙突进（Sturm und Drang）是18世纪60年代晚期至80年代早期发生在德国文学和音乐领域的变革运动。名称源于克林格1776年剧本《狂飙与突进》。主张个性解放、返回自然、推崇天才、强调感情。1770年赫尔德与歌德在斯特拉斯堡的会</div>
+</a>
+<a class="entry-item" href="狮鹰.html">
+  <div class="noun">狮鹰</div>
+  <div class="snippet">即格里芬（Griffin），神话生物，前半身为鹰（头、喙、翅膀、前爪），后半身为狮（躯干、后腿、尾巴），传说中守护宝藏，象征力量与警觉。在《浮士德》中，狮鹰追赶雄鹰，浮士德将此天象解读为吉兆——狮鹰代表伪帝的叛乱势力，雄鹰代表皇帝一方，预示</div>
+</a>
+<a class="entry-item" href="玛门.html">
+  <div class="noun">玛门</div>
+  <div class="snippet">玛门（Mammon）源自亚兰文，原意为&quot;财富&quot;、&quot;财产&quot;，在新约圣经《马太福音》6:24中被耶稣拟人化，指与上帝对立的金钱崇拜。中世纪后被神格化为代表贪婪的地狱恶魔，掌管七宗罪中的贪婪，弥尔顿《失乐园》中描写其为堕落天使，在地狱建造万魔殿。</div>
+</a>
+<a class="entry-item" href="玛黑珥沙拉勒哈施罢斯.html">
+  <div class="noun">玛黑珥沙拉勒哈施罢斯</div>
+  <div class="snippet">希伯来语名字，意为&quot;掳掠速临，抢夺快到&quot;，出自《以赛亚书》第8章第1-4节。先知以赛亚奉耶和华之命给儿子取此名，预言亚述王将迅速掳掠大马士革和撒玛利亚。歌德在《浮士德》中以之比喻掠取财宝的速度。</div>
+</a>
+<a class="entry-item" href="理性.html">
+  <div class="noun">理性</div>
+  <div class="snippet">《浮士德》中启蒙思想的核心概念。瓦格纳在制造人造人时宣称&quot;人们对于自然的神秘常大加赞称，我们敢凭着理性将实验进行&quot;，代表了启蒙时代对理性的绝对信心。然而歌德通过浮士德的探索之旅同时展示了理性的局限——理性不能穷尽生命的全部真理。学士对经验和</div>
+</a>
+<a class="entry-item" href="理论全是灰色，生命的金树才是长青.html">
+  <div class="noun">理论全是灰色，生命的金树才是长青</div>
+  <div class="snippet">歌德《浮士德》中魔鬼梅非斯特对学生的名言，出自第一部&quot;书斋&quot;场景。德文原文为&quot;Grau, teurer Freund, ist alle Theorie, Und grün des Lebens goldner Baum。&quot;意为抽象的理论是</div>
+</a>
+<a class="entry-item" href="田凫.html">
+  <div class="noun">田凫</div>
+  <div class="snippet">一种鸟类（lapwing/凤头麦鸡），在《浮士德》瓦尔普吉斯之夜场景中与樫鸟、猫头鹰一同被提及，作为夜间活跃的鸟类营造出阴森神秘的氛围。在欧洲民间传说中，田凫的鸣叫常被视为不祥之兆。</div>
+</a>
+<a class="entry-item" href="痛苦圣母.html">
+  <div class="noun">痛苦圣母</div>
+  <div class="snippet">痛苦圣母（Mater Dolorosa，又称七苦圣母）是天主教纪念圣母玛利亚在人世间所受苦难的称号。核心源自圣母与耶稣受难的联系——玛利亚作为耶稣的母亲，经历了西默盎预言、埃及逃难、耶稣失踪、苦路相遇、十字架下、怀抱圣尸、耶稣安葬七种痛苦。</div>
+</a>
+<a class="entry-item" href="登徒子.html">
+  <div class="noun">登徒子</div>
+  <div class="snippet">中文古典典故，出自宋玉《登徒子好色赋》，后世用以代指好色之徒。在《浮士德》中译本中，梅非斯特以此词嘲讽浮士德见到玛加蕾特后便急于占有，实为一种归化翻译。德语原文意为你说话已经像个法国人了，译者以登徒子替换了法国人风流多情的欧洲文化意象。</div>
+</a>
+<a class="entry-item" href="皮格迈俄族.html">
+  <div class="noun">皮格迈俄族</div>
+  <div class="snippet">希腊神话中的矮人族，其名源于希腊语&quot;πυγμή&quot;（拳到肘的长度，约45厘米），意为&quot;前臂长的矮人&quot;。据荷马《伊利亚特》记载，他们居住在大洋河南岸，每年秋季与南飞的鹤群作战。后人常以此指代非洲中部的矮小族群（俾格米人）。</div>
+</a>
+<a class="entry-item" href="瞬间.html">
+  <div class="noun">瞬间</div>
+  <div class="snippet">《浮士德》全剧的核心哲学概念。浮士德与魔鬼打赌的关键在于&quot;瞬间&quot;——如果浮士德对某一瞬间感到满足并说出&quot;停一停吧，你真美丽&quot;，他就输了赌约。浮士德宣称&quot;在任何瞬间都不会满足&quot;，体现了永不停止的追求精神。但临终前他终于在理想实现的幻觉中对&quot;最</div>
+</a>
+<a class="entry-item" href="磷光.html">
+  <div class="noun">磷光</div>
+  <div class="snippet">浮士德死后灵魂发出的微弱闪光，梅非斯特借此指示魔鬼们捕捉灵魂的方向。&quot;磷光&quot;源自磷元素在空气中自燃发出的微弱冷光，此处被用来比喻灵魂的微弱可见性，并与希腊神话中普绪刻（灵魂）的蝴蝶意象相连，是歌德融合科学与神话的独特笔法。</div>
+</a>
+<a class="entry-item" href="神圣罗马帝国.html">
+  <div class="noun">神圣罗马帝国</div>
+  <div class="snippet">962年至1806年存在于中欧的封建帝国，以德意志地区为核心，皇帝由选帝侯选举产生。在《浮士德》第二部中，浮士德随梅非斯特来到神圣罗马帝国的朝廷，目睹了君臣会商国是、国家财政崩溃、发行纸币解决危机等一系列场景。伏尔泰曾讽刺其&quot;既不神圣，也不</div>
+</a>
+<a class="entry-item" href="神曲.html">
+  <div class="noun">神曲</div>
+  <div class="snippet">《神曲》（原名《喜剧》，薄伽丘后加&quot;神圣的&quot;）是意大利诗人但丁的代表作，创作于约1307至1321年流放期间。全诗共14,233行，以托斯卡纳方言写成，分为《地狱篇》《炼狱篇》《天堂篇》三部。但丁在古罗马诗人维吉尔（象征理性）和贝缇丽彩（象</div>
+</a>
+<a class="entry-item" href="神正论.html">
+  <div class="noun">神正论</div>
+  <div class="snippet">神正论（Theodicy）一词由莱布尼茨在1710年同名著作中首次提出，源自希腊语theos（神）和dike（正义），意为&quot;上帝的正义&quot;。该学说试图解答&quot;恶的问题&quot;：如果上帝是全知、全能、全善的，为何世界上仍有恶存在？莱布尼茨提出&quot;最好世界</div>
+</a>
+<a class="entry-item" href="神的形象.html">
+  <div class="noun">神的形象</div>
+  <div class="snippet">即Imago Dei，基督教神学核心概念，出自《圣经·创世记》1:26-27——神按自己的形象造人。在《浮士德》中，浮士德两次提及&quot;我肖似神的形象&quot;：第一次在召唤地灵前，体现其自信与骄傲；第二次在地灵消失后变为自嘲与反思，认识到人类自以为肖</div>
+</a>
+<a class="entry-item" href="神秘的合唱.html">
+  <div class="noun">神秘的合唱</div>
+  <div class="snippet">神秘的合唱（Chorus Mysticus）是《浮士德》全剧结尾的著名合唱段落，也是全剧的最终升华与哲学总结。原文为：&quot;一切无常者，不过是虚幻；力不胜任者，在此处实现；一切无可名，在此处完成；永恒的女性，领我们飞升。&quot;这八行诗概括了全剧的核</div>
+</a>
+<a class="entry-item" href="神谕的没落.html">
+  <div class="noun">神谕的没落</div>
+  <div class="snippet">普鲁塔克（Plutarch）的哲学对话录，拉丁文标题为《De Defectu Oraculorum》。探讨古希腊神谕（尤其是德尔斐神谕）为何逐渐衰微，提出人口减少、精灵中介说、自然呼气说等多种解释。文中包含著名的&quot;大神潘死了&quot;的故事。</div>
+</a>
+<a class="entry-item" href="祥云.html">
+  <div class="noun">祥云</div>
+  <div class="snippet">中国传统文化中象征祥瑞的云气，传说中为神仙所驾的彩云。在《浮士德》中描述海伦的衣裳化为祥云，裹住浮士德将他飘入高空，具有从凡俗升入神圣境界的象征意义。</div>
+</a>
+<a class="entry-item" href="福音.html">
+  <div class="noun">福音</div>
+  <div class="snippet">基督教核心概念，希腊原文euangelion意为&quot;好消息&quot;。在神学上指耶稣基督降世为人、受死复活，为人类成就救恩的好消息。福音的核心内容包括：基督为人的罪而死、被埋葬、第三天复活（哥林多前书15:1-4）。同时&quot;福音&quot;也指新约圣经中记载耶稣</div>
+</a>
+<a class="entry-item" href="科塔出版社.html">
+  <div class="noun">科塔出版社</div>
+  <div class="snippet">德国历史上最负盛名的出版机构之一，由约翰·格奥尔格·科塔于1659年在蒂宾根创立。在德国古典时期达到世界性声誉，长期与歌德和席勒合作，出版了歌德的作品全集和《浮士德》。该社还出版了赫尔德、谢林、荷尔德林、克莱斯特等德国文学巨匠的作品。现以K</div>
+</a>
+<a class="entry-item" href="穆沙盖特.html">
+  <div class="noun">穆沙盖特</div>
+  <div class="snippet">希腊语意为缪斯的头头，即阿波罗之别名。亨宁格斯在1798-1799年所编的诗集名，企图与席勒编的《诗神年鉴》唱对台戏。</div>
+</a>
+<a class="entry-item" href="空蜗牛壳.html">
+  <div class="noun">空蜗牛壳</div>
+  <div class="snippet">梅非斯特召唤出来的古代幽灵骑士、国王、皇帝被比喻为空蜗牛壳。他们虽然穿着完整的盔甲，看似威风凛凛，但内里已是空壳，如同蜗牛舍弃的空壳。这一比喻讽刺封建旧秩序已失去实质内容，徒具其表，是中世纪幽灵的空洞再现。</div>
+</a>
+<a class="entry-item" href="窄门.html">
+  <div class="noun">窄门</div>
+  <div class="snippet">基督教《圣经》中的重要概念，出自《马太福音》第7章13—14节：&quot;你们要进窄门。因为引到灭亡，那门是宽的，路是大的，进去的人也多；引到永生，那门是窄的，路是小的，找着的人也少。&quot;喻指通往永生的道路需要努力和自我约束，与宽门大路形成鲜明对比，</div>
+</a>
+<a class="entry-item" href="签名.html">
+  <div class="noun">签名</div>
+  <div class="snippet">浮士德中皇帝在诏书上签署姓名以确认其法律效力的行为。皇帝在确定封赏文书之后需要用神圣的签名加以证明，这是中世纪君主制中确认法律文件效力的重要程序。</div>
+</a>
+<a class="entry-item" href="精灵.html">
+  <div class="noun">精灵</div>
+  <div class="snippet">歌德《浮士德》中的重要概念，德文对应词为Geist。剧中浮士德在郊外面对自然美景时，呼唤大气中的精灵降临，带领他进入多彩的新生活。在德国浪漫主义和歌德的作品中，精灵（Geist）既是超自然存在（如地灵Erdgeist），也是人内在的精神力量</div>
+</a>
+<a class="entry-item" href="约伯记.html">
+  <div class="noun">约伯记</div>
+  <div class="snippet">《约伯记》是《圣经·旧约》第18卷，属于诗歌智慧书。全书以&quot;义人为何受苦&quot;为核心主题，讲述义人约伯在失去财产、儿女和健康后，与三位朋友辩论苦难的意义，最终神从旋风中亲自回答约伯。歌德《浮士德》天上序幕的构思，包括天主与梅非斯特关于浮士德的赌</div>
+</a>
+<a class="entry-item" href="约翰一书.html">
+  <div class="noun">约翰一书</div>
+  <div class="snippet">《圣经·新约》第23卷，使徒约翰约公元98年写于以弗所，核心教导&quot;神就是光&quot;、&quot;神就是爱&quot;、&quot;神就是生命&quot;，旨在帮助信徒持守真理、彼此相爱、确知永生。</div>
+</a>
+<a class="entry-item" href="约翰福音.html">
+  <div class="noun">约翰福音</div>
+  <div class="snippet">《圣经·新约》第四部福音书，由使徒约翰约公元85-98年写成，强调耶稣的神性——&quot;太初有道，道与神同在&quot;，记录了耶稣所行的七大神迹和长篇教导，约90%内容为其他福音书所无。</div>
+</a>
+<a class="entry-item" href="纹章.html">
+  <div class="noun">纹章</div>
+  <div class="snippet">欧洲中世纪发展起来的盾牌识别标记体系，广义上也指古希腊盾牌上的装饰图案。在《浮士德》中，福耳库阿斯向合唱队解释纹章，以埃阿斯盾牌上的盘蛇、七将攻忒拜时盾牌上的图样为例，描述城堡大厅中悬挂的狮子、老鹰、玫瑰等纹章图案。</div>
+</a>
+<a class="entry-item" href="经验.html">
+  <div class="noun">经验</div>
+  <div class="snippet">《浮士德》中的核心哲学概念之一。学士在对话中猛烈抨击经验的价值，称&quot;经验！就像泡沫和尘屑！它跟精神难以匹敌&quot;，否定一切经验知识的可靠性。这一对话反映了歌德时代关于经验与理性、理论与实践的哲学争论。学士的极端立场与浮士德本人从书斋走向经验世界</div>
+</a>
+<a class="entry-item" href="结晶的人.html">
+  <div class="noun">结晶的人</div>
+  <div class="snippet">《浮士德》中梅非斯特对荷蒙库路斯的戏称，也指瓦格纳通过人工方式创造的生命体。梅非斯特以讽刺的口吻说&quot;从前我在外面周游各处，也曾亲眼见过结晶的人&quot;，暗示&quot;结晶的人&quot;即人造人/荷蒙库路斯。此概念借用了自然科学的比喻——正如物质可以通过结晶过程形</div>
+</a>
+<a class="entry-item" href="绝对主义.html">
+  <div class="noun">绝对主义</div>
+  <div class="snippet">《浮士德》中梅非斯特对学士的告诫用语。梅非斯特看到学士变得决断而泼辣，讽刺地提醒他&quot;可别做绝对主义者回家&quot;，意即不要过于武断专横、自以为是。此处的&quot;绝对主义&quot;指一种极端的主体性哲学立场——学士认为世界由自我创造，一切权威和传统都可以被否定。</div>
+</a>
+<a class="entry-item" href="缪斯.html">
+  <div class="noun">缪斯</div>
+  <div class="snippet">希腊神话中主司艺术与科学的九位文艺女神的总称，为宙斯与记忆女神谟涅摩叙涅所生。英语&quot;music&quot;一词即源于缪斯。在西方文学传统中，诗人常呼告缪斯以求灵感。歌德在《浮士德·舞台序幕》中借团长之口质问诗人为何&quot;去麻烦缪斯&quot;。</div>
+</a>
+<a class="entry-item" href="羊人.html">
+  <div class="noun">羊人</div>
+  <div class="snippet">即萨提尔（Satyr），希腊神话中的森林之神，半人半羊形象——长着羊角、羊腿和尾巴。性格好色、嗜酒、狂欢，是酒神狄俄倪索斯的随从。古希腊悲剧演出后常加演轻松诙谐的&quot;羊人剧&quot;以调剂气氛。</div>
+</a>
+<a class="entry-item" href="美惠女神.html">
+  <div class="noun">美惠女神</div>
+  <div class="snippet">美惠女神（希腊语：Χάριτες，Charites，意为&quot;恩惠&quot;；罗马对应：Gratiae）是希腊神话中司妩媚、优雅和美丽的三位女神，体现人生一切美好事物。根据赫西俄德《神谱》，美惠三女神为阿格莱亚（光辉）、欧佛洛绪涅（喜悦）和塔勒亚（荣华</div>
+</a>
+<a class="entry-item" href="老磨坊.html">
+  <div class="noun">老磨坊</div>
+  <div class="snippet">比喻尼古拉经营出版事业的出版社。尼古拉曾将旧纸回炉，将过时的东西改头换面出版。他曾出版《德国百科丛书》，作为其文学批评的喉舌。歌德在《浮士德》中以此讽刺尼古拉。</div>
+</a>
+<a class="entry-item" href="耶稣会士.html">
+  <div class="noun">耶稣会士</div>
+  <div class="snippet">天主教修会耶稣会的成员。尼古拉以坚决反对耶稣会士闻名，在《浮士德》中好奇的游客（尼古拉）被描述为侦察耶稣会士。</div>
+</a>
+<a class="entry-item" href="肉体.html">
+  <div class="noun">肉体</div>
+  <div class="snippet">与灵魂相对的物质生命载体。在《浮士德》第五幕中，浮士德死后，梅非斯特说&quot;肉体躺下，灵魂却想逃走&quot;，意指浮士德的肉体已死亡，但灵魂试图逃离魔鬼的控制。肉体的消亡与灵魂的争夺构成该幕的核心冲突。</div>
+</a>
+<a class="entry-item" href="肋骨.html">
+  <div class="noun">肋骨</div>
+  <div class="snippet">《圣经·创世记》中上帝用亚当的一条肋骨创造了夏娃。歌德在《浮士德》注释中以此解释夏娃的来历，说明莉莉特被夏娃顶替的原因。</div>
+</a>
+<a class="entry-item" href="腓尼基人.html">
+  <div class="noun">腓尼基人</div>
+  <div class="snippet">古代地中海东岸的航海商业民族（今黎巴嫩和叙利亚沿海一带），自称为迦南人。以航海经商闻名，曾完成环绕非洲的航行。他们最大的贡献是创造了22个腓尼基字母，成为后世几乎所有西方字母文字的祖先。在《浮士德》中，日耳曼尼库斯前往萨摩特拉刻岛查询腓尼基</div>
+</a>
+<a class="entry-item" href="自然.html">
+  <div class="noun">自然</div>
+  <div class="snippet">歌德自然哲学的核心概念。在《浮士德》的本段中，瓦格纳提到&quot;人们对于自然的神秘常大加赞称&quot;，荷蒙库路斯也说&quot;自然物总是感到宇宙不宽&quot;。歌德把自然视为一个有机的、充满生命力的整体，人既是自然的一部分，又试图通过理性超越自然。浮士德与梅非斯特的赌</div>
+</a>
+<a class="entry-item" href="自然哲学.html">
+  <div class="noun">自然哲学</div>
+  <div class="snippet">歌德时代关于自然本质的哲学探讨，在《浮士德》中通过泰勒斯（水为本原）与阿那克萨戈拉（火/心灵为本原）的辩论体现。反映了歌德本人对自然有机整体观的思考，以及当时地质学中水成论与火成论的争论。</div>
+</a>
+<a class="entry-item" href="自由土地.html">
+  <div class="noun">自由土地</div>
+  <div class="snippet">浮士德晚年填海造陆事业的核心理想——&quot;自由的人民生活在自由的土地上&quot;。浮士德认识到只有每天争取自由和生存的人，才配享有二者的权利。这一概念代表浮士德从个人欲望追求到为人类集体福祉奋斗的最终升华，也是全剧&quot;智慧的最后总结&quot;。</div>
+</a>
+<a class="entry-item" href="自由的大海使精神解放.html">
+  <div class="noun">自由的大海使精神解放</div>
+  <div class="snippet">梅非斯特在《浮士德》第五幕中宣扬的海洋自由理念，认为大海不受陆地规则的束缚，可以自由地进行劫掠、贸易和扩张。此言为三勇士的海盗行为辩护，反映了近代海洋文明对传统陆地秩序的冲击，以及海洋自由名义下的道德失范。</div>
+</a>
+<a class="entry-item" href="荣光.html">
+  <div class="noun">荣光</div>
+  <div class="snippet">神圣的光辉与荣耀，在《浮士德》中指从天国照射下来的神性光芒。文中&quot;荣光自右上方照临&quot;标志着天使的降临，是神恩与救赎的象征，驱散地狱的黑暗，为浮士德灵魂的拯救铺路。</div>
+</a>
+<a class="entry-item" href="药效咒语.html">
+  <div class="noun">药效咒语</div>
+  <div class="snippet">魔女在浮士德饮下药酒后给他的一个咒语，称经常哼唱可增强药效。此咒语与魔女念诵的女巫的九九表（Hexen-Einmaleins）有关，是一种增强魔药效力的歌谣。</div>
+</a>
+<a class="entry-item" href="萨克森人.html">
+  <div class="noun">萨克森人</div>
+  <div class="snippet">古代日耳曼人的一支，原居北欧日德兰半岛及德国西北部。部分于5-6世纪渡海征服不列颠，形成盎格鲁-撒克逊人，是现代英格兰人的祖先；留在欧洲大陆的萨克森人后来形成德意志的重要支系。在《浮士德》中，浮士德命萨克森人应战墨塞涅。</div>
+</a>
+<a class="entry-item" href="蚁族.html">
+  <div class="noun">蚁族</div>
+  <div class="snippet">希腊神话中由蚂蚁变来的人类族群，与密耳弥冬人关联。在《浮士德》的古典瓦尔普吉斯之夜中，作为小人族之一出现，与皮格迈俄族、拇指族并列，从事搬运铁料等工作。 --- 希腊神话中的密耳弥多涅人（Myrmidons），由蚂蚁变成的人类民族。宙斯应埃</div>
+</a>
+<a class="entry-item" href="蝾螈.html">
+  <div class="noun">蝾螈</div>
+  <div class="snippet">在欧洲中世纪传说和炼金术中被称为沙罗曼达（Salamander），代表火元素的精灵，与温蒂妮（水）、葛罗姆（地）、希尔芙（风）并列。帕拉塞尔斯将其确立为火精。在《浮士德》中，蝾螈出现在瓦尔普吉斯之夜的黑暗自然场景中，作为山间神秘生物的一员。</div>
+</a>
+<a class="entry-item" href="血签契约.html">
+  <div class="noun">血签契约</div>
+  <div class="snippet">浮士德与魔鬼梅非斯特之间用血液签署的灵魂交易契约，是西方文学中&quot;浮士德式交易&quot;（Faustian bargain）的原型。在歌德《浮士德》中，梅非斯特要求浮士德用一滴血在契约上签名，并称&quot;血是一种特别的液体&quot;，象征灵魂契约的神圣与不可逆性。</div>
+</a>
+<a class="entry-item" href="诗.html">
+  <div class="noun">诗</div>
+  <div class="snippet">在《浮士德》假面舞会场景中，车童自称&quot;我就是诗&quot;，将诗歌人格化。诗被描绘为挥霍家珍的创造者，与财富之神普路托斯平起平坐。诗代表精神创造力和慷慨施予的力量，其赠品虽看似虚幻（化为甲虫蝴蝶），但实质上是更高层次的精神财富。这一设定体现了歌德对诗</div>
+</a>
+<a class="entry-item" href="诺尔曼人.html">
+  <div class="noun">诺尔曼人</div>
+  <div class="snippet">又译诺曼人，指公元8-11世纪从北欧斯堪的纳维亚南下侵扰欧洲沿海的北方日耳曼人（维京人）。定居法国诺曼底后形成诺曼人，1066年威廉征服英格兰。在《浮士德》中，浮士德命诺尔曼人歼灭水师、扩充阿耳戈利斯地盘。</div>
+</a>
+<a class="entry-item" href="谁有力量，谁就有权利.html">
+  <div class="noun">谁有力量，谁就有权利</div>
+  <div class="snippet">梅非斯特在三勇士汇报征服成果时所说的&quot;强权即公理&quot;式宣言，体现了梅非斯特信奉的丛林法则和虚无主义世界观。这一思想贯穿于梅非斯特&quot;永远否定的精灵&quot;的性格之中，也是对近代殖民扩张中弱肉强食逻辑的揭露。</div>
+</a>
+<a class="entry-item" href="赦罪者.html">
+  <div class="noun">赦罪者</div>
+  <div class="snippet">指耶稣基督，即《圣经》中为人类赎罪而被钉死在十字架上的救世主。在《浮士德》中，浮士德以耶稣受难仍不足以替一切人赎罪来质问梅非斯特，表达了对格蕾辛命运的痛心和对神正论的怀疑。</div>
+</a>
+<a class="entry-item" href="超人.html">
+  <div class="noun">超人</div>
+  <div class="snippet">尼采在《查拉图斯特拉如是说》中提出的核心哲学概念（Übermensch），指人通过自我克服、自我超越而达到的理想形象。在《浮士德》中，地灵用&quot;超人&quot;一词嘲讽浮士德——此前浮士德自诩超越凡人、肖似神祇，但在面对地灵的真实力量时却显得畏怯渺小。</div>
+</a>
+<a class="entry-item" href="路迦福音.html">
+  <div class="noun">路迦福音</div>
+  <div class="snippet">《路迦福音》（又译《路加福音》）是《新约圣经》四福音书之一，由医生路加所写，约成书于公元65至80年，共24章。该书以对耶稣出生和童年最详细的记述著称，包含好撒玛利亚人、浪子回头等独有故事。强调耶稣的人性、祷告、圣灵和妇女的角色。第1章第1</div>
+</a>
+<a class="entry-item" href="达克堤洛族.html">
+  <div class="noun">达克堤洛族</div>
+  <div class="snippet">希腊神话中的古老精灵族群，其名希腊语意为&quot;手指&quot;。传说女神瑞亚分娩时手指插入泥土而生出他们。他们被认为是铁的发现者和最早的冶金匠人，发明了用火加工金属的工艺，并将金属工艺、数学和字母传授给人类。有时也被视为奥林匹克运动会的创建者。</div>
+</a>
+<a class="entry-item" href="达克提利族.html">
+  <div class="noun">达克提利族</div>
+  <div class="snippet">希腊神话中住在伊达山的古老精灵族群，名字意为&quot;手指&quot;。与大母神瑞亚相关，被认为是铁器的发现者和最早的金属加工者，也发明了音乐韵律。被描述为侏儒形态的精怪。在《浮士德》注解中提及他们与皮格迈俄族被混同。</div>
+</a>
+<a class="entry-item" href="返老还童.html">
+  <div class="noun">返老还童</div>
+  <div class="snippet">《浮士德》第六场的核心主题。梅非斯特为年迈的浮士德提供两种方案：一是到田间耕耘、过简朴劳动生活的天然良方，二是找魔女调制汤药的魔法途径。浮士德拒绝劳动生活而选择魔女汤药，饮后恢复青春。这一情节象征浮士德摆脱中世纪书斋禁锢、重新投入世俗人生与</div>
+</a>
+<a class="entry-item" href="进化论.html">
+  <div class="noun">进化论</div>
+  <div class="snippet">歌德在《浮士德》中表达了进化论的观点，他是进化论的先驱者之一。歌德认为动植物都存在原形态（Urform），动物的原形是脊椎骨，植物的原形是叶子，都是从原形经过演变进化而来。1790年他发表《植物的变形》，指出花的名部是叶形的演变，头壳是上部</div>
+</a>
+<a class="entry-item" href="追思弥撒.html">
+  <div class="noun">追思弥撒</div>
+  <div class="snippet">天主教为悼念逝者而举行的弥撒仪式，拉丁文称Requiem（安魂曲），全称Missa pro Defunctis（亡者弥撒）。名称源自进堂咏首句&quot;Requiem aeternam dona eis, Domine&quot;（主啊，请赐予他们永恒的安息</div>
+</a>
+<a class="entry-item" href="追放电光.html">
+  <div class="noun">追放电光</div>
+  <div class="snippet">浮士德中大主教用来威胁皇帝的比喻说法。大主教警告皇帝，教皇若知道他与魔鬼结盟，将用追放的电光毁灭这有罪的国度。电光比喻教皇的破门律（绝罚令）如雷电般迅速而毁灭性的惩罚力量。</div>
+</a>
+<a class="entry-item" href="逻各斯.html">
+  <div class="noun">逻各斯</div>
+  <div class="snippet">逻各斯（Logos）是古希腊哲学中的核心概念，源自希腊语动词&quot;legein&quot;（言说），本义为&quot;言辞&quot;、&quot;理性&quot;、&quot;尺度&quot;。赫拉克利特最早将其引入哲学，指支配宇宙万物的普遍规律与理性原则。斯多亚学派将其理解为宇宙理性，犹太哲学家斐洛视其为神圣</div>
+</a>
+<a class="entry-item" href="酒神狂女.html">
+  <div class="noun">酒神狂女</div>
+  <div class="snippet">即迈那得斯（Maenads），古希腊宗教中侍奉酒神狄俄倪索斯的女性信徒团体。&quot;迈那得斯&quot;一词直译为&quot;发狂的人&quot;或&quot;狂女&quot;。她们头戴常春藤冠、身披鹿皮、手持酒神杖，在祭典中饮酒狂欢至迷狂状态，在山林中疯狂舞蹈，甚至撕裂野兽生食其肉。在《浮士德</div>
+</a>
+<a class="entry-item" href="金星夫人.html">
+  <div class="noun">金星夫人</div>
+  <div class="snippet">即占星学中的金星（Venus），以爱与美之神维纳斯命名。在炼金术—占星传统中，金星对应金属铜。星士说&quot;金星夫人使你们如痴如醉，从早到晚向你们媚眼乱飞&quot;，形容金星的爱情与美感影响力。歌德在此将行星人格化，赋予其诗意魅力。</div>
+</a>
+<a class="entry-item" href="金银会合.html">
+  <div class="noun">金银会合</div>
+  <div class="snippet">炼金术与占星学中的重要概念。星士预言&quot;当月姑跟太阳相亲相爱，金银会合，就出现快乐的世界&quot;，月姑（月亮）对应白银，太阳对应黄金，金银会合指月亮与太阳在占星学上的特殊交汇。在炼金术中，金银融合象征完美的哲人石和终极的财富转化。此预言为梅非斯特的</div>
+</a>
+<a class="entry-item" href="铁翅鸟.html">
+  <div class="noun">铁翅鸟</div>
+  <div class="snippet">希腊神话中的斯廷法利斯湖怪鸟（Stymphalian Birds），长着铁/铜质的翅膀、喙和利爪，抖落的羽毛如飞箭般致命。它们是战神阿瑞斯的宠物，后被赫拉克勒斯用铜钹巨响驱赶，作为其十二功绩中的第六项。</div>
+</a>
+<a class="entry-item" href="铸钱.html">
+  <div class="noun">铸钱</div>
+  <div class="snippet">浮士德中皇帝赋予五位忠良的经济特权之一。领主在自己的封地内拥有铸造货币的权力，这是封建制度下君主赏赐给最高贵族的重大经济特权，意味着领主在其领地内拥有独立财政权。</div>
+</a>
+<a class="entry-item" href="铿墨里人.html">
+  <div class="noun">铿墨里人</div>
+  <div class="snippet">希腊神话中居住在永恒黑暗之地的神秘民族。荷马在《奥德赛》中描述他们生活在大洋河彼岸的世界尽头，终年被迷雾笼罩，阳光永远无法照耀——即&quot;黑暗之国&quot;。历史上也确有铿墨里人（Cimmerians），为黑海北岸的印欧游牧民族，公元前7世纪曾入侵小亚</div>
+</a>
+<a class="entry-item" href="阿瓦里蒂娅.html">
+  <div class="noun">阿瓦里蒂娅</div>
+  <div class="snippet">拉丁语Avaritia的音译，意为&quot;贪吝&quot;（阴性名词）。在《浮士德》假面舞会中，这是瘦子角色（梅菲斯特的假面）的旧名。他自述在旧时妇女勤俭持家时叫此名，后来社会风气变化，妇女转向奢侈浪费，他便改名为德语阳性名词&quot;贪吝&quot;（Geiz）。这一变化</div>
+</a>
+<a class="entry-item" href="隘道.html">
+  <div class="noun">隘道</div>
+  <div class="snippet">狭窄险要的山道，战场上的战略要地。在《浮士德》的战争中，如果敌人占据隘道，皇帝的军队就将陷于困境。这是关系到战局胜负的关键地形。</div>
+</a>
+<a class="entry-item" href="雌雄同体.html">
+  <div class="noun">雌雄同体</div>
+  <div class="snippet">指荷蒙库路斯（Homunculus）被泰勒斯判断为兼具两性特征的存在（Hermaphrodite）。在炼金术传统中象征对立统一，预示其需要通过海洋自然过程完成生命的完整生成。</div>
+</a>
+<a class="entry-item" href="雾带.html">
+  <div class="noun">雾带</div>
+  <div class="snippet">即Fata Morgana（复杂蜃景），一种出现在意大利西西里岛墨西拿海峡的复杂海市蜃楼现象。名称源自亚瑟王传说中的女巫摩根勒菲（Morgan le Fay），传说她会在墨西拿海峡上空制造空中城堡的幻象。在《浮士德》中，浮士德以此比喻战场上</div>
+</a>
+<a class="entry-item" href="音乐师.html">
+  <div class="noun">音乐师</div>
+  <div class="snippet">在《浮士德》瓦尔普吉斯之夜的梦中，担任乐队演奏的全是嗡嗡的昆虫、青蛙、蟋蟀等自然界的生物，以此讽刺业余音乐家和诗人的不成熟作品。</div>
+</a>
+<a class="entry-item" href="顺势疗法.html">
+  <div class="noun">顺势疗法</div>
+  <div class="snippet">又称类似疗法或同类疗法，由德国医生萨穆埃尔·哈涅曼（Samuel Hahnemann）于18世纪末创立的一种替代医学体系。核心原则为&quot;以同治同&quot;（能引起某种症状的物质也能治愈该症状）和&quot;无穷小定律&quot;（反复稀释后疗效反而增强）。科学界普遍认为</div>
+</a>
+<a class="entry-item" href="马人.html">
+  <div class="noun">马人</div>
+  <div class="snippet">又译半人马，希腊神话中半人半马的传说生物，上半身为人的躯干，下半身为马的身体。通常形象为粗野狂暴，但有例外——喀戎智慧博学，是众多希腊英雄的导师。在《浮士德》注解中提及刻戎为马人族。</div>
+</a>
+<a class="entry-item" href="马太福音.html">
+  <div class="noun">马太福音</div>
+  <div class="snippet">《新约圣经》的第一卷书，以耶稣十二门徒之一的马太名义写成。全书共28章，详细记载了耶稣基督的家谱、降生、传道、受难与复活。第27章着重描写耶稣被钉十字架及受难的经过，包括抹大拉的马利亚等妇女在场观看的情节。其特色是强调耶稣应验了旧约先知的预</div>
+</a>
+<a class="entry-item" href="马太福音第四章.html">
+  <div class="noun">马太福音第四章</div>
+  <div class="snippet">圣经新约《马太福音》第四章，记载耶稣在旷野禁食四十昼夜后受魔鬼三次试探：（1）将石头变食物，（2）从殿顶跳下，（3）得万国荣华。耶稣三次引用《申命记》经文抵挡魔鬼。随后耶稣开始在加利利传道，呼召彼得、安得烈、雅各和约翰为首批门徒。歌德在《浮</div>
+</a>
+<a class="entry-item" href="马耳西族.html">
+  <div class="noun">马耳西族</div>
+  <div class="snippet">古代意大利中部的奥斯坎-翁布里亚语族部落，居住在富奇努斯湖东岸地区（今阿布鲁佐大区马尔西卡）。部落名称源于战神马尔斯（Mars），崇拜医护女神安齐蒂亚。公元前304年与罗马结盟，后在同盟者战争中与罗马作战，战后获罗马公民权。另有同名的日耳曼</div>
+</a>
+<a class="entry-item" href="马蹄足.html">
+  <div class="noun">马蹄足</div>
+  <div class="snippet">恶魔的传统标志性特征之一。梅非斯特在传说中有一只马蹄（马脚），但在《浮士德》中他着骑士装束将其遮掩。在魔女丹房场景中，魔女起初没认出梅非斯特，因为他以骑士打扮出现，但她本应对魔鬼的马蹄有所察觉。马蹄足象征魔鬼的兽性与堕落本质。</div>
+</a>
+<a class="entry-item" href="马魔足.html">
+  <div class="noun">马魔足</div>
+  <div class="snippet">魔鬼的显著特征之一——恶魔有一只马蹄。《浮士德》中梅非斯特虽然着骑士装束以掩盖魔鬼身份，但他的一足实际上是马蹄形，成为魔鬼本相的标志。</div>
+</a>
+<a class="entry-item" href="鬼火.html">
+  <div class="noun">鬼火</div>
+  <div class="snippet">德国民间传说中在沼泽或夜间出现的神秘火光，德语称Irrlicht（迷途之光），被认为会引诱行人迷路。在《浮士德》瓦尔普吉斯之夜场景中，鬼火为浮士德和梅非斯特带路前往布罗肯山。 --- 民间传说中在夜间沼泽地出现的磷光火焰，又称&quot;鬼火&quot;或&quot;磷</div>
+</a>
+<a class="entry-item" href="魔女.html">
+  <div class="noun">魔女</div>
+  <div class="snippet">欧洲民间传说中的女巫，在《浮士德》中大量出现于瓦尔普吉斯之夜场景。传说她们每年4月30日夜晚骑扫帚飞往布罗肯山参加魔鬼的狂欢集会。歌德笔下的魔女合唱充满粗俗、狂欢和魔法色彩，是德国民间传说与文学结合的经典形象。 --- 欧洲民间传说中拥有超</div>
+</a>
+<a class="entry-item" href="魔术.html">
+  <div class="noun">魔术</div>
+  <div class="snippet">浮士德在玛加蕾特房间中自省时使用的意象。我被魔术的妖雾罩住——这里的魔术的妖雾指情感的魔力，让原本为寻欢作乐而来的浮士德被房间中纯洁真挚的生活气息所打动，内心产生震撼与迷失，不是指梅非斯特的魔法。</div>
+</a>
+<a class="entry-item" href="魔术之邦.html">
+  <div class="noun">魔术之邦</div>
+  <div class="snippet">《浮士德》中与梦幻之国并列的概念，指浮士德和梅非斯特在瓦尔普吉斯之夜所进入的魔法领域。在这里自然法则被打破，鬼怪、女巫和恶魔自由活动，是歌德笔下一个充满奇幻色彩的超现实空间。</div>
+</a>
+<a class="entry-item" href="魔神.html">
+  <div class="noun">魔神</div>
+  <div class="snippet">歌德《浮士德》中瓦格纳警告浮士德不要召唤的四方妖魔。瓦格纳描述了四个方向的魔神：北方有锐齿魔神，舌如利箭刺人；东方魔神使万物枯干，从肺里摄取养分；南方来自沙漠之地的魔神，在头上烧起烈火；西方群魔先以凉爽诱人，后将田野淹没。这些魔神爱窃听、幸</div>
+</a>
+<a class="entry-item" href="鸳梦.html">
+  <div class="noun">鸳梦</div>
+  <div class="snippet">鸳鸯梦的简称，比喻情侣的美梦或爱情幻境。浮士德在玛加蕾特房间中感叹自己本为寻欢作乐而来却像在鸳梦之中融解，表现了他从情欲冲动到内心情感被纯真氛围软化的心理转变。</div>
+</a>
+<a class="entry-item" href="黑暗.html">
+  <div class="noun">黑暗</div>
+  <div class="snippet">浮士德失明后遭遇的外部环境状态，也是忧愁加诸浮士德的精神状态。在《浮士德》第五幕中，忧愁宣称&quot;永恒的黑暗笼罩住他，太阳不升起也不落下&quot;。但浮士德失明后宣称&quot;黑夜逼来，好像越来越深沉，可是心中却有光明在照耀&quot;，体现了精神光明对物理黑暗的超越。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>

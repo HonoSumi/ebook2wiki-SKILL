@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">物件 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+物件
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">141 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="七印封严的书卷.html">
+  <div class="noun">七印封严的书卷</div>
+  <div class="snippet">出自《圣经·启示录》第5章第1节：&quot;我看见坐宝座的右手中有书卷，里外都写着字，用七印封严了。&quot;象征神对人类历史的终极计划，是难以参透的奥秘。在德语中经马丁·路德的翻译成为习语&quot;ein Buch mit sieben Siegeln&quot;，意为极</div>
+</a>
+<a class="entry-item" href="七弦琴.html">
+  <div class="noun">七弦琴</div>
+  <div class="snippet">即古希腊里拉琴（Lyre），拨弦乐器，通常有七根弦，由共鸣箱、双臂和横杆构成U形框架。在《浮士德》中为欧福里翁的遗物，福耳库阿斯拾起后称可用以孝敬诗人。</div>
+</a>
+<a class="entry-item" href="七里靴.html">
+  <div class="noun">七里靴</div>
+  <div class="snippet">欧洲民间传说和童话中的经典魔法道具，穿上这种靴子的人每走一步就能跨出约21英里（33.6公里），速度极快。因法国作家夏尔·佩罗的童话《小拇指》而广为人知，故事中小拇指从食人巨怪脚上偷走七里靴并用它致富。在现代语境中，&quot;七里靴&quot;常被用作习语，</div>
+</a>
+<a class="entry-item" href="三叉戟.html">
+  <div class="noun">三叉戟</div>
+  <div class="snippet">三叉戟（Trident）是希腊神话中海神波塞冬的标志性武器，一种有三个叉的长柄兵器。波塞冬挥动三叉戟可掀起巨浪、引发地震。罗得岛原始民族曾为海神锻造三叉戟作为镇海的权杖，象征海神的至高权威。</div>
+</a>
+<a class="entry-item" href="三脚香炉.html">
+  <div class="noun">三脚香炉</div>
+  <div class="snippet">古希腊宗教仪式中的重要器物，尤其用于德尔斐阿波罗神庙。女祭司（皮媞亚）坐在安放在地裂缝隙上的三脚架上，吸入从地底升起的乙烯气体，进入通灵状态传达神谕。在希腊神话中自古即作为预言之力的象征。本书中作为母亲们的神力的象征。</div>
+</a>
+<a class="entry-item" href="五角星.html">
+  <div class="noun">五角星</div>
+  <div class="snippet">又称五芒星，人类历史上最古老的符号之一，自美索不达米亚文明起已有五千年历史。古希腊毕达哥拉斯学派视为健康与知识的象征；中世纪神秘学中作为驱魔护符，可封印恶魔；倒置五角星则被黑魔法和撒旦教用作邪恶象征。歌德笔下浮士德用五角星困住梅非斯特。</div>
+</a>
+<a class="entry-item" href="人面狮.html">
+  <div class="noun">人面狮</div>
+  <div class="snippet">即斯芬克斯（Sphinx），希腊神话中的有翼怪物，狮身人面，以谜语考验路人。源于古埃及，在希腊神话中变为雌性邪恶之物。其著名谜语&quot;什么动物早上四条腿、中午两条腿、晚上三条腿&quot;被俄狄浦斯猜中后跳崖而死。在《浮士德》中，浮士德向人面狮打听海伦的</div>
+</a>
+<a class="entry-item" href="伪旗.html">
+  <div class="noun">伪旗</div>
+  <div class="snippet">反叛皇帝（伪帝）军队所打出的旗帜。侦察兵回报说伪帝的群众&quot;跟着伪旗迎风招展，一切天生的绵羊&quot;，讽刺民众盲目追随伪帝的旗帜如同驯良的绵羊。该意象与伪帝的出现一起构成了对政治叛乱中盲从现象的批判。</div>
+</a>
+<a class="entry-item" href="伽拉忒亚的贝车.html">
+  <div class="noun">伽拉忒亚的贝车</div>
+  <div class="snippet">伽拉忒亚的贝车是海神女伽拉忒亚（Galatea）所乘的贝壳战车。伽拉忒亚为海神涅柔斯的五十个女儿中最美的一位。荷蒙库路斯在爱与美的魅力的驱动下，向伽拉忒亚的贝车撞去，撞破他的玻璃瓶，火与水交融，与海洋成亲。</div>
+</a>
+<a class="entry-item" href="假面.html">
+  <div class="noun">假面</div>
+  <div class="snippet">假面舞会中的面具，在《浮士德》中具有深刻的象征意义。司仪指出&quot;要透过外壳，追究核心，这不是你干司仪的专长&quot;。面具象征着表象与真实之间的张力、社会角色的伪装，以及人类在公共场合隐藏真实自我的普遍现象。普路托斯（浮士德）和贪吝（梅菲斯特）均以假</div>
+</a>
+<a class="entry-item" href="刻罗涅龟甲.html">
+  <div class="noun">刻罗涅龟甲</div>
+  <div class="snippet">乌龟壳（Chelone为希腊语龟之意）。刻罗涅在希腊神话中是一个因偷懒被赫尔墨斯变成乌龟的仙女。在《浮士德》中描述卡柏洛诸神乘坐之物散发的光芒。</div>
+</a>
+<a class="entry-item" href="刻耳柏洛斯.html">
+  <div class="noun">刻耳柏洛斯</div>
+  <div class="snippet">希腊神话中看守冥界入口的三头犬，为堤丰与厄喀德娜所生。它允许死者灵魂进入冥界，但阻止任何人出去。赫拉克勒斯活捉它是其十二功绩之一。</div>
+</a>
+<a class="entry-item" href="叉棍.html">
+  <div class="noun">叉棍</div>
+  <div class="snippet">欧洲民间传说中女巫和魔鬼使用的工具之一，与扫帚并列为女巫的交通工具。在西方文化意象中，干草叉（pitchfork）常与魔鬼撒旦联系在一起，女巫与魔鬼缔约后也使用叉棍参加魔女集会的飞行。 --- 叉状的长棍，欧洲民间传说中魔女飞行的骑乘工具之</div>
+</a>
+<a class="entry-item" href="双乌.html">
+  <div class="noun">双乌</div>
+  <div class="snippet">梅非斯特的两只乌鸦信使，也被称为双乌。原为北欧大神奥丁的两个随从胡金（Huginn）和穆宁（Muninn），后转义为魔鸟归梅非斯特所有。梅非斯特派遣它们执行多项魔法任务：向水精借水波之影、向侏儒锻铁场索取火种等。乌鸦的双乌身份凸显了其作为魔</div>
+</a>
+<a class="entry-item" href="周报.html">
+  <div class="noun">周报</div>
+  <div class="snippet">每周出版一次的报纸或刊物。世界最早的定期报刊即周报，1609年诞生于德国（《通告——报道或新闻报》）。在《浮士德》中，玛尔太要求将丈夫的死讯刊登在周报上作为讣闻。原著注指出，周报和死亡证明书在浮士德（16世纪）的时代尚无其事，这是歌德有意为</div>
+</a>
+<a class="entry-item" href="哲人之石.html">
+  <div class="noun">哲人之石</div>
+  <div class="snippet">又称贤者之石、点金石，拉丁语lapis philosophorum，是西方炼金术传说中的终极物质。传说哲人之石是一种红色粉末或石头，能将贱金属（如铅、铜）转化为黄金，也能制成长生不老的万能药。在《浮士德》注释中，哲人之石被描述为附在蒸馏器管</div>
+</a>
+<a class="entry-item" href="嘉德勋章.html">
+  <div class="noun">嘉德勋章</div>
+  <div class="snippet">英国最高勋位勋章，全称&quot;最尊贵的嘉德勋章&quot;。相传14世纪英王爱德华三世在一次舞会上见到情妇索尔士布利伯爵夫人掉落蓝色袜带，后于1348年创立此勋章。拜伦、莎士比亚诗中均常提到。歌德在《浮士德》中以袜带指代嘉德勋章。</div>
+</a>
+<a class="entry-item" href="圆屋顶.html">
+  <div class="noun">圆屋顶</div>
+  <div class="snippet">浮士德中大主教用来比喻国家政治架构的建筑意象。圆屋顶依靠拱顶石承重，大主教以此比喻四位侯爵是支撑皇室和宫廷稳固的关键力量。</div>
+</a>
+<a class="entry-item" href="土耳其船.html">
+  <div class="noun">土耳其船</div>
+  <div class="snippet">指奥斯曼帝国的船只，在《浮士德》中玛尔太丈夫自称截获了一条运送大苏丹财宝的土耳其船。这反映了16至18世纪地中海地区基督教国家船只常袭击奥斯曼土耳其船只的历史背景，当时北非巴巴里海盗与奥斯曼帝国相互支持，欧洲基督教国家与奥斯曼帝国之间存在长</div>
+</a>
+<a class="entry-item" href="地狱犬.html">
+  <div class="noun">地狱犬</div>
+  <div class="snippet">希腊神话中的冥界看门犬刻耳柏洛斯（Cerberus），堤丰与厄喀德那之子，通常有三个头、龙尾、背盘毒蛇，守卫冥界大门，只许灵魂进入不许出去。</div>
+</a>
+<a class="entry-item" href="坚堤.html">
+  <div class="noun">坚堤</div>
+  <div class="snippet">浮士德围海造陆工程中修筑的坚固堤坝。浮士德命令筑一带&quot;坚堤&quot;围住海洋，以保护围垦地不受海涛侵蚀。这一意象体现了人类以工程手段征服自然、改造自然的雄心，也呼应了梅非斯特关于&quot;为尼普顿备好筵席&quot;的讽刺。</div>
+</a>
+<a class="entry-item" href="坟墓.html">
+  <div class="noun">坟墓</div>
+  <div class="snippet">在《浮士德》第五幕中，梅非斯特指挥鬼怪（Lemures）为浮士德挖掘的墓穴。浮士德误以为挖掘声是民伕在开掘沟渠、围海造田，实际上却是鬼怪在为他掘墓。梅非斯特命令鬼怪&quot;挖出一个长方形土坑&quot;，并感叹&quot;从宫殿走向这狭隘的住房，总归是这样一个糊涂的</div>
+</a>
+<a class="entry-item" href="塔西陀《日耳曼尼亚》.html">
+  <div class="noun">塔西陀《日耳曼尼亚》</div>
+  <div class="snippet">古罗马历史学家塔西佗于公元98年左右完成的重要著作，全名《论日耳曼人的起源和现状》，记述了公元1世纪日耳曼部落的地理、风俗、社会制度，具有极高的史学价值。</div>
+</a>
+<a class="entry-item" href="壁虎.html">
+  <div class="noun">壁虎</div>
+  <div class="snippet">蜥蜴的一种，在《浮士德》中作为拉弥亚的变形之一，从梅非斯特手中滑走。</div>
+</a>
+<a class="entry-item" href="大宇宙的灵符.html">
+  <div class="noun">大宇宙的灵符</div>
+  <div class="snippet">歌德《浮士德》中诺斯特拉达姆斯神秘之书上的符号，象征宏观宇宙（Macrocosm）的和谐秩序与万物运行法则。浮士德打开书本看到此符后，感受到宇宙万物流转的宏伟景象，但发现它仅是一个可观的奇观，无法真正参与其中，于是转而召唤地灵。此符象征静态</div>
+</a>
+<a class="entry-item" href="威尼斯光玻璃.html">
+  <div class="noun">威尼斯光玻璃</div>
+  <div class="snippet">浮士德中大酒正提及的珍贵酒具材质，指意大利威尼斯穆拉诺岛出产的传统手工玻璃。威尼斯玻璃以其晶莹剔透、色彩绚丽而闻名，大酒正称用此制成的高脚杯能增强酒味却不使人烂醉。</div>
+</a>
+<a class="entry-item" href="安眠药.html">
+  <div class="noun">安眠药</div>
+  <div class="snippet">能诱导睡眠的药物。在《浮士德》中，格蕾辛的母亲因服用安眠药（过量）死去，临死前没有办理临终圣事（告解、领圣体、领终傅），因此灵魂要入炼狱受长远的痛苦。这是格蕾辛背负的重要罪愆之一，也是恶灵在教堂场景中控诉她的核心罪行。历史上最早的合成安眠药</div>
+</a>
+<a class="entry-item" href="宝剑.html">
+  <div class="noun">宝剑</div>
+  <div class="snippet">浮士德中皇帝授予礼部大臣的象征性物品。宝剑不仅是武器更是权力和信任的象征，礼部大臣佩带此剑侍立皇帝身旁，代表其保卫皇帝和国家的职责。</div>
+</a>
+<a class="entry-item" href="宝鼎.html">
+  <div class="noun">宝鼎</div>
+  <div class="snippet">又称三足鼎（tripod），是浮士德从母亲们那里取回的魔法器物。用钥匙触碰宝鼎后，会产生迷蒙的雾气与缥缈的音乐，进而显现出帕里斯和海伦的幻影。宝鼎是连接冥界与凡尘的媒介法器，象征召唤古典美的艺术创造力。</div>
+</a>
+<a class="entry-item" href="小丑的帽子.html">
+  <div class="noun">小丑的帽子</div>
+  <div class="snippet">狂欢节中小丑戴的帽子，象征狂欢精神与言论自由。在《浮士德》中，司仪说皇帝从罗马带回的不仅是皇冠还有小丑的帽子——戴上它看似痴呆，帽子下却是大智之人，可以借疯癫之名说出真话。</div>
+</a>
+<a class="entry-item" href="小教堂.html">
+  <div class="noun">小教堂</div>
+  <div class="snippet">《浮士德》第五幕中老夫妇居住的菩提树旁的小教堂，是浮士德尚未占有的最后领地之一。三勇士在强行驱逐老夫妇时引发火灾，小教堂被烧毁倒塌。小教堂的毁灭象征着浮士德不惜一切代价追求绝对掌控的欲望对传统信仰的践踏。</div>
+</a>
+<a class="entry-item" href="山羊.html">
+  <div class="noun">山羊</div>
+  <div class="snippet">欧洲民间传说中魔女飞行的骑乘工具之一，也是撒旦的象征形象。在山羊形象中，魔鬼常以羊角、羊蹄的形态出现。歌德在《浮士德》注释中提及。</div>
+</a>
+<a class="entry-item" href="幻想花束.html">
+  <div class="noun">幻想花束</div>
+  <div class="snippet">化装舞会中的拟人化装饰角色。其唱词提到连古希腊植物学家忒俄佛拉斯托斯也叫不出它的名字，表达了这种幻想之花的独特与时髦，希望能被女士插在发间、偎依芳心。</div>
+</a>
+<a class="entry-item" href="幻想花环.html">
+  <div class="noun">幻想花环</div>
+  <div class="snippet">化装舞会中的拟人化装饰角色，由五色花朵和苔藓组成的艺术花环。其唱词指出这种花环在自然界并不常见，而是由时尚所创造，象征着人工艺术对自然的超越和时尚的力量。</div>
+</a>
+<a class="entry-item" href="忒俄尔柏.html">
+  <div class="noun">忒俄尔柏</div>
+  <div class="snippet">一种巴洛克时期的大型低音琉特琴（Theorbo/双颈大琵琶），拥有加长的琴颈和第二套弦轴箱，低音弦极长，常用于数字低音伴奏。在《浮士德》化装舞会中，男园丁们以忒俄尔柏伴奏唱歌。</div>
+</a>
+<a class="entry-item" href="恶魔石.html">
+  <div class="noun">恶魔石</div>
+  <div class="snippet">欧洲民间传说中与魔鬼相关的巨大岩石，最具代表性的是瑞士乌里州格申恩小镇的&quot;魔鬼之石&quot;（Devil&#x27;s Stone），高12米、重约2200吨。传说魔鬼被村民用山羊欺骗后，愤怒地抓起此石要砸毁桥梁，却被十字架吓退，巨石脱手落入峡谷。1977年</div>
+</a>
+<a class="entry-item" href="戒指.html">
+  <div class="noun">戒指</div>
+  <div class="snippet">《浮士德》假面舞会中车童向四周抛撒的珍贵饰物之一，原文描述为&quot;戒指镶着贵重的宝石&quot;。戒指与其他宝物（金冠、项链、珍珠）一同被群众争抢，但最终都化为幻影，象征世俗财富和奢靡享受的虚空与不可靠。</div>
+</a>
+<a class="entry-item" href="所多玛苹果.html">
+  <div class="noun">所多玛苹果</div>
+  <div class="snippet">源于《圣经》所多玛城的传说。死海沿岸产有一种外表鲜艳的苹果，但一摘即化为灰烬，比喻外表华丽诱人而内在空洞无物的事物，与&quot;金玉其外，败絮其中&quot;意近。</div>
+</a>
+<a class="entry-item" href="所罗门锁钥.html">
+  <div class="noun">所罗门锁钥</div>
+  <div class="snippet">指《所罗门之匙》（Key of Solomon），西方神秘学传统中最重要的魔法书之一，传说由以色列国王所罗门所著，实为中世纪术士假托其名撰写。书中记载了召唤与操纵恶魔精灵的方法、仪式道具制作、护身符绘制等内容，是欧洲仪式魔法的重要根源。</div>
+</a>
+<a class="entry-item" href="托考伊酒.html">
+  <div class="noun">托考伊酒</div>
+  <div class="snippet">即匈牙利托卡伊（Tokaji）贵腐葡萄酒，产自匈牙利东北部托卡伊地区，是世界上最早诞生的贵腐酒（始于1650年）。因其甘甜醇美的品质，被誉为&quot;酒中之王，王者之酒&quot;，法国国王路易十四、俄国沙皇等皆对其推崇备至。托卡伊产区于2002年被列为联合</div>
+</a>
+<a class="entry-item" href="扫帚.html">
+  <div class="noun">扫帚</div>
+  <div class="snippet">欧洲传说中女巫飞行的经典交通工具。最早的女巫骑扫帚图像见于1451年法国手稿。扫帚与女巫的关联源于多种因素：女性家务工具的象征、致幻药膏涂抹的载体、以及异教丰产仪式。在《浮士德》魔女合唱中，扫帚是飞往布罗肯山的重要工具。</div>
+</a>
+<a class="entry-item" href="扫帚柄.html">
+  <div class="noun">扫帚柄</div>
+  <div class="snippet">欧洲民间传说中魔女的典型飞行工具。在瓦尔普吉斯之夜，魔女们骑着扫帚柄飞往布罗肯山参加魔宴。歌德在《浮士德》注释中作为魔女飞行的典型意象提及。</div>
+</a>
+<a class="entry-item" href="拂尘.html">
+  <div class="noun">拂尘</div>
+  <div class="snippet">驱蝇拂尘，在《浮士德》中为梅非斯特使用的道具。魔鬼一名蝇主（别西卜，Lord of Flies），故执拂尘为笏。在魔女丹房场景中，梅非斯特用拂尘挡开魔女泼洒的火焰并击打坛坛罐罐，既可看作武器，也是其魔鬼身份的标志性用具。</div>
+</a>
+<a class="entry-item" href="拱顶石.html">
+  <div class="noun">拱顶石</div>
+  <div class="snippet">浮士德中大主教使用的建筑比喻。在拱形建筑结构中，拱顶石是位于正中央的楔形石块，起到锁定整个拱结构的关键作用。大主教以此比喻四位侯爵是支撑皇室和宫廷的关键力量。</div>
+</a>
+<a class="entry-item" href="指挥棒.html">
+  <div class="noun">指挥棒</div>
+  <div class="snippet">元帅的权杖，象征军事指挥权。在《浮士德》中，元帅因不满皇帝依靠梅非斯特的魔法作战，认为魔术干不出好事，遂交出指挥棒辞去指挥职务。皇帝起初拒绝接受，后转交给梅非斯特代理指挥，但梅非斯特讽刺指挥棒与十字架有点相像而拒绝。</div>
+</a>
+<a class="entry-item" href="文书.html">
+  <div class="noun">文书</div>
+  <div class="snippet">浮士德中皇帝用于记录和确认封赏诏令的官方文件。皇帝的封赏需要高贵的文书和签名作为正式凭证，由文书室誊清和封印，体现了中世纪神圣罗马帝国的行政程序。</div>
+</a>
+<a class="entry-item" href="斯库拉.html">
+  <div class="noun">斯库拉</div>
+  <div class="snippet">希腊神话中的女海妖，守护在墨西拿海峡一侧，与另一侧的大漩涡卡律布狄斯相对。她长有六个头、十二只脚、口中三排利齿，吞吃过往船只上的水手。原为水仙女，因女巫喀耳刻嫉妒而被变成怪物。英语习语&quot;between Scylla and Charybdi</div>
+</a>
+<a class="entry-item" href="日神铜像.html">
+  <div class="noun">日神铜像</div>
+  <div class="snippet">日神铜像即罗得岛太阳神巨像（Colossus of Rhodes），是古代世界七大奇迹之一，为一尊太阳神赫利俄斯的青铜巨像，高达约33米。公元前226年因强烈地震从膝盖处折断倒塌，存世仅约56年。残骸被阿拉伯人卖给犹太商人，用900头骆驼运</div>
+</a>
+<a class="entry-item" href="普洛透斯海豚.html">
+  <div class="noun">普洛透斯海豚</div>
+  <div class="snippet">海神普洛透斯（Proteus）变形成的海豚，载荷蒙库路斯前往永生之海。普洛透斯善于变形，变身海豚驮着荷蒙库路斯进入海洋，帮助其完成生命进化的过程。</div>
+</a>
+<a class="entry-item" href="曼陀林.html">
+  <div class="noun">曼陀林</div>
+  <div class="snippet">一种拨弦乐器（Mandolin），起源于意大利，音色清脆明亮。在《浮士德》化装舞会场景中，制花女郎们以曼陀林伴奏演唱，营造出浓郁的意大利文艺复兴氛围。</div>
+</a>
+<a class="entry-item" href="曼陀罗华.html">
+  <div class="noun">曼陀罗华</div>
+  <div class="snippet">即曼德拉草（Mandragora officinarum），茄科茄参属植物，根部分叉似人形，欧洲中世纪传说中具有魔力。古人迷信其具有保健、觅宝并控制天气的魔力。因曼德拉草有毒，人触之即死，民间传说让黑犬代为刨取。在《浮士德》中，梅非斯特说众</div>
+</a>
+<a class="entry-item" href="杜卡登.html">
+  <div class="noun">杜卡登</div>
+  <div class="snippet">又译杜卡特（Ducat），中世纪欧洲最具影响力的金币之一，起源于1284年意大利威尼斯共和国。含金量约99.47%，重约3.545克。在《浮士德》假面舞会场景中，群众看到铜锅中滚出的金币时惊呼&quot;就像跳出真的杜卡登&quot;，表现了人们对财富的贪婪渴</div>
+</a>
+<a class="entry-item" href="杜松子树.html">
+  <div class="noun">杜松子树</div>
+  <div class="snippet">格林童话《杜松子树》（The Juniper Tree）中的核心意象。该童话讲述一个继母将前娘的儿子烹煮给父亲吃，小妹妹收集骨殖葬在杜松子树下，骨殖化为小鸟唱歌复仇的故事。在《浮士德》第一部&quot;监狱&quot;场景的注释中，译者引用此童话来说明格蕾辛精</div>
+</a>
+<a class="entry-item" href="桂冠.html">
+  <div class="noun">桂冠</div>
+  <div class="snippet">以月桂枝叶编织而成的环状头冠，源自古希腊神话。太阳神阿波罗因追求达芙妮不得，将月桂枝叶编成冠冕戴在头上以示怀念。古希腊以桂冠授予体育竞技优胜者及杰出诗人，后演变为&quot;桂冠诗人&quot;称号。古罗马亦以月桂花环授予凯旋将领，象征胜利与荣耀。</div>
+</a>
+<a class="entry-item" href="梅迪奇的维纳斯.html">
+  <div class="noun">梅迪奇的维纳斯</div>
+  <div class="snippet">一尊公元前1世纪希腊化时期的大理石雕塑，高约1.53米，现藏于意大利佛罗伦萨乌菲兹美术馆。表现女神维纳斯以&quot;羞怯的维纳斯&quot;经典姿态站立——右手护胸、左手遮挡下身。原为金发红唇并佩戴耳环，是西方古典艺术中最具影响力的雕塑之一。</div>
+</a>
+<a class="entry-item" href="棕榈树枝.html">
+  <div class="noun">棕榈树枝</div>
+  <div class="snippet">在西方古典传统中象征胜利与荣誉，源自古希腊罗马时期，胜利者常被授予棕榈枝。在《浮士德》中，车童对普路托斯说&quot;我不是舒展过勇猛的羽翼，为你夺得棕榈树枝&quot;，表明他作为诗的化身，曾为财富之神赢得胜利和荣耀。</div>
+</a>
+<a class="entry-item" href="橄榄枝.html">
+  <div class="noun">橄榄枝</div>
+  <div class="snippet">化装舞会中的拟人化角色&quot;有果实的橄榄枝&quot;，象征和平。其唱词自称是山野精华所聚、各地和平的象征，不愿嫉妒任何繁花或引起争吵，表达了和平与和谐的主题。</div>
+</a>
+<a class="entry-item" href="橄榄枝冠.html">
+  <div class="noun">橄榄枝冠</div>
+  <div class="snippet">橄榄枝冠（Olive wreath/kotinos）是古希腊奥林匹克竞技会优胜者的最高奖赏，由野生橄榄枝编织而成。橄榄树被视为雅典娜赐予人类的和平与幸福象征，橄榄枝冠的制作有严格的宗教礼仪要求：须由双亲健在的12岁儿童用金刀从宙斯神庙后的圣</div>
+</a>
+<a class="entry-item" href="武库.html">
+  <div class="noun">武库</div>
+  <div class="snippet">古代存放武器的仓库。在《浮士德》中，梅非斯特从武库中取出兵器，分发给召唤而来的幽灵骑士，使他们武装起来参加新的战争。武库象征着中世纪军事力量的遗存，梅非斯特清空武库的行动意味着将死去的过去重新注入战斗。</div>
+</a>
+<a class="entry-item" href="比萨墓地壁画.html">
+  <div class="noun">比萨墓地壁画</div>
+  <div class="snippet">意大利比萨奇迹广场墓园（Camposanto Monumentale）中的14世纪湿壁画系列，主要由布法马可创作（约1336-1341年），包括《死的胜利》《地狱图》《最后的审判》等，描绘死亡平等、地狱惨象等主题，对歌德《浮士德》的创作有直</div>
+</a>
+<a class="entry-item" href="水蛭.html">
+  <div class="noun">水蛭</div>
+  <div class="snippet">环节动物，古代医学用于放血治疗。尼古拉采用水蛭在肛门部吸血的方法治疗他的幻视症，成为歌德在《浮士德》中讽刺的对象。</div>
+</a>
+<a class="entry-item" href="沙恭达罗.html">
+  <div class="noun">沙恭达罗</div>
+  <div class="snippet">古印度梵语诗人迦梨陀娑最著名的七幕诗剧，全称《凭信物与沙恭达罗团圆记》。讲述净修林女郎沙恭达罗与国王豆扇陀的爱情故事。1789年译介至欧洲后对歌德、席勒等德国文学家产生深远影响。</div>
+</a>
+<a class="entry-item" href="油膏.html">
+  <div class="noun">油膏</div>
+  <div class="snippet">中世纪欧洲传说中女巫使用的飞行药膏（Flying Ointment / Hexensalbe），含有颠茄、天仙子、曼德拉草等茄科致幻植物。女巫将其涂抹于身体（特别是敏感部位），产生强烈的飞行幻觉。在《浮士德》中魔女合唱提及油膏是飞行必备之物</div>
+</a>
+<a class="entry-item" href="海马.html">
+  <div class="noun">海马</div>
+  <div class="snippet">希腊神话中的马头鱼尾海兽（Hippocampus），海神波塞冬战车的拉车兽，常作为特里同和涅瑞伊得斯的坐骑。在《浮士德》中忒尔喀涅斯族骑着海马出场。</div>
+</a>
+<a class="entry-item" href="瀑布.html">
+  <div class="noun">瀑布</div>
+  <div class="snippet">河流从陡峭的山崖上倾泻而下的自然景观。在《浮士德》第十四场中，浮士德将自己不安的灵魂比喻为&quot;像瀑布沿着一座一座的岩石飞奔，欲壑难填，一直掉进深渊&quot;，形象地表达了他永不满足、不断追求又不断毁灭的生命状态。</div>
+</a>
+<a class="entry-item" href="火刑柴堆.html">
+  <div class="noun">火刑柴堆</div>
+  <div class="snippet">梅非斯特为贵妇人治疗失恋痛苦时所使用的魔法木炭的来源。他声称木炭是从火刑柴堆（Scheiterhaufen）中拣来的，暗示其带有异教审判的黑暗力量，画出黑线可使变心的情郎回心转意。</div>
+</a>
+<a class="entry-item" href="火炬.html">
+  <div class="noun">火炬</div>
+  <div class="snippet">《浮士德》第五幕&quot;宫中大院&quot;一景的道具。原文标注&quot;火炬&quot;，点明了场景发生在夜晚，以火炬照明。这一黑暗中的光焰与浮士德的失明、心中光明等意象形成呼应。</div>
+</a>
+<a class="entry-item" href="烧瓶.html">
+  <div class="noun">烧瓶</div>
+  <div class="snippet">《浮士德》中瓦格纳创造荷蒙库路斯所使用的长颈玻璃烧瓶（retort/flask）。瓦格纳在瓶中调和数百种物质，经过蒸馏使团块由浊变清，最终结晶成一个优美的小人。荷蒙库路斯必须严格封闭在瓶中生存，一旦离开瓶子就会消亡。该烧瓶是炼金术传统中制造</div>
+</a>
+<a class="entry-item" href="狮子洋钱.html">
+  <div class="noun">狮子洋钱</div>
+  <div class="snippet">一种镌有狮子纹章的欧洲银币。在《浮士德》中由梅非斯特提及，称其藏有贵重的狮子洋钱。最著名的是荷兰狮子银币（Lion Dollar / Leeuwendaalder），1575年至1731年由荷兰各省铸造，正面为站立骑士与持盾立狮，背面为直立</div>
+</a>
+<a class="entry-item" href="狮子狗.html">
+  <div class="noun">狮子狗</div>
+  <div class="snippet">歌德《浮士德》中的重要文学意象。在诗剧第一部&quot;城门前&quot;场景中，魔鬼梅菲斯特首次登场时化身为一条黑毛狮子狗（卷毛犬），跟随浮士德和瓦格纳进入书斋。狮子狗在书斋中逐渐显出异样，最终现出梅菲斯特的原形，与浮士德签订灵魂契约。这一&quot;魔鬼化身动物&quot;的</div>
+</a>
+<a class="entry-item" href="猫头鹰.html">
+  <div class="noun">猫头鹰</div>
+  <div class="snippet">鸮形目鸟类的通称，在西方文化中常象征孤独、智慧和神秘。在《浮士德》第十四场森林与山洞中，梅非斯特嘲讽浮士德在山洞中孤寂度日&quot;像只猫头鹰枯坐度日&quot;，以此讽刺浮士德的隐居生活与学者习气。</div>
+</a>
+<a class="entry-item" href="玫瑰.html">
+  <div class="noun">玫瑰</div>
+  <div class="snippet">蔷薇科蔷薇属植物的通称，在西方文学中常象征爱情、美丽与神秘。在《浮士德》第十四场中，梅非斯特引用《雅歌》4:5时提到&quot;在玫瑰花下吃草的双生鹿&quot;，译者注指出，路德的德译本《圣经》中将&quot;百合花&quot;译作&quot;玫瑰&quot;。玫瑰也是《浮士德》第二部结尾&quot;神秘合</div>
+</a>
+<a class="entry-item" href="玫瑰花.html">
+  <div class="noun">玫瑰花</div>
+  <div class="snippet">天使从天国撒下的花朵，在《浮士德》结尾具有重要象征意义。玫瑰花化为火焰驱走魔鬼梅非斯特，粘住其头颈。玫瑰代表神圣之爱与神恩，其火焰象征爱的净化力量，体现了歌德&quot;爱（而非暴力）才是战胜魔鬼的最终力量&quot;的核心思想。</div>
+</a>
+<a class="entry-item" href="珍珠.html">
+  <div class="noun">珍珠</div>
+  <div class="snippet">《浮士德》假面舞会中车童弹指间飞出的珍宝之一。原文描绘&quot;这里飞出了珍珠一串&quot;，随之还有黄金项链、耳环、金冠、戒指等。群众争相抢夺这些宝物，但它们随后即化为甲虫、蝴蝶等幻象，体现了歌德对物质财富虚幻本质的批判——看似珍贵的珍珠不过是引人追逐的</div>
+</a>
+<a class="entry-item" href="破裂的王冠.html">
+  <div class="noun">破裂的王冠</div>
+  <div class="snippet">魔女丹房场景中，诸猿要求扮演国王的梅非斯特将破裂的王冠修好。此情节影射世间的国王靠人民的血汗保持王位，讽刺世俗权力的虚妄与脆弱。王冠在此象征权力与荣耀的虚幻空无，破裂暗示一切世俗权威终将崩塌。</div>
+</a>
+<a class="entry-item" href="神圣祭台.html">
+  <div class="noun">神圣祭台</div>
+  <div class="snippet">浮士德中皇帝提及的未来加冕仪式地点。神圣祭台指教堂中的圣坛，是古代君主加冕仪式的核心场所，象征着王权来自神授。</div>
+</a>
+<a class="entry-item" href="禁果.html">
+  <div class="noun">禁果</div>
+  <div class="snippet">《圣经·创世记》中分别善恶树上的果实，上帝禁止亚当和夏娃食用。夏娃受蛇诱惑偷食禁果，并与亚当同食，二人因此被逐出伊甸园。歌德在《浮士德》中借苹果象征禁果与诱惑。</div>
+</a>
+<a class="entry-item" href="第七首饰盒.html">
+  <div class="noun">第七首饰盒</div>
+  <div class="snippet">指《浮士德》第一部第七场&quot;黄昏&quot;中，梅非斯特放入格蕾辛衣柜的首饰盒子。该文本段开头承接第七场：梅非斯特将首饰盒锁入橱中，格蕾辛回房后惊讶发现，用带子上的小钥匙打开，取出项链、耳环等贵重首饰试戴，走到镜前自我欣赏，感叹&quot;一切要钱，一切非钱不行</div>
+</a>
+<a class="entry-item" href="红色老鼠.html">
+  <div class="noun">红色老鼠</div>
+  <div class="snippet">德国格林《德意志神话学》中记载从入睡的魔女口中有时跳出的红色老鼠。歌德在《浮士德》中描写浮士德与年轻魔女跳舞时，从她口中跳出一只红色老鼠，暗示魔女的内在丑陋与邪恶本质。</div>
+</a>
+<a class="entry-item" href="纸币.html">
+  <div class="noun">纸币</div>
+  <div class="snippet">《浮士德》第二部第一幕中，梅非斯特为解救帝国财政危机而发行的纸质货币。皇帝在化装舞会中误签公文，声称以帝国地下埋藏的无数财宝作为担保。纸币一夜之间被复制数千张，分十、三十、五十、一百克朗面额流通市面，迅速缓解了国库空虚，使京城重现繁荣。这一</div>
+</a>
+<a class="entry-item" href="纺车.html">
+  <div class="noun">纺车</div>
+  <div class="snippet">将纤维纺织成纱线或丝线的手工工具。在《浮士德》第十五场&quot;格蕾辛的住房&quot;中，格蕾辛独坐在纺车旁，因思念浮士德而无法平静。舒伯特将此诗谱曲为艺术歌曲《纺车旁的格丽卿》（Gretchen am Spinnrade, D.118），钢琴伴奏以重复音</div>
+</a>
+<a class="entry-item" href="结晶.html">
+  <div class="noun">结晶</div>
+  <div class="snippet">歌德笔下山中精灵创造出的透明结晶体，被视为一种能够凝固时间、映照宇宙秩序的完美形式。精灵在结晶及其永恒的沉默中观察人世间的活动，体现了歌德晚年的自然哲学思想——结晶作为物质与精神的结合点，是认知世界的媒介。</div>
+</a>
+<a class="entry-item" href="维纳斯贝车.html">
+  <div class="noun">维纳斯贝车</div>
+  <div class="snippet">爱与美女神维纳斯（阿佛洛狄忒）的贝壳战车。在《浮士德》中，伽拉忒亚继承维纳斯的地位，乘坐五彩辉煌的贝壳车渡海而来。</div>
+</a>
+<a class="entry-item" href="羊皮纸.html">
+  <div class="noun">羊皮纸</div>
+  <div class="snippet">浮士德中宰相用来记录皇帝封赏诏书的材料。宰相将重要规章记载在羊皮纸上，交文书室誊清封印，再由皇帝用神圣签名加以证明，体现了中世纪文书行政的庄重程序。</div>
+</a>
+<a class="entry-item" href="美人鸟.html">
+  <div class="noun">美人鸟</div>
+  <div class="snippet">即塞壬（Siren），希腊神话中的人首鸟身怪物，以天籁般的歌声引诱水手触礁沉没。在古希腊艺术中为上半身美女、下半身鸟躯的形象，中世纪后才逐渐演变为美人鱼。最著名的故事出自荷马《奥德赛》。在《浮士德》第二部中，美人鸟与鸟头狮、人面狮一同出现在</div>
+</a>
+<a class="entry-item" href="翠菊.html">
+  <div class="noun">翠菊</div>
+  <div class="snippet">菊科草本植物，学名Callistephus chinensis，又称江西腊。在《浮士德》园亭场景中，玛加蕾特采摘一朵翠菊用于花瓣占卜，以此试探浮士德是否爱她。这一意象成为文学史上爱情占卜的经典场景。</div>
+</a>
+<a class="entry-item" href="苍蝇.html">
+  <div class="noun">苍蝇</div>
+  <div class="snippet">在《浮士德》瓦尔普吉斯之夜的梦中，苍蝇嘴巴作为乐队演奏的意象，与蚊子、蟋蟀、青蛙等组成怪诞的自然界乐队。</div>
+</a>
+<a class="entry-item" href="苍鹭.html">
+  <div class="noun">苍鹭</div>
+  <div class="snippet">鹭科鸟类，在此处指被皮格迈俄族（侏儒）射杀以夺取羽毛装饰头盔的苍鹭。其羽毛被用于装饰头盔，成为贪婪与暴力的牺牲品，并引发鹤群的复仇。</div>
+</a>
+<a class="entry-item" href="苹果.html">
+  <div class="noun">苹果</div>
+  <div class="snippet">在《圣经》传统中象征诱惑与知识，同时也是女性乳房的象征。歌德在《浮士德》中借浮士德与魔女的对话，以苹果树和苹果象征情欲与诱惑。</div>
+</a>
+<a class="entry-item" href="药酒.html">
+  <div class="noun">药酒</div>
+  <div class="snippet">魔女在丹房中调制的返老还童药酒，浮士德饮下后恢复青春。此酒由魔女以荒诞的仪式调制，浮士德饮下时杯口迸发火焰。梅非斯特称喝了这种酒任何妇人都会被当作海伦，意味着药酒激发了浮士德的情欲。</div>
+</a>
+<a class="entry-item" href="莱茵葡萄酒.html">
+  <div class="noun">莱茵葡萄酒</div>
+  <div class="snippet">指产自德国莱茵河流域的葡萄酒，尤以莱茵高（Rheingau）产区最为著名。德国葡萄酒历史可追溯至罗马时期，莱茵高是雷司令（Riesling）葡萄的核心产区，早在1435年便有雷司令的记载。莱茵葡萄酒在歌德时代已被视为德国国产名酒，在《浮士德</div>
+</a>
+<a class="entry-item" href="菩提树.html">
+  <div class="noun">菩提树</div>
+  <div class="snippet">德国民间文化中的核心象征之一，实际指椴树科的心叶椴。在德语中被误译为&quot;菩提树&quot;。椴树在德国文化中象征正义与法律（日耳曼人的露天法庭常在椴树下举行）、爱情与婚姻（心形叶片）、和平与家园，是村庄广场的村民聚会中心。著名的柏林&quot;菩提树下大街&quot;即以</div>
+</a>
+<a class="entry-item" href="蔷薇花蕾.html">
+  <div class="noun">蔷薇花蕾</div>
+  <div class="snippet">化装舞会中的拟人化角色，代表含苞待放的蔷薇。其唱词说蔷薇花蕾隐而不露，谁发现它们才是真正的幸福，并提到在佛萝拉（花神）的国度里，眼光、心灵和意识都接受美的统治。</div>
+</a>
+<a class="entry-item" href="蚂蟥.html">
+  <div class="noun">蚂蟥</div>
+  <div class="snippet">即水蛭，环节动物，古代医学中用于放血治疗。尼古拉曾用蚂蟥在肛门部吸血治疗幻视症。歌德在《浮士德》中以蚂蟥讽刺尼古拉的荒唐疗法。</div>
+</a>
+<a class="entry-item" href="蚊子.html">
+  <div class="noun">蚊子</div>
+  <div class="snippet">在《浮士德》瓦尔普吉斯之夜的梦中，蚊子的吻作为乐队演奏的意象出现，与苍蝇、蟋蟀、青蛙等共同组成怪诞的乐队。</div>
+</a>
+<a class="entry-item" href="蛤蟆.html">
+  <div class="noun">蛤蟆</div>
+  <div class="snippet">两栖动物蟾蜍的俗称，在文学中常被用作贬义或丑恶的比喻。在《浮士德》第十四场中，梅非斯特嘲讽浮士德像蛤蟆一样从湿润的苔藓和石头上汲取营养，以此挖苦浮士德退隐山林的苦修生活。</div>
+</a>
+<a class="entry-item" href="蜘蛛.html">
+  <div class="noun">蜘蛛</div>
+  <div class="snippet">在《浮士德》瓦尔普吉斯之夜的梦中，蜘蛛之足作为刚修炼成的小妖形象的一部分出现，与蛤蟆之腹、小翅翼共同讽刺业余诗人的不成熟诗作。</div>
+</a>
+<a class="entry-item" href="蝙蝠.html">
+  <div class="noun">蝙蝠</div>
+  <div class="snippet">哺乳动物，翼手目。在《浮士德》中拉弥亚们化作蝙蝠般的身影，在黑暗中围绕梅非斯特飞舞，形成可怕的圆圈。</div>
+</a>
+<a class="entry-item" href="蝴蝶.html">
+  <div class="noun">蝴蝶</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中与精灵相关的意象，在文本中被提及作为精灵或小妖的翅翼象征。</div>
+</a>
+<a class="entry-item" href="蟋蟀.html">
+  <div class="noun">蟋蟀</div>
+  <div class="snippet">在《浮士德》瓦尔普吉斯之夜的梦中，草中蟋蟀作为乐队演奏的意象出现，组成怪诞的自然界乐队，借以讽刺业余作者。</div>
+</a>
+<a class="entry-item" href="蠹鱼.html">
+  <div class="noun">蠹鱼</div>
+  <div class="snippet">蠹鱼（学名Lepisma saccharina），又称衣鱼、书虫，是一种古老的原始无翅昆虫，早在3至4亿年前就已出现，被称为&quot;活化石&quot;。体长4至20毫米，外被银灰色细鳞，形似小鱼。喜阴暗潮湿环境，以富含淀粉和胶质的物质为食，常蛀食书籍、纸张</div>
+</a>
+<a class="entry-item" href="血书的字条.html">
+  <div class="noun">血书的字条</div>
+  <div class="snippet">浮士德与梅非斯特立约时用血写下的契约字条。在《浮士德》第五幕浮士德死后，梅非斯特准备出示&quot;血书的字条&quot;以收取浮士德的灵魂，但感叹如今世人方法很多，从恶魔手里把灵魂抢走。血书契约象征着浮士德与魔鬼之间不可逆转的交易。</div>
+</a>
+<a class="entry-item" href="衣裳.html">
+  <div class="noun">衣裳</div>
+  <div class="snippet">指海伦消失后留下的衣物，在《浮士德》中具有神圣的象征意义。福耳库阿斯告诫浮士德紧紧抓住，衣裳虽非失去的女神本身，却很神圣，可载浮士德脱离凡俗升入清空。</div>
+</a>
+<a class="entry-item" href="西班牙长靴.html">
+  <div class="noun">西班牙长靴</div>
+  <div class="snippet">中世纪欧洲宗教法庭使用的一种残酷刑具，由多块木板或铁片构成，包裹住受害者的腿部，通过敲入楔子逐渐增加压力以碾碎腿骨。在《浮士德》中，梅非斯特借该刑具比喻逻辑学对人的思维的限制与束缚——就像把腿套进西班牙长靴一样，使人无法自由思考。</div>
+</a>
+<a class="entry-item" href="跳蚤歌.html">
+  <div class="noun">跳蚤歌</div>
+  <div class="snippet">又称《跳蚤之歌》，源自歌德诗剧《浮士德》第一部，是魔鬼梅非斯特在奥尔巴赫地窖酒馆中唱的一首讽刺歌曲。讲述一位国王宠爱一只大跳蚤，封它为宰相、赐它绶带勋章，跳蚤全家在朝廷中作威作福，王后和宫女被叮咬却不敢掐死它。歌曲以跳蚤影射封建宫廷中的弄臣</div>
+</a>
+<a class="entry-item" href="迷宫.html">
+  <div class="noun">迷宫</div>
+  <div class="snippet">指希腊神话中克里特岛的著名迷宫，由工匠代达罗斯为国王弥诺斯设计建造，用于囚禁半人半牛的怪物弥诺陶洛斯。迷宫结构极其复杂，雅典英雄忒修斯在阿里阿德涅的线团帮助下进入迷宫杀死怪物并成功走出。&quot;阿里阿德涅之线&quot;由此成为解决复杂问题方法的代名词。1</div>
+</a>
+<a class="entry-item" href="酒神杖.html">
+  <div class="noun">酒神杖</div>
+  <div class="snippet">希腊酒神狄俄尼索斯（Bacchus）及其追随者手持的仪仗，用茴香杆制成，顶端装饰松果，杖身缠绕常春藤或葡萄藤，象征繁荣与丰产。在《浮士德》中，梅非斯特抓住的拉弥亚变形为一根酒神杖。 --- 古希腊神话中酒神狄俄尼索斯及其追随者所持的仪式手杖</div>
+</a>
+<a class="entry-item" href="金冠.html">
+  <div class="noun">金冠</div>
+  <div class="snippet">《浮士德》假面舞会中车童向四周抛撒的珍宝之一，与梳子、耳环、戒指等并列。车童弹指间飞出珍珠、金冠、项链等贵重物品，群众争相抢夺，但这些金玉其外的赠品随后都化为幻影（甲虫、蝴蝶等），寓意物质财富的虚幻性。</div>
+</a>
+<a class="entry-item" href="金剪刀.html">
+  <div class="noun">金剪刀</div>
+  <div class="snippet">希腊神话中命运三女神之一阿特洛波斯（Atropos）手中的剪刀，用于剪断人的生命之线。在《浮士德》中，合唱队向命运女神祈求收起金剪刀（即不要剪断她们的生命线），以求得救。</div>
+</a>
+<a class="entry-item" href="金杯.html">
+  <div class="noun">金杯</div>
+  <div class="snippet">《图勒王》谣曲中的核心象征物。图勒国王的爱妃临终时所赠，国王视为无上珍品，每次举杯痛饮都不由落下眼泪。临终时他将国土分给储君，唯独留下金杯，在告别国宴上将其投入大海，随即合眼长眠。金杯象征忠贞不渝的爱情、甜蜜而痛苦的记忆，以及不可传承的个体</div>
+</a>
+<a class="entry-item" href="金牛犊.html">
+  <div class="noun">金牛犊</div>
+  <div class="snippet">出自《圣经·出埃及记》，以色列人在摩西上山领受十诫时铸造的金牛犊偶像加以崇拜，后成为金钱崇拜与物质欲望的象征。在《浮士德》中，梅非斯特告诉皇帝只要亲自掘取地下宝藏，&quot;自有一大群的金牛犊，纷纷钻出土地之下&quot;，喻指财富将滚滚而来。法国作曲家古诺</div>
+</a>
+<a class="entry-item" href="金羊毛.html">
+  <div class="noun">金羊毛</div>
+  <div class="snippet">金羊毛（Golden Fleece）是希腊神话中的宝物，出自一只名为克律索马罗斯的神羊的金色羊毛。佛里克索斯将金羊毛赠予科尔喀斯国王埃厄忒斯，国王将它钉在战神阿瑞斯的圣林中，由一条永不睡眠的巨龙看守。伊阿宋率阿耳戈英雄在美狄亚帮助下取得金羊</div>
+</a>
+<a class="entry-item" href="钟声.html">
+  <div class="noun">钟声</div>
+  <div class="snippet">《浮士德》第二部第五幕中，老夫妇居住的菩提树旁小教堂发出的钟声。浮士德视钟声为眼中钉、脚底刺，因为它代表了他尚未完全掌控的基督教传统与道德约束。钟声使浮士德感到自己如同被圈进教堂墓地，触发其暴怒并最终下令驱逐老夫妇。</div>
+</a>
+<a class="entry-item" href="钥匙.html">
+  <div class="noun">钥匙</div>
+  <div class="snippet">《浮士德》第二部中梅非斯特交给浮士德的一把神奇钥匙，用于下到&quot;母亲们&quot;的领域。这把钥匙在浮士德手中由小变大并发光，具有引导功能，能辨别正确途径，带浮士德找到母亲们。钥匙象征着男性创造力、探索意志和通往本源世界的媒介，浮士德接过钥匙后心胸豁然</div>
+</a>
+<a class="entry-item" href="铁门.html">
+  <div class="noun">铁门</div>
+  <div class="snippet">监狱牢房的铁制小门，分隔了自由与囚禁、生与死。浮士德持钥匙与灯立于铁门前，内心充满恐惧与哀伤，迟迟不敢开门。铁门是格蕾辛悲惨命运的具象化屏障，也是浮士德必须跨越的良心门槛。</div>
+</a>
+<a class="entry-item" href="铲锹.html">
+  <div class="noun">铲锹</div>
+  <div class="snippet">鬼怪和民伕使用的挖掘工具。在《浮士德》第五幕中，铲锹的挖掘声是连接真实与幻觉的关键意象——浮士德听到铲锹声，认为是民伕在为他围海造田、开掘沟渠；实际上这是鬼怪在为他挖掘坟墓。</div>
+</a>
+<a class="entry-item" href="锁链.html">
+  <div class="noun">锁链</div>
+  <div class="snippet">囚禁格蕾辛的铁制镣铐。浮士德进入牢狱后抓住锁链试图打开，格蕾辛则在听到他的呼唤后跳起身来、锁链脱落。锁链既是物理的束缚，也象征格蕾辛因罪孽而背负的精神枷锁。锁链的脱落标志着她灵魂的觉醒与自由的回归。</div>
+</a>
+<a class="entry-item" href="闪电之光.html">
+  <div class="noun">闪电之光</div>
+  <div class="snippet">战场上出现在长矛枪头的奇异电光，被皇帝视为妖异现象。浮士德解释这是古代神灵（双生子/狄俄斯库里）回光返照的遗迹，船夫都要向他们祈祷。这种超自然现象是梅非斯特魔法在战场上的体现。</div>
+</a>
+<a class="entry-item" href="阿尔戎涅.html">
+  <div class="noun">阿尔戎涅</div>
+  <div class="snippet">德语Alraune的音译，即曼德拉草（Mandragora），一种具有人形根部的药用植物。欧洲民间传说认为它生长在绞刑架下，由死者的精液或血液化成，具有神奇魔力，能预知未来、带来财富。尖叫能致人死命。在《浮士德》中梅非斯特用以形容福耳库阿斯</div>
+</a>
+<a class="entry-item" href="阿福花.html">
+  <div class="noun">阿福花</div>
+  <div class="snippet">学名Asphodelus，又称金穗花、日光兰。在希腊神话中与冥界密切相关，《奥德赛》中描述亡魂居住在长满阿福花的草地上（阿福花平原），是冥后珀耳塞福涅和得墨忒耳的神花。</div>
+</a>
+<a class="entry-item" href="阿耳戈号.html">
+  <div class="noun">阿耳戈号</div>
+  <div class="snippet">阿耳戈号（Argo）是希腊神话中伊阿宋率领英雄们前往科尔喀斯夺取金羊毛时所乘的大船。在女神雅典娜的帮助下建造，安装了来自多多那圣树的可预言未来的木板。随行英雄包括赫拉克勒斯、俄耳甫斯、忒修斯等五十位著名英雄。</div>
+</a>
+<a class="entry-item" href="阿耳戈船.html">
+  <div class="noun">阿耳戈船</div>
+  <div class="snippet">希腊神话中伊阿宋率领阿尔戈英雄前往科尔喀斯夺取金羊毛所乘的大船。由阿尔戈斯在雅典娜帮助下建造，船首装有可预言的多多那圣树木板。有50把船桨。后化为天上的南船座。在《浮士德》注解中被提及为远征船。</div>
+</a>
+<a class="entry-item" href="青蛙.html">
+  <div class="noun">青蛙</div>
+  <div class="snippet">在《浮士德》瓦尔普吉斯之夜的梦中，叶间青蛙作为乐队演奏的意象出现，与蚊子、苍蝇、蟋蟀等共同组成怪诞的自然界乐队。</div>
+</a>
+<a class="entry-item" href="风信旗.html">
+  <div class="noun">风信旗</div>
+  <div class="snippet">《浮士德》瓦尔普吉斯之夜中象征两面派人物的角色，随风向改变立场说出截然相反的话。可能影射乐队指挥和作家约翰·弗里德里希·莱夏特，或施托尔贝克兄弟。</div>
+</a>
+<a class="entry-item" href="风鸣琴.html">
+  <div class="noun">风鸣琴</div>
+  <div class="snippet">又称风神之琴、风弦琴、风奏琴，英文名Aeolian harp，意为&quot;风神埃俄罗斯的竖琴&quot;。它是一种依靠风力振动琴弦自动发声的乐器，木质共鸣箱上绷着10至12根琴弦，风吹过琴弦时产生卡门涡街效应引起共振而发声。18世纪末至19世纪浪漫主义运动</div>
+</a>
+<a class="entry-item" href="马勃菌.html">
+  <div class="noun">马勃菌</div>
+  <div class="snippet">一种真菌（puffball mushroom），成熟后触碰即爆裂喷出黑色孢子。在《浮士德》中梅非斯特追逐拉弥亚时，抓住一个看似肥胖的拉弥亚，却变成一触即裂的马勃菌，象征幻象的虚无与欺骗性。</div>
+</a>
+<a class="entry-item" href="高脚杯.html">
+  <div class="noun">高脚杯</div>
+  <div class="snippet">浮士德中大酒正提及的珍贵酒具，特指用威尼斯光玻璃制成的高脚杯。大酒正声称这种杯具有神奇功效——能增强酒味而不使人醉，象征着宫廷宴饮的精致与奢华。</div>
+</a>
+<a class="entry-item" href="魔术的衣衫.html">
+  <div class="noun">魔术的衣衫</div>
+  <div class="snippet">歌德《浮士德》中象征超自然力量的魔法道具。浮士德在郊外面对夕阳时发出感慨，渴望获得一件魔术的衣衫（魔披风），带他飞往异国游历。在浮士德传说中，魔鬼梅菲斯特将自己的披风交给浮士德，披上后即可腾空飞行。魔披风是浮士德以灵魂换取的超自然力量的具体</div>
+</a>
+<a class="entry-item" href="魔术票子.html">
+  <div class="noun">魔术票子</div>
+  <div class="snippet">《浮士德》中弄臣对纸币的戏称。弄臣拿到皇帝赏赐的纸币后，不解其运作原理，称之为&quot;魔术票子&quot;（魔票），体现了底层角色对新出现的纸币制度的困惑与好奇。梅非斯特随后向弄臣解释其用途，称纸币可以满足口腹之欲、购买田地房产和城堡。这一称呼揭示了纸币在</div>
+</a>
+<a class="entry-item" href="魔杖.html">
+  <div class="noun">魔杖</div>
+  <div class="snippet">即占卜杖、寻宝杖，德语称Wünschelrute（愿望之杖），是一种用于 寻找地下水源和矿脉的Y形或L形木杖。欧洲矿工传统中广泛使用， 被认为能感应地下的矿藏。在歌德《浮士德》第二部中，土精代表提到 &quot;精明的魔杖&quot;能够发现岩缝中隐藏的矿脉，</div>
+</a>
+<a class="entry-item" href="魔笛.html">
+  <div class="noun">魔笛</div>
+  <div class="snippet">莫扎特1791年创作的最后一部歌剧（德语：Die Zauberflöte），同年9月30日首演于维也纳维登剧院。剧本取材于童话集《金尼斯坦》，讲述埃及王子塔米诺借助魔笛的神奇力量，历经考验救出公主帕米娜的故事。该剧融合德奥民谣与意大利歌剧风</div>
+</a>
+<a class="entry-item" href="魔镜.html">
+  <div class="noun">魔镜</div>
+  <div class="snippet">歌德《浮士德》魔女丹房场景中的关键道具。浮士德在镜中看到天仙般的美女形象，被深深吸引，时而近前时而退后。魔镜象征着浮士德内心深处被压抑的欲望的投射，预示了后续与玛甘泪的爱情悲剧，以及浮士德从理性追求转向感官体验的转折。</div>
+</a>
+<a class="entry-item" href="魔马.html">
+  <div class="noun">魔马</div>
+  <div class="snippet">梅非斯特用魔法准备的马匹，用于浮士德救出格蕾辛后迅速逃离。魔马是魔鬼力量的体现，也是浮士德与梅非斯特合作关系的象征。在&quot;夜旷野&quot;场景中，浮士德与梅非斯特正是骑黑马经过刑场。</div>
+</a>
+<a class="entry-item" href="鸟头狮.html">
+  <div class="noun">鸟头狮</div>
+  <div class="snippet">即格里芬（Griffin），希腊神话传说中的生物，拥有鹰的头和翅膀、狮子的身体，为提丰和厄喀德娜所生。在古典传说中它居住于斯基泰草原，负责看守金矿。在《浮士德》第二部的&quot;古典的瓦尔普吉斯之夜&quot;中，浮士德在希腊大地上遇到鸟头狮、人面狮、美人鸟</div>
+</a>
+<a class="entry-item" href="麦穗冠.html">
+  <div class="noun">麦穗冠</div>
+  <div class="snippet">金黄色麦穗编织而成的冠冕，化装舞会中的装饰性角色。它自称是刻瑞斯（罗马农业女神）的礼物，温雅可爱而非常相配，象征丰收和实用之美。</div>
+</a>
+<a class="entry-item" href="黄金.html">
+  <div class="noun">黄金</div>
+  <div class="snippet">《浮士德》假面舞会中普路托斯宝箱中涌出的金汁和金器。原文描绘普路托斯的群龙将&quot;装着黄金的大箱&quot;搬到地上，铜锅中&quot;熔解的黄金血一样沸腾起来&quot;，金冠、戒指、链条在沸腾的金血中熔化。群众疯狂抢夺，但司仪指出这只是化装舞会的玩笑，黄金并非真实。黄金</div>
+</a>
+<a class="entry-item" href="黄金水盆.html">
+  <div class="noun">黄金水盆</div>
+  <div class="snippet">浮士德中侍从长在皇帝宴会时捧持的贵重器具。侍从长捧着黄金水盆，为皇帝保管戒指，伺候皇帝洗手，是中世纪宫廷礼仪中的重要场景。</div>
+</a>
+<a class="entry-item" href="黄金的吊桶.html">
+  <div class="noun">黄金的吊桶</div>
+  <div class="snippet">出自歌德《浮士德》中大宇宙灵符场景的诗句：&quot;钧天的诸力升降匆匆，相互传递黄金的吊桶。&quot;其典故可追溯至荷马史诗《伊利亚特》第8卷中宙斯的&quot;黄金链&quot;（Aurea Catena Homeri）意象，后经赫尔墨斯主义与炼金术传统转化，象征宇宙间神圣</div>
+</a>
+<a class="entry-item" href="黑犬.html">
+  <div class="noun">黑犬</div>
+  <div class="snippet">欧洲民间传说中与地下财宝和曼德拉草相关的神秘动物。因曼德拉草剧毒且传说被拔出时会发出致命尖叫，故用黑犬代为刨取。此黑犬也会因毒性而死。在《浮士德》中，梅非斯特初次接近浮士德时即以黑犬（黑色獒犬）形象出现；本场景中他提到朝臣&quot;胡扯什么黑犬&quot;，</div>
+</a>
+<a class="entry-item" href="齐特拉琴.html">
+  <div class="noun">齐特拉琴</div>
+  <div class="snippet">又称齐特尔琴、齐特琴，欧洲古老的民间拨弦乐器，号称奥地利最古老的乐器。德语&quot;Zither&quot;源自拉丁语&quot;cithara&quot;（古希腊拨弦乐器）。外形类似中国的古筝或扬琴，有扁平的木质共鸣箱，通常设5根旋律弦和30至40根和声弦。演奏时置于膝上或桌</div>
+</a>
+<a class="entry-item" href="龙.html">
+  <div class="noun">龙</div>
+  <div class="snippet">《浮士德》假面舞会中为普路托斯拉车的神话生物。原文描述其&quot;外被鳞甲的大口，喷出火焰&quot;。普路托斯下车后一挥手，群龙便停止行动，并将装满黄金的大箱搬到地上。龙在此处象征财富的原始力量与贪婪的恐怖，同时借用了古典神话中龙或蛇常被用作神祇坐骑的传统</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>

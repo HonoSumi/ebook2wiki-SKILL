@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玛加蕾特 · 浮士德</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">玛加蕾特 · 浮士德</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../浮士德_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">人物</a>
+<span>/</span>
+玛加蕾特
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>玛加蕾特</h1>
+  <span class="meta-tag">人物</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>《浮士德》第一部中的女主人公，昵称格蕾辛（又译葛丽卿、甘泪卿）。她是出身平民阶层的纯洁少女，浮士德在街道上与她不期而遇后一见钟情。她先后经历误杀母亲、兄长被杀、溺婴悲剧，最终被处死但灵魂获得救赎。她是永恒之女性的第一层面——市民之爱的代表。<br>---<br>歌德诗剧《浮士德》第一部女主角。全名玛加蕾特（Margarete），昵称格蕾辛（Gretchen），早期中文译本意译为&quot;甘泪卿&quot;。平民少女，纯真善良。浮士德在魔鬼梅非斯特引诱下追求她，送首饰、借邻妇玛尔太牵线，最终导致她误杀母亲、兄长战死、溺婴入狱的悲剧，但灵魂最终得到上帝拯救。在该文本段中，玛加蕾特持灯上场，独白后唱《图勒王》谣曲，意外发现首饰盒并试戴首饰。<br>---<br>歌德《浮士德》中女主人公的全名（Margarete），格蕾辛（Gretchen）为其昵称。一位年轻美貌、纯真善良的平民少女，信仰虔诚，生活简朴。浮士德对她一见钟情，在梅非斯特的帮助下展开追求，最终导致格蕾辛的悲剧命运。她代表了&quot;永恒女性&quot;的救赎力量。<br>---<br>歌德《浮士德》中的女主角，全名为Margarete，昵称格蕾辛（Gretchen），中文旧译甘泪卿。她是一位出身平民家庭的纯真少女，被返老还童的浮士德追求并爱上。因误用安眠药毒死母亲、哥哥被浮士德误杀、未婚溺婴等悲剧被判处死刑。在狱中她拒绝浮士德的营救，最终灵魂得救，成为&quot;永恒之女性&quot;救赎力量的化身之一。<br>---<br>玛加蕾特（Margarete）是格蕾辛的全名，歌德诗剧《浮士德》第一部中的女主角。昵称格蕾辛（Gretchen，意为&quot;小玛加蕾特&quot;）。她是一位虔诚的天主教徒，纯洁天真的平民少女。浮士德返老还童后在大教堂前遇见她，为其美貌吸引。她与浮士德的爱情悲剧构成&quot;格蕾辛悲剧&quot;，是浮士德&quot;小世界&quot;探索的核心情节。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>美丽的小姐，我能否冒昧，伸手臂给您，护送您一回？我不是小姐，也不美丽，不要护送，也能去家里。<br>---<br>玛加蕾特持灯，上。这里多么热，多么郁闷……我但愿妈妈回转家来。<br>---<br>玛 加 蕾 特 我觉得先生处处对我体谅，一味迁就，使我惭愧。<br>---<br>玛 加 蕾 特  等我一会！……他爱我——不爱我。<br>---<br>第十六场 玛尔太的庭园玛加蕾特。浮士德。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://www.wikiwand.com/zh-cn/articles/%E6%B5%AE%E5%A3%AB%E5%BE%B7%E2%85%A0" target="_blank" rel="noopener">https://www.wikiwand.com/zh-cn/articles/%E6%B5%AE%E5%A3%AB%E5%BE%B7%E2%85%A0</a>
+<a class="source-url-item" href="https://www.wikiwand.com/zh-sg/articles/%E6%B5%AE%E5%A3%AB%E5%BE%B7I" target="_blank" rel="noopener">https://www.wikiwand.com/zh-sg/articles/%E6%B5%AE%E5%A3%AB%E5%BE%B7I</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/zh-cn/%E6%B5%AE%E5%A3%AB%E5%BE%B7I" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-cn/%E6%B5%AE%E5%A3%AB%E5%BE%B7I</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-02 01:20
+</footer>
+</body>
+</html>
