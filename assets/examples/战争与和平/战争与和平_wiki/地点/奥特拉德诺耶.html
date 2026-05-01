@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奥特拉德诺耶 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">奥特拉德诺耶 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">地点</a>
+<span>/</span>
+奥特拉德诺耶
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>奥特拉德诺耶</h1>
+  <span class="meta-tag">地点</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>俄语意为&quot;欢乐之地&quot;，是罗斯托夫伯爵家族位于梁赞省的乡村庄园。这里是娜塔莎·罗斯托娃成长的地方，也是安德烈公爵第一次真正注意到娜塔莎的地点。书中著名的月夜场景——娜塔莎在窗前感叹夜色之美、想要飞翔——即发生于此。安德烈公爵正是在这里被娜塔莎纯粹的青春活力所感染，内心开始发生转变。<br>---<br>奥特拉德诺耶（Отрадное），《战争与和平》中罗斯托夫家族在乡下的庄园，意为&quot;欢乐之地&quot;。位于莫斯科附近，是罗斯托夫家主要的乡村住所。小说中许多温馨的家庭场景发生于此，包括狩猎、圣诞节化装舞会等。娜塔莎曾在此地的月夜里与索尼娅倾诉心事，安德烈公爵也曾在此听到娜塔莎的歌声而深受触动。在本书第77段中，罗斯托夫家在此住了两年后迁居彼得堡。<br>---<br>罗斯托夫家族的乡间庄园，俄语意为“愉悦之地”。娜塔莎成长的地方，安德烈公爵在此第一次见到她，著名的“月光之夜”场景即发生于此。<br>---<br>罗斯托夫家族的乡村庄园，位于梁赞省，意为&quot;快乐之地&quot;。安德烈公爵在此初遇娜塔莎，并听到她在月夜窗前的著名独白。在本章中，安德烈公爵回忆起在奥特拉德诺耶林荫道上初遇娜塔莎的场景，这个陌生的世界如今已不再令他心神不安。<br>---<br>奥特拉德诺耶（Otradnoye），罗斯托夫家的乡村庄园，俄语原意为&quot;快乐之地&quot;。该庄园是《战争与和平》中最重要场景之一，安德烈公爵在此第一次见到娜塔莎，并在月夜听到娜塔莎对索尼娅感叹夜色的美丽，从此爱上了她。本篇中娜塔莎回忆初次在此见到安德烈公爵的情景。<br>---<br>罗斯托夫家族的乡村庄园，俄语意为&quot;欢乐之地&quot;。罗斯托夫一家大部分时间住在此处。小说中最著名场景之一：安德烈公爵因公务到访时，看见娜塔莎&quot;苗条得出奇，黑头发，黑眼睛&quot;；夜里听到娜塔莎感叹&quot;多么美的月色！&quot;并想要飞起来，这一幕深深触动了他。也见证了著名的狩猎场景和圣诞节活动，象征俄罗斯贵族庄园生活的温馨、活力与自然之美。<br>---<br>奥特拉德诺耶是《战争与和平》中罗斯托夫家族的庄园，位于莫斯科省，小说中最重要的场景之一。尼古拉·罗斯托夫请假回家时在此激动地跑上门廊。庄园花坛被称为&quot;犯罪的人有名的避难所&quot;。也是娜塔莎与安德烈公爵恋爱的重要地点。<br>---<br>罗斯托夫家的庄园所在地，附近有禁伐区森林，是狩猎活动的主要场地。<br>---<br>罗斯托夫伯爵家族的乡间庄园，家族生活中心。安德烈公爵在此初遇娜塔莎，月夜场景和著名狩猎场面发生于此。<br>---<br>罗斯托夫家族的乡村领地庄园，俄语意为&quot;令人愉快的地方&quot;。罗斯托夫家在乡下的主要居住地，安德烈公爵在此月夜听到娜塔莎感叹而爱上她。与博尔孔斯基家的&quot;童山&quot;庄园形成鲜明对照。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>马车在花园的林荫道上驰向奥特拉德诺耶村罗斯托夫的住宅。从右边树林里传来姑娘们快乐的喊叫声，她看见一群姑娘在他的马车前面跑过大路。<br>一八〇九年伊利亚·安德烈伊奇伯爵住在奥特拉德诺耶，他仍像往常那样，几乎把全省都请来打猎，看戏，吃饭，听音乐。<br>---<br>罗斯托夫家在乡下住了两年，在这期间，他们的经济状况并不见好转。<br>---<br>“您可记得，他在奥特拉德诺耶咱们家住过一夜。”<br>---<br>早在奥特拉德诺耶林荫道上和在月夜的窗口，这个陌生的世界就曾经使他心神不安。现在这个世界已经不再使他心神不安了，也不陌生了；而且，他亲身进入这个世界后，发现了新的乐趣。<br>---<br>娜塔莎觉得，早在奥特拉德诺耶第一次看见安德烈公爵的时候，就爱上他了。<br>---<br>&quot;自从您第一次到奥特拉德诺耶那天起，我就爱上您了。&quot;<br>---<br>最后一站奥特拉德诺耶到了，赏给车夫三卢布酒钱，他像孩子似的，上气不接下气地跑上宅第的门廊。……米坚卡从六级台阶上飞也似地冲下来，一直冲向花坛。（这个花坛是奥特拉德诺耶犯罪的人有名的避难所。）<br>---<br>丹尼洛说，&quot;母狼搬家了，搬到奥特拉德诺耶禁伐区，在那儿嚎叫呢。&quot;大队人马刚走出菜园，就沿着通往奥特拉德诺耶森林的大路和田野散开。离开奥特拉德诺耶禁伐区的那片绿洲只有百十来俄丈远了。<br>---<br>派一名猎手到奥特拉德诺耶去要马车；尼古拉带着娜塔莎和彼佳到大叔的村子去了。<br>---<br>也许忽然到了一个地方，睁眼一看，不是奥特拉德诺耶，而是一个仙境。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://baike.baidu.com/item/%E5%A5%A5%E7%89%B9%E6%8B%89%E5%BE%B7%E8%AF%BA%E8%80%B6" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%A5%A5%E7%89%B9%E6%8B%89%E5%BE%B7%E8%AF%BA%E8%80%B6</a>
+<a class="source-url-item" href="https://book.qq.com/book-read/32055497/15" target="_blank" rel="noopener">https://book.qq.com/book-read/32055497/15</a>
+<a class="source-url-item" href="https://sobooks.net/" target="_blank" rel="noopener">https://sobooks.net/</a>
+<a class="source-url-item" href="https://www.douban.com/note/635691370/" target="_blank" rel="noopener">https://www.douban.com/note/635691370/</a>
+<a class="source-url-item" href="https://yunshuwu.cn/chap/8576.html" target="_blank" rel="noopener">https://yunshuwu.cn/chap/8576.html</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/zh-hant/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3%E4%BA%BA%E7%89%A9%E5%88%97%E8%A1%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hant/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3%E4%BA%BA%E7%89%A9%E5%88%97%E8%A1%A8</a>
+<a class="source-url-item" href="奥特拉德诺耶（俄语意为&quot;愉悦之地&quot;）是罗斯托夫家族的庄园。出现财务危机后罗斯托夫家从莫斯科搬至此地。小说中著名的&quot;月夜对话&quot;场景就发生在这里——安德烈公爵听到娜塔莎和索尼娅在窗边的对话，重新燃起对生活的热爱。" target="_blank" rel="noopener">奥特拉德诺耶（俄语意为&quot;愉悦之地&quot;）是罗斯托夫家族的庄园。出现财务危机后罗斯托夫家从莫斯科搬至此地。小说中著名的&quot;月夜对话&quot;场景就发生在这里——安德烈公爵听到娜塔莎和索尼娅在窗边的对话，重新燃起对生活的热爱。</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

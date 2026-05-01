@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地点 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">地点 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+地点
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">404 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="Berlin.html">
+  <div class="noun">Berlin</div>
+  <div class="snippet">柏林，普鲁士王国首都。1805年拿破仑战争期间，俄国沙皇亚历山大一世与普鲁士国王弗里德里希·威廉三世在此会晤谈判，讨论普鲁士加入第三次反法同盟的问题。小说中比利宾认为柏林会谈的结果将决定战争走向。</div>
+</a>
+<a class="entry-item" href="Brunn.html">
+  <div class="noun">Brunn</div>
+  <div class="snippet">布吕恩（德语Brünn），今捷克共和国第二大城市布尔诺（Brno），1805年维也纳被法军占领后奥地利宫廷逃亡至此作为临时首都。《战争与和平》中安德烈公爵在此找到俄国外交官比利宾，并得知维也纳陷落的消息。</div>
+</a>
+<a class="entry-item" href="Copenhagen.html">
+  <div class="noun">Copenhagen</div>
+  <div class="snippet">哥本哈根，丹麦王国首都。小说中外交官比利宾曾在此任职，表明其外交生涯阅历丰富，曾服务于欧洲多个重要外交地点。</div>
+</a>
+<a class="entry-item" href="Durnstein.html">
+  <div class="noun">Durnstein</div>
+  <div class="snippet">迪伦斯坦（又称迪恩施泰因），奥地利瓦豪河谷小镇，位于多瑙河畔。1805年11月11日此地爆发迪恩施泰因战役，库图佐夫率俄军在此伏击莫蒂埃的法军师团，双方均遭受重大伤亡。小说中俄军的胜利消息即与此战相关。</div>
+</a>
+<a class="entry-item" href="Krems.html">
+  <div class="noun">Krems</div>
+  <div class="snippet">克雷姆斯（多瑙河畔克雷姆斯），位于奥地利瓦豪河谷、维也纳上游约73公里的多瑙河畔城市。1805年11月11日附近发生了迪恩施泰因战役（亦称克雷姆斯战役），是小说中安德烈公爵前往报捷的那场战斗所在地。</div>
+</a>
+<a class="entry-item" href="Paris.html">
+  <div class="noun">Paris</div>
+  <div class="snippet">巴黎，法兰西第一帝国的首都。小说中外交官比利宾曾在此供职，熟悉法国政情，这也解释了为什么他能以深刻的洞察力分析拿破仑的战略。</div>
+</a>
+<a class="entry-item" href="Schonbrunn Palace.html">
+  <div class="noun">Schonbrunn Palace</div>
+  <div class="snippet">申布鲁恩宫（亦称美泉宫），位于奥地利维也纳的哈布斯堡王朝夏宫，世界文化遗产。拿破仑在1805年和1809年两次占领维也纳期间均驻跸于此。1809年法奥在此签订《申布伦条约》。小说中比利宾告知安德烈公爵波拿巴已抵达申布鲁恩宫。</div>
+</a>
+<a class="entry-item" href="三山.html">
+  <div class="noun">三山</div>
+  <div class="snippet">莫斯科的历史区域（俄语Три Горы），位于普列斯尼亚区莫斯科河左岸，因三座小山得名。1812年拿破仑逼近莫斯科时，拉斯托普钦曾计划在此召集民众抵御法军，但最终从后门逃离。</div>
+</a>
+<a class="entry-item" href="三山城门.html">
+  <div class="noun">三山城门</div>
+  <div class="snippet">莫斯科西郊的历史城门（Трёхгорная застава），通向三山地区。1812年战争期间曾有传闻说俄军将在三山城门外与法军决战，莫斯科居民曾聚集于此准备参战。</div>
+</a>
+<a class="entry-item" href="不来梅.html">
+  <div class="noun">不来梅</div>
+  <div class="snippet">德国北部威悉河畔的港口城市，历史上为汉萨同盟核心成员，全称&quot;自由汉萨城市不来梅&quot;，1811年被拿破仑吞并入法兰西帝国，1815年维也纳会议后恢复独立城市地位。</div>
+</a>
+<a class="entry-item" href="东方.html">
+  <div class="noun">东方</div>
+  <div class="snippet">小说中老博尔孔斯基公爵所主张的俄国战略方向。他主张俄国应将整个政策放在东方，对法国只需陈兵边界实行强硬政策即可，体现了当时俄国政坛关于外交战略方向的分歧。</div>
+</a>
+<a class="entry-item" href="中国城.html">
+  <div class="noun">中国城</div>
+  <div class="snippet">又称&quot;基泰戈罗德&quot;（Kitai-gorod），莫斯科历史最悠久的街区之一，紧邻红场和克里姆林宫东北侧。名称与中国人无关，更可能源于古俄语&quot;кита&quot;（编织物/篱笆），指该地早期以木杆和泥土构筑的防御工事。16至20世纪是莫斯科最重要的商业金</div>
+</a>
+<a class="entry-item" href="中央多面堡.html">
+  <div class="noun">中央多面堡</div>
+  <div class="snippet">法国人对波罗金诺战役中拉耶夫斯基炮垒的称呼之一，因该炮垒位于俄军防线中央而得名。</div>
+</a>
+<a class="entry-item" href="主教塘大街.html">
+  <div class="noun">主教塘大街</div>
+  <div class="snippet">莫斯科的一条古老街道（улица Патриаршие Пруды），位于主教塘（Патриаршие пруды）附近。巴兹杰耶夫的遗孀在此处的住宅是皮埃尔藏身的地点，他在这里找到了共济会导师的图书和手稿。</div>
+</a>
+<a class="entry-item" href="乌季察.html">
+  <div class="noun">乌季察</div>
+  <div class="snippet">波罗金诺战场南端的村庄，位于斯摩棱斯克大路左侧，是波罗金诺战役中俄军左翼的重要据点。</div>
+</a>
+<a class="entry-item" href="乌季察平原.html">
+  <div class="noun">乌季察平原</div>
+  <div class="snippet">乌季察附近的平原地带，波罗金诺战役的主战场之一，俄法两军在此激战。</div>
+</a>
+<a class="entry-item" href="乌尔姆.html">
+  <div class="noun">乌尔姆</div>
+  <div class="snippet">德国巴登-符腾堡州城市，位于多瑙河畔，人口约12.6万。爱因斯坦出生地，拥有世界最高教堂尖塔（161.5米）。1805年乌尔姆战役中奥军在此向拿破仑投降。</div>
+</a>
+<a class="entry-item" href="乌斯维亚日.html">
+  <div class="noun">乌斯维亚日</div>
+  <div class="snippet">俄罗斯普斯科夫州乌斯维亚特区行政中心，位于乌斯维亚恰河右岸、乌兹缅湖与乌斯维亚特湖之间，靠近白俄罗斯边境。1021年首次被编年史提及，是&#x27;从瓦良格人到希腊人&#x27;商路上的重要要塞。历史上多次在俄罗斯、立陶宛、波兰之间易手，1772年第一次瓜分波</div>
+</a>
+<a class="entry-item" href="亚斯纳亚波利亚纳.html">
+  <div class="noun">亚斯纳亚波利亚纳</div>
+  <div class="snippet">托尔斯泰的庄园，俄语意为&quot;明亮的林间空地&quot;，位于俄罗斯图拉州。托尔斯泰1828年诞生于此，在此创作了《战争与和平》《安娜·卡列宁娜》《复活》等不朽著作。1921年被列为国家文物保护区，现为托尔斯泰庄园博物馆。</div>
+</a>
+<a class="entry-item" href="亚麻布厂.html">
+  <div class="noun">亚麻布厂</div>
+  <div class="snippet">俄语名为波洛特尼亚内扎沃德（Полотняный Завод），卡卢加州一城镇型定居点，1718年彼得大帝敕令建造亚麻布工厂而得名，位于卡卢加至维亚济马铁路线上。</div>
+</a>
+<a class="entry-item" href="仓库.html">
+  <div class="noun">仓库</div>
+  <div class="snippet">仓库（粮仓，амбар）是俄国乡村少女圣诞占卜的又一重要场所。占卜方式是在深夜独自前往仓库侧耳静听内部传出的声音：若听到装粮的沙沙声则为吉兆（预示丰裕的婚姻），若听到敲打声则为凶兆。在小说中索尼娅勇敢地前往仓库听音，而尼古拉在月光下的小路上</div>
+</a>
+<a class="entry-item" href="伊兹梅尔.html">
+  <div class="noun">伊兹梅尔</div>
+  <div class="snippet">乌克兰西南部敖德萨州城市，位于多瑙河畔，隔河与罗马尼亚相望。历史上是奥斯曼帝国的重要要塞，1790年被苏沃洛夫攻陷。现为乌克兰多瑙河重要港口。</div>
+</a>
+<a class="entry-item" href="伊兹梅尔团.html">
+  <div class="noun">伊兹梅尔团</div>
+  <div class="snippet">全称伊兹梅尔近卫军团（Измайловский лейб-гвардии полк），俄罗斯帝国近卫军中第三支成立的步兵近卫团，1730年由女皇安娜·伊万诺夫娜下令组建，以莫斯科郊外的皇家庄园伊兹梅洛沃村命名。参与了拿破仑战争等多次重大战役</div>
+</a>
+<a class="entry-item" href="伊凡大帝教堂钟楼.html">
+  <div class="noun">伊凡大帝教堂钟楼</div>
+  <div class="snippet">全称为伊凡大帝钟楼，位于莫斯科克里姆林宫教堂广场，高81米，是克里姆林宫建筑群中最高的建筑。建于1505至1508年，由意大利建筑师博恩·弗里亚济设计，1600年由沙皇鲍里斯·戈杜诺夫加建至81米并覆金箔。1812年拿破仑撤军时法军试图将其</div>
+</a>
+<a class="entry-item" href="伊利英卡街.html">
+  <div class="noun">伊利英卡街</div>
+  <div class="snippet">莫斯科最古老的街道之一，位于中国城（基泰格罗德）区域内，从红场延伸至伊利亚门。名称源于15世纪的先知伊利亚修道院。历史上是莫斯科的商业中心，1812年俄军撤退时军官曾在此聚集。</div>
+</a>
+<a class="entry-item" href="伊韦尔小教堂.html">
+  <div class="noun">伊韦尔小教堂</div>
+  <div class="snippet">位于莫斯科红场入口处复活门旁的东正教小教堂，供奉来自希腊阿索斯山伊维尔修道院的伊维尔圣母显灵圣像。历代沙皇进入克里姆林宫前必在此祈祷，是莫斯科重要的宗教和历史地标。苏联时期被拆除，1994-1996年重建。</div>
+</a>
+<a class="entry-item" href="伊韦尔教堂.html">
+  <div class="noun">伊韦尔教堂</div>
+  <div class="snippet">位于莫斯科红场复活门旁的东正教小教堂，供奉伊韦尔圣母圣像。是莫斯科最受尊崇的宗教场所之一，常年烛光不熄。建于1669年，1929年被苏联拆除，1994-1995年按原貌重建。对皮埃尔而言，看到它意味着回到了温暖安稳的莫斯科。</div>
+</a>
+<a class="entry-item" href="伏尔加河.html">
+  <div class="noun">伏尔加河</div>
+  <div class="snippet">欧洲最长的河流，全长约3530公里，发源于瓦尔代丘陵，流经俄罗斯欧洲部分的核心区域，注入里海。伏尔加河是俄罗斯的母亲河，在俄罗斯历史、经济、文化中具有极重要的地位。沿岸分布着众多历史名城，包括特维尔、雅罗斯拉夫尔、下诺夫哥罗德、喀山、伏尔加</div>
+</a>
+<a class="entry-item" href="伐林区.html">
+  <div class="noun">伐林区</div>
+  <div class="snippet">伐林区在《战争与和平》中指的是森林中已被砍伐的区域，有时也指禁伐区。在狩猎场景中，这是狼被猎犬追逐时试图逃往的逃生路线——一旦狼跑进茂密的伐林区，猎犬将难以追击。猎手们的重要任务就是赶在狼之前截断通往伐林区的道路。丹尼洛正是通过迂回到伐林区</div>
+</a>
+<a class="entry-item" href="但泽.html">
+  <div class="noun">但泽</div>
+  <div class="snippet">今波兰格但斯克，波罗的海沿岸重要港口城市。拿破仑时期但泽为自由市，受法国控制，是拿破仑战争期间法军重要的后勤补给港和海军基地。 --- 即今波兰格但斯克（Gdansk），波罗的海重要港口城市，历史上长期是波兰与德意志争夺的战略要地。1793</div>
+</a>
+<a class="entry-item" href="佩尔胡什科夫.html">
+  <div class="noun">佩尔胡什科夫</div>
+  <div class="snippet">莫斯科通往莫扎伊斯克途中的驿站村庄，皮埃尔在此换马时听说了舍瓦尔金诺战役的消息。</div>
+</a>
+<a class="entry-item" href="佩尔胡什科夫换马站.html">
+  <div class="noun">佩尔胡什科夫换马站</div>
+  <div class="snippet">佩尔胡什科夫村设有驿马的换乘站，皮埃尔在此换马时听说了舍瓦尔金诺战役的消息。</div>
+</a>
+<a class="entry-item" href="俄国.html">
+  <div class="noun">俄国</div>
+  <div class="snippet">俄罗斯帝国，小说的主要故事发生地，包括莫斯科、彼得堡和童山等地点。</div>
+</a>
+<a class="entry-item" href="俱乐部.html">
+  <div class="noun">俱乐部</div>
+  <div class="snippet">指莫斯科英国俱乐部，1771年成立的贵族社交组织，19世纪成为莫斯科上流社会最重要的社交场所之一。会员采用无记名投票制，拥有庞大的图书馆和全俄罗斯餐饮水平最高的餐厅。小说中多洛霍夫在俱乐部筵席上看皮埃尔时的冷酷目光被多次提及。</div>
+</a>
+<a class="entry-item" href="克列缅丘格.html">
+  <div class="noun">克列缅丘格</div>
+  <div class="snippet">克列缅丘格（Kremenchug）是乌克兰中部城市，位于第聂伯河畔。在《战争与和平》中是尼古拉·罗斯托夫从军队返乡途中经过的城市之一。</div>
+</a>
+<a class="entry-item" href="克尼亚兹科沃.html">
+  <div class="noun">克尼亚兹科沃</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵所属兵团在波罗金诺战役前夕驻扎的村庄。1812年8月25日傍晚，安德烈公爵在此地一间破旧棚屋中进行了关于死亡与人生意义的著名哲学沉思，回顾了自己一生的三大不幸：对娜塔莎的爱情、父亲的去世和法国入侵。</div>
+</a>
+<a class="entry-item" href="克尼亚济科沃.html">
+  <div class="noun">克尼亚济科沃</div>
+  <div class="snippet">波罗金诺战场附近的一个村庄或地点，法军在此部署炮兵对俄军阵地进行火力打击，是波罗金诺战役中的战术位置之一。</div>
+</a>
+<a class="entry-item" href="克尼亚济科沃村.html">
+  <div class="noun">克尼亚济科沃村</div>
+  <div class="snippet">波罗金诺战场附近的小村庄，皮埃尔离开拉耶夫斯基炮垒后沿着山谷向此村方向行走，途中经过救护站，目睹了战争的惨烈后果。</div>
+</a>
+<a class="entry-item" href="克拉斯诺耶.html">
+  <div class="noun">克拉斯诺耶</div>
+  <div class="snippet">克拉斯诺耶（Krasny，亦译克拉斯内）是俄罗斯斯摩棱斯克州的一个城镇，位于斯摩棱斯克西南约50公里处。1812年11月15-18日，法军主力在此地与俄军发生激战，史称克拉斯诺耶战役。法军五个梯队被俄军各个击破，损失惨重，其中内伊元帅的部队</div>
+</a>
+<a class="entry-item" href="克里姆林宫.html">
+  <div class="noun">克里姆林宫</div>
+  <div class="snippet">位于莫斯科市中心的著名城堡建筑群，俄国的政治和宗教中心。文中提到老百姓在克里姆林宫领枪支准备抵抗法军。 --- 莫斯科中心的历史城堡群（Московский Кремль），俄国历代沙皇的皇宫所在地，内有教堂、宫殿、钟楼等建筑群。1812年</div>
+</a>
+<a class="entry-item" href="克里姆林广场.html">
+  <div class="noun">克里姆林广场</div>
+  <div class="snippet">莫斯科克里姆林宫周边的广场区域，托尔斯泰用来描绘古老宁静的莫斯科冬日景象。在小说中是莫斯科的标志性地标之一。</div>
+</a>
+<a class="entry-item" href="克里木田庄.html">
+  <div class="noun">克里木田庄</div>
+  <div class="snippet">总管建议出售的皮埃尔位于克里木（克里米亚）的田庄，是解决财务困难的方案之一。</div>
+</a>
+<a class="entry-item" href="克里米亚浅滩.html">
+  <div class="noun">克里米亚浅滩</div>
+  <div class="snippet">克里米亚浅滩（俄语：Крымский брод）是莫斯科河上一处古老的渡口，位于今克里米亚大桥（花园环线）所在地。因历史上克里米亚汗国驻莫斯科代表处设于附近而得名，是连接莫斯科与南方领土的贸易路线起点。今天该处已建起克里米亚大桥。</div>
+</a>
+<a class="entry-item" href="克雷姆斯.html">
+  <div class="noun">克雷姆斯</div>
+  <div class="snippet">克雷姆斯（Krems）全称多瑙河畔克雷姆斯，位于奥地利下奥地利州瓦豪河谷，是多瑙河南岸的历史古城。1805年11月11日俄奥联军在此击败法军莫蒂埃师团，史称克雷姆斯战役（迪恩施泰因之战）。 --- 全称多瑙河畔克雷姆斯（Krems an d</div>
+</a>
+<a class="entry-item" href="兰巴赫.html">
+  <div class="noun">兰巴赫</div>
+  <div class="snippet">兰巴赫（Lambach）位于奥地利上奥地利州，1805年10月31日在此发生兰巴赫战役。库图佐夫撤退途中，巴格拉季昂指挥俄军后卫在此阻击法军博蒙部，是俄军延缓法军追击的一系列后卫战之一。</div>
+</a>
+<a class="entry-item" href="兹纳缅卡街.html">
+  <div class="noun">兹纳缅卡街</div>
+  <div class="snippet">莫斯科中央行政区的一条历史街道，连接博罗维茨卡亚广场与阿尔巴特广场。在1812年法军占领莫斯科期间，法军曾在此驻防。</div>
+</a>
+<a class="entry-item" href="冲沟.html">
+  <div class="noun">冲沟</div>
+  <div class="snippet">战场地形中自然形成的深沟，在波罗金诺战役中成为军队前进的天然障碍和防御屏障，双方曾沿冲沟两侧反复争夺。</div>
+</a>
+<a class="entry-item" href="凸角堡.html">
+  <div class="noun">凸角堡</div>
+  <div class="snippet">又称&quot;尖角堡&quot;或&quot;三角堡&quot;，是一种凸出于主防线之外的防御工事，形状通常为三角形或箭头形（法文称flèche），用于交叉火力覆盖防御薄弱区域。波罗金诺战役中俄军在前沿修建了数座凸角堡作为防御阵地。</div>
+</a>
+<a class="entry-item" href="列塔舍夫卡.html">
+  <div class="noun">列塔舍夫卡</div>
+  <div class="snippet">俄罗斯的一个村庄，1812年俄法战争期间，俄军总司令部曾设于此。博尔霍维季诺夫从阿里斯托沃村出发，在泥泞道路上骑行一个半小时，于凌晨一点多钟到达列塔舍夫卡，在一座农舍中找到了值勤将军科诺夫尼岑。</div>
+</a>
+<a class="entry-item" href="利亚多夫斯克高地.html">
+  <div class="noun">利亚多夫斯克高地</div>
+  <div class="snippet">尼古拉在狩猎中把守的地点。</div>
+</a>
+<a class="entry-item" href="利佩茨克.html">
+  <div class="noun">利佩茨克</div>
+  <div class="snippet">俄罗斯利佩茨克州首府，位于沃罗涅日河畔，距莫斯科约508公里。最早见于13世纪文献，地名意为&quot;椴树&quot;。1284年被蒙古人摧毁；1702年彼得大帝在此建立铸铁工场；1779年正式获得城市地位。如今是俄罗斯钢铁工业的核心基地，以冷轧变压器钢闻名</div>
+</a>
+<a class="entry-item" href="利沃尼亚.html">
+  <div class="noun">利沃尼亚</div>
+  <div class="snippet">利沃尼亚（Livonia，又译立窝尼亚），波罗的海东岸的历史地区，大致涵盖今爱沙尼亚和拉脱维亚的大部分领土。1721年大北方战争后并入俄罗斯帝国，称利夫兰省。该地区上层社会以德意志裔贵族为主。在《战争与和平》中，贝格的父亲是&quot;利沃尼亚地方无</div>
+</a>
+<a class="entry-item" href="别列济纳河.html">
+  <div class="noun">别列济纳河</div>
+  <div class="snippet">白俄罗斯境内的一条河流，发源于明斯克高地，全长613公里，注入第聂伯河。1812年11月26至29日，拿破仑大军从莫斯科撤退至此，遭俄军三面包围，法军工兵在冰水中抢建浮桥渡河，场面极其惨烈。法军在此损失惨重，&quot;别列济纳&quot;在法语中成为&quot;惨败&quot;</div>
+</a>
+<a class="entry-item" href="别祖博沃.html">
+  <div class="noun">别祖博沃</div>
+  <div class="snippet">博罗季诺战场附近的一个村庄，位于科洛恰河和莫斯科河流域的峡谷之间，从博罗季诺战场的高地上可以远眺该村。</div>
+</a>
+<a class="entry-item" href="加来海峡.html">
+  <div class="noun">加来海峡</div>
+  <div class="snippet">加来海峡（法语：Pas de Calais），英语称多佛尔海峡（Strait of Dover），位于英吉利海峡最东端，介于英国与法国之间，最窄处仅约33公里，是英国与欧洲大陆相距最近的地方。海峡下方建有英法海底隧道，是世界上最繁忙的海上航</div>
+</a>
+<a class="entry-item" href="加钦斯克.html">
+  <div class="noun">加钦斯克</div>
+  <div class="snippet">斯摩棱斯克的一个历史郊区，位于德聂伯河对岸。在《战争与和平》中，阿尔帕特奇抵达斯摩棱斯克后下榻于加钦斯克郊区的费拉蓬托夫客栈。该地名源自俄语&quot;Гахенская слобода&quot;（加亨斯卡亚镇），是当时经商和宿驿的聚集处。</div>
+</a>
+<a class="entry-item" href="华沙.html">
+  <div class="noun">华沙</div>
+  <div class="snippet">波兰首都。1806年拿破仑在耶拿-奥尔施泰特战役后击败普鲁士，进入华沙。1807年蒂尔西特和约后建立华沙公国（Duchy of Warsaw），作为法国在东欧的卫星国与盟友。在本书中，朗巴以华沙作为法军占领的世界首都之一列举。</div>
+</a>
+<a class="entry-item" href="华沙大路.html">
+  <div class="noun">华沙大路</div>
+  <div class="snippet">又称华沙公路（Варшавское шоссе），是19世纪沙俄时期连接莫斯科与华沙的重要战略道路。在铁路普及前，是俄罗斯帝国西部方向的主要陆路交通线之一，具有重要的军事和交通意义。《战争与和平》中阿纳托利计划经此路逃往国外。</div>
+</a>
+<a class="entry-item" href="博古恰罗沃.html">
+  <div class="noun">博古恰罗沃</div>
+  <div class="snippet">博古恰罗沃是《战争与和平》中安德烈·博尔孔斯基公爵分封到的田庄，位于童山附近，是小说中安德烈公爵隐居并进行农事改革的场所。1812年战争期间，老公爵去世后，该村农民曾发生骚乱（&quot;博古恰罗沃暴动&quot;），拒绝让玛丽亚公爵小姐离开。 --- 安德烈</div>
+</a>
+<a class="entry-item" href="博古恰罗沃庄园.html">
+  <div class="noun">博古恰罗沃庄园</div>
+  <div class="snippet">博古恰罗沃（Богучарово）是安德烈·博尔孔斯基公爵在奥斯特利茨战役受伤、妻子难产去世后分到的庄园，位于离童山四十俄里处。安德烈公爵在此隐居反思，进行农事改革（解放农奴、改徭役为代役租），并与皮埃尔展开关于人生意义的深刻辩论。 ---</div>
+</a>
+<a class="entry-item" href="博尔孔斯基庄园.html">
+  <div class="noun">博尔孔斯基庄园</div>
+  <div class="snippet">博尔孔斯基公爵家族在博古恰罗沃的领地庄园。包括庄主宅院、谷仓、花园等设施。老公爵去世后由玛丽亚公爵小姐继承，但在法军逼近时发生了农民暴动。</div>
+</a>
+<a class="entry-item" href="博罗维茨基城门.html">
+  <div class="noun">博罗维茨基城门</div>
+  <div class="snippet">莫斯科克里姆林宫面向西南方向的一座城门，位于博罗维茨基山丘附近，是克里姆林宫最古老的城门之一。1812年俄军撤退时，士兵曾由此门折回红场区域。</div>
+</a>
+<a class="entry-item" href="卡利什.html">
+  <div class="noun">卡利什</div>
+  <div class="snippet">波兰最古老的城市之一，位于波兰中部大波兰省，1793年瓜分波兰后被普鲁士吞并，1806年拿破仑击败普鲁士后将其划入华沙公国，1813年普俄在此签订反拿破仑的卡利什条约。</div>
+</a>
+<a class="entry-item" href="卡卢加.html">
+  <div class="noun">卡卢加</div>
+  <div class="snippet">俄罗斯欧洲部分中部城市，卡卢加州首府，位于奥卡河畔，西南距莫斯科约188公里。始建于14世纪，历史上曾是莫斯科公国西南边境的重要边防堡垒。在1812年俄法战争中具有关键战略意义——卡卢加省是俄军给养的主要存放地，粮秣充足，库图佐夫率军转移到</div>
+</a>
+<a class="entry-item" href="卡卢日斯卡雅大路.html">
+  <div class="noun">卡卢日斯卡雅大路</div>
+  <div class="snippet">连接莫斯科与西南方向城市卡卢加的古道，分为老卡卢加路和新卡卢加路。在1812年俄法战争中具有决定性战略意义：拿破仑从莫斯科撤退时试图沿此路向西南突围，但库图佐夫在小雅罗斯拉维茨战役中封锁了此路，迫使法军沿已被摧毁的旧斯摩棱斯克路撤退，最终导</div>
+</a>
+<a class="entry-item" href="卡卢日斯基城门.html">
+  <div class="noun">卡卢日斯基城门</div>
+  <div class="snippet">莫斯科的古老城门之一，位于城市西南方向，通向卡卢加城方向。1812年拿破仑军队从多个城门同时拥入莫斯科，卡卢日斯基城门是其中之一。</div>
+</a>
+<a class="entry-item" href="卡拉巴赫.html">
+  <div class="noun">卡拉巴赫</div>
+  <div class="snippet">卡拉巴赫（Qarabağ / Karabakh）是南高加索的一个地理和历史区域，位于今阿塞拜疆境内。名称源自突厥语和波斯语，意为&quot;黑色的花园&quot;。该地区以山地地形为主，自古以出产优质马匹闻名。卡拉巴赫马是当地古老马种，以金栗色毛皮、速度和耐力</div>
+</a>
+<a class="entry-item" href="卡缅内桥.html">
+  <div class="noun">卡缅内桥</div>
+  <div class="snippet">卡缅内桥（俄语：Большой Каменный мост，大石桥）是横跨莫斯科河的一座钢拱桥，位于莫斯科克里姆林宫西端。它是莫斯科第一座永久性石桥，始建于1682年（最初名&quot;诸圣桥&quot;），后在1938年重建为现代化桥梁。莫斯科旧谚语&quot;比石桥</div>
+</a>
+<a class="entry-item" href="卡缅卡村.html">
+  <div class="noun">卡缅卡村</div>
+  <div class="snippet">俄语Каменка，意为&quot;石村&quot;，是俄罗斯及东欧地区极为常见的地名。在《战争与和平》中，指离莫斯科约六十俄里的一个村庄，阿纳托利·库拉金计划在此处与被免职的司祭为他和娜塔莎举行秘密婚礼。</div>
+</a>
+<a class="entry-item" href="卡缅卡河.html">
+  <div class="noun">卡缅卡河</div>
+  <div class="snippet">波罗金诺战场南部的一条小河，南北流向汇入科洛恰河，位于俄军左翼阵地附近，构成战场天然屏障。</div>
+</a>
+<a class="entry-item" href="卢加.html">
+  <div class="noun">卢加</div>
+  <div class="snippet">意大利托斯卡纳大区卢卡省省会，位于意大利中部，以保存完好的文艺复兴时期城墙和丝绸贸易历史闻名。1805年被拿破仑占领并交由他的姐姐管理。著名歌剧作曲家普契尼的故乡。中文历史文献中常译作&quot;卢加&quot;或&quot;卢卡&quot;。 --- 卢加（Lucca）是意大利</div>
+</a>
+<a class="entry-item" href="卢比扬卡大街.html">
+  <div class="noun">卢比扬卡大街</div>
+  <div class="snippet">莫斯科中心城区的一条重要街道，连接卢比扬卡广场与斯列坚卡门广场。名称源于1480年伊凡三世安置诺夫哥罗德俘虏的居住区。1926至1990年曾名&quot;捷尔任斯基街&quot;。街上的卢比扬卡大楼先后为全俄保险公司、契卡、克格勃和联邦安全局（FSB）所在地，</div>
+</a>
+<a class="entry-item" href="卢比扬卡街.html">
+  <div class="noun">卢比扬卡街</div>
+  <div class="snippet">莫斯科市中心一条著名的街道，连接卢比扬卡广场与斯列坚卡街。在1812年法军占领莫斯科期间，法军曾在此驻防。该街日后因克格勃总部所在地而闻名。</div>
+</a>
+<a class="entry-item" href="厄尔巴岛.html">
+  <div class="noun">厄尔巴岛</div>
+  <div class="snippet">意大利第三大岛，位于托斯卡纳海岸外。1814年拿破仑首次退位后被流放于此，保留皇帝头衔和少量军队。1815年2月拿破仑逃离该岛返回法国建立百日王朝。</div>
+</a>
+<a class="entry-item" href="叶卡捷琳娜医院.html">
+  <div class="noun">叶卡捷琳娜医院</div>
+  <div class="snippet">莫斯科以女皇叶卡捷琳娜二世命名的医院，是19世纪莫斯科重要的医疗机构，与莫斯科大学医学院关系密切。小说中莫斯科总督拉斯托普钦在传单中宣布计划将伊韦尔圣母像抬到该医院为伤兵治病祈福。</div>
+</a>
+<a class="entry-item" href="哈莫夫尼克区.html">
+  <div class="noun">哈莫夫尼克区</div>
+  <div class="snippet">哈莫夫尼克区（俄语：Хамовники）是莫斯科市中心的一个历史区，位于莫斯科河左岸。名称源自16世纪在此定居的织工（&quot;哈姆&quot;意为粗布）。该区在1812年莫斯科大火中少数未被完全烧毁，保留了大量历史建筑。列夫·托尔斯泰曾在此居住并创作《复活</div>
+</a>
+<a class="entry-item" href="商场.html">
+  <div class="noun">商场</div>
+  <div class="snippet">特指莫斯科红场旁的旧货商场（Gostiny Dvor），是莫斯科历史上最大的商业建筑群，始建于16世纪，包含大量店铺和货摊。1812年俄军撤离莫斯科时，士兵们在此趁乱哄抢货物。</div>
+</a>
+<a class="entry-item" href="喀山大学.html">
+  <div class="noun">喀山大学</div>
+  <div class="snippet">全称喀山联邦大学，1804年由沙皇亚历山大一世签署成立，是俄罗斯第三所高校，仅次于莫斯科大学和圣彼得堡大学。1844至1847年间列夫·托尔斯泰在此学习，此外列宁也曾在此就读。该校以非欧几何创始人罗巴切夫斯基和有机化学结构理论闻名。</div>
+</a>
+<a class="entry-item" href="因河.html">
+  <div class="noun">因河</div>
+  <div class="snippet">多瑙河右岸主要支流，发源于瑞士阿尔卑斯山，流经奥地利和德国， 在帕绍注入多瑙河，全长约510公里。</div>
+</a>
+<a class="entry-item" href="图拉省.html">
+  <div class="noun">图拉省</div>
+  <div class="snippet">俄罗斯帝国和苏联早期的一个省级行政区，1796年建省，1929年撤销。首府为图拉市。该省因是列夫·托尔斯泰的出生地亚斯纳亚波利亚纳的所在地而闻名。现代俄罗斯联邦的图拉州是其继承者。</div>
+</a>
+<a class="entry-item" href="土岗炮垒.html">
+  <div class="noun">土岗炮垒</div>
+  <div class="snippet">俄国人对波罗金诺战役中拉耶夫斯基炮垒的称呼，因该炮垒建在库尔干纳亚高地（土岗）之上而得名，是俄军中央防线的关键支撑点。 --- 即拉耶夫斯基炮垒，位于波罗金诺战场中央库尔干纳亚高地上的V字形棱堡防御工事，由拉耶夫斯基将军率部防守，架设多门重</div>
+</a>
+<a class="entry-item" href="土耳其.html">
+  <div class="noun">土耳其</div>
+  <div class="snippet">横跨欧亚的奥斯曼帝国（本书历史背景时期），18世纪末与俄国多次交战。1787-1791年俄土战争中战败，失去克里米亚。书中士兵歌即在土耳其作战时编创。</div>
+</a>
+<a class="entry-item" href="圣母升天堂.html">
+  <div class="noun">圣母升天堂</div>
+  <div class="snippet">莫斯科的东正教教堂，玛丽亚·德米特里耶夫娜·阿赫罗西莫娃所属的教区教堂。在莫斯科有多座以圣母升天命名的教堂，其中最著名的是克里姆林宫内的圣母升天大教堂（乌斯宾斯基大教堂），历代沙皇在此加冕。</div>
+</a>
+<a class="entry-item" href="圣母升天大教堂.html">
+  <div class="noun">圣母升天大教堂</div>
+  <div class="snippet">位于莫斯科克里姆林宫教堂广场北侧，是俄罗斯历史上最重要的东正教教堂。现存建筑由意大利建筑师亚里士多德·菲奥拉万蒂于1475-1479年为伊凡三世建造，以弗拉基米尔的同名教堂为蓝本，融合意大利文艺复兴风格。白色石墙配五个金色圆顶。自1547年</div>
+</a>
+<a class="entry-item" href="圣瓦西里大教堂.html">
+  <div class="noun">圣瓦西里大教堂</div>
+  <div class="snippet">又称瓦西里升天教堂，位于莫斯科红场南端，1555-1561年由伊凡雷帝为纪念征服喀山汗国而下令建造，以九个彩色洋葱头圆顶闻名，是俄罗斯最著名的地标建筑。</div>
+</a>
+<a class="entry-item" href="圣赫勒拿岛.html">
+  <div class="noun">圣赫勒拿岛</div>
+  <div class="snippet">大西洋上一座面积约121平方公里的火山岛，隶属于英国，距非洲西海岸约1950公里。因拿破仑一世1815年滑铁卢战役失败后被流放至此直至1821年去世而闻名于世。其遗体最初葬于岛上，1840年被迎回巴黎荣军院安葬。</div>
+</a>
+<a class="entry-item" href="坎波福米奥.html">
+  <div class="noun">坎波福米奥</div>
+  <div class="snippet">意大利东北部弗留利-威尼斯朱利亚大区乌迪内省的一个村庄，今名坎波福尔米多（Campoformido）。因1797年法奥在此签订《坎波福米奥和约》而闻名于世，该条约结束了第一次反法同盟战争，标志着拿破仑在意大利战场的最终胜利。</div>
+</a>
+<a class="entry-item" href="坦波夫.html">
+  <div class="noun">坦波夫</div>
+  <div class="snippet">坦波夫（Тамбов）是俄罗斯欧洲部分中部的城市和省份（坦波夫省），位于莫斯科东南约480公里，沃罗涅日河左岸。坦波夫省成立于1796年，是俄罗斯帝国重要的农业产区和粮食出口地。在《战争与和平》中，罗斯托夫家在坦波夫乡下拥有田庄，管家定期从</div>
+</a>
+<a class="entry-item" href="埃尔富特.html">
+  <div class="noun">埃尔富特</div>
+  <div class="snippet">德国图林根州城市。1808年9月27日至10月14日，拿破仑一世与俄国亚历山大一世在此举行埃尔富特会议（Congress of Erfurt），这是两人最后一次会晤。会议旨在巩固1807年蒂尔西特和约建立的法俄联盟，但塔列朗暗中劝说亚历山大</div>
+</a>
+<a class="entry-item" href="基什涅沃.html">
+  <div class="noun">基什涅沃</div>
+  <div class="snippet">今摩尔多瓦首都基希讷乌（Kishinev），历史上曾属俄罗斯帝国。乳娘讲述老公爵夫人在此生玛丽亚公爵小姐。</div>
+</a>
+<a class="entry-item" href="基辅.html">
+  <div class="noun">基辅</div>
+  <div class="snippet">基辅（Kyiv）现乌克兰首都，历史上基辅罗斯的中心。在《战争与和平》中是尼古拉·罗斯托夫返乡途中的重要经过城市。过了基辅之后他才开始真正牵挂起家乡。</div>
+</a>
+<a class="entry-item" href="基辅共济会.html">
+  <div class="noun">基辅共济会</div>
+  <div class="snippet">基辅共济会指18至19世纪在基辅活动的共济会分会组织。俄国帝国境内（小俄罗斯地区）的第一个共济会分会于1784年在基辅成立，名为&quot;不朽&quot;。19世纪初基辅成为俄国共济会的重要活动中心之一，与十二月党人运动有密切联系。在《战争与和平》中，皮埃尔</div>
+</a>
+<a class="entry-item" href="基辅省农庄.html">
+  <div class="noun">基辅省农庄</div>
+  <div class="snippet">皮埃尔继承的大多数农奴所在的乌克兰地区田庄，他在此处推行共济会理念下的农事改革，但成效甚微。</div>
+</a>
+<a class="entry-item" href="塔博尔桥.html">
+  <div class="noun">塔博尔桥</div>
+  <div class="snippet">维也纳多瑙河上的一座桥梁，1805年拿破仑战争中的重要地点。法军元帅缪拉和拉纳用停战假消息欺骗守军，未发一枪一弹夺取此桥，使法军得以顺利进入维也纳并追击俄军。</div>
+</a>
+<a class="entry-item" href="塔塔里诺沃.html">
+  <div class="noun">塔塔里诺沃</div>
+  <div class="snippet">博罗季诺战场附近的一个村庄，俄军总司令库图佐夫在博罗季诺战役期间的驻地，其前线指挥部设于此地，皮埃尔曾在此寻找库图佐夫未果。 --- 波罗金诺战场附近的村庄，库图佐夫在波罗金诺战役期间的驻跸地和军事会议召开地。祈祷仪式结束后库图佐夫由此出发</div>
+</a>
+<a class="entry-item" href="塔鲁丁诺.html">
+  <div class="noun">塔鲁丁诺</div>
+  <div class="snippet">塔鲁丁诺（Тарутино）是俄罗斯卡卢加州的一个村庄，位于莫斯科以南约80公里。在1812年俄法战争中具有重要战略意义：库图佐夫率俄军从莫斯科撤退后，从梁赞大路秘密转向卡卢加大道，在塔鲁丁诺建立营地，切断了拿破仑向俄国南部产粮区前进的路线</div>
+</a>
+<a class="entry-item" href="多布罗耶.html">
+  <div class="noun">多布罗耶</div>
+  <div class="snippet">俄国斯摩棱斯克附近的一个村庄，1812年俄法战争期间，库图佐夫在克拉斯诺耶战役后将俄军总司令部迁至此地。</div>
+</a>
+<a class="entry-item" href="多棱宫.html">
+  <div class="noun">多棱宫</div>
+  <div class="snippet">莫斯科克里姆林宫内最古老的世俗建筑之一，1487-1491年由意大利建筑师马可·鲁福与彼得罗·索拉里为伊凡三世修建。因外立面采用白色多棱石砌筑得名，是沙皇举行庆典、接见外国使节的主要场所。现为俄罗斯总统府接待厅，是克里姆林宫世界文化遗产的核</div>
+</a>
+<a class="entry-item" href="多瑙河.html">
+  <div class="noun">多瑙河</div>
+  <div class="snippet">欧洲第二长河，发源于德国黑森林，流经中欧和东欧多个国家，注入黑海。拿破仑战争时期，多瑙河沿岸的奥地利、匈牙利等地是法军与反法同盟军多次交战的重要战场。 --- 欧洲第二长河，全长约2850公里，发源于德国黑林山，自西向东流经10个国家，注入</div>
+</a>
+<a class="entry-item" href="多罗戈布日.html">
+  <div class="noun">多罗戈布日</div>
+  <div class="snippet">俄罗斯斯摩棱斯克州的一个历史古城，位于德聂伯河上游。始建于12世纪，曾是斯摩棱斯克领地内的一个分封公国中心。在1812年俄法战争期间，该城因地处莫斯科大道而成为俄军撤退和法军进军的重要节点，被法军部分焚毁。 --- 俄罗斯斯摩棱斯克州的城市</div>
+</a>
+<a class="entry-item" href="多罗戈希日.html">
+  <div class="noun">多罗戈希日</div>
+  <div class="snippet">多罗戈布日（Дорогобуж / Dorogobuzh），俄罗斯斯摩棱斯克州中部城市，位于第聂伯河畔，距州府斯摩棱斯克以东约125公里。该城1150年首见文献记载，历史上是保卫斯摩棱斯克东部通道的要塞。在1812年拿破仑战争中，该城于8月</div>
+</a>
+<a class="entry-item" href="多罗戈米尔城门.html">
+  <div class="noun">多罗戈米尔城门</div>
+  <div class="snippet">莫斯科西部的城门，位于多罗戈米洛沃区，是莫斯科纪念1812年卫国战争胜利的城门建筑。最初于1814年为庆祝击败拿破仑而建木制凯旋门，后于1834年改建为石制城门，1936年被拆除，1968年异地重建为莫斯科凯旋门。</div>
+</a>
+<a class="entry-item" href="多罗戈米洛夫城门.html">
+  <div class="noun">多罗戈米洛夫城门</div>
+  <div class="snippet">莫斯科古城墙上的城门之一，位于莫斯科河畔的多罗戈米洛沃地区，是通往斯摩棱斯克和欧洲方向的主要通道。在1812年拿破仑入侵莫斯科时，法军先头部队正是通过此城门进入莫斯科的。</div>
+</a>
+<a class="entry-item" href="多罗戈米洛夫桥.html">
+  <div class="noun">多罗戈米洛夫桥</div>
+  <div class="snippet">莫斯科西郊横跨莫斯科河的一座桥梁（Дорогомиловский мост），位于多罗戈米洛夫区，是从西面进入莫斯科的重要通道。1812年9月1日至2日夜间，俄军经此桥撤出莫斯科，桥上发生严重拥堵。</div>
+</a>
+<a class="entry-item" href="多罗戈米洛夫郊区.html">
+  <div class="noun">多罗戈米洛夫郊区</div>
+  <div class="snippet">莫斯科西郊的一个历史区域（Дорогомилово），位于莫斯科河右岸，邻近多罗戈米洛夫桥。1812年9月2日上午俄军后卫部队最后撤离此地，法军前锋随即进入该区。</div>
+</a>
+<a class="entry-item" href="大俄罗斯.html">
+  <div class="noun">大俄罗斯</div>
+  <div class="snippet">指俄罗斯帝国的核心区域，包括莫斯科和圣彼得堡一带，区别于小俄罗斯（乌克兰）等地。</div>
+</a>
+<a class="entry-item" href="大叔的庄园.html">
+  <div class="noun">大叔的庄园</div>
+  <div class="snippet">大叔居住的乡村庄园，有猎仆室和花园。充满俄罗斯乡村传统生活气息，以简朴自然、热情好客、充满民间音乐和美食为特色。是小说中俄罗斯传统乡村贵族生活的缩影。</div>
+</a>
+<a class="entry-item" href="大多面堡.html">
+  <div class="noun">大多面堡</div>
+  <div class="snippet">法国人对波罗金诺战役中拉耶夫斯基炮垒的称呼。多面堡是一种多边形的野战防御工事，四周挖有战壕并筑有土墙。</div>
+</a>
+<a class="entry-item" href="奔萨.html">
+  <div class="noun">奔萨</div>
+  <div class="snippet">俄罗斯欧洲部分中南部城市，奔萨州首府，位于伏尔加河支流苏拉河畔，距莫斯科约625公里。1663年建为防御要塞，18世纪发展为区域行政中心。是俄国文学评论家别林斯基和诗人莱蒙托夫的故乡。</div>
+</a>
+<a class="entry-item" href="奥卡河.html">
+  <div class="noun">奥卡河</div>
+  <div class="snippet">俄罗斯欧洲部分的主要河流，伏尔加河右岸最大支流，长约1500公里，流域面积约24.5万平方公里。发源于中俄罗斯丘陵，流经奥廖尔、卡卢加、科洛姆纳、梁赞等重要城市，在下诺夫哥罗德注入伏尔加河。莫斯科河是其左岸支流之一，因此奥卡河水系对莫斯科地</div>
+</a>
+<a class="entry-item" href="奥地利.html">
+  <div class="noun">奥地利</div>
+  <div class="snippet">中欧内陆国家，首都维也纳。在拿破仑战争时期为奥地利帝国，是反法同盟的重要成员，在1805年奥斯特利茨战役中战败后与拿破仑保持复杂关系。</div>
+</a>
+<a class="entry-item" href="奥尔沙.html">
+  <div class="noun">奥尔沙</div>
+  <div class="snippet">奥尔沙（Orsha）是白俄罗斯维捷布斯克州的一座城市，位于第聂伯河畔，距斯摩棱斯克以西约130公里。1812年拿破仑征俄战争中，奥尔沙是法军撤退途中的重要战略枢纽。拿破仑在此短暂停留收拢溃兵，内伊元帅以残部约千人逃至此地与主力会合。法军由此</div>
+</a>
+<a class="entry-item" href="奥尔登卡大路.html">
+  <div class="noun">奥尔登卡大路</div>
+  <div class="snippet">奥尔登卡大路（俄语：Большая Ордынка）是莫斯科河南岸（замоскворечье）地区的一条古老街道，全长约1.73公里，北起莫斯科河大桥，南至花园环路。其名称源于俄语&quot;Орда&quot;（金帐汗国），历史上曾是莫斯科通往金帐汗国的必</div>
+</a>
+<a class="entry-item" href="奥尔登堡.html">
+  <div class="noun">奥尔登堡</div>
+  <div class="snippet">位于德国西北部的一个公国，奥尔登堡大公的领地。1810年被拿破仑吞并，因大公与俄国沙皇亚历山大一世的亲戚关系，成为俄法关系破裂的重要导火索。书中人物多次讨论这一事件及其政治影响。</div>
+</a>
+<a class="entry-item" href="奥尔米茨.html">
+  <div class="noun">奥尔米茨</div>
+  <div class="snippet">德语Olmütz的音译，今捷克城市奥洛穆茨（Olomouc）。在1805年拿破仑战争中，俄奥联军在此集结并驻扎，沙皇亚历山大一世和奥地利皇帝弗朗茨二世在此决定主动出击与拿破仑决战，最终导致奥斯特里茨战役的惨败。 --- 捷克语名奥洛穆茨（O</div>
+</a>
+<a class="entry-item" href="奥廖尔.html">
+  <div class="noun">奥廖尔</div>
+  <div class="snippet">俄罗斯奥廖尔州首府，位于莫斯科以南约382公里奥卡河畔，1566年由伊凡雷帝建为要塞。被称为&quot;俄罗斯第三大文学之都&quot;，是屠格涅夫、蒲宁等文学家的故乡。皮埃尔被释放后来到该城养病三个月。 --- 俄罗斯奥廖尔州首府，位于莫斯科以南约382公里</div>
+</a>
+<a class="entry-item" href="奥德河.html">
+  <div class="noun">奥德河</div>
+  <div class="snippet">中欧主要河流，发源于捷克，流经波兰和德国，注入波罗的海。拿破仑战争期间，奥德河曾是法军东进的重要军事分界线，多次出现在和约与停战谈判中。</div>
+</a>
+<a class="entry-item" href="奥恰科夫.html">
+  <div class="noun">奥恰科夫</div>
+  <div class="snippet">乌克兰南部城市（现名奥恰基夫），位于第聂伯河口与布格河交汇处，历史上是战略要地。俄土战争期间（1788年）波将金和苏沃洛夫率俄军攻占该奥斯曼要塞，后根据《雅西条约》割让给俄罗斯帝国。 --- 奥斯曼帝国在黑海北岸第聂伯河入海口的要塞，现属乌</div>
+</a>
+<a class="entry-item" href="奥斯特利茨.html">
+  <div class="noun">奥斯特利茨</div>
+  <div class="snippet">奥斯特利茨（今捷克境内斯拉夫科夫乌布尔纳），因1805年12月2日在此发生的奥斯特利茨战役（三皇之战）而闻名。拿破仑在此以劣势兵力击败俄奥联军，取得其军事生涯中最辉煌的胜利之一，第三次反法同盟随之瓦解。</div>
+</a>
+<a class="entry-item" href="奥斯特罗夫纳.html">
+  <div class="noun">奥斯特罗夫纳</div>
+  <div class="snippet">白俄罗斯维捷布斯克州别申科维奇区的一个农业城镇，白俄罗斯语名阿斯特鲁纳（Астроўна），位于维捷布斯克以西约15公里处。历史上属波兰-立陶宛联邦，1772年第一次瓜分波兰后并入俄罗斯帝国。1812年拿破仑侵俄战争中，法俄两军在此发生奥斯</div>
+</a>
+<a class="entry-item" href="奥斯特罗连卡医院.html">
+  <div class="noun">奥斯特罗连卡医院</div>
+  <div class="snippet">卡缅斯基元帅因伤暂住的医院，他在此向沙皇递交辞呈后离开军队返回庄园。</div>
+</a>
+<a class="entry-item" href="奥格斯特堤坝.html">
+  <div class="noun">奥格斯特堤坝</div>
+  <div class="snippet">奥斯特利茨战役中位于奥格斯特村附近的堤坝和水塘区域。战役后期溃败的俄奥联军拥挤在此狭窄堤岸上遭受法军炮击，死伤惨重。多洛霍夫曾试图从冰面上逃生。此处描绘了战役中最惨烈的画面之一。</div>
+</a>
+<a class="entry-item" href="奥格斯特村.html">
+  <div class="noun">奥格斯特村</div>
+  <div class="snippet">奥斯特利茨战役中的村庄，位于战场南侧靠近水塘区域。战役后期溃败的俄奥联军残部（朗热隆和多赫图罗夫部）在此地池塘和堤坝附近拥挤溃退，遭受法军猛烈炮击，损失惨重。该处是战役最惨烈的场景之一。</div>
+</a>
+<a class="entry-item" href="奥特拉德诺耶.html">
+  <div class="noun">奥特拉德诺耶</div>
+  <div class="snippet">俄语意为&quot;欢乐之地&quot;，是罗斯托夫伯爵家族位于梁赞省的乡村庄园。这里是娜塔莎·罗斯托娃成长的地方，也是安德烈公爵第一次真正注意到娜塔莎的地点。书中著名的月夜场景——娜塔莎在窗前感叹夜色之美、想要飞翔——即发生于此。安德烈公爵正是在这里被娜塔莎</div>
+</a>
+<a class="entry-item" href="孤林.html">
+  <div class="noun">孤林</div>
+  <div class="snippet">孤林是《战争与和平》狩猎场景中的重要地理位置，指秋收后田野间成片独立的树林。八月底，树林在秋播作物的黑土田地和麦庄之间犹如绿色的孤林，到秋天则变为金黄和鲜红。狼和狐狸等猎物常常藏匿在这些孤林之中，猎人们围绕孤林布局围猎，等待野兽从林中跑出。</div>
+</a>
+<a class="entry-item" href="察列沃－扎伊米希.html">
+  <div class="noun">察列沃－扎伊米希</div>
+  <div class="snippet">俄罗斯斯摩棱斯克州的一个村庄。1812年俄法战争期间，库图佐夫在被任命为俄军总司令后在此地正式接管全军，检阅部队。该地名在中文译本中写作&quot;察列沃－扎伊米希&quot;。</div>
+</a>
+<a class="entry-item" href="小雅罗斯拉维茨.html">
+  <div class="noun">小雅罗斯拉维茨</div>
+  <div class="snippet">俄罗斯卡卢加州的一座城市，位于卢扎河畔，莫斯科西南约121公里。1812年10月24日在此发生重要战役，拿破仑试图沿卡卢日斯卡雅大路向南撤退，但遭俄军顽强阻击，小镇多次易手，最终库图佐夫封锁了南进道路，迫使法军转向已被摧毁的旧路撤退，成为1</div>
+</a>
+<a class="entry-item" href="尤苏波夫家.html">
+  <div class="noun">尤苏波夫家</div>
+  <div class="snippet">莫斯科显赫的尤苏波夫家族的宅邸，贝格在撤离途中经过其门口，看到有家具出售。</div>
+</a>
+<a class="entry-item" href="尤赫诺夫.html">
+  <div class="noun">尤赫诺夫</div>
+  <div class="snippet">尤赫诺夫（Yukhnov / Юхнов），俄罗斯卡卢加州西部城镇，尤赫诺夫斯基区行政中心，位于库纳瓦河畔，自1410年即有记载，1777年正式建市。在1812年俄法战争中，该地区是著名俄军游击队指挥官丹尼斯·达维多夫（托尔斯泰《战争与和平</div>
+</a>
+<a class="entry-item" href="尼古拉圣像礼拜堂.html">
+  <div class="noun">尼古拉圣像礼拜堂</div>
+  <div class="snippet">位于莫斯科阿尔巴特街的一座东正教教堂，供奉圣尼古拉。1812年缪拉率法军沿阿尔巴特街行进时曾在此附近停留等待侦察克里姆林宫的报告。</div>
+</a>
+<a class="entry-item" href="尼基茨卡雅.html">
+  <div class="noun">尼基茨卡雅</div>
+  <div class="snippet">莫斯科市中心的一条重要街道，全称大尼基茨卡亚街，从克里姆林宫向西北方向延伸，因尼基塔女修道院得名。 --- 莫斯科的一条主要街道（Никитская улица），以附近的尼基塔修道院得名，通往莫斯科市中心。1812年莫斯科大撤退时是居民撤</div>
+</a>
+<a class="entry-item" href="尼库林街.html">
+  <div class="noun">尼库林街</div>
+  <div class="snippet">莫斯科的一条小巷或街区，在《战争与和平》中由女仆阿尼斯卡提及，作为前往火场的捷径。皮埃尔正是在穿过尼库林街后进入着火的院子，救出了被困的女孩卡捷奇卡。</div>
+</a>
+<a class="entry-item" href="尼日尼(下诺夫哥罗德).html">
+  <div class="noun">尼日尼(下诺夫哥罗德)</div>
+  <div class="snippet">俄罗斯城市，全名下诺夫哥罗德（Нижний Новгород），位于奥卡河与伏尔加河交汇处，意为&quot;下游的新城&quot;。1812年法军占领莫斯科期间，大量莫斯科贵族和文人逃往此处避难，成为战时文化中心。在小说中，拉斯托普钦用帆船将法国人和外国人经水</div>
+</a>
+<a class="entry-item" href="尼科利斯卡亚街.html">
+  <div class="noun">尼科利斯卡亚街</div>
+  <div class="snippet">莫斯科最古老的街道之一，位于基泰格罗德街区，连接红场与卢比扬卡广场。在1812年法军占领莫斯科期间，法军曾在此驻防。</div>
+</a>
+<a class="entry-item" href="山谷.html">
+  <div class="noun">山谷</div>
+  <div class="snippet">山谷是《战争与和平》狩猎场景中的一处地形，指草木茂密的低洼地带。猎犬在追捕狐狸时沿着山谷的一个分叉向麦田追去，猎犬手们也沿着山谷边沿奔跑。山谷是猎物可能藏身和逃窜的路线之一，也是猎人们布置围猎的重要地形参照。</div>
+</a>
+<a class="entry-item" href="巴滕施泰因.html">
+  <div class="noun">巴滕施泰因</div>
+  <div class="snippet">东普鲁士城市（今波兰巴尔托什采），位于阿勒河畔，柯尼斯堡以南约34英里。1807年4月俄普两国在此签订《巴滕施泰因条约》结成反法同盟。小说中俄军在1807年战役期间在此附近集中待命。 --- 东普鲁士城镇（今波兰Bartoszyce），18</div>
+</a>
+<a class="entry-item" href="巴顿.html">
+  <div class="noun">巴顿</div>
+  <div class="snippet">德国西南部历史地区，即巴登（Baden），原为神圣罗马帝国境内的巴登藩侯国，后升格为选侯国和大公国。1806年拿破仑强制其加入莱茵联盟。小说中拿破仑提及亚历山大皇帝的巴顿亲属，因俄国皇室与德意志各邦国之间广泛的政治联姻关系，使拿破仑以此作为</div>
+</a>
+<a class="entry-item" href="巴黎.html">
+  <div class="noun">巴黎</div>
+  <div class="snippet">法国首都，拿破仑帝国的权力中心，小说中俄国贵族深受法国文化影响，以上流社会讲法语为风尚，阿纳托利曾在巴黎过着放荡生活。 --- 法国首都，欧洲文化和时尚的中心。在小说中，巴黎是俄国贵族心向往之的文化圣地，被视为&quot;天堂&quot;。拉斯托普钦伯爵讽刺俄</div>
+</a>
+<a class="entry-item" href="布伦.html">
+  <div class="noun">布伦</div>
+  <div class="snippet">布伦（Boulogne-sur-Mer，滨海布洛涅），法国北部加来海峡省港口城市，位于英吉利海峡沿岸。1803-1805年拿破仑在此建立大规模军营，集结约6万士兵和756艘船只，作为入侵英国的基地，史称&quot;布伦军营&quot;（Camp of Boul</div>
+</a>
+<a class="entry-item" href="布加勒斯特.html">
+  <div class="noun">布加勒斯特</div>
+  <div class="snippet">罗马尼亚首都，位于罗马尼亚东南部多瑙河支流登博维察河畔。1806-1812年俄土战争期间，俄军统帅库图佐夫将大本营设于此地，并于1812年5月28日在此签订《布加勒斯特和约》，结束俄土战争，使俄国得以集中兵力应对拿破仑的入侵。小说中安德烈公</div>
+</a>
+<a class="entry-item" href="布劳瑙.html">
+  <div class="noun">布劳瑙</div>
+  <div class="snippet">奥地利上奥地利州城市，位于因河畔与德国巴伐利亚交界处，中世纪因食盐贸易发展为要塞和贸易枢纽，1779年划归奥地利，是阿道夫·希特勒的出生地。 --- 因河畔布劳瑙，奥地利上奥地利州的城市，位于奥德边境因河畔， 1805年俄军在此扎营并向维也</div>
+</a>
+<a class="entry-item" href="布吕恩.html">
+  <div class="noun">布吕恩</div>
+  <div class="snippet">布吕恩（Brünn）即今捷克布尔诺（Brno），1805年时属奥地利帝国。拿破仑在奥斯特里茨战役前将法军主力集结于此，该城附近爆发了著名的三皇会战。小说中奥地利宫廷因法军威胁从维也纳迁至此处。 --- 即今捷克城市布尔诺（Brno），历史上</div>
+</a>
+<a class="entry-item" href="布尔诺.html">
+  <div class="noun">布尔诺</div>
+  <div class="snippet">捷克第二大城市，南摩拉维亚州首府，1243年建市。位于捷克东南部斯夫拉特卡河与斯维塔瓦河交汇处。是捷克宪法法院、最高法院所在地，工业重镇和交通枢纽。遗传学家孟德尔在此完成豌豆实验，作家米兰·昆德拉和数学家哥德尔也出生于此。历史上德语称Brü</div>
+</a>
+<a class="entry-item" href="布鲁诺沃.html">
+  <div class="noun">布鲁诺沃</div>
+  <div class="snippet">即布劳瑙（Braunau），奥地利的一座要塞城市，是《战争与和平》中俄军进驻奥地利时库图佐夫的总部所在地。小说第一卷第二部描写了俄军步兵团在布劳瑙附近驻扎及接受总司令检阅的场景。&quot;布鲁诺沃&quot;是俄语化名称，中译本中亦直接译为&quot;布劳瑙&quot;。</div>
+</a>
+<a class="entry-item" href="庄主宅院.html">
+  <div class="noun">庄主宅院</div>
+  <div class="snippet">博尔孔斯基家族在博古恰罗沃庄园的住所，是玛丽亚公爵小姐居住和接待访客的地方。罗斯托夫到此与玛丽亚公爵小姐会面。</div>
+</a>
+<a class="entry-item" href="庄园.html">
+  <div class="noun">庄园</div>
+  <div class="snippet">贵族在乡间的宅邸和附属土地，童山是博尔康斯基家族的庄园。</div>
+</a>
+<a class="entry-item" href="库塔菲耶夫门.html">
+  <div class="noun">库塔菲耶夫门</div>
+  <div class="snippet">莫斯科克里姆林宫西墙外的一座桥头堡式塔楼，建于1516年，与三一塔隔桥相望，是进入克里姆林宫的主要入口之一。1812年法军攻打克里姆林宫时此处发生了小规模战斗。</div>
+</a>
+<a class="entry-item" href="库德林诺.html">
+  <div class="noun">库德林诺</div>
+  <div class="snippet">莫斯科的一个历史区域，位于花园环线附近，是罗斯托夫家撤离莫斯科时经过的地点之一。 --- 莫斯科西部的一个历史街区，位于花园环路一带。1812年莫斯科大撤退时，罗斯托夫家的车队经过此地，与从尼基茨卡雅、普雷斯尼亚、波德诺文斯克街方向汇入的其</div>
+</a>
+<a class="entry-item" href="库德林诺区.html">
+  <div class="noun">库德林诺区</div>
+  <div class="snippet">莫斯科的一个区域，位于花园环线附近，罗斯托夫家车队途经此地与其他撤离车队汇合。</div>
+</a>
+<a class="entry-item" href="度支部土墙.html">
+  <div class="noun">度支部土墙</div>
+  <div class="snippet">沙俄财政部建筑周围的夯土防护墙。拿破仑在1812年等待莫斯科贵族代表团前来投降时，曾在此土墙旁长时间来回踱步，心情烦躁不安。</div>
+</a>
+<a class="entry-item" href="弗兹德维仁卡街.html">
+  <div class="noun">弗兹德维仁卡街</div>
+  <div class="snippet">沃兹德维任卡大街（俄语：Воздвиженка），亦译作弗兹德维仁卡街，是莫斯科最古老的街道之一，位于市中心阿尔巴特区，东起亚历山大公园（克里姆林宫附近），西接阿尔巴特广场。得名于1450年在此建立的荣举十字圣架修道院。该街9号的沃尔孔斯基</div>
+</a>
+<a class="entry-item" href="弗拉基米尔.html">
+  <div class="noun">弗拉基米尔</div>
+  <div class="snippet">俄国城市，位于莫斯科以东。在莫斯科撤退期间，拉斯托普钦下令将政府物资运往该地。</div>
+</a>
+<a class="entry-item" href="彼得堡.html">
+  <div class="noun">彼得堡</div>
+  <div class="snippet">圣彼得堡是俄罗斯第二大城市，位于波罗的海芬兰湾东岸，1703年由彼得大帝奠基，1712年至1918年为沙俄首都。城内分布42座岛屿、400多座桥梁，有&quot;北方威尼斯&quot;之称。冬宫（埃尔米塔什博物馆）、夏宫等建筑举世闻名，是俄罗斯公认的文化首都，</div>
+</a>
+<a class="entry-item" href="彼得罗夫克大街.html">
+  <div class="noun">彼得罗夫克大街</div>
+  <div class="snippet">莫斯科市中心的一条重要街道，俄语名Петровка（彼得罗夫卡街），南起剧院广场，北至林荫环路，因街道顶端的圣彼得修道院得名。莫斯科第一批大火即从该街附近燃起。街上有著名的大剧院、中央百货商店（ЦУМ）等地标。</div>
+</a>
+<a class="entry-item" href="德累斯顿.html">
+  <div class="noun">德累斯顿</div>
+  <div class="snippet">德国东部城市，萨克森州首府，位于易北河畔，以巴洛克建筑和丰富的艺术收藏闻名，被誉为&quot;易北河畔的佛罗伦萨&quot;。历史上曾是萨克森王国的首都和文化中心。1812年春，拿破仑在征俄前于德累斯顿举行盛大外交集会，召集欧洲各国君主，试图巩固大陆体系并展示</div>
+</a>
+<a class="entry-item" href="德维纳河.html">
+  <div class="noun">德维纳河</div>
+  <div class="snippet">又称西德维纳河或道加瓦河，东欧主要河流，发源于俄罗斯瓦尔代高地，流经白俄罗斯和拉脱维亚，注入波罗的海。拿破仑战争中，该河是俄军的重要战略防线，普弗尔的&quot;德里萨大营&quot;即位于该河畔。</div>
+</a>
+<a class="entry-item" href="德聂伯河.html">
+  <div class="noun">德聂伯河</div>
+  <div class="snippet">东欧最大的河流之一，发源于俄罗斯瓦尔代高地，流经白俄罗斯、乌克兰，注入黑海。在拿破仑战争中，该河是俄国纵深防御的重要地理屏障，也是拿破仑东征的战略目标线之一。</div>
+</a>
+<a class="entry-item" href="德里萨.html">
+  <div class="noun">德里萨</div>
+  <div class="snippet">西德维纳河畔的城镇（今白俄罗斯维捷布斯克州上德文斯克），及其附近著名的筑垒兵营。1812年普法俄裔将军冯·普富尔为俄军设计的防御计划核心，俄军第一西方军团曾撤退至此，因地理位置不利迅速被放弃，成为俄军战略撤退的重要节点。小说中安德烈公爵调任</div>
+</a>
+<a class="entry-item" href="德里萨阵地.html">
+  <div class="noun">德里萨阵地</div>
+  <div class="snippet">1812年卫国战争初期俄军在德里萨城（今白俄罗斯上德文斯克）西北部西德维纳河左岸河曲处构筑的筑垒阵地。由普鲁士将军普弗尔设计，按其迂回运动理论构建，曾被认为是空前的战术杰作。实际上由于法军兵力绝对优势，该阵地被证明毫无意义，俄军于1812年</div>
+</a>
+<a class="entry-item" href="忒摩比利.html">
+  <div class="noun">忒摩比利</div>
+  <div class="snippet">又译温泉关、德摩比利，希腊中部东海岸的狭窄关隘。公元前480年斯巴达国王列奥尼达一世率三百斯巴达勇士在此阻击波斯大军，全部战死，成为西方历史上以少敌多、英勇牺牲的不朽象征。书中军官兹德尔任斯基将萨尔塔诺夫水坝比作俄国的忒摩比利。</div>
+</a>
+<a class="entry-item" href="恩斯城.html">
+  <div class="noun">恩斯城</div>
+  <div class="snippet">恩斯河畔的城市，被认为是奥地利最古老的城市（1212年获城市特许状）， 位于恩斯河与多瑙河交汇处附近，是重要的历史贸易枢纽。</div>
+</a>
+<a class="entry-item" href="恩斯河.html">
+  <div class="noun">恩斯河</div>
+  <div class="snippet">多瑙河南岸支流，全长254公里，奥地利境内最长的河流， 发源于萨尔茨堡州的拉德施塔特陶恩山区，在毛特豪森注入多瑙河。 --- 奥地利境内多瑙河的一条支流。在托尔斯泰《战争与和平》中，托尔斯泰详细描写了俄军在库图佐夫率领下向维也纳撤退时，于1</div>
+</a>
+<a class="entry-item" href="意大利.html">
+  <div class="noun">意大利</div>
+  <div class="snippet">欧洲南部国家，由亚平宁半岛及西西里岛、撒丁岛等组成，首都罗马。在拿破仑战争时期意大利半岛部分被法国控制，是反法联军作战的重要战场之一。 --- 南欧国家。在本章中，安德烈公爵计划出国游历，意大利列在其旅行计划中，反映了他对欧洲文化和自由生活</div>
+</a>
+<a class="entry-item" href="戈尔基.html">
+  <div class="noun">戈尔基</div>
+  <div class="snippet">博罗季诺战场附近的一个村庄，位于波罗金诺村附近的高地上。皮埃尔在寻找战场时经过此村，在这里第一次见到了头戴十字架帽、身穿白衬衫的农民民军在修筑工事。 --- 波罗金诺战场附近的村庄，位于俄军防线中央略偏右的位置。库图佐夫在此设立战役指挥部，</div>
+</a>
+<a class="entry-item" href="战俘营.html">
+  <div class="noun">战俘营</div>
+  <div class="snippet">战争期间交战国用来关押被俘敌方战斗人员的场所。1797年英国诺曼克罗斯战俘营被认为是世界上第一座专门建造的战俘营。在《战争与和平》中，皮埃尔在目睹法军处决俄国囚犯后被单独关押在一座破旧小教堂里，随后被宣布赦免并送入战俘营。</div>
+</a>
+<a class="entry-item" href="扎哈林诺.html">
+  <div class="noun">扎哈林诺</div>
+  <div class="snippet">博罗季诺战场附近的一个村庄，与别祖博沃村相邻，位于战场右侧科洛恰河流域的峡谷地带。</div>
+</a>
+<a class="entry-item" href="扎尔策涅克.html">
+  <div class="noun">扎尔策涅克</div>
+  <div class="snippet">托尔斯泰《战争与和平》中保罗格勒骠骑兵团驻扎的德意志村庄，位于布劳瑙（Braunau）附近约两英里处。尼古拉·罗斯托夫所在的骑兵连驻扎于此。</div>
+</a>
+<a class="entry-item" href="扎尔策涅克村.html">
+  <div class="noun">扎尔策涅克村</div>
+  <div class="snippet">托尔斯泰《战争与和平》中虚构的德国村庄，靠近布劳瑙。保罗格勒骠骑兵团在此驻扎，司令部位于该村三俄里外。1805年俄法战争期间俄军在此附近扎营，是小说中军队生活场景的重要地点。</div>
+</a>
+<a class="entry-item" href="扎罗夫草地.html">
+  <div class="noun">扎罗夫草地</div>
+  <div class="snippet">娜塔莎和彼佳在狩猎中停留的地方。</div>
+</a>
+<a class="entry-item" href="托伦.html">
+  <div class="noun">托伦</div>
+  <div class="snippet">今波兰托伦，维斯瓦河畔历史名城，哥白尼的故乡。拿破仑战争期间，托伦是法军进军俄国途中的重要据点，拿破仑曾在此驻军和建立后勤基地。</div>
+</a>
+<a class="entry-item" href="托尔若克.html">
+  <div class="noun">托尔若克</div>
+  <div class="snippet">俄罗斯特维尔州的历史名城，位于莫斯科与圣彼得堡之间的交通要道上，以金线刺绣闻名。皮埃尔在前往彼得堡途中在此驿站停留沉思。</div>
+</a>
+<a class="entry-item" href="扬科沃.html">
+  <div class="noun">扬科沃</div>
+  <div class="snippet">托尔斯泰小说《战争与和平》中尼古拉·罗斯托夫所属骠骑兵团的驻扎村庄，位于博古恰罗沃附近约十五俄里处。1812年俄法战争期间，罗斯托夫和同僚伊林即从此地出发前往博古恰罗沃，由此引出了罗斯托夫解救玛丽亚公爵小姐的重要情节。</div>
+</a>
+<a class="entry-item" href="拉祖莫夫斯基家的教堂.html">
+  <div class="noun">拉祖莫夫斯基家的教堂</div>
+  <div class="snippet">俄国贵族拉祖莫夫斯基家族在莫斯科府邸附设的家庭礼拜堂，是莫斯科上流社会做弥撒的重要场所。小说中罗斯托夫一家在1812年战争期间照常到此教堂做弥撒，娜塔莎在此经历了重要的精神觉醒。</div>
+</a>
+<a class="entry-item" href="拉耶夫斯基土岗.html">
+  <div class="noun">拉耶夫斯基土岗</div>
+  <div class="snippet">博罗季诺战场中央库尔干山丘上的一座棱堡，以俄军第7步兵军军长尼古拉·拉耶夫斯基中将命名。该棱堡配备18门火炮，是俄军防线的核心关键点，成为博罗季诺战役中争夺最激烈的阵地之一，具有极高的军事历史意义。</div>
+</a>
+<a class="entry-item" href="拉耶夫斯基炮垒.html">
+  <div class="noun">拉耶夫斯基炮垒</div>
+  <div class="snippet">波罗金诺战役中俄军中央阵地的关键防御工事，以指挥官拉耶夫斯基将军命名。皮埃尔在此处目睹了战役最激烈的战斗场面。这是全书战争描写的核心场景之一。</div>
+</a>
+<a class="entry-item" href="摩尔达维亚.html">
+  <div class="noun">摩尔达维亚</div>
+  <div class="snippet">历史上的摩尔达维亚公国，位于今罗马尼亚和摩尔多瓦一带，曾臣属于奥斯曼帝国和俄罗斯帝国。</div>
+</a>
+<a class="entry-item" href="摩拉维亚.html">
+  <div class="noun">摩拉维亚</div>
+  <div class="snippet">捷克东部历史地理区域，得名于摩拉瓦河，面积约2.2万平方公里，占捷克领土约30%。首府布尔诺。拿破仑战争期间法俄奥多场战役在此进行，书中比利宾称之为&quot;讨厌的摩拉维亚山洞&quot;。</div>
+</a>
+<a class="entry-item" href="救主山.html">
+  <div class="noun">救主山</div>
+  <div class="snippet">《战争与和平》中提到的地名，小公爵夫人丽莎在前往童山途中经过此地，怀孕的身体在此遭遇变故。与莫斯科基督救主大教堂所在区域有文化关联。</div>
+</a>
+<a class="entry-item" href="敖德萨.html">
+  <div class="noun">敖德萨</div>
+  <div class="snippet">乌克兰黑海沿岸的重要港口城市，18世纪末由叶卡捷琳娜二世建立。19世纪初敖德萨迅速发展成为俄国重要的贸易港口和多元文化城市。在小说中仅作为女教师讨论生活费用时提及的城市。</div>
+</a>
+<a class="entry-item" href="敖德萨共济会.html">
+  <div class="noun">敖德萨共济会</div>
+  <div class="snippet">敖德萨共济会指19世纪在黑海港口城市敖德萨活动的共济会组织。敖德萨的城市规划理念被认为深受共济会启蒙思想影响，被称为&quot;太阳之城&quot;。19世纪上半叶敖德萨是俄国南部共济会活动的四大中心之一，成员多为当地精英阶层，1822年被沙皇政府禁止后转入秘</div>
+</a>
+<a class="entry-item" href="斯佩兰斯基府第.html">
+  <div class="noun">斯佩兰斯基府第</div>
+  <div class="snippet">米哈伊尔·米哈伊洛维奇·斯佩兰斯基在彼得堡的私人住宅，坐落在道利达花园旁边。是一幢不大的私人住宅，内部异常清洁，像修道士的居室那样朴素整洁。安德烈公爵曾受邀在此参加私人午宴，在宴会上首次见到斯佩兰斯基私下的另一面，对其改革理想开始幻灭。</div>
+</a>
+<a class="entry-item" href="斯摩棱斯克.html">
+  <div class="noun">斯摩棱斯克</div>
+  <div class="snippet">俄罗斯西部重要古城，位于第聂伯河畔，是通往莫斯科的要道。1812年俄法战争中，俄军在此与拿破仑大军激战后弃城焚毁，成为战争转折的关键节点。</div>
+</a>
+<a class="entry-item" href="斯摩棱斯克大路.html">
+  <div class="noun">斯摩棱斯克大路</div>
+  <div class="snippet">连接莫斯科和斯摩棱斯克的主要道路，1812年俄军沿此路撤退，波罗金诺战场即位于此路附近。拿破仑的大军也沿此路向莫斯科推进。 --- 连接莫斯科和斯摩棱斯克的一条古道，是19世纪初俄国西部最重要的交通干线之一。1812年拿破仑入侵俄国时，法军</div>
+</a>
+<a class="entry-item" href="斯文齐亚内.html">
+  <div class="noun">斯文齐亚内</div>
+  <div class="snippet">立陶宛东部城镇（今Švenčionys），历史上属维尔纳省。1812年拿破仑征俄期间，俄军在撤退途中经过此地。安德烈公爵在谈话中提及此地，以说明俄国军队在巴克莱·德·托利指挥下撤退时严格执行焦土政策、禁止劫掠地方，而库图佐夫上任后改变了这一</div>
+</a>
+<a class="entry-item" href="斯洛博达宫.html">
+  <div class="noun">斯洛博达宫</div>
+  <div class="snippet">莫斯科的一处历史宫殿建筑，位于列福尔托沃区。最初为18世纪中期巴洛克风格的私家庄园，后经建筑大师马特维·卡扎科夫和贾科莫·夸伦吉重建为古典主义风格。1812年拿破仑入侵期间，亚历山大一世在此召开贵族和商人联席会议，号召组织民团抗击法军。该建</div>
+</a>
+<a class="entry-item" href="新卡卢日斯卡雅大路.html">
+  <div class="noun">新卡卢日斯卡雅大路</div>
+  <div class="snippet">通往卡卢加的一条新道路。1812年10月，拿破仑的法国军队在塔鲁丁诺战役后，突然向左转向新卡卢日斯卡雅大路，试图从西南方向突破俄军防线向卡卢加撤退，从而避开已被战火破坏的斯摩棱斯克大道。</div>
+</a>
+<a class="entry-item" href="新圣母修道院.html">
+  <div class="noun">新圣母修道院</div>
+  <div class="snippet">莫斯科著名修道院，位于莫斯科河畔，克里姆林宫西南约4公里处。1524年由莫斯科大公瓦西里三世为纪念收复斯摩棱斯克而建。该修道院是莫斯科巴洛克风格建筑的杰出代表，2004年被列入联合国教科文组织世界遗产名录。历史上曾作为皇家女性成员修道和囚禁</div>
+</a>
+<a class="entry-item" href="施特拉尔松.html">
+  <div class="noun">施特拉尔松</div>
+  <div class="snippet">德国东北部波罗的海沿岸城市，历史上曾是汉萨同盟核心成员，在拿破仑战争时期为战略要地。《战争与和平》中提及作为俄军与瑞典军队会师的地点。</div>
+</a>
+<a class="entry-item" href="旧卡卢日斯卡雅大路.html">
+  <div class="noun">旧卡卢日斯卡雅大路</div>
+  <div class="snippet">通往卡卢加城的古老道路，位于莫斯科西南方向。1812年拿破仑从莫斯科撤退时试图通过此路向卡卢加方向撤退，以寻找未被战争破坏的补给区。但在小雅罗斯拉维茨战役后被俄军截断，迫使法军改道斯摩棱斯克大道。</div>
+</a>
+<a class="entry-item" href="普图斯克.html">
+  <div class="noun">普图斯克</div>
+  <div class="snippet">波兰城市，位于华沙以北约30英里，1806年12月26日在此发生普图斯克战役，俄法双方不分胜负。</div>
+</a>
+<a class="entry-item" href="普拉茨山.html">
+  <div class="noun">普拉茨山</div>
+  <div class="snippet">又称普拉岑高地，位于今捷克境内，是1805年奥斯特里茨战役（三皇会战）的核心战略要地。拿破仑在此役中诱敌深入，夺回高地后分割包围俄奥联军取得决定性胜利。</div>
+</a>
+<a class="entry-item" href="普拉茨村.html">
+  <div class="noun">普拉茨村</div>
+  <div class="snippet">今捷克境内的普拉茨（Prace）村，位于奥斯特利茨（今斯拉夫科夫）附近，是1805年奥斯特利茨战役的核心战场。该村附近的普拉茨高地是战役中双方争夺的战略制高点。俄奥联军最初驻守该高地，后因沙皇调兵南下而被法军夺占，导致战局逆转。</div>
+</a>
+<a class="entry-item" href="普拉茨高地.html">
+  <div class="noun">普拉茨高地</div>
+  <div class="snippet">也译作普拉钦高地或普拉岑高地（Pratzen Heights），位于今捷克境内，是奥斯特里茨战役中最关键的制高点。拿破仑故意放弃该高地引诱联军分兵，随后在浓雾掩护下突然夺回，实现中央突破奠定胜局。 --- 普拉茨高地（Pratzen Hei</div>
+</a>
+<a class="entry-item" href="普雷斯尼亚.html">
+  <div class="noun">普雷斯尼亚</div>
+  <div class="snippet">莫斯科西部的一个历史区域，得名于普雷斯尼亚河，在1812年时是莫斯科的一个城区。 --- 莫斯科西部的一个历史街区（Пресня），位于普雷斯尼亚河畔，今属莫斯科中央行政区。1812年莫斯科大撤退时该区居民纷纷驱车撤离。</div>
+</a>
+<a class="entry-item" href="普鲁士.html">
+  <div class="noun">普鲁士</div>
+  <div class="snippet">欧洲历史国家，位于波罗的海周边的德意志地区，存在于1525年至1947年。1701年正式成为普鲁士王国，后在霍亨索伦家族统治下通过军事扩张崛起为欧洲列强。1866年击败奥地利、1871年普法战争后统一德意志，建立德意志帝国。普鲁士以军国主义</div>
+</a>
+<a class="entry-item" href="林茨.html">
+  <div class="noun">林茨</div>
+  <div class="snippet">奥地利第三大城市、上奥地利州首府，位于多瑙河与其支流特劳恩河交汇处， 多瑙河上游最大河港，重要的工业与交通枢纽。</div>
+</a>
+<a class="entry-item" href="枢密院广场.html">
+  <div class="noun">枢密院广场</div>
+  <div class="snippet">莫斯科克里姆林宫内的五大广场之一，位于枢密院大厦与兵工厂之间。1812年法军占领克里姆林宫后在此安营扎寨。</div>
+</a>
+<a class="entry-item" href="柏林.html">
+  <div class="noun">柏林</div>
+  <div class="snippet">普鲁士王国的首都，1701年起成为普鲁士政治中心。1805年时由腓特烈·威廉三世统治，第三次反法同盟期间普鲁士在拿破仑压力下摇摆不定。1806年耶拿战役后曾被法军占领。小说中外交家从柏林带来亚历山大一世访问波茨坦的消息，涉及普鲁士与俄国结盟</div>
+</a>
+<a class="entry-item" href="柯尼斯堡.html">
+  <div class="noun">柯尼斯堡</div>
+  <div class="snippet">今俄罗斯加里宁格勒，原东普鲁士首府，历史上为普鲁士王国重要城市和港口。拿破仑在进军俄国途中经过此城，该地也是蒂尔西特和约的谈判背景地之一。</div>
+</a>
+<a class="entry-item" href="格伦特.html">
+  <div class="noun">格伦特</div>
+  <div class="snippet">德语名Grund，奥地利下奥地利州地名，位于霍拉布伦县境内。在《战争与和平》中，安德烈公爵于1805年战役期间在此地见到巴格拉季翁公爵并巡视俄军前沿阵地。</div>
+</a>
+<a class="entry-item" href="格扎特.html">
+  <div class="noun">格扎特</div>
+  <div class="snippet">俄罗斯斯摩棱斯克州的城市，1812年战争的战略要地，现名加加林。</div>
+</a>
+<a class="entry-item" href="格洛高.html">
+  <div class="noun">格洛高</div>
+  <div class="snippet">格洛高（Glogau，今波兰格沃古夫/Głogów）是西里西亚地区的重要要塞城市，历史上长期属于普鲁士。在《战争与和平》中，鲍里斯向安娜·帕夫洛夫娜的沙龙客人讲述他在格洛高的旅行以及所见的普鲁士军队情况。该城在拿破仑战争期间是普鲁士的重要驻</div>
+</a>
+<a class="entry-item" href="格里德涅瓦.html">
+  <div class="noun">格里德涅瓦</div>
+  <div class="snippet">波罗金诺附近的村庄，俄军后卫在此与法军发生战斗，随后撤退至舍瓦尔金诺。</div>
+</a>
+<a class="entry-item" href="格鲁津斯基公爵府第.html">
+  <div class="noun">格鲁津斯基公爵府第</div>
+  <div class="snippet">莫斯科的一处贵族宅邸及花园，位于波瓦尔大街附近。格鲁津斯基是俄罗斯化姓氏，意为&quot;格鲁吉亚人&quot;，其家族为18-19世纪定居莫斯科的格鲁吉亚王室后裔。在《战争与和平》中，皮埃尔在莫斯科大火中穿行时经过其花园，随后在此附近目睹法军士兵抢劫并出手相</div>
+</a>
+<a class="entry-item" href="格鲁津斯基花园.html">
+  <div class="noun">格鲁津斯基花园</div>
+  <div class="snippet">《战争与和平》中莫斯科波瓦尔大街拐角处的一处花园。皮埃尔抱着救出的女孩跑回此处时，发现这里已挤满了人和从屋里搬出来的家什，还有穿着形形色色服装的士兵。</div>
+</a>
+<a class="entry-item" href="梁赞.html">
+  <div class="noun">梁赞</div>
+  <div class="snippet">俄罗斯梁赞州首府，位于莫斯科东南约180-202公里的奥卡河畔，1095年首次见于史籍。14世纪初成为梁赞公国都城，1521年并入俄罗斯帝国。工业以机械制造和炼油为主，也是俄国生理学家巴甫洛夫和诗人叶赛宁的故乡。 --- 梁赞（Рязань</div>
+</a>
+<a class="entry-item" href="梁赞大路.html">
+  <div class="noun">梁赞大路</div>
+  <div class="snippet">莫斯科通往东南方梁赞城（Рязань）的主要道路。库图佐夫在1812年9月1日夜下令俄军经此路撤退，采取迂回机动的方式摆脱法军追击。</div>
+</a>
+<a class="entry-item" href="梁赞省.html">
+  <div class="noun">梁赞省</div>
+  <div class="snippet">俄国的一个省份，位于莫斯科东南。在小说中具有重要叙事作用：安德烈公爵的儿子领地位于该省，安德烈因此拜访了担任该省首席贵族的伊利亚·安德烈伊奇·罗斯托夫伯爵，从而在奥特拉德诺耶庄园初遇娜塔莎。在本章中出现在安德烈公爵对往事的回忆中。</div>
+</a>
+<a class="entry-item" href="梅先大街.html">
+  <div class="noun">梅先大街</div>
+  <div class="snippet">莫斯科的一条历史街道（Мещанская улица，今和平大街部分路段），意为&quot;市民街&quot;。1812年大撤退时，从这条街驶来的大车和马车阻碍了罗斯托夫家车队的停靠。</div>
+</a>
+<a class="entry-item" href="梅季希.html">
+  <div class="noun">梅季希</div>
+  <div class="snippet">梅季希（Мытищи / Mytishchi）是俄罗斯莫斯科州的一座城市，位于莫斯科东北约19公里处的亚乌扎河畔。该城建城于15世纪，18世纪叶卡捷琳娜二世在此修建了俄罗斯第一条供水系统向克里姆林宫送水，1925年正式设市。在《战争与和平》</div>
+</a>
+<a class="entry-item" href="梅季希村.html">
+  <div class="noun">梅季希村</div>
+  <div class="snippet">莫斯科东北方向约二十俄里（约21公里）的村庄，是当时通往莫斯科的重要驿站。罗斯托夫一家撤离莫斯科后在此过夜，并在夜空中看到莫斯科大火的火光。现已成为莫斯科州的一个城市。 --- 梅季希村（俄语：Мытищи）是莫斯科附近的一个村庄，距莫斯科</div>
+</a>
+<a class="entry-item" href="梅尔克.html">
+  <div class="noun">梅尔克</div>
+  <div class="snippet">梅尔克（Melk）位于奥地利下奥地利州多瑙河畔，以梅尔克修道院闻名于世。1805年至1809年间拿破仑军队占领该地，拿破仑曾将修道院作为指挥中心。该修道院是联合国世界文化遗产瓦豪河谷的一部分。</div>
+</a>
+<a class="entry-item" href="梅德内.html">
+  <div class="noun">梅德内</div>
+  <div class="snippet">梅德内（Medyn / Медынь），又译作梅丁，是俄罗斯卡卢加州的一个城市，位于梅德内河畔，距卡卢加西北约62公里。在1812年俄法战争中，此地发生了关键性的梅德内战斗（1812年10月13日）：俄军伊洛瓦伊斯基率领的哥萨克部队击败了波</div>
+</a>
+<a class="entry-item" href="梅柳科娃家.html">
+  <div class="noun">梅柳科娃家</div>
+  <div class="snippet">佩拉格娅·丹尼洛夫娜·梅柳科娃的庄园，距罗斯托夫家约四俄里。 圣诞节当晚罗斯托夫家的年轻人化装后到此聚会，在此举办了热闹的假面舞会。 尼古拉与索尼娅在此夜晚感情升温。 --- 梅柳科娃家是佩拉格娅·丹尼洛夫娜·梅柳科娃的庄园宅邸，位于罗斯托</div>
+</a>
+<a class="entry-item" href="梅柳科娃庄子.html">
+  <div class="noun">梅柳科娃庄子</div>
+  <div class="snippet">即梅柳科娃家的庄园，佩拉格娅·丹尼洛夫娜·梅柳科娃的宅邸。 尼古拉在前往梅柳科娃家的路上辨认着方向，在月光下的雪原中驰骋。</div>
+</a>
+<a class="entry-item" href="榛树丛薮.html">
+  <div class="noun">榛树丛薮</div>
+  <div class="snippet">榛树丛薮是《战争与和平》狩猎场景中的一种灌木地形，由榛树密集生长而成。猎犬手们在榛树丛薮后面的洼地上守候猎物，而丹尼洛正是从分开的榛树丛薮中纵马驰出的。这种茂密的灌木丛是狩猎场景中俄国乡间地貌的典型特征，既是猎物的藏身处，也是猎人们穿行其中</div>
+</a>
+<a class="entry-item" href="橡树林.html">
+  <div class="noun">橡树林</div>
+  <div class="snippet">罗斯托夫家狩猎远征的起点，有一个未受惊扰的狼窝。</div>
+</a>
+<a class="entry-item" href="欧洲.html">
+  <div class="noun">欧洲</div>
+  <div class="snippet">小说中政治与军事角逐的大舞台。拿破仑战争波及整个欧洲大陆，俄国在亲欧与反欧之间摇摆。老博尔孔斯基公爵主张俄国应将政策放在东方而非干预欧洲事务，反映了当时俄国关于&quot;西化还是本土化&quot;的争论。</div>
+</a>
+<a class="entry-item" href="汉堡.html">
+  <div class="noun">汉堡</div>
+  <div class="snippet">德国北部易北河畔的最大港口城市，全称&quot;汉堡汉萨自由市&quot;，历史上是汉萨同盟的核心成员，1810年被拿破仑吞并入法兰西帝国，大陆封锁政策使其贸易遭受毁灭性打击。</div>
+</a>
+<a class="entry-item" href="沃伊纳河.html">
+  <div class="noun">沃伊纳河</div>
+  <div class="snippet">莫斯科以西的河流，在波罗金诺附近汇入科洛恰河，是波罗金诺战场的地理标识之一。</div>
+</a>
+<a class="entry-item" href="沃罗佐沃村.html">
+  <div class="noun">沃罗佐沃村</div>
+  <div class="snippet">莫斯科郊外的村庄，距莫斯科约7公里。1812年德国发明家列比赫在这里秘密建造军用大气球，由莫斯科总督拉斯托普钦监督。皮埃尔曾在法军逼近莫斯科前专程前往查看气球的建造进展。这一地点在《战争与和平》中作为列比赫大气球项目的所在地出现。</div>
+</a>
+<a class="entry-item" href="沃罗涅日.html">
+  <div class="noun">沃罗涅日</div>
+  <div class="snippet">俄罗斯沃罗涅日州首府，位于沃罗涅日河与顿河汇流处附近。1586年建城，彼得大帝时期曾在此建设海军。19世纪初是重要的商贸和工业中心。杰尼索夫的老家在此地。</div>
+</a>
+<a class="entry-item" href="沙姆舍沃.html">
+  <div class="noun">沙姆舍沃</div>
+  <div class="snippet">《战争与和平》中法军运输队驻扎的村庄，杰尼索夫游击队计划袭击的目标。</div>
+</a>
+<a class="entry-item" href="沙姆舍沃村.html">
+  <div class="noun">沙姆舍沃村</div>
+  <div class="snippet">《战争与和平》中出现的村庄，位于斯摩棱斯克地区附近。在1812年游击战情节中，法军的军需物资运输队和俄国俘虏驻扎于此。杰尼索夫和多洛霍夫率领游击队在此突袭法军，成功解救包括皮埃尔在内的俘虏。年轻的彼佳·罗斯托夫在此战中阵亡。普拉东·卡拉塔耶</div>
+</a>
+<a class="entry-item" href="沼泽广场.html">
+  <div class="noun">沼泽广场</div>
+  <div class="snippet">莫斯科的一处广场，皮埃尔在此目睹了法国厨子受鞭刑的场面。</div>
+</a>
+<a class="entry-item" href="法国.html">
+  <div class="noun">法国</div>
+  <div class="snippet">拿破仑一世统治下的法兰西帝国，是俄国在奥斯特利茨战役中的敌国。 --- 拿破仑统治下的法兰西帝国，19世纪初欧洲最强大的国家。在《战争与和平》中，法国既是俄国的文化楷模（语言、时尚、思想），又是俄国的战场敌人。这一矛盾深刻体现了当时俄国社会</div>
+</a>
+<a class="entry-item" href="法国剧院.html">
+  <div class="noun">法国剧院</div>
+  <div class="snippet">1812年战争期间彼得堡仍在正常演出的法国剧院。在小说中作为彼得堡上层社会生活如常的象征，与莫斯科的灾难形成鲜明对比。尽管战争形势严峻，彼得堡的法国剧院、舞会晚会等依然如故。</div>
+</a>
+<a class="entry-item" href="法国营盘.html">
+  <div class="noun">法国营盘</div>
+  <div class="snippet">法国营盘指拿破仑大军在1812年俄法战争期间的野战营地/军营。在《战争与和平》中，多洛霍夫和彼佳乔装成法军军官潜入法国营盘进行侦察。小说中对此有细腻描写：篝火旁的士兵谈话声、煮锅里的食物、军官们的警惕与怀疑——托尔斯泰通过这个侦察视角展现了</div>
+</a>
+<a class="entry-item" href="波克罗夫卡街.html">
+  <div class="noun">波克罗夫卡街</div>
+  <div class="snippet">莫斯科最古老的街道之一，位于巴斯曼区，与马罗谢卡街相连。在1812年法军占领莫斯科期间，法军曾在此驻防。</div>
+</a>
+<a class="entry-item" href="波克罗夫斯科耶.html">
+  <div class="noun">波克罗夫斯科耶</div>
+  <div class="snippet">俄罗斯常见村庄名，《战争与和平》中吉洪·谢尔巴特的家乡。</div>
+</a>
+<a class="entry-item" href="波克隆山.html">
+  <div class="noun">波克隆山</div>
+  <div class="snippet">莫斯科西部的一座山丘，海拔171.5米，曾是莫斯科最高自然点之一。历史上所有从西方进入莫斯科的人都要在此向首都行礼致敬，故得名&quot;俯首山&quot;。1812年库图佐夫曾在此山路边条凳上听取将领们关于放弃莫斯科的意见。现为莫斯科胜利公园和卫国战争中央博</div>
+</a>
+<a class="entry-item" href="波兰.html">
+  <div class="noun">波兰</div>
+  <div class="snippet">中欧国家，18世纪末的波兰立陶宛联邦。1790年代经历《五三宪法》改革、俄普奥三次瓜分，1795年亡国达123年。书中在提及多洛霍夫在波兰打死犹太人的事件中出现。</div>
+</a>
+<a class="entry-item" href="波多尔斯克.html">
+  <div class="noun">波多尔斯克</div>
+  <div class="snippet">俄罗斯莫斯科州城市，位于莫斯科以南约30公里处的帕赫拉河畔。起源于18世纪莫斯科丹尼洛夫修道院管辖下的波多尔村，1781年正式获得城市地位。在1812年俄法战争中，俄军渡过帕赫拉河向图拉大路进发时，曾计划在波多尔斯克停留休整，但最终因战局变</div>
+</a>
+<a class="entry-item" href="波希米亚.html">
+  <div class="noun">波希米亚</div>
+  <div class="snippet">中欧历史地区，今捷克共和国中西部。四面环山，形成天然盆地，首府布拉格。1805年奥斯特里茨战役即发生在波希米亚境内。神圣罗马帝国时期为重要王国领地。</div>
+</a>
+<a class="entry-item" href="波德诺文斯克街.html">
+  <div class="noun">波德诺文斯克街</div>
+  <div class="snippet">莫斯科的一条街道，罗斯托夫家撤离时在该街上与其他撤离车队汇集。 --- 莫斯科的一条街道（Подновинская улица），位于库德林诺附近。1812年莫斯科撤退时，该街道的居民车队与罗斯托夫家的车队在花园街一带汇合。</div>
+</a>
+<a class="entry-item" href="波森.html">
+  <div class="noun">波森</div>
+  <div class="snippet">今波兰波兹南，历史上属普鲁士王国。拿破仑战争期间，波森是法军向俄国进军途中的重要补给站和集结点。</div>
+</a>
+<a class="entry-item" href="波瓦尔大街.html">
+  <div class="noun">波瓦尔大街</div>
+  <div class="snippet">波瓦尔大街（Поварская улица，Povarskaya Street）是俄罗斯莫斯科市中心的一条古老街道，东起阿尔巴特广场，西至花园环路库德林广场，长约1公里。街名源自俄语&quot;повар&quot;（厨师），17世纪时这里曾是莫斯科宫廷厨师的</div>
+</a>
+<a class="entry-item" href="波的尼亚湾.html">
+  <div class="noun">波的尼亚湾</div>
+  <div class="snippet">波罗的海北部海湾，位于瑞典东海岸和芬兰西海岸之间。拿破仑战争时期，俄国于1809年通过冰封该海湾的奇袭迫使瑞典割让芬兰，使俄国版图扩展到波的尼亚湾沿岸。</div>
+</a>
+<a class="entry-item" href="波罗金诺.html">
+  <div class="noun">波罗金诺</div>
+  <div class="snippet">即博罗季诺（Бородино），俄罗斯莫斯科以西约124公里的村庄。1812年9月7日在此爆发著名的博罗季诺战役（波罗金诺战役），是拿破仑战争中最惨烈的单日战役，俄法双方伤亡逾七万人。托尔斯泰在《战争与和平》中对此战役有长篇描写。</div>
+</a>
+<a class="entry-item" href="波美拉尼亚.html">
+  <div class="noun">波美拉尼亚</div>
+  <div class="snippet">中欧历史地域名称，位于波罗的海南岸，名称源于斯拉夫语&quot;沿海之地&quot;，现今分属德国和波兰两国北部，在拿破仑战争时期为战略通道。</div>
+</a>
+<a class="entry-item" href="波茨坦.html">
+  <div class="noun">波茨坦</div>
+  <div class="snippet">德国勃兰登堡州首府，位于柏林西南郊，18世纪腓特烈大帝时期发展为普鲁士文化、军事中心。以无忧宫（Sanssouci）闻名，腓特烈大帝在此建造了洛可可式夏日宫殿。1945年曾举行波茨坦会议。小说中亚历山大一世在此与普鲁士国王会晤。 --- 普</div>
+</a>
+<a class="entry-item" href="洛迪.html">
+  <div class="noun">洛迪</div>
+  <div class="snippet">意大利北部小镇，位于米兰东南约22英里处、阿达河畔。1796年5月10日，拿破仑在此指挥法军强攻洛迪桥击败奥地利后卫部队。此战虽规模不大，但对拿破仑个人影响深远，他后来称此战后意识到自己能决断人民命运。法军士兵从此称拿破仑为&quot;小伍长&quot;。</div>
+</a>
+<a class="entry-item" href="涅斯库奇内.html">
+  <div class="noun">涅斯库奇内</div>
+  <div class="snippet">涅斯库奇内（俄语：Нескучное/Нескучный сад，意为&quot;不无聊的&quot;）是莫斯科河畔的一处历史园林区，原为18世纪贵族庄园，1830年代被尼古拉一世收购改建为皇家寓所。今为高尔基中央文化休闲公园的一部分，内有亚历山德林斯基宫（现</div>
+</a>
+<a class="entry-item" href="涅曼河.html">
+  <div class="noun">涅曼河</div>
+  <div class="snippet">涅曼河（立陶宛语Nemunas，俄语Неман，德语Memel），东欧平原西部重要河流，发源于白俄罗斯明斯克西南约50公里，流经白俄罗斯、立陶宛和俄罗斯加里宁格勒州，全长937公里，流域面积约9.82万平方公里，经库尔斯潟湖注入波罗的海。二</div>
+</a>
+<a class="entry-item" href="溪谷.html">
+  <div class="noun">溪谷</div>
+  <div class="snippet">溪谷是《战争与和平》狩猎场景中的一种地形特征，指林边被水冲塌的小型沟壑。尼古拉·罗斯托夫在守候野兽时，以溪谷作为参照物之一来观察周围环境。狼在逃跑时也曾在溪谷中被卡拉伊追赶上并滚入其中纠缠搏斗。</div>
+</a>
+<a class="entry-item" href="滑雪场.html">
+  <div class="noun">滑雪场</div>
+  <div class="snippet">滑雪场是19世纪莫斯科冬季在莫斯科河沿岸或城市广场搭建的临时木制滑雪坡道（俄语на горах），供贵族和平民冬季乘雪橇滑行娱乐。这些坡道高达数丈，装饰有彩灯旗帜，是莫斯科冬季社交生活的重要场所，常与茨冈人表演、酒馆并列，为纨绔子弟常去的消</div>
+</a>
+<a class="entry-item" href="澡堂.html">
+  <div class="noun">澡堂</div>
+  <div class="snippet">澡堂（俄式蒸汽浴房，баня）在俄国民间传统中被视为阴阳交界之处，是少女圣诞占卜的重要场所。相传在深夜独自进入黑暗的澡堂，散开头发、卸下首饰，摆放公鸡和餐具，即可召来未来丈夫的鬼魂形象。这一传统融合了古斯拉夫多神教与东正教信仰，被认为是「不</div>
+</a>
+<a class="entry-item" href="热那亚.html">
+  <div class="noun">热那亚</div>
+  <div class="snippet">意大利北部利古里亚大区首府，位于利古里亚海热那亚湾北岸，是意大利最大港口。中世纪曾建立热那亚共和国，是强大的海洋共和国之一，与威尼斯、比萨等竞争地中海贸易霸权。著名航海家哥伦布诞生于此。 --- 热那亚（Genova）是意大利西北部利古里亚</div>
+</a>
+<a class="entry-item" href="焦姆金山.html">
+  <div class="noun">焦姆金山</div>
+  <div class="snippet">罗斯托夫家附近的地名。尼古拉在圣诞节夜晚雪橇行驶途中辨认方位时提及。 他在月光下的雪原上驰骋，发现既不是科索伊草地也不是焦姆金山， 感到自己进入了一个新奇的仙境。</div>
+</a>
+<a class="entry-item" href="特劳恩河.html">
+  <div class="noun">特劳恩河</div>
+  <div class="snippet">多瑙河右岸支流，全长153公里，发源于施泰尔马克州的托特斯山， 流经萨尔茨卡默古特地区，在奥地利林茨附近汇入多瑙河。</div>
+</a>
+<a class="entry-item" href="特维尔城门.html">
+  <div class="noun">特维尔城门</div>
+  <div class="snippet">莫斯科的古老城门之一，位于城市西北方向，通向特维尔城。1812年法军从特维尔、卡卢日斯基和多罗戈米洛夫三座城门同时进入莫斯科。</div>
+</a>
+<a class="entry-item" href="特维尔街.html">
+  <div class="noun">特维尔街</div>
+  <div class="snippet">莫斯科中心的一条核心主干道，从克里姆林宫北侧向西北延伸。在1812年法军占领莫斯科期间，法军曾在此驻防。</div>
+</a>
+<a class="entry-item" href="特罗伊茨.html">
+  <div class="noun">特罗伊茨</div>
+  <div class="snippet">即谢尔吉耶夫镇的圣三一修道院（Троице-Сергиева лавра），是俄罗斯最大的东正教男修道院，位于莫斯科东北约70公里处。小说中彼佳·罗斯托夫随团队开往该地。</div>
+</a>
+<a class="entry-item" href="特罗伊茨修道院.html">
+  <div class="noun">特罗伊茨修道院</div>
+  <div class="snippet">全称谢尔盖三圣大修道院，俄罗斯最古老、最著名的东正教大修道院之一，位于莫斯科东北约71公里的谢尔盖耶夫镇。由圣谢尔盖·拉多涅日斯基于1337年创建，1993年被列为世界文化遗产。</div>
+</a>
+<a class="entry-item" href="特罗伊茨门.html">
+  <div class="noun">特罗伊茨门</div>
+  <div class="snippet">莫斯科克里姆林宫西侧特罗伊茨基塔（三一塔）的大门，是克里姆林宫的第二重要大门。历史上是牧首、皇后和公主出入宫苑的主要通道。法军攻打克里姆林宫时此处发生过战斗。</div>
+</a>
+<a class="entry-item" href="特韦尔.html">
+  <div class="noun">特韦尔</div>
+  <div class="snippet">俄罗斯古城，位于莫斯科西北约167公里处伏尔加河上游，现为特维尔州首府。建于1135年，曾是与莫斯科公国争夺俄罗斯中心地位的特维尔大公国都城。1931年至1990年间曾更名为加里宁。</div>
+</a>
+<a class="entry-item" href="特韦尔林荫道.html">
+  <div class="noun">特韦尔林荫道</div>
+  <div class="snippet">特韦尔林荫道（特维尔大道）是莫斯科市中心最古老的林荫大道，属于莫斯科林荫环路的一部分，北起尼基茨基大道，南至普希金广场。建成于1796年，是19世纪莫斯科贵族上流社会散步聚会的著名场所。在《战争与和平》中，皮埃尔正是在此被阿纳托利·库拉金呼</div>
+</a>
+<a class="entry-item" href="玛斯广场.html">
+  <div class="noun">玛斯广场</div>
+  <div class="snippet">法国巴黎战神广场（Champ-de-Mars），位于埃菲尔铁塔与巴黎军校之间。原为军事训练场，法国大革命期间发生马尔斯广场屠杀事件，后举办多届世博会和1900年奥运会。 --- 即战神广场（Marsovo Polye），位于圣彼得堡市中心，</div>
+</a>
+<a class="entry-item" href="瑞典.html">
+  <div class="noun">瑞典</div>
+  <div class="snippet">北欧国家，位于斯堪的纳维亚半岛东半部，首都斯德哥尔摩，君主立宪制国家。在拿破仑战争时期保持灵活外交政策，在反法同盟中扮演重要角色。</div>
+</a>
+<a class="entry-item" href="瑞士.html">
+  <div class="noun">瑞士</div>
+  <div class="snippet">中欧国家。在本章中，安德烈公爵在感受新生、计划未来时，将瑞士列为其出国旅行的目的地之一。</div>
+</a>
+<a class="entry-item" href="瑞士(安德烈公爵疗养地).html">
+  <div class="noun">瑞士(安德烈公爵疗养地)</div>
+  <div class="snippet">瑞士，阿尔卑斯山国，19世纪欧洲贵族疗养胜地。在《战争与和平》中，安德烈公爵在订婚后来到瑞士的矿泉疗养地治疗，医生嘱咐他需要在矿泉疗养地停留更长时间，因此他的归期被迫延迟三个月。他在瑞士写信向妹妹玛丽亚公爵小姐宣布了自己与娜塔莎·罗斯托娃订</div>
+</a>
+<a class="entry-item" href="瓦卢耶瓦.html">
+  <div class="noun">瓦卢耶瓦</div>
+  <div class="snippet">博罗季诺战场附近的一个村庄，位于斯摩棱斯克大路沿线。1812年博罗季诺战役前，拿破仑军队驻扎在该村，成为法军的前沿指挥所。 --- 波罗金诺战场附近的一处地点，1812年波罗金诺战役前夕拿破仑在此设立大本营。</div>
+</a>
+<a class="entry-item" href="瓦卢耶瓦高地.html">
+  <div class="noun">瓦卢耶瓦高地</div>
+  <div class="snippet">波罗金诺附近的高地，拿破仑在8月24日骑马到此视察俄军阵地。</div>
+</a>
+<a class="entry-item" href="瓦尔瓦尔卡大街.html">
+  <div class="noun">瓦尔瓦尔卡大街</div>
+  <div class="snippet">莫斯科最古老的街道之一，位于基泰戈罗德（Kitai-gorod）地区，紧邻克里姆林宫。街名来源于圣瓦尔瓦拉教堂。苏联时期曾更名为斯捷潘·拉辛街。在1812年，这条街上有一座未竣工的楼房，下层是酒馆，成为平民聚众喧闹的场所。</div>
+</a>
+<a class="entry-item" href="瓦拉几亚.html">
+  <div class="noun">瓦拉几亚</div>
+  <div class="snippet">罗马尼亚南部历史区域，位于多瑙河下游与喀尔巴阡山脉之间。14世纪建立瓦拉几亚公国，19世纪与摩尔达维亚合并为罗马尼亚。拿破仑战争期间，该地区为奥斯曼帝国控制下的附属公国，是俄土争夺之地。 --- 历史地区名，位于今罗马尼亚南部，介于喀尔巴阡</div>
+</a>
+<a class="entry-item" href="瓦格拉木.html">
+  <div class="noun">瓦格拉木</div>
+  <div class="snippet">奥地利维也纳东北约16公里的村庄。1809年7月5日至6日拿破仑在此与奥地利卡尔大公决战，史称瓦格拉姆战役，是当时欧洲规模最大的战役（双方投入超30万兵力）。法军惨胜，奥地利求和，第五次反法同盟瓦解。此役被视为拿破仑最后一次绝对性胜利。</div>
+</a>
+<a class="entry-item" href="瓦西里·布拉任内大教堂.html">
+  <div class="noun">瓦西里·布拉任内大教堂</div>
+  <div class="snippet">位于莫斯科红场的标志性东正教教堂，由伊凡雷帝为纪念1552年征服喀山汗国而下令修建（1555-1561年）。以九个彩色洋葱头圆顶闻名。1812年拿破仑军队占领莫斯科时，俄军士兵曾从该教堂旁经过前往红场。</div>
+</a>
+<a class="entry-item" href="申布鲁恩.html">
+  <div class="noun">申布鲁恩</div>
+  <div class="snippet">亦称美泉宫（Schloss Schonbrunn），位于维也纳西南部的巴洛克式皇家宫殿，哈布斯堡王朝夏宫，规模仅次于凡尔赛宫。1996年被联合国列入世界文化遗产。1805年拿破仑占领维也纳后曾驻跸于此。</div>
+</a>
+<a class="entry-item" href="申格拉本.html">
+  <div class="noun">申格拉本</div>
+  <div class="snippet">奥地利村庄名（Schöngrabern），位于维也纳以北。1805年11月16日（俄历11月4日），库图佐夫派遣巴格拉季翁率约7000俄军在此阻击缪拉指挥的约3万法军，史称申格拉本战役。俄军损失惨重但成功完成了掩护主力撤退的任务，是《战争与</div>
+</a>
+<a class="entry-item" href="白杨幼林.html">
+  <div class="noun">白杨幼林</div>
+  <div class="snippet">白杨幼林是《战争与和平》狩猎场景中的一处植被景观，指由年轻白杨树组成的林带。在尼古拉·罗斯托夫守候野兽的位置，有一片白杨幼林，中间矗立着两棵稀奇古怪的大橡树，成为他判断视野方向的参照物之一。这类风景描写体现了托尔斯泰对俄国乡村自然景色的细腻</div>
+</a>
+<a class="entry-item" href="白采尔科维.html">
+  <div class="noun">白采尔科维</div>
+  <div class="snippet">乌克兰基辅州城市，位于罗斯河畔，距基辅约80公里，意为&quot;白色教堂&quot;。始建于1032年。在1812年俄法战争期间，奥博连斯基的哥萨克部队驻扎于此进行整编。尼古拉·罗斯托夫的弟弟彼佳加入了这支部队，罗斯托夫一家因此留在莫斯科等待彼佳的消息。</div>
+</a>
+<a class="entry-item" href="皇后操场.html">
+  <div class="noun">皇后操场</div>
+  <div class="snippet">圣彼得堡战神广场的旧称，18世纪末称女皇草甸，用作军事训练和阅兵场地。1805年正式更名为战神广场。文中沙皇亚历山大一世以此比喻阅兵与实战不同。</div>
+</a>
+<a class="entry-item" href="皮埃尔家.html">
+  <div class="noun">皮埃尔家</div>
+  <div class="snippet">皮埃尔·别祖霍夫在莫斯科的宅邸。皮埃尔继承了别祖霍夫家族的巨额财产后成为莫斯科最富有的贵族之一，其宅邸豪华宽敞。本篇中安德烈公爵深夜到访，在这间&quot;烟雾弥漫的斗室&quot;中向皮埃尔倾诉对娜塔莎的爱情。</div>
+</a>
+<a class="entry-item" href="石岛.html">
+  <div class="noun">石岛</div>
+  <div class="snippet">彼得堡（圣彼得堡）涅瓦河上的岛屿，18至19世纪为贵族夏季别墅聚集区，以风景优美著称。海伦在此举行了一场盛大的宴会，并在宴会上结识了耶稣会教士德若贝尔。</div>
+</a>
+<a class="entry-item" href="石岛行宫.html">
+  <div class="noun">石岛行宫</div>
+  <div class="snippet">又称卡缅诺斯特罗夫斯基宫，位于圣彼得堡石岛（卡缅内岛）西南端的新古典主义宫殿。1776年至1782年由叶卡捷琳娜大帝下令为其子保罗一世建造。亚历山大一世时期成为他最喜爱的行宫之一。1812年俄法战争期间，亚历山大一世在此接见了从莫斯科赶来的</div>
+</a>
+<a class="entry-item" href="石桥.html">
+  <div class="noun">石桥</div>
+  <div class="snippet">指莫斯科的大石桥（Большой Каменный мост），横跨莫斯科河，是莫斯科最古老的石造桥梁，建于17世纪末。小说中韦列夏金在石桥旁边开设小饭馆。大石桥历史上是莫斯科的重要地标，1858年旧桥被拆除后重建。</div>
+</a>
+<a class="entry-item" href="祖波夫土围子.html">
+  <div class="noun">祖波夫土围子</div>
+  <div class="snippet">莫斯科的一处地点，在1812年法军占领莫斯科期间被用作拘留所。俄语音译为祖波夫的土城地区，位于莫斯科花园环路沿线，原是旧莫斯科外围土墙防御工事的一部分。小说中皮埃尔和其他嫌疑犯被关押于此。</div>
+</a>
+<a class="entry-item" href="禁伐区.html">
+  <div class="noun">禁伐区</div>
+  <div class="snippet">奥特拉德诺耶附近的森林保护区，母狼带仔迁居之处。</div>
+</a>
+<a class="entry-item" href="福明斯克.html">
+  <div class="noun">福明斯克</div>
+  <div class="snippet">俄罗斯卡卢加州的一个村庄，位于莫斯科西南方向。在1812年俄法战争中，法军布鲁西埃师曾驻扎于此。后来发现法军全部主力（包括拿破仑本人）均已转移到该地，改变了俄军对形势的判断。</div>
+</a>
+<a class="entry-item" href="科丘别伊伯爵家.html">
+  <div class="noun">科丘别伊伯爵家</div>
+  <div class="snippet">科丘别伊伯爵在彼得堡的府邸，是上流社会社交场所。在《战争与和平》中， 安德烈公爵在此参加晚会，被科丘别伊引见给斯佩兰斯基，二人进行了关于荣誉与特权的深入讨论。</div>
+</a>
+<a class="entry-item" href="科别尔尼茨.html">
+  <div class="noun">科别尔尼茨</div>
+  <div class="snippet">科别尔尼茨（Kobelnitz，今捷克科贝尔尼采/Kobylnice），奥斯特利茨战役南线关键村庄，联军计划进攻的目标之一，普热贝舍夫斯基将军在此附近率部投降。</div>
+</a>
+<a class="entry-item" href="科夫诺.html">
+  <div class="noun">科夫诺</div>
+  <div class="snippet">今立陶宛考纳斯，涅曼河畔重要城市。1812年拿破仑大军渡过涅曼河后第一个攻占的俄国城市，法军在此设立指挥部和后勤基地。</div>
+</a>
+<a class="entry-item" href="科尔切瓦.html">
+  <div class="noun">科尔切瓦</div>
+  <div class="snippet">科尔切瓦（俄语：Корчева）是俄罗斯特维尔州伏尔加河畔的一座历史古城，1781年获得城市地位，曾是科尔切瓦县的行政中心。在《战争与和平》中，老博尔孔斯基公爵在信中斥责该区长官汉德里科夫办事不力。1936-1937年因修建伊万科沃水库该城</div>
+</a>
+<a class="entry-item" href="科尔尼克.html">
+  <div class="noun">科尔尼克</div>
+  <div class="snippet">邻近地主伊拉金家扎队驻营的猎场。</div>
+</a>
+<a class="entry-item" href="科斯特罗马.html">
+  <div class="noun">科斯特罗马</div>
+  <div class="snippet">俄罗斯伏尔加河畔古城，始建于1152年，位于莫斯科东北约340公里处。是俄罗斯著名旅游线路&quot;金环&quot;的重要城市之一，拥有14世纪的伊帕季耶夫修道院——罗曼诺夫王朝的摇篮（1613年米哈伊尔·罗曼诺夫在此被推选为沙皇）。在《战争与和平》中，罗斯</div>
+</a>
+<a class="entry-item" href="科洛恰修道院.html">
+  <div class="noun">科洛恰修道院</div>
+  <div class="snippet">位于科洛恰河畔的一座东正教修道院，靠近博罗季诺战场。在博罗季诺战役前，皮埃尔从高处远眺时看到了该修道院的十字架和钟楼在阳光下闪光。</div>
+</a>
+<a class="entry-item" href="科洛恰河.html">
+  <div class="noun">科洛恰河</div>
+  <div class="snippet">莫斯科河的一条支流，流经博罗季诺战场。在博罗季诺战役中，该河构成了俄军防线前方的天然屏障，法军需渡河才能攻击俄军阵地。 --- 俄罗斯欧洲部分的一条河流，莫斯科河的支流，流经莫斯科以西的波罗金诺地区。1812年波罗金诺战役期间，俄军沿科洛恰</div>
+</a>
+<a class="entry-item" href="科洛恰河防线.html">
+  <div class="noun">科洛恰河防线</div>
+  <div class="snippet">俄军最初计划依托科洛恰河构筑的防御线，但由于拿破仑抢先跨过该河，这条防线未能发挥作用。</div>
+</a>
+<a class="entry-item" href="科洛恰河阵地.html">
+  <div class="noun">科洛恰河阵地</div>
+  <div class="snippet">俄军最初沿科洛恰河选择的防御阵地，以该河为天然屏障，阻止法军沿斯摩棱斯克大路向莫斯科推进。</div>
+</a>
+<a class="entry-item" href="科索伊草地.html">
+  <div class="noun">科索伊草地</div>
+  <div class="snippet">罗斯托夫家庄园附近的一片草地。尼古拉在乘雪橇行驶途中辨认地形的参照地点。 月光下雪原一片银白，使他不确定自己到了什么地方。</div>
+</a>
+<a class="entry-item" href="科莫涅诺家.html">
+  <div class="noun">科莫涅诺家</div>
+  <div class="snippet">科莫涅诺家是19世纪莫斯科的一个社交场所或私人宅邸，具体指一位名叫科莫涅诺（Кomoneno）的人的宅第。在《战争与和平》中，皮埃尔为寻找阿纳托利·库拉金而驱车前往此处，是当时莫斯科贵族纨绔子弟常去的消遣地点之一。</div>
+</a>
+<a class="entry-item" href="童山.html">
+  <div class="noun">童山</div>
+  <div class="snippet">俄语原意为&quot;秃山&quot;，是博尔孔斯基家族的世袭庄园，位于斯摩棱斯克以东约六十俄里处。老公爵尼古拉·安德烈耶维奇在保罗皇帝时代被放逐后在此闭门家居，过着极其规律的生活。童山是《战争与和平》中重要的故事场景之一，见证了博尔孔斯基家族的日常生活、安德</div>
+</a>
+<a class="entry-item" href="童山(博尔孔斯基庄园).html">
+  <div class="noun">童山(博尔孔斯基庄园)</div>
+  <div class="snippet">童山（俄语：Лысые Горы，意为&quot;秃山&quot;），博尔孔斯基家族的世袭庄园，尼古拉·安德烈耶维奇·老公爵的隐居地。位于斯摩棱斯克以东约六十俄里（约64公里），离莫斯科大道三俄里处。1812年拿破仑入侵时处于法军进军莫斯科的路线上，因此位于战</div>
+</a>
+<a class="entry-item" href="童山庄园.html">
+  <div class="noun">童山庄园</div>
+  <div class="snippet">童山（俄语：Лысые Горы，意为秃山）是博尔孔斯基公爵家族的世袭庄园，位于斯摩棱斯克以东约六十俄里。老博尔孔斯基公爵被流放后一直深居于此，与女儿玛丽亚公爵小姐同住。庄园是小说中博尔孔斯基家族的核心场景，象征着旧式俄国贵族家庭的传统与秩</div>
+</a>
+<a class="entry-item" href="符腾堡.html">
+  <div class="noun">符腾堡</div>
+  <div class="snippet">德国西南部历史地区，原为神圣罗马帝国境内的符腾堡公国，后升格为王国，今属巴登-符腾堡州。俄国皇太后玛丽亚·费奥多罗夫娜出身符腾堡公国，因此亚历山大皇帝与符腾堡有姻亲关系。小说中拿破仑威胁要把亚历山大皇帝的所有符腾堡亲属从德意志驱逐出去，作为</div>
+</a>
+<a class="entry-item" href="米哈伊洛夫卡村.html">
+  <div class="noun">米哈伊洛夫卡村</div>
+  <div class="snippet">大叔居住的村庄。尼古拉、娜塔莎和彼佳打猎后在此留宿过夜，大叔热情款待，是&quot;娜塔莎之舞&quot;的发生地。</div>
+</a>
+<a class="entry-item" href="米库林纳村.html">
+  <div class="noun">米库林纳村</div>
+  <div class="snippet">《战争与和平》中出现的村庄，杰尼索夫游击队监视法军动向的前哨地点之一。在1812年游击战情节中，米库林纳村附近树林靠近大路的地方安置了六名哥萨克士兵，一旦有法军纵队出现便立刻报告。法军运输队从米库林纳村向沙姆舍沃村移动。</div>
+</a>
+<a class="entry-item" href="精神病院.html">
+  <div class="noun">精神病院</div>
+  <div class="snippet">专门收治精神疾病患者的医疗机构。在莫斯科撤退期间，拉斯托普钦下令释放精神病院的所有病人。</div>
+</a>
+<a class="entry-item" href="索尔本.html">
+  <div class="noun">索尔本</div>
+  <div class="snippet">索邦（La Sorbonne），由罗伯特·德·索邦（Robert de Sorbon）于1253年创立的神学院，后发展为欧洲最著名的学术中心之一，是巴黎大学（University of Paris）的核心机构。1806年拿破仑改革法国高等教</div>
+</a>
+<a class="entry-item" href="索科尔尼克松林.html">
+  <div class="noun">索科尔尼克松林</div>
+  <div class="snippet">莫斯科著名的公园和森林区，原为皇家猎鹰保护区，1878年向公众开放。皮埃尔与多洛霍夫决斗的地点。</div>
+</a>
+<a class="entry-item" href="索科尔尼茨.html">
+  <div class="noun">索科尔尼茨</div>
+  <div class="snippet">索科尔尼茨（Sokolnitz），奥斯特利茨战役南线关键村庄/城堡，联军与法军在此激烈拉锯争夺，是战役南部战线核心阵地。</div>
+</a>
+<a class="entry-item" href="索科尔尼茨别墅.html">
+  <div class="noun">索科尔尼茨别墅</div>
+  <div class="snippet">莫斯科索科尔尼基地区的一座郊外庄园别墅，是1812年莫斯科总督拉斯托普钦伯爵的郊外住所。法军逼近莫斯科时，拉斯托普钦当天早晨从这座别墅赶回城中处理政务。</div>
+</a>
+<a class="entry-item" href="红场.html">
+  <div class="noun">红场</div>
+  <div class="snippet">莫斯科中心的著名广场，位于克里姆林宫东墙外，是俄罗斯最具历史意义的公共空间。红场名称源自俄语красная（美丽的），而非指颜色。1812年俄军撤离莫斯科时，士兵在红场旁的商场区域发生哄抢。</div>
+</a>
+<a class="entry-item" href="红帕赫拉.html">
+  <div class="noun">红帕赫拉</div>
+  <div class="snippet">红帕赫拉（Красная Пахра，Krasnaya Pakhra）是俄罗斯莫斯科州的一个地名，在1812年俄法战争中是俄军侧翼行军的关键节点之一。俄军撤离莫斯科后，从梁赞大路转向卡卢加大道时途经红帕赫拉，最终到达塔鲁丁诺营地。这一侧翼行</div>
+</a>
+<a class="entry-item" href="维也纳.html">
+  <div class="noun">维也纳</div>
+  <div class="snippet">奥地利首都，1805年拿破仑战争期间的重要城市。拿破仑于1805年11月率法军占领维也纳，下榻美泉宫，随后在奥斯特里茨战役（三皇会战）中击败俄奥联军，彻底瓦解了第三次反法同盟。 --- 奥地利首都，位于多瑙河畔，1805年拿破仑战争期间是俄</div>
+</a>
+<a class="entry-item" href="维亚济马.html">
+  <div class="noun">维亚济马</div>
+  <div class="snippet">俄罗斯斯摩棱斯克州的城市，位于莫斯科以西约200公里，始建于1239年，曾为独立的维亚济马公国的中心。1812年拿破仑大军从莫斯科撤退时在此遭遇俄军重创，史称维亚济马战役。</div>
+</a>
+<a class="entry-item" href="维亚济马集市.html">
+  <div class="noun">维亚济马集市</div>
+  <div class="snippet">俄国斯摩棱斯克州维亚济马城的传统集市。维亚济马位于莫斯科通往斯摩棱斯克及波兰的重要商道上，自14世纪起发展成为重要的贸易中心。当地以亚麻、蜂蜜、蜂蜡、皮革和纺织品交易闻名。在《战争与和平》中，博古恰罗沃的村长德龙每年去赶维亚济马集市，给玛丽</div>
+</a>
+<a class="entry-item" href="维利亚河.html">
+  <div class="noun">维利亚河</div>
+  <div class="snippet">东欧河流，今称内里斯河，发源于白俄罗斯，流经立陶宛在科夫诺（考纳斯）附近汇入涅曼河。1812年拿破仑大军渡涅曼河后，在维利亚河畔遇到波兰枪骑兵的渡河事件。</div>
+</a>
+<a class="entry-item" href="维尔纳.html">
+  <div class="noun">维尔纳</div>
+  <div class="snippet">今立陶宛首都维尔纽斯，当时属俄罗斯帝国。1812年拿破仑入侵前夕，俄国亚历山大一世在此设立大本营进行军队检阅和战争准备。维尔纳是拿破仑进军莫斯科途中的重要战略城市。 --- 即今立陶宛首都维尔纽斯（Vilnius）。1795年波兰-立陶宛联</div>
+</a>
+<a class="entry-item" href="维捷布斯克.html">
+  <div class="noun">维捷布斯克</div>
+  <div class="snippet">今白俄罗斯东北部城市，位于西德维纳河畔。1812年俄法战争中，俄军在撤退途中放弃了维捷布斯克。法军占领维捷布斯克后拿破仑曾在此停留，犹豫是否继续深入俄国腹地。</div>
+</a>
+<a class="entry-item" href="维斯杜拉河.html">
+  <div class="noun">维斯杜拉河</div>
+  <div class="snippet">波兰境内最长的河流，全长1047公里，发源于波兰南部贝兹基德山脉，流经克拉科夫、华沙等重要城市，向北注入波罗的海格但斯克湾。维斯杜拉河是波兰的母亲河，历史上是重要的贸易航道。在拿破仑战争时期，维斯杜拉河是法军与俄军对峙的重要地理分界线，拿破</div>
+</a>
+<a class="entry-item" href="维斯洛乌霍沃.html">
+  <div class="noun">维斯洛乌霍沃</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的虚构村庄名，位于博古恰罗沃附近。在1812年拿破仑入侵期间被法军占领，法国将军在此发布布告宣称对居民秋毫无犯、照价付款，以此诱使农民留在原处不撤离。</div>
+</a>
+<a class="entry-item" href="维绍.html">
+  <div class="noun">维绍</div>
+  <div class="snippet">地名，对应现今捷克共和国境内的维什科夫（Vyškov），德文名Wischau。在1805年拿破仑战争期间，这里是俄奥联军与法军在奥斯特利茨战役前发生军事接触的地点之一。小说中多尔戈鲁科夫公爵在此指挥俄军击退法军，被称为&quot;维绍之战&quot;的胜利者。</div>
+</a>
+<a class="entry-item" href="缪拉阵地.html">
+  <div class="noun">缪拉阵地</div>
+  <div class="snippet">指拿破仑的元帅缪拉（Joachim Murat）率领法军驻扎的阵地。缪拉是那不勒斯国王、拿破仑的妹夫，在1812年战争中指挥法军骑兵。塔鲁丁诺战役后，全部法国军队曾来到缪拉的阵地，随后转向新卡卢日斯卡雅大路。</div>
+</a>
+<a class="entry-item" href="罗戈日城门.html">
+  <div class="noun">罗戈日城门</div>
+  <div class="snippet">莫斯科东郊的历史区域和城门旧址，即罗戈日城门广场（Rogozhskaya Zastava），位于塔甘卡区。16世纪末作为莫斯科东郊的驿站车夫聚居地建立，因罗戈日（今诺金斯克）而得名。18世纪起成为东正教旧礼仪派的精神中心。在1812年，该城</div>
+</a>
+<a class="entry-item" href="罗斯托夫家大院.html">
+  <div class="noun">罗斯托夫家大院</div>
+  <div class="snippet">罗斯托夫家族在莫斯科波瓦尔大街的宅邸大院。1812年莫斯科撤离期间，罗斯托夫家的大部分财产被装车运走，只留下看门人伊格纳特和小厮米什卡看守空荡荡的院落。</div>
+</a>
+<a class="entry-item" href="罗马.html">
+  <div class="noun">罗马</div>
+  <div class="snippet">安德烈公爵在意大利养伤的城市。19世纪初属于拿破仑统治下的意大利王国。托尔斯泰安排安德烈在罗马养伤客观上造成了他与娜塔莎的长期分离，为后来娜塔莎被阿纳托尔诱惑埋下伏笔。</div>
+</a>
+<a class="entry-item" href="罗马大剧场.html">
+  <div class="noun">罗马大剧场</div>
+  <div class="snippet">即罗马斗兽场（Colosseum），古罗马弗拉维王朝于公元72-80年建造的椭圆形巨型露天剧场，可容纳5-8万观众，用于角斗士比赛、斗兽等公共娱乐。其废墟是古罗马文明的象征，托尔斯泰在此书中将莫斯科大火后的残垣断壁与之相比。</div>
+</a>
+<a class="entry-item" href="耶路撒冷.html">
+  <div class="noun">耶路撒冷</div>
+  <div class="snippet">位于巴勒斯坦中部的历史名城，犹太教、基督教和伊斯兰教三大宗教的圣城。小说祷文中将俄国称为上帝所爱的圣城耶路撒冷，赋予卫国战争以神圣意义。</div>
+</a>
+<a class="entry-item" href="肉商街.html">
+  <div class="noun">肉商街</div>
+  <div class="snippet">莫斯科的一条历史街道，因集中肉铺而得名。文中肖斯太太经过时看到酒店里有醉汉闹事的混乱场面。</div>
+</a>
+<a class="entry-item" href="致命的多面堡.html">
+  <div class="noun">致命的多面堡</div>
+  <div class="snippet">法国人对波罗金诺战役中拉耶夫斯基炮垒的称呼之一，因该阵地争夺极其惨烈、死伤无数而得名。</div>
+</a>
+<a class="entry-item" href="舍瓦尔金诺.html">
+  <div class="noun">舍瓦尔金诺</div>
+  <div class="snippet">莫斯科以西的村庄，位于波罗金诺附近，1812年8月24日俄法两军在此发生战斗（舍瓦尔金诺战役）。 --- 博罗季诺战场西南方向的一个村庄，以舍瓦尔金诺多面堡闻名。1812年9月5日，此处发生了博罗季诺会战的前哨战，俄军在此构筑的五角形防御工</div>
+</a>
+<a class="entry-item" href="舍瓦尔金诺土岗.html">
+  <div class="noun">舍瓦尔金诺土岗</div>
+  <div class="snippet">位于波罗金诺战场西南部的一座五角形防御多面堡（棱堡），1812年9月5日（俄历8月24日）法俄两军在此发生前哨战，俄军损失约5000人后放弃该堡，但赢得了构筑主阵地工事的时间。</div>
+</a>
+<a class="entry-item" href="舍瓦尔金诺高地.html">
+  <div class="noun">舍瓦尔金诺高地</div>
+  <div class="snippet">舍瓦尔金诺村附近的高地，俄军在此设立了观察哨和防御工事，拿破仑于8月24日攻占此地。</div>
+</a>
+<a class="entry-item" href="舒亚.html">
+  <div class="noun">舒亚</div>
+  <div class="snippet">俄罗斯伊万诺沃州的城市，位于泰扎河畔。1393年首次见于文献记载，以舒伊斯基公爵家族（Шуйские）闻名——该家族成员在16-17世纪曾执掌俄罗斯政权，其中包括一度成为沙皇的瓦西里·舒伊斯基。舒亚在19世纪发展为亚麻纺织业中心，拥有400</div>
+</a>
+<a class="entry-item" href="花园大街.html">
+  <div class="noun">花园大街</div>
+  <div class="snippet">莫斯科的花园环线大道，罗斯托夫家及其他撤离车队在此汇合后并行前进。</div>
+</a>
+<a class="entry-item" href="花园街.html">
+  <div class="noun">花园街</div>
+  <div class="snippet">莫斯科的一条主要街道，属于花园环线的一部分，罗斯托夫家的车队在此并入主干道。 --- 莫斯科的重要环形街道（Садовая улица），属于花园环线的一部分。1812年莫斯科撤退期间，多条街道的车队在此汇合，形成拥挤的撤离人流。</div>
+</a>
+<a class="entry-item" href="花房.html">
+  <div class="noun">花房</div>
+  <div class="snippet">即温室，用于栽培和展示植物的建筑。中国早在汉代就有温室雏形，唐代出现&quot;唐花&quot;烘花技术，清代贵族庄园中常见花房，用于培育反季节花卉。</div>
+</a>
+<a class="entry-item" href="苏哈列夫塔.html">
+  <div class="noun">苏哈列夫塔</div>
+  <div class="snippet">莫斯科历史上的标志性巴洛克式塔楼，1692-1701年由彼得大帝下令修建，高约63米。曾是俄罗斯第一所数学与航海科学学校的所在地，设有天文台。1934年被斯大林下令拆除，现已不存。</div>
+</a>
+<a class="entry-item" href="苏哈列夫塔楼.html">
+  <div class="noun">苏哈列夫塔楼</div>
+  <div class="snippet">莫斯科的一座著名历史塔楼（Сухарева башня），高63米，1695至1701年由彼得大帝下令建造，曾设有俄国第一所数学与航海学校及天文台。1934年被斯大林下令拆除。在小说中，罗斯托夫家的车队绕经此塔楼时，娜塔莎认出了穿车夫长褂的</div>
+</a>
+<a class="entry-item" href="英吉利滨海街.html">
+  <div class="noun">英吉利滨海街</div>
+  <div class="snippet">圣彼得堡涅瓦河畔最著名的滨河大道之一，18世纪因英国商人聚居而得名。贵族豪宅云集的高贵街区。本节中叶卡捷琳娜时代的大臣在此拥有府第，举办1810年除夕新年舞会，外交使团和皇帝均出席。</div>
+</a>
+<a class="entry-item" href="英吉利饭店.html">
+  <div class="noun">英吉利饭店</div>
+  <div class="snippet">19世纪莫斯科真实存在的著名酒店，位于莫斯科市中心，是上流社会聚会、赌博和举办宴会的热门场所。多洛霍夫在向索尼娅求婚被拒后在此包租最阔绰的房间设宴话别并设赌局，引诱尼古拉·罗斯托夫赌博并使他输掉巨款。</div>
+</a>
+<a class="entry-item" href="英国.html">
+  <div class="noun">英国</div>
+  <div class="snippet">西欧国家。在本章中，安德烈公爵在焕发新生后，决定辞职后出国游历，英国在他的旅行计划之中。另外，斯佩兰斯基家晚宴上男人们&quot;按照英国习惯&quot;在餐后留在餐桌旁饮红葡萄酒。</div>
+</a>
+<a class="entry-item" href="茨奈姆.html">
+  <div class="noun">茨奈姆</div>
+  <div class="snippet">德语Znaim的音译，今捷克城市兹诺伊莫（Znojmo），位于维也纳以北约80公里。1809年拿破仑战争中，法军与奥地利军队在此激战，随后签署了《茨奈姆停战协议》，事实上结束了第五次反法同盟的战事。 --- 捷克语名兹诺伊莫（Znojmo）</div>
+</a>
+<a class="entry-item" href="莫伊卡河.html">
+  <div class="noun">莫伊卡河</div>
+  <div class="snippet">莫伊卡河（Мойка，Moika River）是俄罗斯圣彼得堡市中心一条环绕城区的人工河道，全长约5公里，最大宽度40米，最大深度3.2米。发源于夏园附近的丰坦卡河，流经战神广场、涅瓦大街，最终注入涅瓦河。河名源自英格里亚语&quot;Muya&quot;，意</div>
+</a>
+<a class="entry-item" href="莫利坦.html">
+  <div class="noun">莫利坦</div>
+  <div class="snippet">莫利坦（Moliten/Molliten），东普鲁士的一个小城镇（今属俄罗斯加里宁格勒州或波兰北部地区）。在《战争与和平》中，骠骑兵杰尼索夫少校在1807年战役期间于此地受伤，随后被送往普鲁士某镇的军医院治疗。该地在中文译本中音译为&quot;莫利坦</div>
+</a>
+<a class="entry-item" href="莫扎伊斯克.html">
+  <div class="noun">莫扎伊斯克</div>
+  <div class="snippet">俄罗斯莫斯科州西部的一座城镇，位于莫斯科以西约110公里处，1231年首次见于史书记载。1812年拿破仑入侵俄国期间，博罗季诺战役即发生在该城附近，是俄军保卫莫斯科的重要防线。 --- 俄罗斯莫斯科州西部城镇，位于莫斯科以西约110公里，是</div>
+</a>
+<a class="entry-item" href="莫扎伊斯克客栈.html">
+  <div class="noun">莫扎伊斯克客栈</div>
+  <div class="snippet">莫扎伊斯克城内的旅店，皮埃尔到达时已住满军官。</div>
+</a>
+<a class="entry-item" href="莫斯科.html">
+  <div class="noun">莫斯科</div>
+  <div class="snippet">莫斯科是俄罗斯联邦首都，建于1147年，是俄罗斯政治、经济、文化中心。克里姆林宫和红场为其标志性建筑，被列入世界文化遗产。1812年拿破仑入侵时曾遭大火。1918年成为苏俄首都，1991年苏联解体后成为俄罗斯联邦首都。莫斯科以绿化面积大著称</div>
+</a>
+<a class="entry-item" href="莫斯科大道.html">
+  <div class="noun">莫斯科大道</div>
+  <div class="snippet">历史上连接莫斯科与斯摩棱斯克的主要道路，又称旧斯摩棱斯克大道（Старая Смоленская дорога），是俄国西部重要的军事与商旅通道。1812年拿破仑入侵俄国时，法军沿此路进军莫斯科，败退时亦经此路。小说中童山庄园即位于此大道附</div>
+</a>
+<a class="entry-item" href="莫斯科河.html">
+  <div class="noun">莫斯科河</div>
+  <div class="snippet">俄罗斯欧洲部分的一条重要河流，流经莫斯科市和莫斯科州，全长约502公里。在博罗季诺战场，莫斯科河构成了俄军右翼防线的天然依托。</div>
+</a>
+<a class="entry-item" href="莫斯科河外区.html">
+  <div class="noun">莫斯科河外区</div>
+  <div class="snippet">莫斯科的历史城区，俄语名扎莫斯科沃列奇耶（Замоскворечье），位于莫斯科河南岸，与克里姆林宫隔河相望。在1812年莫斯科大火中该区域遭到严重焚毁。在《战争与和平》中，托尔斯泰描写了该区域与马车市场等处同时起火的情景。</div>
+</a>
+<a class="entry-item" href="莫斯科河桥.html">
+  <div class="noun">莫斯科河桥</div>
+  <div class="snippet">横跨莫斯科河的主要桥梁，连接克里姆林宫附近区域与莫斯科河南岸。1812年俄军撤退时，军队和难民在此桥上造成严重堵塞，叶尔莫洛夫将军下令用大炮威胁才疏通道路。</div>
+</a>
+<a class="entry-item" href="莫斯科的城墙.html">
+  <div class="noun">莫斯科的城墙</div>
+  <div class="snippet">莫斯科的城墙和城郭，娜塔莎在离别之际从马车中回望的景物。</div>
+</a>
+<a class="entry-item" href="莫斯科维亚.html">
+  <div class="noun">莫斯科维亚</div>
+  <div class="snippet">莫斯科维亚是西欧人对俄罗斯（尤其是莫斯科公国及沙皇俄国）的古称，源自莫斯科公国。19世纪上半叶仍被西欧用作俄国的代称，尤其在拿破仑战争期间的宣传和文献中常用，带有一定的异域色彩。</div>
+</a>
+<a class="entry-item" href="莫斯科英国俱乐部.html">
+  <div class="noun">莫斯科英国俱乐部</div>
+  <div class="snippet">约1772年仿照英国绅士俱乐部模式建立的俄国贵族私人社交俱乐部，位于特维尔斯卡亚街21号。尽管名为&quot;英国俱乐部&quot;，实际会员几乎都是俄国贵族。是18-19世纪莫斯科贵族社会的舆论中心和社交场所，提供餐饮、阅读、赌博、闲聊等服务。皮埃尔是会员。</div>
+</a>
+<a class="entry-item" href="莫斯科近郊田产.html">
+  <div class="noun">莫斯科近郊田产</div>
+  <div class="snippet">莫斯科周边的乡村地区，罗斯托夫家族的田产所在地。因家族经济亏空而被迫出售。</div>
+</a>
+<a class="entry-item" href="莫霍夫街.html">
+  <div class="noun">莫霍夫街</div>
+  <div class="snippet">莫斯科市中心的一条单行道，位于克里姆林宫附近。18世纪得名于附近的苔藓市场。法军攻打克里姆林宫时曾经过此街。</div>
+</a>
+<a class="entry-item" href="莱希河.html">
+  <div class="noun">莱希河</div>
+  <div class="snippet">中欧河流，多瑙河右岸支流，全长263公里，发源于奥地利蒂罗尔州阿尔卑斯山脉，流经奥地利和德国巴伐利亚州。1805年拿破仑战争中为法奥对峙的重要防线。</div>
+</a>
+<a class="entry-item" href="莱茵河.html">
+  <div class="noun">莱茵河</div>
+  <div class="snippet">欧洲西部第一大河，发源于瑞士阿尔卑斯山区，流经瑞士、列支敦士登、奥地利、德国、法国、荷兰注入北海，全长约1232公里，是欧洲最繁忙的内河航道。</div>
+</a>
+<a class="entry-item" href="菲利.html">
+  <div class="noun">菲利</div>
+  <div class="snippet">原为莫斯科西郊的一个村庄，位于莫斯科河与波克隆山之间。1812年9月13日（俄历9月1日），俄军总司令库图佐夫在此村的一座农舍中召开军事会议，决定放弃莫斯科以保存军力。菲利因此成为俄国历史上著名的地点。该村1935年并入莫斯科市区。 ---</div>
+</a>
+<a class="entry-item" href="萨拉戈萨.html">
+  <div class="noun">萨拉戈萨</div>
+  <div class="snippet">西班牙第五大城市，阿拉贡自治区首府，位于埃布罗河畔，拥有两千多年历史。在拿破仑战争期间，萨拉戈萨在1808至1809年经历了两次惨烈的围城战，以顽强的抵抗闻名全欧洲，被称为&quot;不破之城&quot;。该城守军在帕拉福领导下进行了你死我活的巷战。</div>
+</a>
+<a class="entry-item" href="萨拉曼卡.html">
+  <div class="noun">萨拉曼卡</div>
+  <div class="snippet">西班牙西部古城，萨拉曼卡省首府，以萨拉曼卡大学（1218年建校，西班牙最古老大学）闻名于世。1988年被列为世界文化遗产。在拿破仑半岛战争中，1812年7月22日威灵顿公爵在此击败法军马尔蒙元帅，取得半岛战争中的关键胜利，即萨拉曼卡战役。</div>
+</a>
+<a class="entry-item" href="蒂尔西特.html">
+  <div class="noun">蒂尔西特</div>
+  <div class="snippet">蒂尔西特（Tilsit，1946年后改称苏维埃茨克/Sovetsk），位于涅曼河南岸，今属俄罗斯加里宁格勒州，与立陶宛边境城市隔河相望。1288年条顿骑士团在此建城堡，1552年获城市权。1807年因《蒂尔西特和约》而闻名于世——拿破仑与亚</div>
+</a>
+<a class="entry-item" href="西伯利亚.html">
+  <div class="noun">西伯利亚</div>
+  <div class="snippet">俄罗斯东部广袤地区，历史上是沙俄政府流放犯人和政治犯的主要地点。在小说中，安德烈公爵讨论农奴制时提及被流放到西伯利亚的农奴。</div>
+</a>
+<a class="entry-item" href="西北联合大学.html">
+  <div class="noun">西北联合大学</div>
+  <div class="snippet">国立西北联合大学，1937年七七事变后由国立北平大学、国立北平师范大学、国立北洋工学院迁至陕西合组而成。初名西安临时大学，后迁至汉中并改称西北联合大学。1939年分拆为西北大学、西北工学院、西北农学院等五所院校，奠定了西北高等教育格局。</div>
+</a>
+<a class="entry-item" href="西夫采夫·弗拉若克.html">
+  <div class="noun">西夫采夫·弗拉若克</div>
+  <div class="snippet">莫斯科阿尔巴特区的一条历史老街，名称中&quot;弗拉若克&quot;意为&quot;小沟壑&quot;。19世纪这里是平民居住区，住着马车夫等底层百姓。该街道至今仍存在于莫斯科市中心。托尔斯泰用此描写皮埃尔进入莫斯科时看到的平民区景象。</div>
+</a>
+<a class="entry-item" href="西徐亚.html">
+  <div class="noun">西徐亚</div>
+  <div class="snippet">古希腊人对黑海以北欧亚草原游牧民族及其所居地区的称呼，即斯基泰（Scythia）。本书以亚历山大·马其顿进入西徐亚的历史类比拿破仑入侵俄国草原，暗示俄国如西徐亚般辽阔难征服。</div>
+</a>
+<a class="entry-item" href="西班牙.html">
+  <div class="noun">西班牙</div>
+  <div class="snippet">南欧国家，1808-1814年拿破仑战争期间，法国在此发动半岛战争。在本章中，斯佩兰斯基家的晚宴上众人谈论拿破仑在西班牙的军事行动。</div>
+</a>
+<a class="entry-item" href="诺沃耶村.html">
+  <div class="noun">诺沃耶村</div>
+  <div class="snippet">波罗金诺战场上的村庄，在托尔斯泰的描述中俄军右翼的位置靠近诺沃耶村。</div>
+</a>
+<a class="entry-item" href="谢尔普霍夫.html">
+  <div class="noun">谢尔普霍夫</div>
+  <div class="snippet">俄罗斯莫斯科州城市，位于莫斯科以南约99公里处的奥卡河畔，建城于1339年。历史上长期作为莫斯科公国南部的军事要塞，拱卫莫斯科免受南方侵袭。在1812年俄法战争中，法军曾分出一支部队攻占谢尔普霍夫，威胁图拉的兵工厂和莫斯科以南的交通线，引起</div>
+</a>
+<a class="entry-item" href="谢苗诺夫斯科耶.html">
+  <div class="noun">谢苗诺夫斯科耶</div>
+  <div class="snippet">波罗金诺战场上的村庄，位于乌季察和波罗金诺之间，是波罗金诺战役中俄军防线的重要地段。 --- 博罗季诺战场上的一个村庄，位于波罗金诺村左侧。在博罗季诺战役中，该村成为俄军左翼防线的核心区域，村庄在战火中被烧毁，冒烟的废墟成为战场景象的一部分</div>
+</a>
+<a class="entry-item" href="谢苗诺夫斯科耶平原.html">
+  <div class="noun">谢苗诺夫斯科耶平原</div>
+  <div class="snippet">谢苗诺夫斯科耶村周边的开阔平原，是波罗金诺战役中俄法两军交战的核心区域之一。</div>
+</a>
+<a class="entry-item" href="谢苗诺夫斯科耶村.html">
+  <div class="noun">谢苗诺夫斯科耶村</div>
+  <div class="snippet">位于莫斯科以西约110公里处的一个村庄，1812年波罗金诺战役中俄军左翼防线的核心阵地。法军主力（达武元帅、内伊元帅、缪拉亲王的部队）集中攻击该村前方的巴格拉季昂棱堡，俄军巴格拉季昂亲王在此身负致命重伤，该村最终被法军攻占。</div>
+</a>
+<a class="entry-item" href="谷仓.html">
+  <div class="noun">谷仓</div>
+  <div class="snippet">农村储存粮食的建筑物。博古恰罗沃的谷仓是农民集会和议事的重要场所，农民们聚集在谷仓前召开公社会议。</div>
+</a>
+<a class="entry-item" href="贡台斯多尔夫.html">
+  <div class="noun">贡台斯多尔夫</div>
+  <div class="snippet">奥地利下奥地利州的一个小镇（Guntersdorf），位于霍拉布伦以北约10.5公里、申格拉本以北约4.7公里。在1805年拿破仑战争中，该地是俄军库图佐夫主力撤退的必经之路和关键咽喉。巴格拉季翁率部在申格拉本以劣势兵力阻击法军，为库图佐夫</div>
+</a>
+<a class="entry-item" href="起居室.html">
+  <div class="noun">起居室</div>
+  <div class="snippet">罗斯托夫家的起居室。娜塔莎、尼古拉和索尼娅在此回忆往事、谈论哲学和梦。 季姆勒在此弹竖琴并加入年轻人的谈话。室内较暗，但满月的银辉穿过大窗户泻到地板上。</div>
+</a>
+<a class="entry-item" href="迦特.html">
+  <div class="noun">迦特</div>
+  <div class="snippet">迦特（Gath，希伯来语意为&quot;酒榨&quot;）是古代非利士人的五大城邦之一，位于耶路撒冷西南约38公里处的以拉谷南侧。迦特在圣经中最著名的身份是非利士巨人歌利亚的家乡（&quot;迦特人歌利亚&quot;）。此外，圣经记载中以色列人的约柜曾被掳到迦特，大卫也曾两次投奔</div>
+</a>
+<a class="entry-item" href="迪伦斯坦.html">
+  <div class="noun">迪伦斯坦</div>
+  <div class="snippet">即迪恩施泰因（Dürnstein），奥地利瓦豪河谷小镇，以中世纪城堡和葡萄酒闻名。历史上英格兰狮心王理查一世曾被囚禁于此城堡。1805年迪恩施泰因战役在此爆发。</div>
+</a>
+<a class="entry-item" href="道利达花园.html">
+  <div class="noun">道利达花园</div>
+  <div class="snippet">圣彼得堡中央区的著名公园，面积约21.1公顷，因叶卡捷琳娜二世赠予波将金公爵的道利达宫而得名。罗斯托夫一家与佩龙斯卡娅约定晚上十点到道利达花园接她，然后前往舞会。 --- 俄语Таврический сад的音译，位于圣彼得堡，毗邻塔夫利宫</div>
+</a>
+<a class="entry-item" href="那不勒斯.html">
+  <div class="noun">那不勒斯</div>
+  <div class="snippet">意大利南部第一大城市，坎帕尼亚大区首府，濒临那不勒斯湾，公元前600年由古希腊人创建，历史中心为世界文化遗产，也是比萨饼的发源地。</div>
+</a>
+<a class="entry-item" href="酒馆.html">
+  <div class="noun">酒馆</div>
+  <div class="snippet">军队驻扎地附近的饮食饮酒场所，是19世纪军官们社交、用餐、赌博的重要场所。在《战争与和平》中，军官们常在酒馆聚会，也是罗斯托夫找到捷利亚宁并揭发其偷窃行为的地点。</div>
+</a>
+<a class="entry-item" href="门廊底层台阶.html">
+  <div class="noun">门廊底层台阶</div>
+  <div class="snippet">建筑门廊最下面的台阶，拉斯托普钦命令将韦列夏金带到这里当众处刑。</div>
+</a>
+<a class="entry-item" href="阿姆施特滕.html">
+  <div class="noun">阿姆施特滕</div>
+  <div class="snippet">阿姆施特滕（Amstetten）位于奥地利下奥地利州，1805年11月5日在此发生阿姆施特滕战役。巴格拉季昂率俄军后卫阻击法军缪拉和拉纳所部，是俄军主力与法军的首次大规模野战交锋。</div>
+</a>
+<a class="entry-item" href="阿尔巴特广场.html">
+  <div class="noun">阿尔巴特广场</div>
+  <div class="snippet">莫斯科最古老的广场之一，位于莫斯科市中心，阿尔巴特大街东端起点处，距克里姆林宫围墙约八百米。该区域自十九世纪初便是莫斯科贵族与知识分子的聚居地，普希金、托尔斯泰、莱蒙托夫、果戈里等文学巨匠曾在此居住或活动。在《战争与和平》中，皮埃尔正是在阿</div>
+</a>
+<a class="entry-item" href="阿尔巴特药房.html">
+  <div class="noun">阿尔巴特药房</div>
+  <div class="snippet">莫斯科阿尔巴特街上的老牌药房，在19世纪初是莫斯科知名的药店之一。在托尔斯泰的《战争与和平》中，罗斯托夫家为给生病的娜塔莎买药，派车夫专程前往阿尔巴特药房，花费一卢布七十戈比购买用精美盒子包装的药粉和药丸，反映了当时莫斯科贵族家庭求医问药的</div>
+</a>
+<a class="entry-item" href="阿尔巴特街.html">
+  <div class="noun">阿尔巴特街</div>
+  <div class="snippet">莫斯科市中心一条历史悠久的著名街道，紧邻莫斯科河。在1812年法军占领莫斯科期间，缪拉的部队曾沿此街行进并进攻克里姆林宫。</div>
+</a>
+<a class="entry-item" href="阿尔科拉.html">
+  <div class="noun">阿尔科拉</div>
+  <div class="snippet">意大利北部维罗纳省的一个村庄，位于阿尔波内河畔，1796年拿破仑在此击败奥地利军队，阿尔科拉战役即以该地命名。</div>
+</a>
+<a class="entry-item" href="阿尔科拉桥.html">
+  <div class="noun">阿尔科拉桥</div>
+  <div class="snippet">阿尔科拉桥位于意大利北部维罗纳东南约25公里的阿尔科拉村，是1796年11月15日至17日阿尔科拉战役的发生地。在这场战役中，年轻的拿破仑将军亲自举起军旗冲上桥头督战，鼓舞法军击溃奥地利军队，展现了其非凡的勇气和军事天才。此役是拿破仑早期军</div>
+</a>
+<a class="entry-item" href="阿拉克切耶夫伯爵接待室.html">
+  <div class="noun">阿拉克切耶夫伯爵接待室</div>
+  <div class="snippet">阿拉克切耶夫伯爵的接待室，以气氛特殊著称。在《战争与和平》中，安德烈公爵在此等候召见时， 观察到等待召见的人们脸上有羞愧、卑顺和恐惧的表情；大官们则侷促不安，装作满不在乎。 门一打开，所有人的脸上都集中为一个表情——恐惧。</div>
+</a>
+<a class="entry-item" href="阿赫罗西莫娃家.html">
+  <div class="noun">阿赫罗西莫娃家</div>
+  <div class="snippet">阿赫罗西莫娃家是莫斯科贵族玛丽亚·德米特里耶夫娜·阿赫罗西莫娃的宅邸，位于莫斯科旧马厩街。她是娜塔莎·罗斯托娃的教母，在罗斯托夫家迁居莫斯科期间热情接待他们暂住，并在娜塔莎险些与阿纳托利·库拉金私奔的关键事件中扮演了重要角色——她及时发现并</div>
+</a>
+<a class="entry-item" href="阿里斯托沃村.html">
+  <div class="noun">阿里斯托沃村</div>
+  <div class="snippet">俄罗斯卡卢加州的一个村庄，位于莫斯科西南方向。1812年俄法战争期间，多赫图罗夫将军在率军前往福明斯克途中在此停留过夜，正是在这里他接到了谢斯拉温等游击队送来的重要情报。</div>
+</a>
+<a class="entry-item" href="陆军大臣办公室.html">
+  <div class="noun">陆军大臣办公室</div>
+  <div class="snippet">阿拉克切耶夫伯爵的办公室，朴素整洁。在《战争与和平》中，安德烈公爵在此被召见。 阿拉克切耶夫坐在桌旁，身材瘦长，头发剪短，绿褐色眼睛上紧锁眉头，通红的鼻子耷拉着。</div>
+</a>
+<a class="entry-item" href="雅乌兹桥.html">
+  <div class="noun">雅乌兹桥</div>
+  <div class="snippet">莫斯科雅乌扎河（Yauza River）上的一座桥，位于莫斯科河入口上游附近。在1812年莫斯科撤退期间，一名前来投奔罗斯托夫伯爵的青年军官从此处跑过，前往追赶他的团队。 --- 莫斯科横跨雅乌兹河的一座桥梁。1812年俄法战争期间，俄军总</div>
+</a>
+<a class="entry-item" href="雅乌兹河桥.html">
+  <div class="noun">雅乌兹河桥</div>
+  <div class="snippet">莫斯科雅乌兹河上的桥梁，雅乌兹河是莫斯科河的主要支流之一。1812年俄军撤退时，该桥与石桥、莫斯科河桥一同发生严重拥堵，军队和难民争相过河。</div>
+</a>
+<a class="entry-item" href="雅法.html">
+  <div class="noun">雅法</div>
+  <div class="snippet">雅法（Jaffa）是以色列地中海沿岸的古老海港城市，拥有四千多年历史，今与特拉维夫合并为特拉维夫-雅法，是世界文化遗产。1799年拿破仑远征埃及期间攻占雅法，下令处决了数千名战俘。书中提到的&quot;雅法医院&quot;事件，是指拿破仑在雅法探望鼠疫士兵并伸</div>
+</a>
+<a class="entry-item" href="雅罗斯拉夫尔.html">
+  <div class="noun">雅罗斯拉夫尔</div>
+  <div class="snippet">俄罗斯最古老的城市之一，位于伏尔加河上游，莫斯科东北约250公里，约建于1010年，由基辅大公智者雅罗斯拉夫建立。它是雅罗斯拉夫尔州首府，俄罗斯&quot;金环&quot;旅游线上最大的城市。2005年其历史中心被列入联合国教科文组织世界文化遗产。1812年莫</div>
+</a>
+<a class="entry-item" href="集市.html">
+  <div class="noun">集市</div>
+  <div class="snippet">俄语称&quot;ярмарка&quot;，指俄罗斯传统的定期商贸集会，通常在宗教节日期间举办，兼具贸易、金融、文化和娱乐功能。著名的下诺夫哥罗德集市是19世纪全俄最大的商贸中心。小说中博古恰罗沃农民在酒馆集会决定不提供马车，反映了农村集市/酒馆在农民公共生</div>
+</a>
+<a class="entry-item" href="霍尔德巴赫河.html">
+  <div class="noun">霍尔德巴赫河</div>
+  <div class="snippet">也译作歌德巴赫溪（Goldbach，德语意为金色小溪），流经奥斯特里茨战场的一条小溪。奥斯特里茨战役中法军达武元帅率部在此顽强防守联军左翼进攻，为拿破仑在普拉茨高地发动决定性反击赢得了时间。</div>
+</a>
+<a class="entry-item" href="霍拉布伦.html">
+  <div class="noun">霍拉布伦</div>
+  <div class="snippet">德语名Hollabrunn，奥地利下奥地利州城市，霍拉布伦县行政中心，位于维也纳以北。1805年巴格拉季翁率四千俄军前卫在此与缪拉法军遭遇周旋，为库图佐夫主力撤退争取宝贵时间。</div>
+</a>
+<a class="entry-item" href="霍斯蒂拉德克.html">
+  <div class="noun">霍斯蒂拉德克</div>
+  <div class="snippet">捷克村庄（Hostěrádky），位于奥斯特利茨战场附近。1805年奥斯特利茨战役后，溃退的俄军在此稍作集结，秩序有所恢复。罗斯托夫曾到此寻找库图佐夫和沙皇亚历山大一世的下落。</div>
+</a>
+<a class="entry-item" href="马伦戈.html">
+  <div class="noun">马伦戈</div>
+  <div class="snippet">意大利北部皮埃蒙特的村庄，位于亚历山德里亚东南约5公里。1800年6月14日拿破仑在此以约28000法军击败约31000奥地利军队，史称马伦戈战役。法军在濒临崩溃之际依靠德赛将军援军反败为胜，此役巩固了拿破仑第一执政的地位，为日后称帝奠定基</div>
+</a>
+<a class="entry-item" href="马卡里.html">
+  <div class="noun">马卡里</div>
+  <div class="snippet">马卡里（马卡里耶夫集市，Makaryev Fair）是俄罗斯历史上最著名、规模最大的定期集市之一。起源于16世纪中期，在伏尔加河左岸的马卡里耶夫修道院附近每年七月举办。得名于东正教圣徒马卡里·任尔托沃茨基。1816年大火后于1817年迁至下</div>
+</a>
+<a class="entry-item" href="马德里.html">
+  <div class="noun">马德里</div>
+  <div class="snippet">西班牙首都。1808年拿破仑以调解西班牙王室继承纠纷为由入侵西班牙，法军占领马德里，引发西班牙半岛战争（1808-1814）。在本书中，朗巴以马德里作为法军占领的世界主要首都之一列举，炫耀拿破仑的军事征服。</div>
+</a>
+<a class="entry-item" href="马罗谢卡街.html">
+  <div class="noun">马罗谢卡街</div>
+  <div class="snippet">莫斯科中央行政区的一条古老街道，连接伊林斯基门广场与波克罗夫卡街。名称源于&quot;小俄罗斯&quot;（Malorossiya）的变体，因17世纪该街设有&quot;小俄罗斯大院&quot;而得名。在1812年，街角有一所挂着靴匠招牌的大房子。 --- 莫斯科市中心一条历史悠</div>
+</a>
+<a class="entry-item" href="马耳他.html">
+  <div class="noun">马耳他</div>
+  <div class="snippet">地中海中部岛国，有&quot;地中海心脏&quot;之称，扼守东西地中海交通要道，战略位置极其重要。历史上先后被腓尼基人、罗马人、阿拉伯人统治，1530年起由耶路撒冷圣约翰骑士团管辖，1798年被拿破仑占领，1800年成为英国殖民地，1964年独立。1814年</div>
+</a>
+<a class="entry-item" href="马车市场.html">
+  <div class="noun">马车市场</div>
+  <div class="snippet">莫斯科的历史街区，俄语名卡列特内街（Каретный ряд），以售卖马车和马具闻名。在1812年莫斯科大火中，这是最先着火的区域之一。在《战争与和平》中，托尔斯泰通过皮埃尔的视角描写大火蔓延时提到了此处。</div>
+</a>
+<a class="entry-item" href="马达加斯加岛.html">
+  <div class="noun">马达加斯加岛</div>
+  <div class="snippet">娜塔莎无聊时随口说出的远方地名。非洲东南部的世界第四大岛。娜塔莎因想念安德烈公爵而心神不宁，在约格尔房间随口说出马达加斯加岛，一个音节一个音节地重复，然后径自离去。反映了她想逃离当下环境的潜意识。</div>
+</a>
+<a class="entry-item" href="高加索.html">
+  <div class="noun">高加索</div>
+  <div class="snippet">位于黑海与里海之间的广阔地区，是亚洲和欧洲的分界线之一。高加索山脉自西北向东南延伸约1100至1200千米，主峰厄尔布鲁士峰海拔5642米，是欧洲最高峰。该地区历史上是俄罗斯帝国向南扩张的重要方向。</div>
+</a>
+<a class="entry-item" href="魏玛.html">
+  <div class="noun">魏玛</div>
+  <div class="snippet">德国图林根州城市，历史上为萨克森-魏玛公国首府。18世纪末至19世纪初是德国古典主义文化中心和欧洲启蒙运动的重镇，歌德、席勒、赫尔德、维兰德等文学巨匠在此活动，史称&quot;魏玛古典主义&quot;。小说中拿破仑威胁驱逐亚历山大皇帝的魏玛亲属，反映了俄国皇室</div>
+</a>
+<a class="entry-item" href="鲁修克.html">
+  <div class="noun">鲁修克</div>
+  <div class="snippet">又译鲁什丘克，今保加利亚鲁塞（Ruse），多瑙河南岸要塞城市。1806—1812年俄土战争期间，库图佐夫于1811年在此指挥鲁什丘克战役，以劣势兵力击败六万土耳其大军。此后库图佐夫主动弃城，诱敌渡河，在斯洛博齐亚包围歼灭土军主力，迫使土耳其</div>
+</a>
+<a class="entry-item" href="鲁比扬卡.html">
+  <div class="noun">鲁比扬卡</div>
+  <div class="snippet">莫斯科的街道广场，皮埃尔的车夫误以为他要前往总司令官邸而将车赶往此处。</div>
+</a>
+<a class="entry-item" href="麦田.html">
+  <div class="noun">麦田</div>
+  <div class="snippet">麦田是《战争与和平》狩猎场景中狐狸被追逐后出现的区域。尼古拉·罗斯托夫站在一片禾茬地中望见对面的麦田，猎犬追着狐狸从孤林经过山谷分叉向麦田追去，狐狸最终在麦田里被猎犬围住。麦田是狩猎场景中开阔地形的一部分，猎人可以在此观察猎物动向。</div>
+</a>
+<a class="entry-item" href="麻雀山.html">
+  <div class="noun">麻雀山</div>
+  <div class="snippet">莫斯科西南部的一座山丘，位于莫斯科河南岸，最高处约220米，是莫斯科市的制高点。原名得自1451年一位名叫Vorobey（俄语意为&quot;麻雀&quot;）的牧师所在的村庄。苏联时期曾改名为列宁山，1999年恢复原名。莫斯科大学主楼即建于此山之上。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

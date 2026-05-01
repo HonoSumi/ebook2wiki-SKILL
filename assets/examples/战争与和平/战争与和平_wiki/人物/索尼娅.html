@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>索尼娅 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">索尼娅 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">人物</a>
+<span>/</span>
+索尼娅
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>索尼娅</h1>
+  <span class="meta-tag">人物</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>托尔斯泰《战争与和平》中的人物，全名索菲娅·亚历山德罗夫娜，是罗斯托夫伯爵夫人的侄女，自幼父母双亡，被罗斯托夫家收养。她温顺善良、深情而克制，与尼古拉·罗斯托夫青梅竹马、两情相悦，但因家境贫寒且是表亲关系，最终未能结合。娜塔莎称她为&quot;表姐&quot;。在罗斯托夫家衰落后，她尽心操持家务，是小说中最令人怜惜的悲剧人物之一。<br>---<br>罗斯托夫伯爵夫人的侄女，自幼父母双亡被罗斯托夫家收养。深爱表哥尼古拉·罗斯托夫，但因无陪嫁最终放弃爱情，成全尼古拉与玛丽亚的婚姻，成为全书最令人同情的角色之一。<br>---<br>索尼娅（全名索菲娅·亚历山德罗夫娜，Sonya Rostova），罗斯托夫伯爵夫人的外甥女，父母双亡后从小被罗斯托夫家收养。她温柔善良、富有牺牲精神，深爱着表哥尼古拉·罗斯托夫。然而因没有嫁妆，老伯爵夫人不断施压要求她解除与尼古拉的婚约。最终尼古拉娶了富有的玛丽亚公爵小姐，索尼娅孤独终老，被娜塔莎形容为&quot;不结果子的谎花&quot;。<br>---<br>罗斯托夫家的女亲戚，全名索菲娅·亚历山德罗夫娜，自幼寄人篱下，与娜塔莎一同长大。深爱尼古拉·罗斯托夫，两人曾有过婚约，但因索尼娅没有财产，伯爵夫人反对这桩婚事。为成全尼古拉与富有的玛丽亚公爵小姐，索尼娅主动解除婚约。娜塔莎曾用《福音书》的比喻说索尼娅像一朵&quot;谎花&quot;——开得美丽却不会结果。任劳任怨，是小说中最真挚却最悲情的角色之一。<br>---<br>索尼娅·亚历山德罗夫娜，《战争与和平》重要配角，罗斯托夫家远亲兼养女。与尼古拉·罗斯托夫青梅竹马并深爱着他，忠贞不渝。本卷中已快满二十岁。尼古拉对回家后要面对她的许诺感到烦恼与矛盾，这也是他迟迟不愿退伍的原因之一。<br>---<br>罗斯托夫家的穷侄女，爱慕尼古拉，性格温顺善良、忠贞不渝。父母双亡后由罗斯托夫家收养，与尼古拉青梅竹马。娜塔莎称她为一朵草莓上不结果实的谎花，美丽却没有收获。尼古拉最终娶了玛丽亚公爵小姐后，索尼娅终身未嫁，默默操持家务。<br>---<br>罗斯托夫伯爵夫人的侄女，全名索菲娅·亚历山德罗夫娜。父母双亡后被伯爵家收养。<br>与尼古拉青梅竹马相恋并互许承诺，但因没有嫁妆无法结合。<br>主动写信解除婚约以成全尼古拉与玛丽亚的婚事，留在罗斯托夫家操持家务，<br>成为自我牺牲与成全他人的象征。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>索尼娅果然在大箱子上，脸朝下躺在保姆肮脏的条纹布羽毛褥子上，身上的粉红纱衫都揉皱了。她用手捂着脸，哽哽咽咽地啼哭着，裸露的肩头直发颤。<br>---<br>索尼娅关上门。一分钟后，让伯爵进来了。他穿着蓝色燕尾服，长袜浅鞋，喷了香水，擦了头油。<br>---<br>索尼娅怕离开娜塔莎，可是，又怕妨碍她和安德烈公爵在一起。<br>---<br>&quot;索尼娅时时刻刻都怕自己成为一个多余的人，极力找借口走开，让他们单独在一起，其实他们并不需要这样。&quot;<br>---<br>索尼娅快满二十岁了。她已经不会长得更美，除了现在这个样子，不会有更大的变化了；即使这样，也就很够了。自从尼古拉回来后，她整个人都沉浸在幸福和爱情之中，这个姑娘的爱情忠贞不渝，使他由衷地高兴。<br>---<br>最使这位仁慈的伯爵夫人恼火的是，这个可怜的黑眼睛侄女是这么温顺，这么善良，对她的恩人是这么由衷地感激，她对尼古拉的爱情是这么忠贞不渝和富于自我牺牲精神，简直对她无可指责。<br>---<br>索尼娅照例插不上话，虽然他们有着共同的回忆。索尼娅的化装最好。 她的小胡子和眉毛对她非常合适。大家都说她很好看，她今天特别活跃和精神饱满。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://baijiahao.baidu.com/s?id=1732521875652580603" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1732521875652580603</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3/9134454" target="_blank" rel="noopener">https://baike.baidu.com/item/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3/9134454</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E7%B4%A2%E5%B0%BC%E5%A8%85" target="_blank" rel="noopener">https://baike.baidu.com/item/%E7%B4%A2%E5%B0%BC%E5%A8%85</a>
+<a class="source-url-item" href="https://blog.sina.com.cn/s/blog_4b562b280102wsbu.html" target="_blank" rel="noopener">https://blog.sina.com.cn/s/blog_4b562b280102wsbu.html</a>
+<a class="source-url-item" href="https://blog.sina.com.cn/s/blog_633b67d70102yyd7.html" target="_blank" rel="noopener">https://blog.sina.com.cn/s/blog_633b67d70102yyd7.html</a>
+<a class="source-url-item" href="https://www.bbc.co.uk/programmes/profiles/146BRwfxDJsRMF3G11kVqm2/sonya-rostova" target="_blank" rel="noopener">https://www.bbc.co.uk/programmes/profiles/146BRwfxDJsRMF3G11kVqm2/sonya-rostova</a>
+<a class="source-url-item" href="https://www.fx361.com/page/2022/0219/10054105.shtml" target="_blank" rel="noopener">https://www.fx361.com/page/2022/0219/10054105.shtml</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

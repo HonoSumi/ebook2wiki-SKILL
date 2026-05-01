@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>尼古拉·罗斯托夫 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">尼古拉·罗斯托夫 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">人物</a>
+<span>/</span>
+尼古拉·罗斯托夫
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>尼古拉·罗斯托夫</h1>
+  <span class="meta-tag">人物</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>托尔斯泰《战争与和平》中的核心人物之一，罗斯托夫伯爵的长子。他是一名骠骑兵军官，性格单纯热情、崇尚武力和爱国精神。他狂热崇拜沙皇亚历山大一世，坚信&quot;俄国人要么是死，要么是胜利&quot;。青年时期与表妹索尼娅相恋，后与玛丽亚·博尔孔斯卡娅公爵小姐结婚。战后放弃军职，承担家族债务，成为精明的庄园主。人物原型为托尔斯泰的父亲尼古拉·伊里奇·托尔斯泰。<br>---<br>《战争与和平》核心人物之一，罗斯托夫家族长子，骠骑兵军官。性格单纯热情、忠君爱国，对沙皇亚历山大一世怀有狂热崇拜。经历了1805年奥斯特利茨战役和1812年卫国战争，从鲁莽青年成长为沉稳指挥官。战后与玛丽亚公爵小姐结婚，成为精明能干的地主。<br>---<br>尼古拉·伊里奇·罗斯托夫（Николай Ильич Ростов），《战争与和平》中罗斯托夫伯爵的长子。他热情冲动、重视荣誉，是一名骠骑兵军官。在小说中经历了申格拉本和奥斯特利茨战役的洗礼，从热血青年逐渐成熟。他在牌桌上输给多洛霍夫四万三千卢布，后来在1812年战争中表现出色。因父亲去世后家道中落，他承担起还债和照顾家庭的重任。在本书第77段中，他选择留在团队当一名小军官以节省开支。<br>---<br>罗斯托夫伯爵家的大儿子，骠骑兵军官，娜塔莎的哥哥。热情忠诚、崇尚荣誉。索尼娅深爱着他。娜塔莎在谈论鲍里斯时说&quot;要是尼古拉就会懂得&quot;。<br>---<br>罗斯托夫家族的长子，全名尼古拉·伊里奇·罗斯托夫。热血爱国、崇尚军旅的骠骑兵军官，从小认定&quot;服兵役是我的天职&quot;。单纯善良但思想保守，忠于沙皇和传统秩序。申格拉本战役中初上战场奋勇杀敌，负伤后一度胆怯逃跑。父亲去世后家族濒临破产，他毅然退役回家还债，成为精明能干的庄园主。与表妹索尼娅的初恋因家道中落告终，最终娶了富有的玛丽亚·博尔孔斯卡娅公爵小姐。<br>---<br>尼古拉·伊里奇·罗斯托夫，《战争与和平》主要人物之一，罗斯托夫伯爵家长子。骠骑兵军官，在保罗格勒团服役，性格粗犷直率、心地善良。在本卷中因母亲来信诉说家道中落而被迫请假返乡，发现管家米坚卡盗窃账目后将其赶出庄园。对妹妹娜塔莎与安德烈公爵的婚事既高兴又怀有疑虑。<br>---<br>小伯爵，罗斯托夫家的长子，年轻的热血贵族，热衷打猎和军旅生活，在家族财务问题上表现决断。<br>---<br>罗斯托夫伯爵家的长子，罗斯托夫家族的核心成员之一。热爱打猎，冲动好胜，性格直率。后参军加入骠骑兵，参与奥斯特利茨战役和1812年卫国战争，最终与玛丽亚·博尔孔斯卡娅结婚，成为精明能干的庄园主。<br>---<br>罗斯托夫伯爵长子，娜塔莎的哥哥，一名骠骑兵军官。淳朴正直、崇尚武力的爱国青年，经历了申格拉本、奥斯特里茨和1812年卫国战争，从热血青年成长为成熟军官。战后为替父亲还债放弃军职，与玛丽亚·博尔孔斯卡娅结婚，成为精明能干的地主。他是全书中最具&quot;俄罗斯性&quot;的典型人物之一，代表俄国宗法制贵族的理想形象。<br>---<br>罗斯托夫家的长子，骠骑兵军官。性格单纯热血，崇尚军旅生活，有着浓郁的俄罗斯气质。<br>从热血骠骑兵成长为务实能干的庄园主。曾因好赌被多洛霍夫设局输掉巨款，之后逐渐成熟。<br>战争结束后退役回家背负债务，最终与玛丽亚公爵小姐结婚，成为精明能干的庄园主还清债务。<br>---<br>尼古拉·罗斯托夫是罗斯托夫家族长子，娜塔莎的哥哥，一位正直热情的骠骑兵军官。他对沙皇亚历山大一世怀有宗教般的热爱。父亲去世后家道中落，他毅然退役承担债务。最终与玛丽亚·博尔孔斯卡娅结婚，成为一位精明务实的庄园主，代表了托尔斯泰笔下完美的俄国宗法制贵族形象。<br>---<br>罗斯托夫伯爵长子，骠骑兵军官，原型为托尔斯泰的父亲。他单纯热血，对沙皇亚历山大一世怀有狂热的崇拜。经历了申格拉本和奥斯特利茨战役的洗礼。与表妹索尼娅青梅竹马，但因家族利益最终与玛丽亚·博尔孔斯卡娅结婚。战后父亲去世，他放弃军职回乡务农成为精明能干的庄园主。思想保守，反对变革。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>&quot;完全同意您的意见，&quot;尼古拉回答说，他满脸通红，一面转动碟子，移动酒杯，露出坚决而不顾一切的神情，仿佛眼前他正面临着严重的危险似的，&quot;我坚信，俄国人要么是死，要么是胜利。&quot;<br>---<br>罗斯托夫为了不被人认出，趁着天黑，身着便服来到蒂尔西特。<br>---<br>虽然尼古拉·罗斯托夫拿定主意在默默无闻的团队继续当一名小军官，花费比较节省，但是在奥特拉德诺耶过的是那样的生活，特别是米坚卡那样处理事情，弄得债务逐年不断增加。<br>---<br>要是尼古拉就会懂得……<br>---<br>&quot;一八〇五年安德烈和尼古拉之间的冲突，以及家里的人见到的其他许多预兆。&quot;<br>---<br>尼古拉·罗斯托夫充分地享受了这种幸福，在一八〇七年以后，他继续在保罗格勒团服务，他已经接替杰尼索夫指挥一个骑兵连了。……罗斯托夫成为一个举止粗野、心地善良的小伙子……他受到部下和长官的爱戴和尊敬，而且，他对自己的生活很满意。<br>---<br>他想，“怎么押注，我早就内行，至于什么转账，我一窍不通。”他对自己说，从此他不再过问家务。他怀着极大的兴趣热衷于对他说来还是新鲜的事情——犬猎，老伯爵置办了大规模的狩猎设备。<br>---<br>尼古拉从来未见过伊拉金，但是，他在看问题和感情上从来不守中庸之道，由于风闻这位地主残暴而且专横，所以对他满心的愤恨，认为他是最凶恶的敌人。他现在去找他，怒不可遏，而且非常激动，手里紧紧握住马鞭，充分准备采取最坚决、最严厉的手段对付敌人。<br>---<br>尼古拉也很喜欢大叔的弹奏。大叔又弹了一支曲子。阿尼西娅·费奥多罗夫娜的笑脸又在门口出现了，她后面还有别的面孔。<br>---<br>尼古拉跟着第一辆雪橇也出发了；后面咯咯吱吱响起了其余的雪橇。先是在狭窄的路上小跑。 在经过花园时，光秃秃的树影常常横断道路，遮住明亮的月光，但是一走出垣墙，整个浴在 月光中一动不动的雪原，钻石似的发出淡蓝色的闪光，向四外伸展开来。<br>---<br>尼古拉都不离索尼娅的身边，并且对她完全另眼相看。他觉得，多亏这个软木炭小胡子，他今天才第一次完全认识索尼娅。……他不断地端详，当他认出仍然和先前一样而又不一样的索尼娅，而且想起那混合着亲吻感觉的软木炭气味的时候，他望了望后退的地面和繁星灿烂的天空，深深呼吸着严寒的空气，觉得自己又进入仙境了。<br>---<br>尼古拉向母亲表明他对索尼娅的爱情和要同她结婚的决心。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://baijiahao.baidu.com/s?id=1732521875652580603" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1732521875652580603</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E5%B0%BC%E5%8F%A4%E6%8B%89%C2%B7%E4%BC%8A%E9%87%8C%E5%A5%87%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A4%AB" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%B0%BC%E5%8F%A4%E6%8B%89%C2%B7%E4%BC%8A%E9%87%8C%E5%A5%87%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A4%AB</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E5%B0%BC%E5%8F%A4%E6%8B%89%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A4%AB" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%B0%BC%E5%8F%A4%E6%8B%89%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A4%AB</a>
+<a class="source-url-item" href="https://www.vrrw.net/hstj/9010.html" target="_blank" rel="noopener">https://www.vrrw.net/hstj/9010.html</a>
+<a class="source-url-item" href="https://www.zhihu.com/question/640038150" target="_blank" rel="noopener">https://www.zhihu.com/question/640038150</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/zh/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3%E4%BA%BA%E7%89%A9%E5%88%97%E8%A1%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/zh/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3%E4%BA%BA%E7%89%A9%E5%88%97%E8%A1%A8</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/zh/战争与和平人物列表" target="_blank" rel="noopener">https://zh.wikipedia.org/zh/战争与和平人物列表</a>
+<a class="source-url-item" href="尼古拉·罗斯托夫是典型的俄罗斯宗法制贵族青年，单纯、尚武、忠于传统。他大学辍学当骠骑兵，参加申格拉本战役、奥斯特利茨战役和波罗金诺战役。父亲去世后承担全部债务，后与玛丽亚公爵小姐结婚，成为精明能干的庄园主。他是托尔斯泰笔下&quot;最俄罗斯&quot;的人物代表之一。" target="_blank" rel="noopener">尼古拉·罗斯托夫是典型的俄罗斯宗法制贵族青年，单纯、尚武、忠于传统。他大学辍学当骠骑兵，参加申格拉本战役、奥斯特利茨战役和波罗金诺战役。父亲去世后承担全部债务，后与玛丽亚公爵小姐结婚，成为精明能干的庄园主。他是托尔斯泰笔下&quot;最俄罗斯&quot;的人物代表之一。</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

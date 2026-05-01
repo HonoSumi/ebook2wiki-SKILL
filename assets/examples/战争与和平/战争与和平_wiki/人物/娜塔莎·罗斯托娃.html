@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>娜塔莎·罗斯托娃 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">娜塔莎·罗斯托娃 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">人物</a>
+<span>/</span>
+娜塔莎·罗斯托娃
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>娜塔莎·罗斯托娃</h1>
+  <span class="meta-tag">人物</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>娜塔莎·罗斯托娃（Natasha Rostova），全名纳塔利娅·伊里奇娜·罗斯托娃，罗斯托夫伯爵的次女，小说女主角。活泼天真，热情奔放，是&quot;生命和幸福的化身&quot;。与安德烈·博尔孔斯基订婚，后被阿纳托利·库拉金诱惑导致婚约破裂。1812年战争中成长，与重伤的安德烈和解。最终嫁给皮埃尔·别祖霍夫，成为贤妻良母。<br>---<br>娜塔莉亚·伊里尼奇娜·罗斯托娃（Наталья Ильинична Ростова），昵称娜塔莎，是《战争与和平》的核心女主人公之一，罗斯托夫伯爵的次女。她天真活泼、富有激情和音乐天赋，是小说的灵魂人物。小说开始时她年仅十三岁，在本书第77段中已满十六岁。四年前她曾与鲍里斯·德鲁别茨科伊有过纯真的亲吻和誓言，此时她内心仍在纠结那个誓言是否还有约束力，而鲍里斯似乎有意回避她。小说中娜塔莎经历了与安德烈公爵的订婚、与阿纳托利·库拉金的私奔风波、战争期间的成长，最终与皮埃尔结婚。<br>---<br>罗斯托夫伯爵的次女，小说女主角，初登场时13岁。托尔斯泰心中的&quot;生命和幸福的化身&quot;。本节中刚满十六岁，与童年追求者鲍里斯重逢后展现少女的娇羞活泼。她与母亲夜谈鲍里斯的事，用独特感受描述人物（称鲍里斯&quot;窄得像饭厅里的钟&quot;，皮埃尔是&quot;蓝的，深蓝中带红的颜色&quot;）。她将首次参加大型舞会，为此整日忙碌。<br>---<br>托尔斯泰《战争与和平》女主角，罗斯托夫伯爵次女，全名娜塔莉娅·伊里尼奇娜·罗斯托娃。热情活泼、天真浪漫，从天真少女历经爱情甜蜜与背叛、战争残酷，最终蜕变为贤妻良母。<br>---<br>《战争与和平》的女主角，罗斯托夫伯爵的次女。托尔斯泰笔下&quot;生命和幸福的化身&quot;，热情奔放、纯真浪漫。她一点也算不上漂亮——眼睛小、额头窄、下巴和嘴偏大，但罕见的活泼和天性的优雅让她成为令人着迷的&quot;迷人精&quot;。她经历了三段爱情：16岁时爱上31岁的安德烈公爵并订婚；因寂寞难耐被花花公子阿纳托利诱惑而险些私奔（性格蜕变的转折点）；战后与皮埃尔结婚，成为四个孩子的母亲，放弃社交、全身心投入家庭。代表了从&quot;感性冲动&quot;到&quot;理性成熟&quot;的精神蜕变。又名娜塔莉亚·伊里尼奇娜·罗斯托娃。<br>---<br>娜塔莉亚·伊里奇娜·罗斯托娃，昵称娜塔莎，罗斯托夫伯爵的次女，小说女主角。充满生命力与热情，纯真活泼，被誉为&quot;生命和幸福的化身&quot;。与安德烈公爵订婚但因受阿纳托利诱惑而解除婚约。1812年战争中成长，照料受重伤的安德烈并获其原谅。战后与皮埃尔·别祖霍夫结婚，成为贤妻良母。托尔斯泰以妻子索菲亚及其妹妹为原型创作了这一形象。<br>---<br>娜塔莉亚·伊里尼奇娜·罗斯托娃（昵称娜塔莎），《战争与和平》核心女主角之一，罗斯托夫家小女儿。本卷中已与安德烈·博尔孔斯基公爵订婚，因老公爵反对婚礼推迟一年。她平静地接受了延期，但哥哥尼古拉和母亲对婚事怀有疑虑。此前曾爱慕过鲍里斯、舞蹈教师和杰尼索夫。<br>---<br>罗斯托夫家的次女，活泼好动，热情充满生命力，坚持参加狩猎，骑术精湛。<br>---<br>罗斯托夫伯爵的次女，全书女主角，托尔斯泰心目中&quot;生命和幸福的化身&quot;。活泼好奇，擅长骑马，充满生命力。经历了与安德烈公爵的爱情、阿纳托尔引诱私奔的波折、战争中照料伤兵等磨难，最终与皮埃尔结婚成为贤妻良母。<br>---<br>罗斯托夫伯爵之女，全书女主角，被托尔斯泰视为&quot;生命和幸福的化身&quot;。热情奔放、天真浪漫，经历了与安德烈公爵的订婚、被阿纳托利诱惑私奔的挫折、1812年战争中照料伤员的精神洗礼，最终与皮埃尔·别祖霍夫结婚成为四个孩子的母亲。本章中她在叔叔家跳俄罗斯民间舞的场景是全书最著名的段落之一。<br>---<br>罗斯托夫家的小女儿，小说的女主角。全名娜塔莉娅·伊里尼奇娜·罗斯托娃。<br>托尔斯泰称她为生命和幸福的化身。充满生命活力与热情，爱好唱歌跳舞。<br>与安德烈公爵订婚，后被阿纳托利·库拉金诱惑险些私奔导致婚约破裂。<br>1812年战争中照料伤兵，在莫斯科大火期间照料重伤的安德烈公爵。<br>战后与皮埃尔·别祖霍夫结婚，从活泼少女蜕变为贤妻良母。<br>---<br>娜塔莎·罗斯托娃是《战争与和平》的女主角，罗斯托夫伯爵的次女。托尔斯泰以妻子索菲亚和其妹妹为原型，视她为「生命和幸福的化身」。她从天真活泼的少女，经历与安德烈的爱情、受阿纳托尔诱惑私奔失败的波折，在1812年战争中照料伤兵而成长，最终与皮埃尔结婚成为贤妻良母。<br>---<br>《战争与和平》核心女主角，罗斯托夫伯爵次女，被托尔斯泰视为&quot;生命和幸福的化身&quot;。原型为托尔斯泰的妻子索菲亚和嫂子谭雅。她并不算漂亮但充满活力，性格热情奔放、真诚坦率，本质是&quot;爱&quot;。经历与安德烈公爵的初恋、被阿纳托尔引诱的挫折、最终与皮埃尔结婚的完整成长弧线。在1812年战争中表现出爱国主义精神，让出马车运载伤员。1956年电影版由奥黛丽·赫本饰演。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>娜塔莎是全家最善于体察人们的语气、眼神和神色的细微变化的人，从一开始吃饭，她就竖起了耳朵。她看出，在她的父亲和安娜·米哈伊洛夫娜之间有什么事，有什么与哥哥有关的事，看出安娜·米哈伊洛夫娜是在做准备工作。<br>---<br>娜塔莎十六岁了，这是一八〇九年，也就是四年前和鲍里斯亲吻之后她扳着指头数到的这一年。从那时起，她一次也没见过鲍里斯。在索尼娅和母亲面前谈起鲍里斯的时候，她像谈久已过去的事，满不在意地说，从前的一切都是孩提的事，不值得一提，早就忘记了。<br>---<br>娜塔莎十六岁了……她脸上那副特别严肃，特别专注的神情，使伯爵夫人吃惊。<br>---<br>娜塔莎满怀喜悦地望着那张熟悉的皮埃尔的面孔，也就是佩龙斯卡娅称为插科打诨的小丑的面孔，她知道皮埃尔在人群中是在找她们，特别是在找她。皮埃尔答应她来参加舞会，并且给她介绍舞伴。<br>---<br>&quot;难道这就是我，就是那个毛丫头（人们都这样叫我），&quot;娜塔莎想，&quot;难道我从现在起就做妻子，和这个陌生的、可爱的、聪明的、甚至受我父亲尊敬的人平等了吗？难道这是真的吗？难道真的现在已经不能拿生活当儿戏了，现在我已经长大了，现在对自己的一言一行都要负责了吗？&quot;<br>---<br>她满脸通红，心情激动得不得了，眼中无泪，在那一整天，她彷徨无主地在家里走来走去，做一些最琐碎的事，仿佛不理解她正等待的是什么事情。甚至在他告别时，最后一次吻她的手，她也没哭。&quot;别走吧！&quot;她对他只说了这么一句，声调是那么恳切，甚至使他思索了片刻，是不是真的必须留下来。<br>---<br>娜塔莎讲了讲她和安德烈公爵恋爱经过，讲了讲他到奥特拉德诺耶的情景，把他最近的来信拿给他看。……她完全不像一个与未婚夫别离的钟情的未婚妻。她完全和从前一样情绪稳定，态度安详，快快活活。<br>---<br>娜塔莎快步走进来，她还没有梳头洗脸，也没有更换衣裳，裹着保姆的一条大围巾。娜塔莎矫健、自信地骑在黑色的阿拉伯马上，一只手熟练地、毫不费力地把马勒住。娜塔莎说，&quot;我们会待在我们自己的地方，决不乱动。&quot;<br>---<br>娜塔莎害怕哥哥做出什么可怕的事情，她怀着不安的心情离他不远地跟着他。她看见两个敌人友好地互相问候，就驰到他们跟前。<br>---<br>这个受过法籍家庭女教师教育的伯爵小姐是何时何地、又是怎样从她呼吸的俄罗斯空气中汲取了这种精神的？而且从其中得到了早已被pas de châle挤掉的舞姿？而这正是大叔所期待于她的那种学不来教不会的俄罗斯的精神和舞姿。<br>---<br>娜塔莎首先发出圣诞节狂欢的调子，狂欢互相传染着，越来越高涨……她虽说不想唱， 可是她长久以来和以后很久都没有像这天晚上唱得这么好。<br>---<br>娜塔莎，梅柳科娃家的年轻人的宠儿，同她们一起消失在后面的房间里了，在这儿，姑娘们赤裸的手臂从半开着的门缝里接过男仆递来她们所要的软木炭、各种长衫和男人的衣裳。……「我非常快活，非常快活！我真的在生你的气呢。你对她太坏了，不过这话我没跟你说。这是一颗怎样的心啊，尼古拉，我太高兴了！」<br>---<br>娜塔莎轻松、甚至快活地度过刚和未婚夫离别的那些日子，现在一天天变得急躁和难以忍受。她一想到她那最好的时光本来可以用来和他谈爱情，而现在却白白浪费掉，心中就难以排遣地难过。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://baike.baidu.com/item/%E5%A8%9C%E5%A1%94%E8%8E%8E%C2%B7%E4%BC%8A%E5%8E%BB%E5%86%85%E5%83%A5%E7%BA%B3%E8%80%B6%E5%A4%AB%E5%A8%9C%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A7%91%E5%A8%98" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%A8%9C%E5%A1%94%E8%8E%8E%C2%B7%E4%BC%8A%E5%8E%BB%E5%86%85%E5%83%A5%E7%BA%B3%E8%80%B6%E5%A4%AB%E5%A8%9C%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A7%91%E5%A8%98</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E5%A8%9C%E5%A1%94%E8%8E%8E%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A4%AB" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%A8%9C%E5%A1%94%E8%8E%8E%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A4%AB</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E5%A8%9C%E5%A1%94%E8%8E%8E%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A8%83/15143141" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%A8%9C%E5%A1%94%E8%8E%8E%C2%B7%E7%BD%97%E6%96%AF%E6%89%98%E5%A8%83/15143141</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/娜塔莎·罗斯托娃/15143141" target="_blank" rel="noopener">https://baike.baidu.com/item/娜塔莎·罗斯托娃/15143141</a>
+<a class="source-url-item" href="娜塔莎是《战争与和平》的女主角，托尔斯泰笔下&quot;生命和幸福的化身&quot;。她从13岁天真少女成长为战争中坚毅的女性，曾与安德烈·博尔孔茨基订婚，后被阿纳托尔诱惑导致婚约破裂。战后与皮埃尔·别祖霍夫结婚，成为贤妻良母。著名改编影视饰演者包括奥黛丽·赫本（1956年）。" target="_blank" rel="noopener">娜塔莎是《战争与和平》的女主角，托尔斯泰笔下&quot;生命和幸福的化身&quot;。她从13岁天真少女成长为战争中坚毅的女性，曾与安德烈·博尔孔茨基订婚，后被阿纳托尔诱惑导致婚约破裂。战后与皮埃尔·别祖霍夫结婚，成为贤妻良母。著名改编影视饰演者包括奥黛丽·赫本（1956年）。</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

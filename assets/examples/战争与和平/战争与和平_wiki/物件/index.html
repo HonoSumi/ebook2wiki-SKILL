@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">物件 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+物件
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">342 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="《俄罗斯导报》.html">
+  <div class="noun">《俄罗斯导报》</div>
+  <div class="snippet">俄国文学与政治月刊，1808年由谢尔盖·格林卡在莫斯科创刊，1820年停刊，1824年短暂复刊。该刊持爱国君主主义立场，得到莫斯科总督罗斯托普钦伯爵的赞助，在拿破仑战争期间是俄国保守派的重要舆论阵地，也是19世纪初俄国最有影响的杂志之一。</div>
+</a>
+<a class="entry-item" href="《可怜的丽莎》.html">
+  <div class="noun">《可怜的丽莎》</div>
+  <div class="snippet">俄国作家卡拉姆辛创作于1792年的短篇小说，是俄国感伤主义文学的代表作。小说讲述贵族青年埃拉斯特与纯真农家女丽莎的爱情悲剧——埃拉斯特始乱终弃，丽莎被抛弃后投水自尽。作品以情感真挚、文字清丽、关注普通人内心世界而轰动俄国文坛，开创了以情感和</div>
+</a>
+<a class="entry-item" href="《在大街上》.html">
+  <div class="noun">《在大街上》</div>
+  <div class="snippet">俄罗斯经典民歌（俄语&quot;Вдоль по улице&quot;），全称《沿着宽阔的街道》。描写年轻铁匠在大街上与姑娘相会的场景。在小说中大叔演奏此曲激发了娜塔莎跳起俄罗斯民间舞，是本章最动人的音乐场景。</div>
+</a>
+<a class="entry-item" href="《奥秘详解》.html">
+  <div class="noun">《奥秘详解》</div>
+  <div class="snippet">俄语原名《Ключ к таинствам натуры》（直译&quot;自然奥秘之钥&quot;），德国神秘主义作家卡尔·冯·埃克哈特斯豪森（Karl von Eckartshausen, 1752-1803）所著的神秘主义宗教哲学著作。该书在19世纪初的</div>
+</a>
+<a class="entry-item" href="《小泉流水》.html">
+  <div class="noun">《小泉流水》</div>
+  <div class="snippet">托尔斯泰《战争与和平》中罗斯托夫家的年轻人演唱的一首四重唱歌曲。俄语原名为&quot;Ручеёк&quot;，意为&quot;小溪流&quot;。这是19世纪初俄国贵族家庭中流行的一首抒情歌曲/浪漫曲，在罗斯托夫伯爵家的命名日晚宴后，由娜塔莎、尼古拉、索尼娅和鲍里斯共同演唱。</div>
+</a>
+<a class="entry-item" href="《昨夜小雪纷纷下》.html">
+  <div class="noun">《昨夜小雪纷纷下》</div>
+  <div class="snippet">俄罗斯传统狩猎民歌（英译&quot;Tari bari rastobari&quot;），歌词描写雪花飘落、猎人出发打猎的场景。大叔按照民间唱法演唱，认为&quot;只有歌词才是一支歌的全部意义&quot;。这首歌贯穿本章始终，是俄罗斯民间文化的重要符号。</div>
+</a>
+<a class="entry-item" href="《约康德》.html">
+  <div class="noun">《约康德》</div>
+  <div class="snippet">法国寓言诗人拉封丹所著《故事集》（Contes et nouvelles en vers）中的第一篇韵文故事，法文名Joconde。改编自意大利诗人阿里奥斯托《疯狂的罗兰》（Orlando Furioso），主题涉及婚姻不忠，在17世纪被认</div>
+</a>
+<a class="entry-item" href="《路加福音》.html">
+  <div class="noun">《路加福音》</div>
+  <div class="snippet">《圣经·新约》中的一卷，传统上认为由医生路加（使徒保罗的同工和旅伴）所著，是四部福音书之一。其内容详细记载了耶稣基督的降生、传道、受难与复活。书中引用《路加福音》第七章第四十七节的典故，暗示娜塔莎正如马格达林（从良妓女）一样，因爱得多而得到</div>
+</a>
+<a class="entry-item" href="一级圣乔治勋章.html">
+  <div class="noun">一级圣乔治勋章</div>
+  <div class="snippet">俄罗斯帝国最高级别军事勋章，由叶卡捷琳娜二世于1769年设立，一级仅授予取得非凡战略成就的最高级别将军。库图佐夫在维尔纳被亚历山大一世授予此勋章，但皇帝对其不满的情绪人尽皆知。</div>
+</a>
+<a class="entry-item" href="三十二师.html">
+  <div class="noun">三十二师</div>
+  <div class="snippet">指拿破仑军队中由达乌（路易·达乌）元帅指挥的第32步兵师，该师士兵多数从德意志北部的汉堡、不来梅等汉萨城市招募而来，属于拿破仑控制下的德意志附庸国部队。</div>
+</a>
+<a class="entry-item" href="三弦琴（巴拉莱卡）.html">
+  <div class="noun">三弦琴（巴拉莱卡）</div>
+  <div class="snippet">俄罗斯传统拨弦乐器，琴身呈独特三角形，有三根弦，音色清脆明亮。起源于18世纪由中亚冬不拉演变而来，19世纪末经改良形成完整声部体系。在俄罗斯被视为民族象征，常用于民间歌舞伴奏。</div>
+</a>
+<a class="entry-item" href="三星勋章.html">
+  <div class="noun">三星勋章</div>
+  <div class="snippet">指俄罗斯帝国时期分为三个等级的勋章体系，通常指圣安娜勋章或圣斯坦尼斯瓦夫勋章。三级制勋章中，一级带星章与大绶带，二级佩戴于颈部，三级佩戴于胸前。小说中瓦西里公爵身穿的俄罗斯长衫上佩有三枚金星勋章，标示其显赫的官阶和荣誉地位。</div>
+</a>
+<a class="entry-item" href="三角帽.html">
+  <div class="noun">三角帽</div>
+  <div class="snippet">起源于17世纪欧洲的宽檐军帽，帽檐卷起形成三角形；18世纪末演变为双角帽（bicorne），拿破仑的标志性横戴双角帽即由其演变而来。</div>
+</a>
+<a class="entry-item" href="三驾雪橇.html">
+  <div class="noun">三驾雪橇</div>
+  <div class="snippet">俄罗斯传统交通工具（троика，三套马车），由三匹马呈扇形同时牵引的雪橇。 中间的马驾辕小跑，两侧的马大跑，最高时速可达45-50公里。 起源于18世纪中叶，用于在漫长邮路上运送邮件和旅客。文化象征意义深厚， 果戈理在《死魂灵》中用它比喻</div>
+</a>
+<a class="entry-item" href="三驾马车.html">
+  <div class="noun">三驾马车</div>
+  <div class="snippet">俄语称&quot;тройка&quot;（troika），俄罗斯传统的三马并排牵引的交通工具。出现于18世纪中叶，最初用于邮政运输。中间辕马小步快跑，两侧边马全速疾驰，时速可达50公里，比欧洲两马牵引更稳定高效。在俄罗斯文化中具有重要的象征意义：果戈理在《死</div>
+</a>
+<a class="entry-item" href="丹尼拉·库波尔.html">
+  <div class="noun">丹尼拉·库波尔</div>
+  <div class="snippet">托尔斯泰《战争与和平》中罗斯托夫伯爵跳的一种舞蹈，是&quot;英格兰舞&quot;（英国乡村对舞）的一节。俄文音译自&quot;Daniel Cooper&quot;，原为一位名叫Cooper的英国人创作的轻快对舞（contradance），在19世纪初拿破仑战争时期的俄国贵族</div>
+</a>
+<a class="entry-item" href="书房.html">
+  <div class="noun">书房</div>
+  <div class="snippet">老别祖霍夫伯爵生前的大书房，位于莫斯科的别祖霍夫宅邸。皮埃尔在决斗后独自留宿于此，经历了深刻的精神反思与内心风暴，它是小说中承载人物心理转折的关键空间。</div>
+</a>
+<a class="entry-item" href="二十五卢布钞票.html">
+  <div class="noun">二十五卢布钞票</div>
+  <div class="snippet">十九世纪初俄国流通的二十五卢布面额纸币，在当时是一笔不小的款项。在小说中，罗斯托夫家的女管家玛夫拉·库兹米尼什娜出于同情，将自己积攒的一张二十五卢布钞票赠予一名前来求助的青年军官，显示出普通俄国人在战争危难时刻的慷慨与善良。</div>
+</a>
+<a class="entry-item" href="亚速步兵团.html">
+  <div class="noun">亚速步兵团</div>
+  <div class="snippet">亚速步兵团（Азовский пехотный полк）是俄罗斯帝国陆军的一个步兵团，1805年时隶属库图佐夫的多瑙河军团。在申格拉本战役中与波多尔斯克步兵团、保罗格勒骠骑兵团共同组成左翼部队，后因指挥混乱陷入困境。</div>
+</a>
+<a class="entry-item" href="人民文学出版社.html">
+  <div class="noun">人民文学出版社</div>
+  <div class="snippet">1951年3月成立于北京的国家级专业文学出版机构，是新中国成立最早、历史最长、规模最大的文学出版社。首任社长冯雪峰，社址位于北京市朝内大街166号。出版了中外文学经典名著，包括&quot;名著名译丛书&quot;等系列丛书。</div>
+</a>
+<a class="entry-item" href="伊兹梅洛夫团.html">
+  <div class="noun">伊兹梅洛夫团</div>
+  <div class="snippet">俄国帝国近卫军中最古老的步兵团之一，1730年由安娜女皇创建，以莫斯科郊外的伊兹梅洛沃庄园命名。在《战争与和平》中，鲍里斯·德鲁别茨科伊在该团服役。该团在拿破仑战争期间是俄军精锐部队，通常由皇室成员担任名誉团长。1805年小说中该团驻扎在奥</div>
+</a>
+<a class="entry-item" href="伊韦尔圣母.html">
+  <div class="noun">伊韦尔圣母</div>
+  <div class="snippet">又称伊韦尔圣母像或门房圣母，源自希腊阿索斯山伊韦尔修道院的著名东正教圣像，属于霍德格特利亚类型。传说由圣路加亲绘，在圣像破坏运动时期被士兵刺伤后流血。1648年复制品被迎至莫斯科，供奉于红场伊韦尔小堂，是莫斯科最受尊崇的圣像之一。</div>
+</a>
+<a class="entry-item" href="伊韦尔圣母像.html">
+  <div class="noun">伊韦尔圣母像</div>
+  <div class="snippet">东正教极受尊崇的圣母像之一，源自希腊阿索斯山的伊韦尔修道院。1648年传入俄罗斯后被安置在莫斯科红场入口处的伊韦尔小礼拜堂内，被视为莫斯科城的守护圣像。旧时俄人进入红场前有在此像前脱帽亲吻的习俗。小说中拉斯托普钦在传单中宣布要将此像抬到叶卡</div>
+</a>
+<a class="entry-item" href="伏特加酒.html">
+  <div class="noun">伏特加酒</div>
+  <div class="snippet">俄国传统蒸馏烈酒，主要由谷物或马铃薯发酵蒸馏制成，酒精度通常为40%左右。在19世纪俄国是常见的日常饮品。本书中朗巴与皮埃尔共餐时，仆人端来了羊肉、煎蛋、茶炊、伏特加酒和从俄国人地窖里抢来的葡萄酒。</div>
+</a>
+<a class="entry-item" href="伤寒医院.html">
+  <div class="noun">伤寒医院</div>
+  <div class="snippet">19世纪欧洲战争中的战地伤寒医院，条件极为恶劣。医院多设在简易砖房内，门窗残缺、卫生极差、缺乏基本药品和护理人员。伤寒（斑疹伤寒）通过虱子传播，在拥挤肮脏的军营和医院中极易爆发。拿破仑1812年侵俄战争中就有数十万士兵死于斑疹伤寒。书中描写</div>
+</a>
+<a class="entry-item" href="使徒行传.html">
+  <div class="noun">使徒行传</div>
+  <div class="snippet">《圣经·新约》的第5卷，记载耶稣升天后使徒们在圣灵引导下将福音从耶路撒冷传至罗马的历程，作者为路加医生，共28章。</div>
+</a>
+<a class="entry-item" href="侧祭坛.html">
+  <div class="noun">侧祭坛</div>
+  <div class="snippet">侧祭坛（俄语：придел/pridel）是东正教教堂中位于主祭坛两侧的附属祭坛空间，用于供奉特定圣徒或服务于不同礼仪需要。在小说中指博古恰罗沃村教堂中供奉圣彼得和圣保罗的侧祭坛。</div>
+</a>
+<a class="entry-item" href="俄罗斯传统美食.html">
+  <div class="noun">俄罗斯传统美食</div>
+  <div class="snippet">阿尼西娅·费奥多罗夫娜亲手制作的各式俄罗斯乡村传统食物，包括草药酒、露酒、腌蘑菇、乳浆黑麦饼、鲜蜜、蜜酒、蜜饯核桃、烤鸡等。娜塔莎觉得这些食物&quot;在任何地方也没见过，也没吃过&quot;，体现了俄罗斯乡村饮食文化的丰富。</div>
+</a>
+<a class="entry-item" href="假发.html">
+  <div class="noun">假发</div>
+  <div class="snippet">18世纪欧洲贵族流行的时尚饰品，源自法国宫廷，彼得大帝改革后传入俄国。白色或灰色的扑粉假发是财富、身份和社会等级的象征。在小说中老博尔孔斯基公爵在晚上喝茶时戴着扑过粉的假发，代表了他作为上一世纪贵族的身份特征。</div>
+</a>
+<a class="entry-item" href="假票子.html">
+  <div class="noun">假票子</div>
+  <div class="snippet">指拿破仑为破坏俄国经济而伪造的卢布钞票。1812年入侵期间，拿破仑在巴黎秘密印制了大量俄国纸币（面额主要为25卢布），随军携带三十四车假钞投放俄国市场，用于购买物资和发给士兵军饷。小说中博古恰罗沃的农民从法军手中收到一百卢布&quot;干草钱&quot;却不知</div>
+</a>
+<a class="entry-item" href="假面_化装服饰.html">
+  <div class="noun">假面/化装服饰</div>
+  <div class="snippet">圣诞节假面舞会的装扮服饰。年轻人化装成穿箍骨裙的老太太（尼古拉）、 土耳其女郎（彼佳）、小丑（季姆勒）、骠骑兵（娜塔莎）等角色， 以及用软木炭画小胡子和眉毛的切尔克斯人（索尼娅）。 这种化装传统源于俄罗斯圣诞节期间的假面游行活动。</div>
+</a>
+<a class="entry-item" href="储藏室.html">
+  <div class="noun">储藏室</div>
+  <div class="snippet">用于存放物品的仓库或储藏间，罗斯托夫家将卸下的箱子搬进储藏室。</div>
+</a>
+<a class="entry-item" href="元帅杖.html">
+  <div class="noun">元帅杖</div>
+  <div class="snippet">元帅杖是法国元帅的权杖，是元帅身份和权威的象征。在1812年克拉斯诺耶战役中，拿破仑麾下最著名的元帅之一——路易·尼古拉·达武的元帅杖被俄军缴获。据传该元帅杖现陈列于俄罗斯国家历史博物馆。托尔斯泰在《战争与和平》中将其描述为&quot;一根据称是&#x27;元</div>
+</a>
+<a class="entry-item" href="克瓦斯.html">
+  <div class="noun">克瓦斯</div>
+  <div class="snippet">盛行于俄罗斯、乌克兰、白俄罗斯等东欧国家的传统低酒精度发酵饮料。以黑麦面包干为原料，加水和糖经自然发酵制成，酒精含量通常不超过1.2%，口感酸甜，带少量气泡。因其营养价值常被称为&quot;液体面包&quot;，与德国啤酒、美国可乐、保加利亚布扎并称世界四大民</div>
+</a>
+<a class="entry-item" href="共济会四方形.html">
+  <div class="noun">共济会四方形</div>
+  <div class="snippet">共济会四方形（方矩/曲尺）是共济会核心标志之一，与圆规组合构成共济会徽章。在共济会思想中，四方形象征道德规范、行为准则与正直。在《战争与和平》中，皮埃尔入会后在家中钻研四方形的意义：四方形的一边象征上帝，另一边象征精神，第三边象征肉体，第四</div>
+</a>
+<a class="entry-item" href="共济会围裙.html">
+  <div class="noun">共济会围裙</div>
+  <div class="snippet">共济会围裙（白围裙）起源于中世纪石匠的工作服，是共济会最核心的象征物之一，代表纯洁、劳动和身份认同。在《战争与和平》中，皮埃尔入会时会长为他系上白围裙，象征坚贞和白璧无瑕，并嘱咐他尽力不让任何东西玷污围裙的洁白。</div>
+</a>
+<a class="entry-item" href="共济会手套.html">
+  <div class="noun">共济会手套</div>
+  <div class="snippet">共济会手套是共济会入会仪式中授予新会员的重要象征物，通常为三副。在《战争与和平》中，皮埃尔获赠三副手套：第一副男人手套含义保密需保存；第二副男人手套在赴会时佩戴；第三副女人手套赠予最尊重的女性，作为心地纯真的证明。会长警告不能让手套成为不洁</div>
+</a>
+<a class="entry-item" href="共济会手抄本.html">
+  <div class="noun">共济会手抄本</div>
+  <div class="snippet">皮埃尔的共济会导师约瑟夫·阿列克谢耶维奇·巴兹杰耶夫遗留下来的共济会神秘教义手抄文本，包含共济会的象征符号、教义阐释和精神修行指导。皮埃尔在莫斯科沦陷前夕试图集中精力研读这些手抄本以寻求精神慰藉和命运指引，但终究无法静心。</div>
+</a>
+<a class="entry-item" href="共济会标志.html">
+  <div class="noun">共济会标志</div>
+  <div class="snippet">共济会标志是由角尺（方矩）和圆规组成的徽章，有时中间带有字母G。角尺象征道德规范与正直，圆规象征精神边界与节制。在《战争与和平》中，皮埃尔入会仪式上会长给他看共济会的标志，并向他展示地毯上的各种图案符号，包括太阳、月亮、槌子、铅锤、铲子、石</div>
+</a>
+<a class="entry-item" href="共济会记录.html">
+  <div class="noun">共济会记录</div>
+  <div class="snippet">共济会（Freemasonry）的苏格兰记录原件，属于共济会的内部文件。共济会是一个以道德自我完善为宗旨的秘密结社，起源于欧洲。皮埃尔在精神迷茫时期加入共济会后，曾担任彼得堡共济会的首长，在深夜抄写共济会记录以逃避现实的痛苦。</div>
+</a>
+<a class="entry-item" href="共济会铲子.html">
+  <div class="noun">共济会铲子</div>
+  <div class="snippet">共济会铲子（泥刀）是石匠涂抹砂浆、粘合砖石的工具，在共济会象征体系中代表传播兄弟之爱与情谊，也象征清除内心罪恶、抚慰他人的道德工具。在《战争与和平》中，会长交予皮埃尔铲子，希望他用以清除心中恶念，并宽宏大量地抚慰邻人的心。</div>
+</a>
+<a class="entry-item" href="养老院.html">
+  <div class="noun">养老院</div>
+  <div class="snippet">皮埃尔规划在田庄设立的慈善机构之一，属于其共济会理念下的社会改革方案。</div>
+</a>
+<a class="entry-item" href="内战纪.html">
+  <div class="noun">内战纪</div>
+  <div class="snippet">《内战记》（Commentarii de Bello Civili）是古罗马统帅凯撒所著的历史著作，共3卷，记载了公元前49年至前45年凯撒与庞培及元老院势力之间的罗马内战，包括凯撒渡过卢比孔河、法萨卢战役等关键事件，是研究古罗马历史的重要</div>
+</a>
+<a class="entry-item" href="军事法规草案.html">
+  <div class="noun">军事法规草案</div>
+  <div class="snippet">安德烈公爵编写的军事改革草案，意图改革俄国陆军条例。安德烈将此草案呈递给皇帝， 皇帝批转给陆军大臣阿拉克切耶夫审议。阿拉克切耶夫在草案上用铅笔批注 &quot;毫无根据抄袭法国军事法典不必要放弃陆军条例&quot;，然后送交陆军条例委员会。</div>
+</a>
+<a class="entry-item" href="军刀.html">
+  <div class="noun">军刀</div>
+  <div class="snippet">骑兵和军官使用的一种单刃或双刃的冷兵器，适合劈砍和刺杀。在拿破仑战争时期，军刀是骑兵的主要武器，重骑兵多使用直刃长剑用于刺击，轻骑兵（如骠骑兵）多使用弧刃马刀用于砍击。军刀也是军官身份和权威的象征。</div>
+</a>
+<a class="entry-item" href="军大衣.html">
+  <div class="noun">军大衣</div>
+  <div class="snippet">19世纪俄军士兵的标准冬季军服，在小说中作为战争场景的标志性视觉元素反复出现。此处皮埃尔在逃离战场时沿途不断看到穿军大衣的身影。</div>
+</a>
+<a class="entry-item" href="军旗.html">
+  <div class="noun">军旗</div>
+  <div class="snippet">军旗是军队的标志性旗帜，象征部队的荣誉、勇敢和光荣。在拿破仑战争时期，军旗是团级部队的核心象征，引导士兵冲锋陷阵，丢失军旗被视为莫大的耻辱。安德烈公爵在奥斯特利茨战场抓起倒下的军旗带领士兵冲锋。 --- 军队中代表部队番号和荣誉的旗帜，在战</div>
+</a>
+<a class="entry-item" href="军火库.html">
+  <div class="noun">军火库</div>
+  <div class="snippet">1812年战争期间莫斯科的武器储备设施。拉斯托普钦在传单中宣布军火库为愿意武装的居民准备了军刀、手枪、长枪等武器，以廉价出售，号召莫斯科居民武装起来保卫城市。这一举措反映了战争危急时刻俄国官方动员民众参战的努力。</div>
+</a>
+<a class="entry-item" href="军犬.html">
+  <div class="noun">军犬</div>
+  <div class="snippet">军中驯养的用于警戒、通信、侦察和搜救等任务的犬只。书中提到的军犬茹奇卡是当时俄国军队中常见的团队吉祥物和警戒动物，体现了军营生活的日常面貌。</div>
+</a>
+<a class="entry-item" href="军需品.html">
+  <div class="noun">军需品</div>
+  <div class="snippet">军队所需的物资，包括粮草、弹药、装备等。罗斯托夫作为有心计的骑兵连长，想抢在法国人之前取用博古恰罗沃的军需品以供部队使用。</div>
+</a>
+<a class="entry-item" href="农民外衣.html">
+  <div class="noun">农民外衣</div>
+  <div class="snippet">俄国农民穿着的粗布外套，皮埃尔为了隐姓埋名留在莫斯科执行刺杀拿破仑的计划而特意购买。这种外衣用粗糙土布制成，样式朴素，能使穿戴者混入平民之中不被认出贵族身份。</div>
+</a>
+<a class="entry-item" href="冬季花园.html">
+  <div class="noun">冬季花园</div>
+  <div class="snippet">又称室内花园或温室，指在贵族府邸内建造的可供四季观赏植物的玻璃或半玻璃暖房。兴起于18世纪的欧洲，19世纪成为俄国贵族庄园的常见配置，既是炫耀财富的场所，也是社交活动空间。小说中别祖霍夫伯爵府的客厅便有两扇对着冬季花园的意大利式窗户。</div>
+</a>
+<a class="entry-item" href="冰.html">
+  <div class="noun">冰</div>
+  <div class="snippet">水在零度以下结成的固体。在奥斯特里茨战役中，联军溃败后试图从结冰的湖面逃跑，法军炮击导致冰面破裂，大量士兵落水溺亡。</div>
+</a>
+<a class="entry-item" href="凿子.html">
+  <div class="noun">凿子</div>
+  <div class="snippet">木工工具，老公爵在车床上工作时使用的工具，得知安德烈消息后扔下凿子。</div>
+</a>
+<a class="entry-item" href="切尔克斯高顶帽.html">
+  <div class="noun">切尔克斯高顶帽</div>
+  <div class="snippet">丹尼洛所戴的传统高加索毛皮高帽。</div>
+</a>
+<a class="entry-item" href="列比赫的大气球.html">
+  <div class="noun">列比赫的大气球</div>
+  <div class="snippet">德国人列比赫为俄国制造的载人热气球，沙皇亚历山大一世曾就此致信拉斯托普钦伯爵，要求组织可靠人员乘吊篮升空作战。</div>
+</a>
+<a class="entry-item" href="别祖霍夫团.html">
+  <div class="noun">别祖霍夫团</div>
+  <div class="snippet">《战争与和平》中1812年战争期间在莫斯科近郊整编的一个步兵团，以别祖霍夫家族命名。彼佳·罗斯托夫为安抚母亲而从奥博连斯基哥萨克团调至此团，罗斯托夫伯爵以为该团不会参加战斗，但实际上该团后来仍投入了战斗。</div>
+</a>
+<a class="entry-item" href="刺刀.html">
+  <div class="noun">刺刀</div>
+  <div class="snippet">安装在步枪枪管前端的冷兵器，用于近距离白刃战。在拿破仑战争时期，套筒式刺刀（Socket Bayonet）是主流类型。刺刀虽然在战场上实际造成的伤亡比例不高，但其心理威慑力极大，密集的刺刀冲锋往往能使敌军士气崩溃而溃退。</div>
+</a>
+<a class="entry-item" href="刺绣架.html">
+  <div class="noun">刺绣架</div>
+  <div class="snippet">绣花用的架子，小公爵夫人丽莎在刺绣架旁做针线活，表现出孕妇特有的安详神态。</div>
+</a>
+<a class="entry-item" href="前厅.html">
+  <div class="noun">前厅</div>
+  <div class="snippet">住宅大门入口处的第一个房间，用于接待访客、存放外衣等。在19世纪俄罗斯贵族宅邸中，前厅通常有仆人值守。 --- 罗斯托夫家入口处的厅堂。化装的家奴们（扮成狗熊、土耳其人、店主等） 最初在此聚集，胆怯地挤在一起，然后才涌入大厅。</div>
+</a>
+<a class="entry-item" href="前导马.html">
+  <div class="noun">前导马</div>
+  <div class="snippet">马车队中走在最前面用来引导方向的马匹，由马夫骑乘。</div>
+</a>
+<a class="entry-item" href="前座.html">
+  <div class="noun">前座</div>
+  <div class="snippet">马车前部供车夫或随从乘坐的位置。</div>
+</a>
+<a class="entry-item" href="前车.html">
+  <div class="noun">前车</div>
+  <div class="snippet">牵引式火炮的重要组成部分，一种两轮车辆，连接在火炮与牵引马匹之间用于承载弹药、炮班人员，并作为牵引连接装置。行军时火炮挂接在前车后方由马匹整体牵引，到达阵地后火炮与前车脱开进入发射位置，前车撤至后方。此过程称为&quot;脱驾&quot;。</div>
+</a>
+<a class="entry-item" href="包脚布.html">
+  <div class="noun">包脚布</div>
+  <div class="snippet">俄罗斯军队的传统裹脚布（портянки），始于彼得大帝时期从荷兰军队学来，用布料包裹双脚再穿军靴，比袜子更耐穿保暖。2012年底俄军才彻底废除这一传统。</div>
+</a>
+<a class="entry-item" href="匕首.html">
+  <div class="noun">匕首</div>
+  <div class="snippet">匕首是《战争与和平》中猎手使用的短刀利器，用于在活捉野兽后处理猎物。丹尼洛在追狼时左手握着出鞘的匕首，随时准备在关键时刻使用。匕首是19世纪俄国贵族猎人的标准装备之一，与鞭子、号角共同构成猎手的典型形象。</div>
+</a>
+<a class="entry-item" href="医院.html">
+  <div class="noun">医院</div>
+  <div class="snippet">皮埃尔规划在田庄设立为农奴提供医疗服务的机构，是改革措施的一部分。</div>
+</a>
+<a class="entry-item" href="十字架.html">
+  <div class="noun">十字架</div>
+  <div class="snippet">东正教核心圣物象征，代表基督的受难与救赎。在东正教礼仪中信徒通过亲吻十字架表达信仰和忏悔。在小说中是神甫执行爱和恕教义时使用的圣物，士兵吻十字架的场景引发皮埃尔对社会虚伪的深刻反思。</div>
+</a>
+<a class="entry-item" href="华尔兹.html">
+  <div class="noun">华尔兹</div>
+  <div class="snippet">起源于奥地利的一种三拍子社交舞蹈，19世纪初在欧洲贵族舞会中极为流行。在小说中，安德烈公爵邀请娜塔莎在彼得堡舞会上跳华尔兹舞，成为两人关系发展的重要转折点。娜塔莎舞技高超，穿着缎子舞鞋的小脚轻快地旋转着，脸焕发着幸福狂喜的光彩。</div>
+</a>
+<a class="entry-item" href="卜列格怀表.html">
+  <div class="noun">卜列格怀表</div>
+  <div class="snippet">即宝玑（Breguet）怀表，当时俄国贵族使用的瑞士顶级奢侈钟表。宝玑由亚伯拉罕-路易·宝玑（Abraham-Louis Breguet）于1775年在巴黎创立，被誉为&quot;现代制表之父&quot;，发明了陀飞轮、宝玑游丝、自动上链等重大技术。宝玑表在1</div>
+</a>
+<a class="entry-item" href="卡扎金.html">
+  <div class="noun">卡扎金</div>
+  <div class="snippet">俄罗斯哥萨克式的紧身外套或半长袍，流行于19世纪。是哥萨克人的典型装束之一，常与毡斗篷、皮高帽一起穿着。在小说中是哥萨克服饰的重要组成部分。</div>
+</a>
+<a class="entry-item" href="卡拉伊.html">
+  <div class="noun">卡拉伊</div>
+  <div class="snippet">罗斯托夫家的老公狗，皮毛蓬乱而丑陋，因独力擒一只大狼而出名。 --- 卡拉伊是《战争与和平》中尼古拉·罗斯托夫的一只老公猎犬（猎狼犬），毛色灰白，身上常有纠结成团的狗毛垂挂。它年纪虽老但经验丰富、勇猛顽强，是尼古拉最信赖的猎犬。在猎狼行动中</div>
+</a>
+<a class="entry-item" href="卡拉巴赫马.html">
+  <div class="noun">卡拉巴赫马</div>
+  <div class="snippet">卡拉巴赫马（Karabakh Horse）是南高加索地区的古老马品种，原产于阿塞拜疆卡拉巴赫山区。融合了阿拉伯马、阿哈尔捷金马（汗血宝马）等血统，以闪亮的金色毛色闻名，速度惊人（1公里约1分09秒），耐力卓越。在《战争与和平》中，彼佳将他的</div>
+</a>
+<a class="entry-item" href="厢房.html">
+  <div class="noun">厢房</div>
+  <div class="snippet">厢房（俄语：флигель，源自德语Flügel）指主楼侧面的附属建筑，通常用作客房、仆人住所或工作室。在小说中，安德烈公爵隐居博古恰罗沃时并未住在主宅，而是住在一所不大的新厢房里。</div>
+</a>
+<a class="entry-item" href="发白的帽子.html">
+  <div class="noun">发白的帽子</div>
+  <div class="snippet">皮埃尔在黑暗中戴的浅色帽子，使他的马夫在半山腰的黑暗中能够认出他来。这一细节体现了贵族服饰在战时环境中的不协调。</div>
+</a>
+<a class="entry-item" href="古钢琴.html">
+  <div class="noun">古钢琴</div>
+  <div class="snippet">现代钢琴的前身，由意大利人克里斯托福里于1700-1709年间发明，通过皮革包裹的槌子击弦发声，音色柔和，音域约5个八度，18世纪在欧洲广泛流行。 --- 19世纪俄国贵族家庭常见的键盘乐器（击弦古钢琴或早期钢琴）。 娜塔莎唱歌时尼古拉在古</div>
+</a>
+<a class="entry-item" href="可怜的丽莎.html">
+  <div class="noun">可怜的丽莎</div>
+  <div class="snippet">俄国作家尼古拉·米哈伊洛维奇·卡拉姆津创作于1792年的感伤主义中篇小说，被视为俄国感伤主义文学的奠基之作。小说讲述农家姑娘丽莎爱上贵族青年埃拉斯特，最终被抛弃后投湖自尽的悲剧故事，体现了&quot;连农妇也懂得爱人&quot;的人文关怀。</div>
+</a>
+<a class="entry-item" href="叶尔扎.html">
+  <div class="noun">叶尔扎</div>
+  <div class="snippet">伊拉金的猎狗，纯种红斑点小母狗，用三户农奴从邻人那儿换来。筋肉似钢，嘴脸俊俏，追捕灰兔时非常敏捷但扑空。</div>
+</a>
+<a class="entry-item" href="号角.html">
+  <div class="noun">号角</div>
+  <div class="snippet">号角是《战争与和平》狩猎场景中猎人使用的信号工具，由金属或兽角制成，能发出低沉或尖厉的声音。丹尼洛吹响追狼的低沉号角以指挥猎犬；在猎手之间发生冲突时，号角也被用作斗殴的信号。号角是19世纪俄国贵族狩猎中不可或缺的通信工具，不同音调和节奏代表</div>
+</a>
+<a class="entry-item" href="吉他.html">
+  <div class="noun">吉他</div>
+  <div class="snippet">大叔弹奏的弦乐器，在小说中用于弹唱俄罗斯民歌《在大街上》和《昨夜小雪纷纷下》。娜塔莎听后决定不再学竖琴改学吉他，象征她回归俄罗斯民间文化传统。 --- 娜塔莎弹奏以排解忧郁的乐器。在19世纪俄国贵族家庭中吉他是常见乐器，尤其受到年轻女性喜爱</div>
+</a>
+<a class="entry-item" href="告俄国民众书.html">
+  <div class="noun">告俄国民众书</div>
+  <div class="snippet">1812年7月6日（俄历）俄国沙皇亚历山大一世在波洛茨克营地签署的一份重要宣言，由国务秘书希什科夫起草，正式向全体俄罗斯人民宣告法国入侵的消息，号召全民以&quot;一致和普遍的起义&quot;抗击侵略者，组建地方民兵保卫祖国。在小说中，拉斯托普钦伯爵将这份刚</div>
+</a>
+<a class="entry-item" href="哈吉穆拉特.html">
+  <div class="noun">哈吉穆拉特</div>
+  <div class="snippet">列夫·托尔斯泰创作于1896至1904年的中篇小说，1912年作为遗作发表。小说以19世纪高加索战争为背景，取材于车臣抗俄领袖哈吉穆拉特的真实历史事件，描写他因与沙米里矛盾激化而投靠俄军、最终被害的故事。被评论家称为托尔斯泰最好的作品之一。</div>
+</a>
+<a class="entry-item" href="响板.html">
+  <div class="noun">响板</div>
+  <div class="snippet">俄罗斯军队行军乐队使用的打击乐器，士兵在行进中击打以配合歌曲节奏。在俄军中常用于鼓舞士气，伴随士兵歌的演唱和舞蹈。</div>
+</a>
+<a class="entry-item" href="四轮马车.html">
+  <div class="noun">四轮马车</div>
+  <div class="snippet">一种四轮畜力牵引车辆，用于运输货物或乘客，起源于古代，在工业革命前是欧洲长途运输和出行的重要交通工具，前轮可转向以提升灵活性。</div>
+</a>
+<a class="entry-item" href="图囊.html">
+  <div class="noun">图囊</div>
+  <div class="snippet">军用地图包或挎包。在《战争与和平》中与娜塔什卡形成谐音关联，表现了尼古拉·罗斯托夫在半睡半醒中的意识流状态。</div>
+</a>
+<a class="entry-item" href="圆规.html">
+  <div class="noun">圆规</div>
+  <div class="snippet">共济会的重要象征物，与方矩共同组成共济会的核心标志。圆规象征精神、道德和自我约束，提醒会员在追求中找到平衡。</div>
+</a>
+<a class="entry-item" href="土耳其烟斗.html">
+  <div class="noun">土耳其烟斗</div>
+  <div class="snippet">又称Chibouk（土耳其语çubuk，意为&quot;木棒&quot;），是一种烟杆极长的土耳其式烟斗，烟杆通常长达1.2至1.5米，烟锅为陶制。在19世纪的俄国贵族中极为流行，沙皇亚历山大一世曾亲自提倡长杆土耳其烟斗，使之与土耳其式长沙发一起成为俄国贵族书</div>
+</a>
+<a class="entry-item" href="圣乔治十字勋章.html">
+  <div class="noun">圣乔治十字勋章</div>
+  <div class="snippet">俄罗斯帝国最重要的军事英勇勋章之一，1807年由沙皇亚历山大一世设立，专门授予在战斗中表现英勇的士兵、士官和下级军官。勋章为十字架形状，正面为圣乔治骑马屠龙图案，绶带为橙黑相间（象征硝烟与火焰）。分四个等级（一二级金质、三四级银质），获得者</div>
+</a>
+<a class="entry-item" href="圣体栏栅门.html">
+  <div class="noun">圣体栏栅门</div>
+  <div class="snippet">东正教教堂圣像屏（圣幛）正中央通往祭台的门，又称王门或圣门，仅在礼仪的特定时刻开启。小说中助祭将念祷文的小板凳放在圣体栏栅门前，为诵读抗敌祷文做准备。</div>
+</a>
+<a class="entry-item" href="圣像.html">
+  <div class="noun">圣像</div>
+  <div class="snippet">基督教（尤其是东正教）中对耶稣基督、圣母、圣徒和天使的神圣画像，希腊语称εικων（icon）。在东正教传统中，圣像被视为&quot;朝向另一世界的窗口&quot;，被用于礼拜和祈祷活动。圣像画有严格的规范：平面化、非写实、金色背景象征神圣荣耀。东正教相信圣像</div>
+</a>
+<a class="entry-item" href="圣安德烈勋章.html">
+  <div class="noun">圣安德烈勋章</div>
+  <div class="snippet">俄罗斯帝国最高勋章，由彼得大帝于1698年设立，以俄罗斯守护神圣安德烈命名，标志为蓝色X形十字架。分绶章、星章、链章和绶带四部分。1807年蒂尔西特和约签订时，亚历山大一世将此勋章授予拿破仑。该勋章于1998年在俄罗斯联邦恢复。</div>
+</a>
+<a class="entry-item" href="圣徒传.html">
+  <div class="noun">圣徒传</div>
+  <div class="snippet">东正教圣徒传记汇编，即俄语Четьи-Минеи（阅读月书），按教会年历编排的圣人传记与训导文集。16世纪莫斯科都主教马卡里主持编纂《大阅读月书》（Великие Четьи-Минеи），共12卷，超过27000页手抄本。18世纪初罗斯托</div>
+</a>
+<a class="entry-item" href="圣油.html">
+  <div class="noun">圣油</div>
+  <div class="snippet">东正教仪式中用于涂油祝福的圣洁油脂，在信徒眼中具有神奇效力。小说中女朝圣者佩拉格尤什卡声称亲眼看见圣母脸上滴下圣油，认为是天降神恩的证明。圣油在东正教中用于洗礼、坚振等圣事，是教会权威和神圣性的重要象征。</div>
+</a>
+<a class="entry-item" href="基辅洞穴修道院.html">
+  <div class="noun">基辅洞穴修道院</div>
+  <div class="snippet">又称基辅佩切尔斯克修道院（Kyiv Pechersk Lavra），位于乌克兰基辅第聂伯河沿岸，始建于1051年，是东正教重要圣地。名称中的&quot;佩切尔斯克&quot;意为&quot;洞穴&quot;，早期修士在山洞中修行，洞内保存有125具木乃伊。古罗斯第一部编年史《往年</div>
+</a>
+<a class="entry-item" href="堤坝.html">
+  <div class="noun">堤坝</div>
+  <div class="snippet">拦截水流的建筑结构。在奥斯特里茨战役中，奥格斯特堤坝是重要地标，联军溃败后大量士兵逃到结冰的湖面和堤坝上，遭法军炮击伤亡惨重。</div>
+</a>
+<a class="entry-item" href="塞佛尔.html">
+  <div class="noun">塞佛尔</div>
+  <div class="snippet">法国塞佛尔皇家瓷器厂（Manufacture nationale de Sèvres）出产的瓷器，以青金石蓝、蓬帕杜玫瑰红和繁复镀金工艺闻名。1740年创办于文森，1756年迁至巴黎西南的塞佛尔村，获路易十五皇家资助。小说中皮埃尔送给老伯爵</div>
+</a>
+<a class="entry-item" href="塞弗尔.html">
+  <div class="noun">塞弗尔</div>
+  <div class="snippet">法国著名瓷器品牌，全称塞弗尔国家陶瓷制造局。1740年在万塞讷创立的皇家瓷厂，1756年迁至巴黎西郊塞弗尔镇，路易十五时期正式成为法国皇家瓷厂。以独特的青金石蓝釉、天蓝釉和裸瓷雕塑闻名，拿破仑时期大量用于宫廷装饰和外交国礼。小说中拿破仑饭后</div>
+</a>
+<a class="entry-item" href="士兵面糊糊.html">
+  <div class="noun">士兵面糊糊</div>
+  <div class="snippet">俄军士兵在野外用面包干、腌肥肉和水煮成的简单食物。皮埃尔尝过后认为这是他从未吃过的美味，反映了战争环境下极端简单的食物也能带来满足感。</div>
+</a>
+<a class="entry-item" href="复活.html">
+  <div class="noun">复活</div>
+  <div class="snippet">列夫·托尔斯泰创作于1889至1899年的最后一部长篇小说，历时十年六易其稿。小说以贵族青年聂赫留朵夫和农奴私生女玛丝洛娃的命运纠葛为主线，深刻抨击了法庭、监狱和官办教会的黑暗，体现了托尔斯泰的道德自我完善和不以暴力抗恶的思想。</div>
+</a>
+<a class="entry-item" href="夕阳.html">
+  <div class="noun">夕阳</div>
+  <div class="snippet">傍晚落山的太阳。在小说中，夕阳意象出现在渡船场景中，安德烈公爵眺望沐浴着落日余晖的河水，夕阳的红光与苍茫的河水辉映，烘托出哲学对话的深邃意境。</div>
+</a>
+<a class="entry-item" href="多洛霍夫游击队.html">
+  <div class="noun">多洛霍夫游击队</div>
+  <div class="snippet">指《战争与和平》中费奥多尔·多洛霍夫指挥的俄军敌后游击支队。在塔鲁丁诺左侧一带活动，曾送来关于福明斯克出现布鲁西埃师的重要情报。多洛霍夫是小说中勇敢而冷酷的军官，在1812年战争期间担任游击队指挥官。</div>
+</a>
+<a class="entry-item" href="多面堡.html">
+  <div class="noun">多面堡</div>
+  <div class="snippet">一种多边形的野战防御工事，用土垒和木栅构筑，四面都有射击孔。波罗金诺战役中俄军在舍瓦尔金诺等地构筑了多面堡。 --- 一种星形或多边形的野战防御工事，通常用泥土和木材构筑，四面有凸出的棱角以消除射击死角。在19世纪欧洲战争中广泛使用，博罗季</div>
+</a>
+<a class="entry-item" href="大厅.html">
+  <div class="noun">大厅</div>
+  <div class="snippet">庄园或宅邸中最大的房间，用于举办舞会、宴会和大型社交活动。19世纪俄罗斯庄园的大厅常配有镀金木雕、水晶吊灯和镶木地板，富丽堂皇。 --- 罗斯托夫家举行聚会和活动的大厅。假面舞会在此举行，化装的人们在此唱歌、 跳舞、跳环舞、做圣诞游戏。娜塔</div>
+</a>
+<a class="entry-item" href="大头针.html">
+  <div class="noun">大头针</div>
+  <div class="snippet">俄罗斯传统缝纫工具，在小说中娜塔莎和女仆们用大头针别绸带、缝裙衫。是19世纪俄国贵族家庭日常针线活必备之物。</div>
+</a>
+<a class="entry-item" href="大气球.html">
+  <div class="noun">大气球</div>
+  <div class="snippet">指1812年德国发明家列比赫在莫斯科郊外为俄军建造的实验性军用飞艇，长57米，设计载40人投掷炸弹。这是人类早期航空史上最大的航空器之一，也是最早的半硬式飞艇。但因技术缺陷未能实战使用，法军逼近莫斯科后被疏散。小说中皮埃尔曾前往观看。</div>
+</a>
+<a class="entry-item" href="大理石板.html">
+  <div class="noun">大理石板</div>
+  <div class="snippet">皮埃尔书房桌上的大理石台板，在皮埃尔与海伦激烈争吵中被皮埃尔抄起作为武器威胁海伦，象征皮埃尔长期压抑的愤怒彻底爆发。</div>
+</a>
+<a class="entry-item" href="天鹅.html">
+  <div class="noun">天鹅</div>
+  <div class="snippet">在希腊神话中，众神之王宙斯曾化为天鹅接近斯巴达王后勒达。这一神话故事在西方艺术和文学中具有深远影响，达·芬奇等大师曾以此为主题创作。</div>
+</a>
+<a class="entry-item" href="天鹅骑士.html">
+  <div class="noun">天鹅骑士</div>
+  <div class="snippet">全名《天鹅骑士，或查理曼大帝的宫廷》（Les Chevaliers du Cygne; or, The Court of Charlemagne），法国女作家让利斯夫人（Madame de Genlis）创作的历史小说，1797年出版。作品</div>
+</a>
+<a class="entry-item" href="奥博连斯基哥萨克团.html">
+  <div class="noun">奥博连斯基哥萨克团</div>
+  <div class="snippet">1812年战争期间由瓦西里·彼得罗维奇·奥博连斯基公爵组建并指挥的哥萨克骑兵团。在《战争与和平》中，小儿子彼佳·罗斯托夫最初加入该团，前往白采尔科维集结，后因母亲担忧而被调往别祖霍夫团。</div>
+</a>
+<a class="entry-item" href="奥尔洛夫的走马.html">
+  <div class="noun">奥尔洛夫的走马</div>
+  <div class="snippet">俄罗斯最著名的马种——奥尔洛夫快步马（Orlov Trotter），由阿列克谢·奥尔洛夫伯爵 在18世纪培育而成。以快步轻驾赛马闻名，青灰色为主，性情温驯活泼、耐力持久。 是斯拉夫民族自主繁育的第一个优良马种，被视为俄罗斯国家的象征和民族骄</div>
+</a>
+<a class="entry-item" href="奥秘详解.html">
+  <div class="noun">奥秘详解</div>
+  <div class="snippet">指德国神秘学家卡尔·冯·埃卡特斯豪森（1752—1803）所著《自然奥秘解答》（Aufschlüsse zur Magie），1788年出版，融合赫尔墨斯主义、卡巴拉与神智学，在共济会员中广为流传。</div>
+</a>
+<a class="entry-item" href="奥贝尔-夏尔姆.html">
+  <div class="noun">奥贝尔-夏尔姆</div>
+  <div class="snippet">19世纪莫斯科的一家法国时装店，店主为奥贝尔-夏尔姆太太（Madame Aubert-Chalmet）。托尔斯泰在《战争与和平》中以谐音双关暗示其&quot;厚颜无耻&quot;（Over-Shameless），反映当时俄国贵族崇尚法国时尚的文化风气。</div>
+</a>
+<a class="entry-item" href="威尔逊日记.html">
+  <div class="noun">威尔逊日记</div>
+  <div class="snippet">英国将军罗伯特·托马斯·威尔逊爵士（1777—1849）所著日记，记录其1812—1814年在俄军司令部担任英国军事联络官期间的见闻，1861年出版，是研究1812年俄国卫国战争的重要第一手史料。</div>
+</a>
+<a class="entry-item" href="威斯特牌.html">
+  <div class="noun">威斯特牌</div>
+  <div class="snippet">伯爵常玩的纸牌游戏之一，桥牌的前身。一种起源于英国的经典四人扑克牌游戏，18至19世纪在欧洲贵族中极为流行。伯爵打威斯特牌时故意让对手看见自己的牌，每天输给邻人数百卢布。</div>
+</a>
+<a class="entry-item" href="孤儿院.html">
+  <div class="noun">孤儿院</div>
+  <div class="snippet">皮埃尔计划在各田庄设立的慈善机构之一，作为改善农奴生活的社会改革措施。</div>
+</a>
+<a class="entry-item" href="学校.html">
+  <div class="noun">学校</div>
+  <div class="snippet">皮埃尔计划在各田庄设立的教育机构，是其农事改革中改善农奴生活的措施之一。</div>
+</a>
+<a class="entry-item" href="安娜·卡列宁娜.html">
+  <div class="noun">安娜·卡列宁娜</div>
+  <div class="snippet">列夫·托尔斯泰创作于1873至1877年的现实主义长篇小说。小说采用双线叙事结构，讲述了贵族妇女安娜追求爱情幸福却被迫卧轨自杀的悲剧，以及庄园主列文探索生命意义的历程。以&quot;幸福的家庭都是相似的，不幸的家庭各有各的不幸&quot;为开篇名句。</div>
+</a>
+<a class="entry-item" href="安娜勋章.html">
+  <div class="noun">安娜勋章</div>
+  <div class="snippet">俄罗斯帝国勋章，1735年由石勒苏益格-荷尔斯泰因公爵卡尔·腓特烈为纪念妻子安娜·彼得罗夫娜而设立，1797年纳入俄国勋章体系，分四级，表彰文武官员。文中贝格上校佩戴此勋章。</div>
+</a>
+<a class="entry-item" href="客厅.html">
+  <div class="noun">客厅</div>
+  <div class="snippet">住宅中用于接待客人、家庭聚会和社交活动的主要房间。在19世纪俄罗斯贵族庄园中，客厅（гостиная/салон）是家族社交生活的中心，装饰豪华。 --- 罗斯托夫家的客厅。老伯爵夫人在这里请季姆勒弹奏她最喜爱的菲尔德《夜曲》， 也在女儿唱</div>
+</a>
+<a class="entry-item" href="小圣像.html">
+  <div class="noun">小圣像</div>
+  <div class="snippet">东正教信仰中用于个人佩戴或家庭供奉的小型圣像（икона）。常以金属、木材或象牙制成，描绘基督、圣母或圣徒形象，是东正教信徒重要的信仰物品。</div>
+</a>
+<a class="entry-item" href="小白桦树.html">
+  <div class="noun">小白桦树</div>
+  <div class="snippet">白桦树是俄罗斯的国树，被视为俄罗斯民族精神的象征。其树皮洁白、树干挺拔，在严寒中坚韧生长，象征俄罗斯人纯洁、坚韧、团结的品格。白桦在俄罗斯民间文学中常比喻苗条美丽的姑娘或纯洁的爱情。桦树皮在历史上被用作书写材料（桦树皮文献）；桦树枝条被扎成</div>
+</a>
+<a class="entry-item" href="山羊皮便鞋.html">
+  <div class="noun">山羊皮便鞋</div>
+  <div class="snippet">俄罗斯传统平底软便鞋，用山羊皮制成，流行于北高加索地区如卡巴尔达人的传统服饰中。小说中托尔若克的女贩子在驿站叫卖此物。</div>
+</a>
+<a class="entry-item" href="嵌花的公事包.html">
+  <div class="noun">嵌花的公事包</div>
+  <div class="snippet">指小说中老别祖霍夫伯爵用来存放遗嘱和写给沙皇请求信的镶嵌有马赛克图案的公事包（便携式文件包）。是全书早期遗产争夺战的核心道具，内装将私生子皮埃尔立为合法继承人的重要文件。大公爵小姐卡季什曾试图偷走该公事包，被安娜·米哈伊洛夫娜阻止。</div>
+</a>
+<a class="entry-item" href="布鲁西埃师.html">
+  <div class="noun">布鲁西埃师</div>
+  <div class="snippet">拿破仑大军的一个师，由布吕耶尔（Bruyère）将军指挥，隶属于南苏蒂将军第1骑兵军。在1812年战争期间，该师驻扎在福明斯克，与其他法军部队失掉联系，被俄军游击队发现后成为攻击目标。</div>
+</a>
+<a class="entry-item" href="带皇上肖像的鼻烟壶.html">
+  <div class="noun">带皇上肖像的鼻烟壶</div>
+  <div class="snippet">鼻烟壶是19世纪初俄国上流社会社交场合常见的物品，带有皇上（沙皇）肖像的鼻烟壶更是特殊的赏赐品。在小说中，贵族们争论这种鼻烟壶究竟是奖赏还是赠品，反映了宫廷赏赐制度和贵族社交文化。肖像鼻烟壶常由细密肖像画家制作，兼具艺术价值和荣誉象征。</div>
+</a>
+<a class="entry-item" href="干树枝.html">
+  <div class="noun">干树枝</div>
+  <div class="snippet">士兵们用来生火的柴火，他们在路边收集干树枝点燃篝火煮食。</div>
+</a>
+<a class="entry-item" href="干草.html">
+  <div class="noun">干草</div>
+  <div class="snippet">晒干的牧草，用作马匹等牲畜的冬季饲料。罗斯托夫出行的重要目的之一就是为骑兵连寻找干草补给。</div>
+</a>
+<a class="entry-item" href="库图佐夫便函.html">
+  <div class="noun">库图佐夫便函</div>
+  <div class="snippet">库图佐夫在莫斯科撤退前写给拉斯托普钦的简短命令式信件，要求其配合军队撤退。</div>
+</a>
+<a class="entry-item" href="弗拉基米尔勋章.html">
+  <div class="noun">弗拉基米尔勋章</div>
+  <div class="snippet">俄罗斯帝国勋章，1782年由女皇叶卡捷琳娜二世设立，共分四级，授予文武官员以表彰战功或其他功绩，获颁者可享受世袭贵族权利。文中贝格上校佩戴此勋章。</div>
+</a>
+<a class="entry-item" href="弹药箱.html">
+  <div class="noun">弹药箱</div>
+  <div class="snippet">战场上存放和运输炮弹、火药等弹药补给品的木制箱子，是炮兵作战中不可或缺的物资装备。</div>
+</a>
+<a class="entry-item" href="彗星.html">
+  <div class="noun">彗星</div>
+  <div class="snippet">指1812年出现的大彗星（即1811年大彗星），当时民间传说它预示着灾难和世界末日的到来。在小说中，皮埃尔将这颗彗星与他心中对娜塔莎的爱情联系在一起，彗星的光芒映照了他从虚无中觉醒的灵魂，成为他精神重生的象征。该场景后来被改编为百老汇音乐剧</div>
+</a>
+<a class="entry-item" href="彼得和保罗侧祭坛.html">
+  <div class="noun">彼得和保罗侧祭坛</div>
+  <div class="snippet">彼得和保罗侧祭坛是东正教教堂中供奉使徒彼得和保罗的附属祭坛（俄语：придел）。在小说中，博古恰罗沃村富裕农奴为迎接皮埃尔的巡视，在地方教堂建造了这座侧祭坛以表感激，实际上这并非出自皮埃尔的慈善感召，而是富裕农奴自行兴建。</div>
+</a>
+<a class="entry-item" href="总司令部.html">
+  <div class="noun">总司令部</div>
+  <div class="snippet">俄军在1812年战争中的最高统帅部，当时设在列塔舍夫卡村的一所农舍中。门口挂着&quot;总司令部&quot;的牌子。库图佐夫作为总司令在此居住和办公，值勤将军科诺夫尼岑及其副官谢尔比宁也在同一农舍中。</div>
+</a>
+<a class="entry-item" href="戈贝兰地毯.html">
+  <div class="noun">戈贝兰地毯</div>
+  <div class="snippet">法国戈贝兰皇家工坊生产的贵重挂毯和地毯，以精美的编织工艺和绘画性设计闻名，是欧洲宫廷和贵族收藏的奢侈品。罗斯托夫家收藏有这种贵重地毯。</div>
+</a>
+<a class="entry-item" href="手帕.html">
+  <div class="noun">手帕</div>
+  <div class="snippet">阿尼西娅·费奥多罗夫娜递给娜塔莎跳舞用的道具。手帕是俄罗斯民间舞蹈中女舞者常用的装饰性道具，可增强舞蹈的表现力。阿尼西娅递手帕的举动象征两个不同阶级女性之间的心灵相通。</div>
+</a>
+<a class="entry-item" href="手提香炉.html">
+  <div class="noun">手提香炉</div>
+  <div class="snippet">东正教礼仪中使用的一种手持式香炉，通常由金属制成，内焚香料，带有链条或手柄，在祈祷和宗教游行时用于熏香。它是东正教礼拜中象征祈祷上升天庭的重要礼仪用具。</div>
+</a>
+<a class="entry-item" href="手枪.html">
+  <div class="noun">手枪</div>
+  <div class="snippet">19世纪初俄国决斗中使用的单发燧发手枪，是当时贵族决斗的标准武器。决斗双方各持一把，在副手口令下前进至界线发射。</div>
+</a>
+<a class="entry-item" href="打谷仓.html">
+  <div class="noun">打谷仓</div>
+  <div class="snippet">打谷仓（threshing barn/гумно）是俄国农庄中进行谷物脱粒作业的场所和建筑。在小说中描写安德烈公爵的博古恰罗沃庄园时，提到宅院内有打谷仓，体现了庄园的农业生产功能和管理井然有序。</div>
+</a>
+<a class="entry-item" href="托尔班琴.html">
+  <div class="noun">托尔班琴</div>
+  <div class="snippet">乌克兰拨弦乐器，又称乌克兰西奥伯琴，约1700年出现。融合了巴洛克鲁特琴和索尔特里琴的特点，琴弦数量25至60根不等，在高音一侧有额外的短高音弦（prystrunky）。制作昂贵，演奏技术难度高，被视为乌克兰贵族的乐器。在《战争与和平》中出</div>
+</a>
+<a class="entry-item" href="护身符.html">
+  <div class="noun">护身符</div>
+  <div class="snippet">被认为具有保护佩戴者免受伤害的神秘力量的物品。在俄罗斯东正教传统中，小圣像常被视为护身符，寄托着家人对远行或出征亲人的祝福与庇护。</div>
+</a>
+<a class="entry-item" href="披巾.html">
+  <div class="noun">披巾</div>
+  <div class="snippet">妇女披在肩上的方形或长条形织物，伯爵夫人出发前已换上旅行装束，披着披巾。</div>
+</a>
+<a class="entry-item" href="披肩.html">
+  <div class="noun">披肩</div>
+  <div class="snippet">玛丽亚公爵小姐披着去迎接深夜到来的德国医生。 --- 娜塔莎跳舞前从身上脱下的外衣，是19世纪俄国贵族女性的常见服饰配件。她扔掉披肩的举动标志着从受法国教育的贵族小姐转变为自由表达俄罗斯民族灵魂的舞者。</div>
+</a>
+<a class="entry-item" href="担架.html">
+  <div class="noun">担架</div>
+  <div class="snippet">担架是战场上运送伤员的简易救护工具，由两根长杆和中间的帆布或网面构成，通常由四名士兵抬运。在拿破仑战争时期，担架是战场伤员后送的基本手段。小说中罗斯托夫第一次上战场时目睹伤员被担架抬走，引发了对死亡和恐惧的深刻体验。</div>
+</a>
+<a class="entry-item" href="拉斯托普钦传单.html">
+  <div class="noun">拉斯托普钦传单</div>
+  <div class="snippet">1812年拿破仑大军逼近莫斯科时，莫斯科总督拉斯托普钦散发的宣传性传单，内容通俗诙谐，充满民间俚语，用以动员民众、鼓舞士气。传单上画有酒馆和小市民卡尔普什卡·奇吉林的形象，以粗话痛骂法国人，同时也发布关于撤离、武装民众等官方信息，在莫斯科被</div>
+</a>
+<a class="entry-item" href="拉耶夫斯基多面堡.html">
+  <div class="noun">拉耶夫斯基多面堡</div>
+  <div class="snippet">波罗金诺战场中央的俄军核心防御工事，修建于库尔干纳亚高地上，配置18至26门火炮，由拉耶夫斯基将军指挥的第7步兵军防守。法军在此发动多次猛烈进攻，伤亡惨重。皮埃尔后来在此地亲历了最残酷的战斗，该堡因而成为《战争与和平》中的关键场景。</div>
+</a>
+<a class="entry-item" href="拿破仑法典.html">
+  <div class="noun">拿破仑法典</div>
+  <div class="snippet">《拿破仑法典》（Code Napoléon），即1804年颁布的《法国民法典》，是资本主义国家最早的一部民法典，被誉为大陆法系开山经典。法典共2281条，确立了自由平等、私有财产神圣不可侵犯、契约自由和过错责任四大原则。在小说中，斯佩兰斯基</div>
+</a>
+<a class="entry-item" href="捐献委员会.html">
+  <div class="noun">捐献委员会</div>
+  <div class="snippet">1812年战争期间莫斯科设立的捐款收集机构。在朱莉的告别晚会上，社交圈规定只许说俄语，说法语者须缴纳罚款，罚款即交给捐献委员会作为战争捐款。这反映了当时莫斯科上流社会高涨的爱国情绪和抵制法国文化的风气。</div>
+</a>
+<a class="entry-item" href="探帚.html">
+  <div class="noun">探帚</div>
+  <div class="snippet">探帚是火炮清理工具，也称炮刷或海绵杆，为一根长木杆末端装羊羔皮或猪鬃刷头。发射后蘸水伸入炮膛清刷，熄灭残留火星并降温，是装填流程中最重要的安全步骤。拿破仑战争时期与推弹杆做成一体，简称炮膛探帚。</div>
+</a>
+<a class="entry-item" href="掷弹兵.html">
+  <div class="noun">掷弹兵</div>
+  <div class="snippet">17世纪中叶出现的欧洲陆军兵科，最初指能投掷手榴弹的精锐步兵。到拿破仑时代，手榴弹虽已退出战场，但掷弹兵称号保留为精锐重步兵的代名词，以身材高大、训练有素著称。在俄国军队中，掷弹兵团被视为精锐部队。</div>
+</a>
+<a class="entry-item" href="支着车篷的马车.html">
+  <div class="noun">支着车篷的马车</div>
+  <div class="snippet">装有篷盖的马车，在军队中用于运送高级军官，安德烈公爵乘坐的正是这种马车。</div>
+</a>
+<a class="entry-item" href="救主像.html">
+  <div class="noun">救主像</div>
+  <div class="snippet">东正教中基督耶稣的圣像，是东正教圣像中最重要的一类，包括全能者基督像、非手造救主像等类型，被视为&quot;朝向另外世界的窗口&quot;，承载着道成肉身的教义。</div>
+</a>
+<a class="entry-item" href="救护站.html">
+  <div class="noun">救护站</div>
+  <div class="snippet">战场上临时设立的医疗救助点，用于对伤员进行紧急处理和初步救治。拿破仑战争时期，拉雷医生创立了&quot;飞行救护车&quot;系统，将救护站前置到战线附近。</div>
+</a>
+<a class="entry-item" href="斯摩棱斯克圣母.html">
+  <div class="noun">斯摩棱斯克圣母</div>
+  <div class="snippet">又称斯摩棱斯克圣母像或霍德格特利亚圣母像，是俄罗斯东正教最受尊崇的圣像之一，属于拜占庭霍德格特利亚类型。传说由福音书作者圣路加亲绘。1812年法军入侵时，该圣像随俄军从斯摩棱斯克撤出并跟随军队行动，被称为俄国西部边疆的守护者。</div>
+</a>
+<a class="entry-item" href="斯摩棱斯克显灵的圣像.html">
+  <div class="noun">斯摩棱斯克显灵的圣像</div>
+  <div class="snippet">东正教最受崇敬的圣像之一，属于「指路圣母」（Hodegetria）类型。据教会传统由福音书作者路加绘制，1046年从君士坦丁堡传入俄罗斯，安放于斯摩棱斯克圣母安息大教堂。在1812年俄法战争中，斯摩棱斯克市民抬着这尊圣像巡游祈祷以保卫城市，</div>
+</a>
+<a class="entry-item" href="日拉尔画像.html">
+  <div class="noun">日拉尔画像</div>
+  <div class="snippet">弗朗索瓦·热拉尔创作的《罗马王》肖像画，是拿破仑帝国时期著名的政治宣传画。画中拿破仑之子手持权杖和地球仪，体现拿破仑王朝的延续性和统治野心。此画派人在波罗金诺战役前夕送到前线。</div>
+</a>
+<a class="entry-item" href="显灵圣像.html">
+  <div class="noun">显灵圣像</div>
+  <div class="snippet">东正教传统中被认为具有神奇力量、能显现神迹的圣母或圣徒画像。小说中女朝圣者佩拉格尤什卡讲述科利亚津出现了一尊显灵的圣母像，圣母脸上滴下圣油，又传说有不信的将军因此失明，忏悔后复明并将金星勋章挂在圣像上。</div>
+</a>
+<a class="entry-item" href="普列奥布拉任斯基团.html">
+  <div class="noun">普列奥布拉任斯基团</div>
+  <div class="snippet">俄罗斯帝国历史最悠久、最精锐的近卫步兵团，由彼得大帝在莫斯科郊外普列奥布拉任斯科耶村创立。参与了俄法战争等重大战役，在俄国政治中具有举足轻重的地位，参与了多次宫廷政变，被称为&quot;沙俄女王制造者&quot;。二月革命后解散。</div>
+</a>
+<a class="entry-item" href="普列奥布拉任斯基营.html">
+  <div class="noun">普列奥布拉任斯基营</div>
+  <div class="snippet">全称普列奥布拉任斯基近卫团，俄罗斯帝国历史最悠久、最精锐的近卫军团。由彼得大帝少年时组建的&quot;游戏兵团&quot;发展而来，名称源于莫斯科郊外的普列奥布拉任斯科耶村。在拿破仑战争时期是俄军精锐力量，在沙俄历史上多次扮演&quot;皇位裁决者&quot;的角色。</div>
+</a>
+<a class="entry-item" href="木偶.html">
+  <div class="noun">木偶</div>
+  <div class="snippet">尼古拉回忆中童年时曾经想送给娜塔莎的玩具。在娜塔莎与尼古拉谈论童年记忆时，尼古拉回忆起有一次娜塔莎因被惩罚独自哭泣，他想拿木偶去安慰她却不好意思。这件小事成了兄妹俩共同的温馨童年记忆。</div>
+</a>
+<a class="entry-item" href="木勺.html">
+  <div class="noun">木勺</div>
+  <div class="snippet">士兵们使用的简陋餐具。士兵在把勺子递给皮埃尔之前先舔干净，体现了士兵之间的质朴和互助精神，也暗示了当时俄军物资的匮乏。</div>
+</a>
+<a class="entry-item" href="机弦.html">
+  <div class="noun">机弦</div>
+  <div class="snippet">机弦（sling，又称投石索、甩石机弦）是人类最早使用的远程武器之一，结构简单：一条绳索或皮带，中间缝上盛放石块的兜囊。使用时旋转甩动，在适当时机松开一端，石子即沿切线高速飞出。其射程可达200—400米，速度可达每小时145—160公里，</div>
+</a>
+<a class="entry-item" href="杜塞克奏鸣曲.html">
+  <div class="noun">杜塞克奏鸣曲</div>
+  <div class="snippet">波西米亚作曲家扬·拉迪斯拉夫·杜塞克创作的钢琴奏鸣曲，在《战争与和平》中被玛丽亚公爵小姐在童山庄园的起居室中反复练习弹奏。</div>
+</a>
+<a class="entry-item" href="杜布罗夫斯基.html">
+  <div class="noun">杜布罗夫斯基</div>
+  <div class="snippet">俄国诗人普希金创作于1832年的中篇小说，1841年作者去世后出版。主人公杜布罗夫斯基因父亲受陷害而死，集结农奴落草为寇、劫富济贫，却因爱上仇人的女儿而宽恕仇人。小说揭示了农奴制度的黑暗。旧译《复仇艳遇》。</div>
+</a>
+<a class="entry-item" href="松明.html">
+  <div class="noun">松明</div>
+  <div class="snippet">俄国乡村传统照明工具，用松木条点燃照明。家奴的住处点着松明守夜等待消息。</div>
+</a>
+<a class="entry-item" href="林荫道.html">
+  <div class="noun">林荫道</div>
+  <div class="snippet">林荫道（俄语：аллея）是俄国贵族庄园园林中两侧植有树木的道路景观，常见树种包括白桦、椴树（菩提树）、槭树等。林荫道是俄国庄园园林艺术的重要组成部分，体现了古典主义庄园的规划美学。</div>
+</a>
+<a class="entry-item" href="枝形灯架.html">
+  <div class="noun">枝形灯架</div>
+  <div class="snippet">多枝状的分支吊灯（Chandelier），用于提供照明和装饰。19世纪俄罗斯贵族庄园中常用青铜镀金或木雕镀金的豪华枝形吊灯，配以蜡烛或煤气灯。</div>
+</a>
+<a class="entry-item" href="枪骑兵巡逻队.html">
+  <div class="noun">枪骑兵巡逻队</div>
+  <div class="snippet">拿破仑军队中的一支骑兵巡逻队，负责在莫斯科街头维持秩序、制止抢劫和捉拿纵火嫌疑犯。由一名中尉军官带领，配有翻译。在小说中逮捕了皮埃尔及其他俄国嫌疑犯。</div>
+</a>
+<a class="entry-item" href="查士丁尼法典.html">
+  <div class="noun">查士丁尼法典</div>
+  <div class="snippet">《查士丁尼法典》（Codex Justinianus）是东罗马帝国皇帝查士丁尼一世于529年颁布的法典汇编，与《学说汇纂》《法学阶梯》《新律》共同构成《民法大全》，是罗马法的集大成之作。法典共12卷，涵盖教会法、私法、刑法和行政法，是世界史</div>
+</a>
+<a class="entry-item" href="树皮鞋.html">
+  <div class="noun">树皮鞋</div>
+  <div class="snippet">俄语称为&quot;拉普季&quot;（лапти），是用树皮（通常为椴树、桦树、榆树或柳树树皮）编织而成的传统俄罗斯鞋履，已有上千年历史。因材料易得、制作简单、成本极低，在沙俄时代是农民最常穿的日常鞋履。20世纪30年代苏联工业化完成后逐渐被皮靴和橡胶鞋取代</div>
+</a>
+<a class="entry-item" href="栗色骟马.html">
+  <div class="noun">栗色骟马</div>
+  <div class="snippet">老伯爵骑的马，名叫维夫梁卡，性格老实善良、保养良好。</div>
+</a>
+<a class="entry-item" href="梳妆台.html">
+  <div class="noun">梳妆台</div>
+  <div class="snippet">带镜子的化妆台，贝格在尤苏波夫家门口所见的家具之一，薇拉一直想要的物件。</div>
+</a>
+<a class="entry-item" href="棺材.html">
+  <div class="noun">棺材</div>
+  <div class="snippet">共济会仪式中的象征物之一，代表死亡与重生。皮埃尔在暗室中看到的盛着骨头的木匣子，象征旧我的死亡和新我的诞生。</div>
+</a>
+<a class="entry-item" href="榴弹.html">
+  <div class="noun">榴弹</div>
+  <div class="snippet">一种内部装有炸药、依靠爆炸后产生的破片和冲击波杀伤目标的炮弹，19世纪已广泛用于战场。文中指由火炮发射的爆炸性炮弹，与实心炮弹（炮弾）不同，榴弹内部装填火药，落地或空爆后产生碎片，造成大面积杀伤。</div>
+</a>
+<a class="entry-item" href="橡树（战争与和平）.html">
+  <div class="noun">橡树（战争与和平）</div>
+  <div class="snippet">托尔斯泰《战争与和平》中最重要的象征物之一。安德烈公爵在经历奥斯特利茨战役幻灭和妻子去世后，路遇一棵老橡树，其苍老丑陋、拒绝春天的姿态正是他内心枯槁的外化。一个半月后，当他从罗斯托夫庄园返回时，发现同一棵橡树已长出鲜亮嫩叶，焕发勃勃生机，象</div>
+</a>
+<a class="entry-item" href="水.html">
+  <div class="noun">水</div>
+  <div class="snippet">自然界中最常见的液体。在奥斯特里茨战役场景中，冰面下的水成为吞噬溃败士兵的死亡陷阱，是战争残酷性的象征。</div>
+</a>
+<a class="entry-item" href="水獭皮帽.html">
+  <div class="noun">水獭皮帽</div>
+  <div class="snippet">伊拉金戴的帽子，打猎装束的一部分。水獭皮在19世纪深受俄国贵族珍视，柔软厚实、防水保暖。伊拉金多次举帽向罗斯托夫兄妹致意。</div>
+</a>
+<a class="entry-item" href="汉堡日报.html">
+  <div class="noun">汉堡日报</div>
+  <div class="snippet">19世纪德国汉堡出版的德文报纸，很可能是《汉堡消息报》（Hamburger Nachrichten，1792年创刊）。小说中拉斯托普钦伯爵以这份报纸为证，指出韦列夏金之子撰写的布告实际是翻译自外文报纸的内容，而非其原创。</div>
+</a>
+<a class="entry-item" href="池塘.html">
+  <div class="noun">池塘</div>
+  <div class="snippet">人工或天然的小型蓄水池。在奥斯特里茨战役中，奥格斯特村附近的池塘在战役中成为俄军溃退时的重要地标。</div>
+</a>
+<a class="entry-item" href="油灯.html">
+  <div class="noun">油灯</div>
+  <div class="snippet">共济会暗室中的微弱光源，象征从黑暗走向光明的过渡状态，代表初步的启蒙和微弱的真理之光。</div>
+</a>
+<a class="entry-item" href="法军全部军队.html">
+  <div class="noun">法军全部军队</div>
+  <div class="snippet">指多赫图罗夫及其部下发现的一个军事事实：原先以为福明斯克只有布鲁西埃一个师，实际上拿破仑的全部军队都在那里。法军已全部离开莫斯科，沿一条意想不到的路线（旧卡卢日斯卡雅大路）运动。</div>
+</a>
+<a class="entry-item" href="法军前卫.html">
+  <div class="noun">法军前卫</div>
+  <div class="snippet">法军行军时部署在主力前方的先头部队，负责侦察、警戒和开路。谢斯拉温抓获的一名法国近卫军俘虏供称：进入福明斯克的军队是整个大军的前卫，拿破仑本人就在其中。</div>
+</a>
+<a class="entry-item" href="法冠.html">
+  <div class="noun">法冠</div>
+  <div class="snippet">东正教和天主教高级神职人员在礼仪中佩戴的 ceremonial 头冠，象征主教的权威与尊严。小说中描写神父戴着紫色丝绒法冠走出来主持抗敌救俄的特别祈祷仪式。</div>
+</a>
+<a class="entry-item" href="法国军大衣.html">
+  <div class="noun">法国军大衣</div>
+  <div class="snippet">法国军大衣（Greatcoat，法文：capote/redingote）是拿破仑时代法军的标配外衣。拿破仑本人常年穿着标志性的灰色&quot;redingote&quot;长大衣。普通士兵的大衣官方规定为米色，实际色调多样，不穿时卷起系在背包上。军官大衣通常为</div>
+</a>
+<a class="entry-item" href="法国烟斗.html">
+  <div class="noun">法国烟斗</div>
+  <div class="snippet">法国烟斗在拿破仑时代主要以海泡石、陶瓷和陶土为材质，上流社会使用精雕细刻的海泡石烟斗，普通士兵使用陶土或黄杨木烟斗。石楠木（briar）烟斗的传说与拿破仑的出生地科西嘉有关，但实际普及是在拿破仑去世后的1820年代。法国的圣克洛德地区自那时</div>
+</a>
+<a class="entry-item" href="法国近卫军.html">
+  <div class="noun">法国近卫军</div>
+  <div class="snippet">又称帝国卫队（Garde Impériale），拿破仑一世最精锐的部队，前身为1799年的执政近卫军。分老近卫军、中年近卫军和青年近卫军三级，以熊皮帽和蓝色制服为标志。1815年滑铁卢战役中，老近卫军宁死不降的悲壮场景成为传奇。 --- 即</div>
+</a>
+<a class="entry-item" href="法国鹰旗.html">
+  <div class="noun">法国鹰旗</div>
+  <div class="snippet">拿破仑帝国时期法国军团的旗帜标志，顶部为铜质帝国雄鹰雕像，是拿破仑仿效古罗马军团鹰旗制度设立的军旗，代表军团的荣誉与灵魂，战斗中失去鹰旗被视为奇耻大辱。</div>
+</a>
+<a class="entry-item" href="法老.html">
+  <div class="noun">法老</div>
+  <div class="snippet">18-19世纪风靡欧洲的赌博纸牌游戏（Faro/Pharao），因法式纸牌上印有法老头像得名。玩家下注预测某张牌会赢或输，在19世纪俄国贵族中极为流行。</div>
+</a>
+<a class="entry-item" href="波士顿牌局.html">
+  <div class="noun">波士顿牌局</div>
+  <div class="snippet">伯爵常玩的源自美国的纸牌游戏。在18世纪末至19世纪流行于欧洲上流社会。玩法比威斯特牌更为复杂，在俄国贵族中很受欢迎。伯爵同时玩威斯特和波士顿两种牌，每天输钱给邻座。</div>
+</a>
+<a class="entry-item" href="波多尔斯克步兵团.html">
+  <div class="noun">波多尔斯克步兵团</div>
+  <div class="snippet">波多尔斯克步兵团（Подольский пехотный полк）是俄罗斯帝国陆军的一个步兵团，1798年组建，最初为海军步兵性质。1811年更名为波多尔斯克步兵团。在申格拉本战役中该团与亚速步兵团并肩作战，构成俄军左翼。</div>
+</a>
+<a class="entry-item" href="波尔多红葡萄酒.html">
+  <div class="noun">波尔多红葡萄酒</div>
+  <div class="snippet">伯爵打猎前饮用的佐餐葡萄酒，产自法国波尔多地区。</div>
+</a>
+<a class="entry-item" href="波尔多酒.html">
+  <div class="noun">波尔多酒</div>
+  <div class="snippet">法国波尔多地区出产的葡萄酒，是世界著名的葡萄酒品种。小说中朗巴上尉将法国葡萄酒称为&quot;莫斯科的波尔多酒&quot;，意指法军占领莫斯科后，法国人随身带来的波尔多葡萄酒，反映了法军占领期间的生活场景。</div>
+</a>
+<a class="entry-item" href="波斯地毯.html">
+  <div class="noun">波斯地毯</div>
+  <div class="snippet">产自波斯（今伊朗）的传统手工编织地毯，以精美的花纹图案和高质量著称，历来是欧洲贵族收藏的贵重物品。</div>
+</a>
+<a class="entry-item" href="波斯壁毯.html">
+  <div class="noun">波斯壁毯</div>
+  <div class="snippet">指产自波斯（今伊朗）的手工编织壁挂地毯，拥有约2500年历史。以天然染料染色、手工打结编织，图案精美繁复，通常包含梅达良纹样、花卉植物、狩猎场景等元素。在19世纪俄国贵族府邸中，波斯壁毯是财富和品位的象征，常被大面积悬挂于厅室墙壁作为装饰。</div>
+</a>
+<a class="entry-item" href="浴室.html">
+  <div class="noun">浴室</div>
+  <div class="snippet">浴室（баня/бани）即俄式蒸汽澡堂，是俄国庄园中的常见附属建筑。俄式浴室以高温蒸汽和桦树枝条拍打为特色，既是日常卫生设施，也是社交和文化传统的一部分。小说中博古恰罗沃庄园宅院内设有浴室。</div>
+</a>
+<a class="entry-item" href="消防水龙.html">
+  <div class="noun">消防水龙</div>
+  <div class="snippet">消防水龙（пожарная бочка/пожарный насос）是19世纪俄国庄园中配备的马拉式消防设备，用于扑灭火灾。在俄国乡村木结构建筑密集的环境中，庄园自备消防设备是必要的预防措施。小说中博古恰罗沃庄园木棚里放着两架消防水龙。</div>
+</a>
+<a class="entry-item" href="渡船.html">
+  <div class="noun">渡船</div>
+  <div class="snippet">用于渡河的船只。在小说中，安德烈公爵和皮埃尔在前往童山途中乘坐渡船过河，并在船上展开了全书最重要的哲学对话，成为安德烈精神新生的转折点。</div>
+</a>
+<a class="entry-item" href="潘趣酒.html">
+  <div class="noun">潘趣酒</div>
+  <div class="snippet">一种以酒、果汁、糖、香料等混合调制的饮料，起源于印度（源自印地语&quot;paanch&quot;，意为五种原料），后传入欧洲，在18至19世纪的欧洲上层社会流行。书中拿破仑在波罗金诺战役前夕饮用潘趣酒，并以此与副官拉普交谈。 --- 一种混合饮料，起源于印</div>
+</a>
+<a class="entry-item" href="火药.html">
+  <div class="noun">火药</div>
+  <div class="snippet">一种爆炸性粉末，由硫磺、木炭和硝石混合制成，是当时火炮发射炮弹的推进剂，也是军事上重要的火器装药。</div>
+</a>
+<a class="entry-item" href="灯笼.html">
+  <div class="noun">灯笼</div>
+  <div class="snippet">照明工具，骑者提着灯笼在风雪夜为医生引路。</div>
+</a>
+<a class="entry-item" href="灰暗的棚屋.html">
+  <div class="noun">灰暗的棚屋</div>
+  <div class="snippet">客栈院子中两间简陋的棚屋，在夜色中呈灰暗色调，皮埃尔躺在马车中仰望棚屋之间的夜空，看到了繁星。</div>
+</a>
+<a class="entry-item" href="炮弹.html">
+  <div class="noun">炮弹</div>
+  <div class="snippet">火炮发射的弹药。拿破仑战争期间主要有实心弹（铁铸球，靠动能杀伤）、榴弹（空心装药爆炸）、霰弹（近距离反人员）等类型。实心弹可在地面弹跳穿透多排步兵。</div>
+</a>
+<a class="entry-item" href="炮王.html">
+  <div class="noun">炮王</div>
+  <div class="snippet">位于莫斯科克里姆林宫内的大型青铜火炮，由俄国铸炮师安德烈·乔赫夫于1586年铸造。口径890毫米，重约40吨，是世界上口径最大的火炮之一。炮身饰有沙皇骑马像浮雕，配有1835年铸造的装饰性铸铁炮架。现陈列于克里姆林宫伊万诺夫广场，虽名为&quot;炮</div>
+</a>
+<a class="entry-item" href="炮眼.html">
+  <div class="noun">炮眼</div>
+  <div class="snippet">掩蔽工事上专为火炮开设的射击口，呈向外扩大的斜面，使火炮可以在胸墙掩护下向目标射击。</div>
+</a>
+<a class="entry-item" href="炮膛探帚.html">
+  <div class="noun">炮膛探帚</div>
+  <div class="snippet">炮膛探帚即探帚、炮刷，是拿破仑战争时期火炮装填工具之一。长木杆一端装羊羔皮刷头，发射后蘸水清理炮膛以熄灭火星。通常与推弹杆一体，一端为探帚，另一端为推弹杆。探帚手是炮组关键岗位。</div>
+</a>
+<a class="entry-item" href="炮车.html">
+  <div class="noun">炮车</div>
+  <div class="snippet">牵引火炮的车辆，也指搭载火炮的战车。在拿破仑战争中，炮车由马匹牵引，每门火炮通常需要6-8匹马拖拽，包括火炮本身和弹药车。</div>
+</a>
+<a class="entry-item" href="炮队.html">
+  <div class="noun">炮队</div>
+  <div class="snippet">火炮部队，在拿破仑战争中是重要的兵种。俄法两军都大量使用火炮，博罗季诺战役中法军消耗约4.36万发炮弹，炮队由多门火炮及其操作人员组成。</div>
+</a>
+<a class="entry-item" href="烟袋.html">
+  <div class="noun">烟袋</div>
+  <div class="snippet">俄罗斯传统的抽烟工具（烟斗/烟袋锅），在19世纪俄国军队中极为常见。俄罗斯抽烟斗时有特定礼仪——若有抽烟斗的客人来访，主人需将烟斗装上烟丝后再递给客人。</div>
+</a>
+<a class="entry-item" href="焰火.html">
+  <div class="noun">焰火</div>
+  <div class="snippet">彼佳正在准备圣诞节期间的节日用品。在19世纪俄国贵族圣诞节庆祝活动中焰火是常见的娱乐项目。罗斯托夫家的圣诞节气氛平淡，但孩子们仍然自娱自乐——彼佳和仆人正在准备晚上放的焰火，展现了年轻人的活力。</div>
+</a>
+<a class="entry-item" href="燃烧弹.html">
+  <div class="noun">燃烧弹</div>
+  <div class="snippet">装满易燃剂的炮弹，利用化学反应释放高温热能引燃目标。19世纪的燃烧弹成分为硝石、硫磺、树脂等，燃烧时间约8-10分钟。在《战争与和平》的申格拉本战役中，图申上尉正是使用燃烧弹引燃申格拉本村，形成火障阻挡法军推进。</div>
+</a>
+<a class="entry-item" href="爱情图.html">
+  <div class="noun">爱情图</div>
+  <div class="snippet">当时在俄国贵族社交圈中流行的爱情寓意游戏图或爱情主题的图册。薇拉借以影射鲍里斯对娜塔莎的爱慕之情，体现当时贵族年轻人之间以游戏方式表达爱情的社交风尚。</div>
+</a>
+<a class="entry-item" href="牌桌.html">
+  <div class="noun">牌桌</div>
+  <div class="snippet">专用于玩纸牌游戏的桌子。在19世纪俄罗斯贵族中，纸牌游戏是主要的社交娱乐方式，牌桌是每个贵族家庭客厅中的标准家具，常兼具国际象棋等功能。</div>
+</a>
+<a class="entry-item" href="特烈帕克.html">
+  <div class="noun">特烈帕克</div>
+  <div class="snippet">俄罗斯传统民间舞蹈，也写作&quot;特列帕克&quot;，俄语Трепак，是一种快速热烈的双拍子俄罗斯民族舞曲。舞蹈动作以下蹲、踢腿、转圈等有力动作为特征，带有浓郁的哥萨克风情。在《战争与和平》中，注释将此舞曲与《丹尼拉·库波尔》相比较。柴可夫斯基的芭蕾《</div>
+</a>
+<a class="entry-item" href="特鲁尼拉.html">
+  <div class="noun">特鲁尼拉</div>
+  <div class="snippet">娜塔莎心爱的猎犬。</div>
+</a>
+<a class="entry-item" href="狐皮袄.html">
+  <div class="noun">狐皮袄</div>
+  <div class="snippet">用狐狸皮制成的皮袄，在俄国贵族中常见。小说中韦列夏金穿一件破旧的蓝呢面狐皮袄。</div>
+</a>
+<a class="entry-item" href="独角兽炮.html">
+  <div class="noun">独角兽炮</div>
+  <div class="snippet">俄国18–19世纪使用的一种前装式加榴炮（gun-howitzer），俄语称Единорог（意为&quot;独角兽&quot;）。由俄国炮兵设计师丹尼洛夫和马丁诺夫于1757年研制，经炮兵总监舒瓦洛夫伯爵批准列装，炮管上的独角兽形装饰源自舒瓦洛夫家族纹章。其</div>
+</a>
+<a class="entry-item" href="狼犬.html">
+  <div class="noun">狼犬</div>
+  <div class="snippet">狩猎大型猎物（狼）的专用犬种，视觉猎犬，速度极快。</div>
+</a>
+<a class="entry-item" href="猎犬.html">
+  <div class="noun">猎犬</div>
+  <div class="snippet">狩猎用的狗，依靠嗅觉追踪猎物。罗斯托夫家共有五十四只。</div>
+</a>
+<a class="entry-item" href="玛丽亚·特雷西娅勋章.html">
+  <div class="noun">玛丽亚·特雷西娅勋章</div>
+  <div class="snippet">全称玛丽亚·特蕾西亚军事勋章（Militär-Maria-Theresien-Orden），1757年由奥地利女大公玛丽亚·特蕾西亚设立，为奥匈帝国最高军事荣誉勋章，历史上仅颁布1241次。授予有杰出军事功绩的军官。</div>
+</a>
+<a class="entry-item" href="玛莎甜根.html">
+  <div class="noun">玛莎甜根</div>
+  <div class="snippet">俄军士兵在饥饿中从地里挖食的一种植物根茎，形似龙须菜，实际味苦，被士兵称为&quot;玛莎甜根&quot;。</div>
+</a>
+<a class="entry-item" href="琥珀烟嘴.html">
+  <div class="noun">琥珀烟嘴</div>
+  <div class="snippet">19世纪俄国上流社会盛行的吸烟用具，以波罗的海琥珀制成烟嘴部分，常配以黄金、珐琅甚至钻石装饰，是贵族身份与品位的象征。俄国拥有全球90%以上的琥珀储量，琥珀自古被视为珍宝。法贝热（Fabergé）和奥夫钦尼科夫（Ovchinnikov）等著</div>
+</a>
+<a class="entry-item" href="田产.html">
+  <div class="noun">田产</div>
+  <div class="snippet">贵族拥有的土地和农田，皮埃尔将大俄罗斯的大部分田产管理权交给了妻子海伦。</div>
+</a>
+<a class="entry-item" href="甲鱼汤.html">
+  <div class="noun">甲鱼汤</div>
+  <div class="snippet">英式甲鱼汤（English Turtle Soup），源自欧洲的贵族料理，在19世纪传入俄国宫廷，成为重大国宴上的高级珍馐。沙皇尼古拉二世1896年加冕典礼宴会和1913年的皇室晚宴中均有这道菜。其做法是：将甲鱼在牛肉汤中煮熟后切块，加入小</div>
+</a>
+<a class="entry-item" href="白嘴鸦.html">
+  <div class="noun">白嘴鸦</div>
+  <div class="snippet">《战争与和平》中捷利亚宁卖给罗斯托夫的一匹刚开始调练的小马的名字。罗斯托夫以七百卢布购买，实际价值不到此价一半。在小说后续情节中，白嘴鸦在申格拉本战役中中弹倒地身亡。 --- 托尔斯泰《战争与和平》中尼古拉·罗斯托夫的坐骑名字。俄语原文为Г</div>
+</a>
+<a class="entry-item" href="皮沙发.html">
+  <div class="noun">皮沙发</div>
+  <div class="snippet">安德烈公爵书房里的家具，被仆人搬到卧室供分娩使用。</div>
+</a>
+<a class="entry-item" href="皮袄.html">
+  <div class="noun">皮袄</div>
+  <div class="snippet">老伯爵所穿的御寒外套，在初冬打猎时保暖。</div>
+</a>
+<a class="entry-item" href="看林小屋.html">
+  <div class="noun">看林小屋</div>
+  <div class="snippet">看林小屋（俄语：сторожка / домик лесника）是森林看守人居住的小木屋。在《战争与和平》中，杰尼索夫游击队以此作为临时指挥部和营地。这是小说中最动人的场景之一——彼佳在战前夜的半梦半醒中，将看林小屋幻想为&quot;直通地心的洞穴</div>
+</a>
+<a class="entry-item" href="短剑.html">
+  <div class="noun">短剑</div>
+  <div class="snippet">法军士兵使用的近战武器。在小说中，负责抢劫亚美尼亚人的法国兵被皮埃尔扔出去后，其同伴扔掉靴子拔出短剑向皮埃尔走来，但被皮埃尔抢先扑倒。</div>
+</a>
+<a class="entry-item" href="短柄长鞭.html">
+  <div class="noun">短柄长鞭</div>
+  <div class="snippet">丹尼洛手持的狩猎工具，用于驾驭猎犬和马匹。</div>
+</a>
+<a class="entry-item" href="砒霜.html">
+  <div class="noun">砒霜</div>
+  <div class="snippet">砒霜即三氧化二砷（As₂O₃），白色粉末，无臭无味，致死量仅0.1至0.2克。古代常因提炼不纯含硫化物而呈红色，俗称&quot;鹤顶红&quot;。在《战争与和平》中，娜塔莎·罗斯托娃在得知阿纳托利·库拉金已婚的当晚，服用了偷偷弄到的砒霜企图自杀，后因恐惧而叫</div>
+</a>
+<a class="entry-item" href="破旧狐皮袄.html">
+  <div class="noun">破旧狐皮袄</div>
+  <div class="snippet">韦列夏金所穿的旧狐皮外套，曾经讲究但已破旧，反映了其囚犯身份和没落境遇。</div>
+</a>
+<a class="entry-item" href="磨刀石.html">
+  <div class="noun">磨刀石</div>
+  <div class="snippet">磨刀石（Whetstone/Sharpening Stone）是用于磨砺刀具刃口的石制工具，在中国已有两千多年历史。《山海经》中称细者为&quot;砥&quot;、粗者为&quot;砺&quot;。传统磨刀石分粗面（定型）和细面（抛光），使用时加水润滑。在《战争与和平》中，哥萨克</div>
+</a>
+<a class="entry-item" href="祈祷书.html">
+  <div class="noun">祈祷书</div>
+  <div class="snippet">东正教祈祷用书，玛丽亚公爵小姐在焦虑时拿起祈祷书试图平复心情，但未能奏效。</div>
+</a>
+<a class="entry-item" href="神灯.html">
+  <div class="noun">神灯</div>
+  <div class="snippet">东正教家庭中悬挂在圣像前的小油灯（圣像灯/长明灯），象征着神的临在，是东正教家庭宗教生活的重要器物。</div>
+</a>
+<a class="entry-item" href="神龛.html">
+  <div class="noun">神龛</div>
+  <div class="snippet">指东正教家庭或教堂中供奉圣像的龛状设施，内设圣像画、蜡烛等。在俄国贵族家庭中，神龛（或称圣像屏、圣像壁）是重要的宗教陈设，通常悬挂或摆放于房间显要位置。小说中别祖霍夫伯爵床前便有一个巨大的神龛，终敷礼时点燃蜡烛，照得满屋红光。</div>
+</a>
+<a class="entry-item" href="科季利翁.html">
+  <div class="noun">科季利翁</div>
+  <div class="snippet">法语Cotillion的音译，又译科季里昂舞，起源于18世纪法国的一种集体社交舞蹈，19世纪在欧洲贵族舞会中非常流行。包含多种花样和队形变换，多对舞伴参与。在小说中，安德烈公爵在晚餐前与娜塔莎跳欢乐的科季利翁舞，向她提起二人在奥特拉德诺耶的</div>
+</a>
+<a class="entry-item" href="竖琴.html">
+  <div class="noun">竖琴</div>
+  <div class="snippet">娜塔莎原先学习的西洋乐器，代表当时上流社会贵族小姐常接受的正规西式音乐教育。娜塔莎决定放弃竖琴改学吉他，象征她从西方教育回归俄罗斯民间文化。 --- 放置在罗斯托夫家起居室角落的一种大型弹拨乐器。季姆勒经常演奏竖琴， 当取下覆盖的绒布时竖琴</div>
+</a>
+<a class="entry-item" href="第六团枪骑兵.html">
+  <div class="noun">第六团枪骑兵</div>
+  <div class="snippet">第六枪骑兵团（6e Régiment de Chevau-Légers Lanciers）是拿破仑时代的法国轻枪骑兵团，1811年由原第29龙骑兵团改编而成。编制4个骑兵中队，制服为深绿色军服配红色衣领/袖口（团徽色），装备长约2.75米的</div>
+</a>
+<a class="entry-item" href="第六猎骑兵团.html">
+  <div class="noun">第六猎骑兵团</div>
+  <div class="snippet">法国第6猎骑兵团（6e Régiment de Chasseurs à Cheval）是法兰西第一帝国的一支轻骑兵部队，组建于1779年。猎骑兵主要负责侦察、追击、侧翼掩护和快速机动等任务。在申格拉本战役中该团两营人被调至前线支援。</div>
+</a>
+<a class="entry-item" href="篝火.html">
+  <div class="noun">篝火</div>
+  <div class="snippet">士兵们在夜晚点燃的火堆，用来取暖和煮食。在皮埃尔精神恍惚的夜晚，士兵们在他身旁点燃篝火煮面糊糊，火光成为黑暗中的温暖和安慰的象征。 --- 军队露营地燃起的火堆，用于取暖、做饭和照明。奥斯特里茨战役前夜法军点燃篝火庆祝拿破仑巡视，火光连成一</div>
+</a>
+<a class="entry-item" href="米尔卡.html">
+  <div class="noun">米尔卡</div>
+  <div class="snippet">罗斯托夫家的母猎犬，黑毛白花，对主人非常亲热。 --- 米尔卡是《战争与和平》中尼古拉·罗斯托夫的一只黑毛白花、臀部宽大的母猎犬，尼古拉亲昵地称她为&quot;米卢什卡&quot;。她速度极快，在猎狼时第一个追上狼，但狼向她斜视一眼后她便被震慑而停住。在后来的</div>
+</a>
+<a class="entry-item" href="索科尔（枣红马）.html">
+  <div class="noun">索科尔（枣红马）</div>
+  <div class="snippet">罗斯托夫家马车队中的一匹枣红色马，索科尔为其名字，特点是急躁不安。</div>
+</a>
+<a class="entry-item" href="紫貂围巾.html">
+  <div class="noun">紫貂围巾</div>
+  <div class="snippet">用紫貂皮制成的围巾。紫貂皮是俄罗斯最珍贵的皮草，褐中带银，自古是贵族身份的象征。 在供暖技术不成熟的年代，皮草既是奢侈品也是应对极寒的生活必需品。 索尼娅在雪橇上以紫貂围巾遮面，在月光下显得格外动人。</div>
+</a>
+<a class="entry-item" href="红桃七.html">
+  <div class="noun">红桃七</div>
+  <div class="snippet">扑克牌中的一张，花色为红心、点数为七。在小说描述的赌博场景中，这是尼古拉·罗斯托夫迫切希望抽到的牌，寄托了他翻本的希望。当红桃七出现在第一张时，他反而因此输到无力偿付的地步。在俄罗斯纸牌游戏中，&quot;七&quot;在确定王牌花色时起关键作用。</div>
+</a>
+<a class="entry-item" href="约书亚记.html">
+  <div class="noun">约书亚记</div>
+  <div class="snippet">《约书亚记》是《圣经·旧约》第6卷，紧接摩西五经之后，为旧约历史书的第一卷，共24章。记载以色列人在领袖约书亚带领下进入迦南应许之地的全过程，包括奇迹般渡过约旦河、耶利哥之战、征服迦南全境及分配土地等事件。传统作者为约书亚本人。</div>
+</a>
+<a class="entry-item" href="约康德.html">
+  <div class="noun">约康德</div>
+  <div class="snippet">La Joconde，法语中达·芬奇名画《蒙娜丽莎》的称呼，源自画中人物丽莎·德尔·乔孔多的夫姓Giocondo的法语化变体。原画创作于1503–1506年，现藏于巴黎卢浮宫。在《战争与和平》中，品学兼优的人以此典故形容库图佐夫脸红的样子。</div>
+</a>
+<a class="entry-item" href="纪念册.html">
+  <div class="noun">纪念册</div>
+  <div class="snippet">娜塔莎的纪念册（album），供亲友题诗、作画留念的册子。这是19世纪俄国贵族小姐中常见的风尚，安德烈公爵在纪念册上为娜塔莎题诗，作为表达情意的含蓄方式。</div>
+</a>
+<a class="entry-item" href="纸币.html">
+  <div class="noun">纸币</div>
+  <div class="snippet">18-19世纪俄国流通的纸卢布。1769年叶卡捷琳娜二世首次发行纸币，以铜币为抵押。19世纪初纸币贬值严重，纸卢布与银卢布的比价大幅波动。小说中多洛霍夫赌桌上同时摆着金币和纸币，反映了当时两种货币并行的流通状况。</div>
+</a>
+<a class="entry-item" href="维夫梁卡.html">
+  <div class="noun">维夫梁卡</div>
+  <div class="snippet">老伯爵骑的栗色骟马，保养得膘肥毛滑，性格老实善良。</div>
+</a>
+<a class="entry-item" href="罗马王画像.html">
+  <div class="noun">罗马王画像</div>
+  <div class="snippet">弗朗索瓦·热拉尔绘制的拿破仑之子（罗马王）的肖像画。画中孩子手持球（代表地球）和小棒（代表权杖），寓意继承皇权统治世界。画作由拿破仑的皇后玛丽·路易丝命人送往前线献给拿破仑。</div>
+</a>
+<a class="entry-item" href="肖像室.html">
+  <div class="noun">肖像室</div>
+  <div class="snippet">俄国贵族府邸中专门悬挂家族祖先肖像的房间，是贵族家庭展示家族历史与身份地位的传统空间。</div>
+</a>
+<a class="entry-item" href="肩章.html">
+  <div class="noun">肩章</div>
+  <div class="snippet">佩带在军服肩部的军衔标识物。俄军最早于1763年引入单肩肩章，1801-1809年改为双肩肩章，以流苏、星徽等区分军衔等级。团长以此暗示多洛霍夫上战场立功即可恢复军官身份。</div>
+</a>
+<a class="entry-item" href="胸墙.html">
+  <div class="noun">胸墙</div>
+  <div class="snippet">用泥土或石头筑成的防护墙，筑在战壕前方用于抵挡枪弹和弹片，是野战工事中常见的防御结构。 --- 炮垒前方用泥土堆筑的矮墙，士兵依托其进行射击和躲避敌方火力，是19世纪野战防御工事的基本组成部分。</div>
+</a>
+<a class="entry-item" href="脂油蜡烛.html">
+  <div class="noun">脂油蜡烛</div>
+  <div class="snippet">脂油蜡烛是用动物油脂（如牛脂、羊脂）制成的蜡烛，是19世纪俄国普通家庭和农舍的主要照明工具。与昂贵的蜜蜡蜡烛不同，脂油蜡烛价格低廉但燃烧时冒黑烟且有气味。在小说中，安德烈公爵养伤的小屋里点着一支脂油蜡烛，烛花结成大烛花，昏暗中娜塔莎借此微光</div>
+</a>
+<a class="entry-item" href="脚镣.html">
+  <div class="noun">脚镣</div>
+  <div class="snippet">套在犯人脚踝上的金属刑具，限制其行动自由。韦列夏金被押解时戴着脚镣。</div>
+</a>
+<a class="entry-item" href="腌肥肉.html">
+  <div class="noun">腌肥肉</div>
+  <div class="snippet">俄军士兵携带的传统军粮之一，用盐腌制的猪肥肉，耐储存且提供高热量。士兵们在煮面糊糊时加入腌肥肉以增加风味和营养。</div>
+</a>
+<a class="entry-item" href="舍瓦尔金诺多面堡.html">
+  <div class="noun">舍瓦尔金诺多面堡</div>
+  <div class="snippet">俄军在波罗金诺战场左翼前方修筑的多面堡防御工事。1812年9月5日（俄历8月24日），法军在此发动猛攻，经激战后俄军主动放弃该阵地。此战为俄军完成主阵地防御工事赢得了宝贵的一昼夜时间，史称舍瓦尔金诺之战。 --- 位于波罗金诺战场西南约两公</div>
+</a>
+<a class="entry-item" href="舞会裙.html">
+  <div class="noun">舞会裙</div>
+  <div class="snippet">19世纪初俄国贵族女性参加舞会时穿着的正式礼服。以薄纱、丝绸等轻质面料制成，多为白色。娜塔莎的舞会裙因太长而由数名女仆紧急缝改，体现舞会准备的忙乱与隆重。</div>
+</a>
+<a class="entry-item" href="芭勒娘舞曲.html">
+  <div class="noun">芭勒娘舞曲</div>
+  <div class="snippet">俄语&quot;Барыня&quot;（Barynya）的音译，意为&quot;女地主&quot;&quot;女主人&quot;。一种节奏欢快热烈的俄罗斯民间舞蹈及舞曲，风格诙谐幽默，常伴有跺脚和蹲身动作。米季卡用三弦琴弹奏此曲。</div>
+</a>
+<a class="entry-item" href="花字奖章.html">
+  <div class="noun">花字奖章</div>
+  <div class="snippet">沙俄时期宫廷女官佩戴在衣袖上的装饰物，绣有皇后姓名首字母的花字徽章，或为皇后颁发给毕业成绩优秀中学女生的奖章，俄文原文为шифр。</div>
+</a>
+<a class="entry-item" href="花边披肩.html">
+  <div class="noun">花边披肩</div>
+  <div class="snippet">贝格花了很多钱给妻子薇拉买的精致披肩。贝格小心翼翼地拥抱妻子，怕把披肩弄皱，还得意地指出披肩样式与尤苏波娃公爵夫人的一样，以此炫耀品位和财力。</div>
+</a>
+<a class="entry-item" href="苏格兰舞.html">
+  <div class="noun">苏格兰舞</div>
+  <div class="snippet">法文Écossaise，意为&quot;苏格兰的&quot;，是一种流行于18世纪末至19世纪初的苏格兰风格对舞（contredanse），以快节奏2/4拍为特征。虽然名为&quot;苏格兰舞&quot;，实际起源于法国，传入英国和欧洲大陆后广受欢迎。在《战争与和平》中，书中注释</div>
+</a>
+<a class="entry-item" href="英国式的暗抽屉.html">
+  <div class="noun">英国式的暗抽屉</div>
+  <div class="snippet">一种具有隐蔽机关的英国式家具暗格抽屉，贝格描述其做工精妙。</div>
+</a>
+<a class="entry-item" href="茴香甜酒.html">
+  <div class="noun">茴香甜酒</div>
+  <div class="snippet">俄语称为анисовка（anisovka），一种以茴香调味的传统俄罗斯烈酒 （茴香伏特加），类似于法国的茴香利口酒，是19世纪俄国军官喜爱的饮品之一。</div>
+</a>
+<a class="entry-item" href="茶炊.html">
+  <div class="noun">茶炊</div>
+  <div class="snippet">俄语称&quot;самовар&quot;（萨马瓦尔），俄罗斯传统金属制双层壁烧水器具，中央腔体燃烧木炭等燃料加热外围储水。18世纪随饮茶风习在俄国普及而出现，19世纪在图拉等地大规模生产。茶炊是俄罗斯家庭温暖与好客的文化象征，经常出现在普希金、托尔斯泰等文</div>
+</a>
+<a class="entry-item" href="荣誉团.html">
+  <div class="noun">荣誉团</div>
+  <div class="snippet">法国荣誉军团勋章（Légion d&#x27;honneur），由拿破仑于1802年5月19日创立， 是法国最高荣誉勋位。拿破仑以此取代旧贵族爵位体系，奖励对国家有功的军人和平民。 十字章为五臂马耳他十字，绶带为红色，格言&quot;Honneur et Pa</div>
+</a>
+<a class="entry-item" href="荣誉团勋章.html">
+  <div class="noun">荣誉团勋章</div>
+  <div class="snippet">法国最高荣誉勋章，由拿破仑于1802年5月19日设立，全称法国荣誉军团勋章（Légion d&#x27;honneur）。分六级（骑士、军官、指挥官、大军官、大十字、特等），绶带为红色，格言&quot;荣誉与祖国&quot;。1807年蒂尔西特和约签订时，拿破仑将此勋章</div>
+</a>
+<a class="entry-item" href="菲格纳游击队.html">
+  <div class="noun">菲格纳游击队</div>
+  <div class="snippet">由亚历山大·菲格纳（Alexander Figner）上校指挥的俄军游击支队。菲格纳以擅长伪装、间谍活动而闻名，常穿着法军制服潜入敌后侦察。1812年间他的游击支队隶属于多赫图罗夫将军指挥，与多洛霍夫、谢斯拉温游击队协同行动。</div>
+</a>
+<a class="entry-item" href="萨克森瓷器.html">
+  <div class="noun">萨克森瓷器</div>
+  <div class="snippet">指德国萨克森地区迈森（Meissen）工坊生产的硬质瓷器，是欧洲最早成功烧制的硬质瓷器，被誉为&quot;白色黄金&quot;，价值昂贵。罗斯托夫家将其作为高级餐具使用。</div>
+</a>
+<a class="entry-item" href="蓝大衣.html">
+  <div class="noun">蓝大衣</div>
+  <div class="snippet">拿破仑战争时期法国军队的标准军服外套，以深蓝色为主色调。拿破仑时代的法国陆军制服以蓝色为主色，搭配白色衬底和红色衣领袖口，设计华丽。这种蓝色军服传统一直延续到第一次世界大战时期。</div>
+</a>
+<a class="entry-item" href="蓝色燕尾服.html">
+  <div class="noun">蓝色燕尾服</div>
+  <div class="snippet">斯佩兰斯基在科丘别伊伯爵家晚会上穿着的服装。在《战争与和平》中， 他穿着蓝色燕尾服，脖颈挂十字架，左胸佩金星勋章，面色白得出奇。</div>
+</a>
+<a class="entry-item" href="蜡烛.html">
+  <div class="noun">蜡烛</div>
+  <div class="snippet">俄国贵族家庭常用的照明工具，在本章中多次出现。乳娘在神龛前点燃涂金粉的蜡烛祈祷。 --- 19世纪俄罗斯贵族家庭室内照明用具。在圣诞节场景中，娜塔莎把蜡烛移到别处 以制造暗光氛围。梅柳科娃家的女仆和男仆手持蜡烛跑出大门迎接来客。 梅柳科娃家</div>
+</a>
+<a class="entry-item" href="行刑台.html">
+  <div class="noun">行刑台</div>
+  <div class="snippet">执行体罚的木制台架，在沼泽广场上用来对被指控为奸细的法国厨子施行鞭刑。</div>
+</a>
+<a class="entry-item" href="衣柜.html">
+  <div class="noun">衣柜</div>
+  <div class="snippet">存放衣物的家具，贝格在尤苏波夫家门口看到并想购买，以讨妻子薇拉的欢心。</div>
+</a>
+<a class="entry-item" href="西斯廷圣母像.html">
+  <div class="noun">西斯廷圣母像</div>
+  <div class="snippet">意大利文艺复兴大师拉斐尔于1513-1514年创作的著名油画，原为西斯廷教堂祭坛画，现藏于德国德累斯顿历代大师画廊。画中圣母怀抱圣婴耶稣，神情庄重而温柔，被誉为拉斐尔最杰出的圣母像之一。托尔斯泰在书中以这幅名画比拟罗马王画像中孩子的神态。</div>
+</a>
+<a class="entry-item" href="诺夫戈罗德团.html">
+  <div class="noun">诺夫戈罗德团</div>
+  <div class="snippet">俄罗斯帝国陆军步兵团，在1805年奥斯特利茨战役中随第四纵队行动，从沙皇亚历山大一世和奥皇弗朗茨二世面前列队经过接受检阅。</div>
+</a>
+<a class="entry-item" href="谢斯拉温游击队.html">
+  <div class="noun">谢斯拉温游击队</div>
+  <div class="snippet">由亚历山大·谢斯拉温（Alexander Seslavin）指挥的俄军&quot;飞行支队&quot;（游击支队）。他主要采用正面作战方式区别于菲格纳的伏击战术。1812年10月11日，谢斯拉温抓获一名法国近卫军俘虏，从而发现了法军主力已抵达福明斯克的关键情报</div>
+</a>
+<a class="entry-item" href="谢苗诺夫团.html">
+  <div class="noun">谢苗诺夫团</div>
+  <div class="snippet">谢苗诺夫团是俄罗斯历史上最著名的近卫步兵团之一，与普列奥布拉任斯基团并称为沙俄近卫军的两大奠基性部队。1683年由彼得大帝从谢苗诺夫村的贵族子弟和孩童中组建&quot;少年军团&quot;发展而来。1700年在北方战争纳尔瓦战役中表现极为悍勇，被彼得大帝授予近</div>
+</a>
+<a class="entry-item" href="谱系图.html">
+  <div class="noun">谱系图</div>
+  <div class="snippet">也称家谱图、世系图，以图表形式记录家族世代传承关系的文献。在中国与正史、方志并称史学三大支柱；在俄国贵族家庭中，谱系图常被悬挂展示以彰显家族荣耀与血统渊源。</div>
+</a>
+<a class="entry-item" href="贝杜英.html">
+  <div class="noun">贝杜英</div>
+  <div class="snippet">托尔斯泰《战争与和平》中瓦西卡·杰尼索夫的战马名字。俄语原文为Бедуин，意为贝都因人（沙漠游牧民族）。小说中描写贝杜英为乌黑色的骏马，在恩斯河桥上撞到刺刀时耳朵直哆嗦、嘶叫着、从马衔铁喷射白沫。后来杰尼索夫将这匹马卖给了尼古拉·罗斯托夫</div>
+</a>
+<a class="entry-item" href="赞美诗.html">
+  <div class="noun">赞美诗</div>
+  <div class="snippet">此处指东正教使用的《圣咏集》（Псалтирь，即《诗篇》），是东正教葬礼和追思仪式中核心的诵读经文。东正教传统中，信徒去世后会在遗体旁连续诵读《圣咏集》为亡者祈祷。小说中老公爵去世后，助祭坐在墙角诵读赞美诗，正是这一东正教丧葬习俗的体现。</div>
+</a>
+<a class="entry-item" href="车夫长褂.html">
+  <div class="noun">车夫长褂</div>
+  <div class="snippet">19世纪俄国马车夫常穿的一种长身外套，粗布制成，形似长袍。皮埃尔为隐藏贵族身份、混入平民中执行刺杀拿破仑的计划，特意让格拉西姆弄来一件车夫长褂换上，结果被娜塔莎在街上认出。</div>
+</a>
+<a class="entry-item" href="车床.html">
+  <div class="noun">车床</div>
+  <div class="snippet">一种木工或金属加工机床，通过旋转工件并施以刀具进行车削加工。在《战争与和平》中，老公爵在童山庄园用其进行手工活计，是其日常活动的一部分。</div>
+</a>
+<a class="entry-item" href="车梯.html">
+  <div class="noun">车梯</div>
+  <div class="snippet">马车供乘客上下车的折叠式阶梯踏板。</div>
+</a>
+<a class="entry-item" href="车篷.html">
+  <div class="noun">车篷</div>
+  <div class="snippet">马车顶部用于遮阳挡雨的篷盖。</div>
+</a>
+<a class="entry-item" href="轿式马车.html">
+  <div class="noun">轿式马车</div>
+  <div class="snippet">19世纪欧洲贵族使用的封闭式四轮马车，车厢形似轿子，有篷封闭，由马拉动。是当时贵族阶层重要的代步交通工具，体现身份地位。</div>
+</a>
+<a class="entry-item" href="辕马.html">
+  <div class="noun">辕马</div>
+  <div class="snippet">套在车辕中间拉车的马，是马车的主要动力来源。</div>
+</a>
+<a class="entry-item" href="过厅.html">
+  <div class="noun">过厅</div>
+  <div class="snippet">住宅中连接入口与主房间的过渡空间，俄语称为&quot;сени&quot;（前室）。在俄罗斯寒冷气候中起到防寒保温和空间缓冲的重要作用。</div>
+</a>
+<a class="entry-item" href="通条.html">
+  <div class="noun">通条</div>
+  <div class="snippet">通条（Ramrod）是前装枪械时代用于从枪口装填火药和弹丸的长条铁棍，也用于清洁枪管、清除火药残渣。在前膛枪（火绳枪、燧发枪）时代，通条是士兵必备的装填工具。在现代后膛枪中，通条转为清洁保养工具。法语中通条称为&quot;baguette&quot;。在《战争</div>
+</a>
+<a class="entry-item" href="重骑兵.html">
+  <div class="noun">重骑兵</div>
+  <div class="snippet">装备重型盔甲和大型战马的主力冲击骑兵，在拿破仑战争中以胸甲骑兵（Cuirassier）为代表。身穿铁制胸甲和头盔，使用直马刀和手枪，用于正面冲锋突破敌阵。</div>
+</a>
+<a class="entry-item" href="重骑兵白制服.html">
+  <div class="noun">重骑兵白制服</div>
+  <div class="snippet">俄罗斯帝国近卫重骑兵团（骑士近卫团）的正式军服。白色制服是俄国近卫骑兵的标志性颜色之一，配以金色装饰和胸甲，在战场上极为醒目。</div>
+</a>
+<a class="entry-item" href="金器.html">
+  <div class="noun">金器</div>
+  <div class="snippet">法国士兵从莫斯科燃烧的大房子中掠夺的贵重物品之一。几个法国人在大房子窗口将满盛金器的抽屉往下扔，另一些站在下面的士兵向扔下的抽屉走过来争抢。</div>
+</a>
+<a class="entry-item" href="金币.html">
+  <div class="noun">金币</div>
+  <div class="snippet">沙俄时期的金卢布金币。1897年沙俄实行金本位制后，金卢布含纯金0.774235克，面值有1、3、5、10、25、100、500卢布七种。在《战争与和平》中，军官们使用金币进行日常交易和赌博。</div>
+</a>
+<a class="entry-item" href="金星勋章.html">
+  <div class="noun">金星勋章</div>
+  <div class="snippet">斯佩兰斯基左胸佩戴的勋章，金星勋章为俄罗斯帝国高级勋章之一。 在《战争与和平》中，它是斯佩兰斯基出场时的重要外貌特征之一。</div>
+</a>
+<a class="entry-item" href="金质小圣像.html">
+  <div class="noun">金质小圣像</div>
+  <div class="snippet">俄罗斯东正教传统中的微型金属圣像（икона-кулон/панагия），通常用金、银等贵金属制成，佩戴在胸前作为信仰标志和护身符，在俄国贵族家庭中十分常见。</div>
+</a>
+<a class="entry-item" href="金质鼻烟壶.html">
+  <div class="noun">金质鼻烟壶</div>
+  <div class="snippet">拿破仑随身携带的黄金制鼻烟壶，是其日常用品和身份的象征。鼻烟壶在18-19世纪的欧洲贵族和宫廷中是常见的奢侈品和社交用品。</div>
+</a>
+<a class="entry-item" href="金链.html">
+  <div class="noun">金链</div>
+  <div class="snippet">悬挂小圣像用的细金链子。在俄罗斯贵族中，佩戴金链悬挂的圣像是常见的宗教习俗和身份象征。</div>
+</a>
+<a class="entry-item" href="钱包.html">
+  <div class="noun">钱包</div>
+  <div class="snippet">俄罗斯传统的装钱用具（俄语кошелёк/мошна）。19世纪俄国贵族使用的钱包多为皮革或银质材质，带铰链盖，饰有花纹。在《战争与和平》中，杰尼索夫的钱包内装金币，被捷利亚宁偷走，成为本章冲突的核心物件。</div>
+</a>
+<a class="entry-item" href="银杯.html">
+  <div class="noun">银杯</div>
+  <div class="snippet">伯爵打猎前饮酒的容器。</div>
+</a>
+<a class="entry-item" href="镶木地板.html">
+  <div class="noun">镶木地板</div>
+  <div class="snippet">19世纪俄国贵族宅邸中常见的豪华地面装饰，由小块硬木拼成图案。在本章中娜塔莎在大厅中的镶木地板上踱步，&quot;不是迈着普通的步子，而是每一步都先用脚跟后用脚尖着地（她穿一双她心爱的新鞋），她像听自己的歌声那样听富于节奏的脚跟咚咚声和脚尖摩擦声&quot;，</div>
+</a>
+<a class="entry-item" href="长明灯.html">
+  <div class="noun">长明灯</div>
+  <div class="snippet">东正教传统中在圣像前常年点燃的小油灯，象征基督是世界之光以及信徒对上帝燃烧的爱。在小说中出现在玛丽亚公爵小姐房间的神龛前。</div>
+</a>
+<a class="entry-item" href="长烟袋.html">
+  <div class="noun">长烟袋</div>
+  <div class="snippet">大叔递给罗斯托夫的吸烟用具，体现俄罗斯乡村贵族生活的闲适随意和不拘礼节。</div>
+</a>
+<a class="entry-item" href="门廊.html">
+  <div class="noun">门廊</div>
+  <div class="snippet">房屋入口处的带顶平台或走廊，是室外与室内之间的过渡空间。在俄罗斯传统庄园建筑中，门廊（крыльцо）常常装饰精美，是重要的建筑元素。</div>
+</a>
+<a class="entry-item" href="阿佐尔.html">
+  <div class="noun">阿佐尔</div>
+  <div class="snippet">与皮埃尔和卡拉塔耶夫同住在棚子里的一只小狗，没有固定主人，也没有固定名字：法国人叫它阿佐尔，其他人叫它费姆加尔卡、小灰子或薇薇。象征着战争中的无主生命和朴素生活的生机。</div>
+</a>
+<a class="entry-item" href="阿拉伯马.html">
+  <div class="noun">阿拉伯马</div>
+  <div class="snippet">娜塔莎骑的黑色骏马，以纯种阿拉伯马的矫健和灵敏著称。</div>
+</a>
+<a class="entry-item" href="阿普舍龙团.html">
+  <div class="noun">阿普舍龙团</div>
+  <div class="snippet">俄罗斯帝国陆军阿普舍龙步兵团，1700年成立，以阿布歇隆半岛命名。在奥斯特利茨战役中表现英勇，受到沙皇亚历山大一世称赞，米洛拉多维奇将军曾亲自激励该团士兵。 --- 阿普舍龙步兵团（81st Apsheron Infantry Regime</div>
+</a>
+<a class="entry-item" href="陆军操典草案.html">
+  <div class="noun">陆军操典草案</div>
+  <div class="snippet">安德烈公爵编写的军事条例草案，旨在改革俄国陆军操典。他在斯佩兰斯基领导下参与军事条例委员会工作期间编写此草案。但草案未被采纳，仅被当作参考材料，因为另有他人抢先提交了相关草案。此事成为安德烈公爵对彼得堡官僚体制失望的原因之一。</div>
+</a>
+<a class="entry-item" href="陆军条例.html">
+  <div class="noun">陆军条例</div>
+  <div class="snippet">俄国现行的陆军军事法规。阿拉克切耶夫认为不应当放弃现有的陆军条例， 批评安德烈公爵的草案是&quot;毫无根据抄袭法国军事法典不必要放弃陆军条例&quot;。 当时还有专门的陆军条例委员会负责审议军事法规事务。</div>
+</a>
+<a class="entry-item" href="雪橇.html">
+  <div class="noun">雪橇</div>
+  <div class="snippet">一种在冰雪上滑行的交通工具，由马匹或狗等牵引。在俄罗斯，雪橇是冬季最重要的传统交通工具，贵族使用豪华轿式雪橇（возок），配有熊皮毯和封闭车厢。 --- 19世纪俄国冬季最重要的交通工具，由马拉行于雪地之上。贵族使用的雪橇分三驾、双套等类</div>
+</a>
+<a class="entry-item" href="霍夫曼药水.html">
+  <div class="noun">霍夫曼药水</div>
+  <div class="snippet">18世纪德国哈雷大学医生兼化学家弗里德里希·霍夫曼发明的一种药用酊剂，由一份乙醚和三份酒精混合而成，又称复方醚醑。19世纪在欧洲和俄罗斯被广泛用作止痛、镇静、抗痉挛及治疗神经紧张的常用家庭药品。在小说中，罗斯托夫伯爵夫人头痛时使用此药。</div>
+</a>
+<a class="entry-item" href="面包干.html">
+  <div class="noun">面包干</div>
+  <div class="snippet">俄军士兵携带的干粮之一，即经过干燥处理的面包块，耐储存且便于携带。士兵们将其掰碎放入锅中煮成面糊糊。</div>
+</a>
+<a class="entry-item" href="面糊糊.html">
+  <div class="noun">面糊糊</div>
+  <div class="snippet">俄军士兵在野外用锅煮的简单食物，用面包干和腌肥肉加水煮成糊状。皮埃尔在波罗金诺战后与士兵共享此食，觉得从未吃过这么好吃的东西。</div>
+</a>
+<a class="entry-item" href="鞍桥.html">
+  <div class="noun">鞍桥</div>
+  <div class="snippet">鞍桥是《战争与和平》中马鞍的前部弓形隆起部分，猎人在马上骑行时用于稳定身体和借力。在猎狼场景中，当尼古拉·罗斯托夫看到卡拉伊咬住狼的喉咙时，他抓住鞍桥准备下马去刺狼。鞍桥是马具的重要组成部分，在狩猎和骑行中为骑手提供支撑。</div>
+</a>
+<a class="entry-item" href="鞭子.html">
+  <div class="noun">鞭子</div>
+  <div class="snippet">鞭子是《战争与和平》中猎手们使用的狩猎工具，用短柄连接皮条制成，用以驱策马匹和指挥猎犬。丹尼洛在追狼时用短柄鞭子拍打枣红马收得紧紧的两肋；丹尼洛也曾举起鞭子指向放走狼的伯爵威吓。鞭子是俄国贵族狩猎中猎手身份的标志之一。</div>
+</a>
+<a class="entry-item" href="项链.html">
+  <div class="noun">项链</div>
+  <div class="snippet">亚美尼亚年轻女子佩戴的饰品，被穿女外衣的高个法国兵抢夺。法国兵扯下项链后，年轻女子两手抱着脖子尖声大叫。这是触发皮埃尔出手攻击法国兵的导火索。</div>
+</a>
+<a class="entry-item" href="顿河马.html">
+  <div class="noun">顿河马</div>
+  <div class="snippet">尼古拉骑的马种，以耐力著称的俄罗斯本土马种，与哥萨克骑兵紧密相连。 --- 俄罗斯顿河地区培育的马种，哥萨克骑兵的典型坐骑。体格高大肥壮，体小腿长，耐劳善跑，适应长途奔袭。在《战争与和平》中多次出现于哥萨克骑兵相关场景。</div>
+</a>
+<a class="entry-item" href="首饰匣.html">
+  <div class="noun">首饰匣</div>
+  <div class="snippet">存放首饰的小匣子，罗斯托夫家撤离前专门派人去取的重要物品。</div>
+</a>
+<a class="entry-item" href="香槟.html">
+  <div class="noun">香槟</div>
+  <div class="snippet">法国香槟区出产的起泡葡萄酒，19世纪俄国贵族宴饮中不可或缺的身份象征。俄国是当时法国香槟的世界第二大消费国，沙皇亚历山大一世尤其钟爱凯歌香槟。小说中多洛霍夫在赌博时不断叫侍者送来香槟，营造奢靡放纵的氛围。</div>
+</a>
+<a class="entry-item" href="香槟酒.html">
+  <div class="noun">香槟酒</div>
+  <div class="snippet">法国香槟地区出产的起泡葡萄酒，在19世纪俄国贵族宴会中不可或缺的象征性饮品。常用于祝酒仪式：为沙皇、为英雄、为家族健康举杯。在博尔孔斯基家，热菜之后斟上香槟酒为老公爵祝寿。</div>
+</a>
+<a class="entry-item" href="马刀.html">
+  <div class="noun">马刀</div>
+  <div class="snippet">骑兵使用的弯形刀剑，便于在马背上劈砍。在小说中，龙骑兵用钝马刀砍杀韦列夏金。</div>
+</a>
+<a class="entry-item" href="马刺.html">
+  <div class="noun">马刺</div>
+  <div class="snippet">骑兵马靴后跟上的金属刺具，用于驱马前进。在俄国骑兵传统中，马刺是军官身份的标志——军官佩戴马刺，而哥萨克士兵凭借高超骑术仅用马鞭驭马，不使用马刺。在《战争与和平》中，马刺声响是军官到访的典型标志。</div>
+</a>
+<a class="entry-item" href="马厩.html">
+  <div class="noun">马厩</div>
+  <div class="snippet">马厩（конюшня）是饲养马匹的专用建筑。在俄国贵族庄园中，马厩是必不可少的附属设施，因为马匹是当时主要的交通工具和农耕畜力。小说中博古恰罗沃庄园的宅院内设有马厩。</div>
+</a>
+<a class="entry-item" href="马尔高酒.html">
+  <div class="noun">马尔高酒</div>
+  <div class="snippet">法国波尔多玛歌产区的一级名庄葡萄酒（Château Margaux）。19世纪俄国贵族是波尔多顶级葡萄酒的重要客户，玛歌酒因其优雅细腻的风格深受喜爱。小说中皮埃尔常在俱乐部或宴会中饮用此酒，体现当时上流社会的饮酒风气。</div>
+</a>
+<a class="entry-item" href="马德拉酒.html">
+  <div class="noun">马德拉酒</div>
+  <div class="snippet">马德拉酒（Madeira wine）是产自葡萄牙马德拉群岛的一种加强型葡萄酒，与波特酒、雪莉酒并列为世界三大加强型葡萄酒。其独特工艺&quot;马德拉化&quot;是将葡萄酒加热到约50-60°C并故意氧化，赋予其独特风味和极强稳定性，被称为&quot;不死之酒&quot;。因大</div>
+</a>
+<a class="entry-item" href="马特维夫娜.html">
+  <div class="noun">马特维夫娜</div>
+  <div class="snippet">《战争与和平》中炮兵上尉图申对他所操作的大炮的拟人化昵称。&quot;马特维夫娜&quot;是俄罗斯女性名字&quot;马特维&quot;的父称形式。图申在申格拉本战役中将这门靠边的旧式大炮想象为一个活生生的存在，与之对话，称其为&quot;亲爱的马特维夫娜&quot;，反映了俄国士兵与武器之间的亲</div>
+</a>
+<a class="entry-item" href="马车.html">
+  <div class="noun">马车</div>
+  <div class="snippet">马拉的轮式交通工具。19世纪俄罗斯贵族的马车种类繁多，包括敞篷四轮马车（droshky）、长车身旅行马车（tarantass）和著名的三套马车（troika）等。</div>
+</a>
+<a class="entry-item" href="驿站.html">
+  <div class="noun">驿站</div>
+  <div class="snippet">俄罗斯驿马通信系统（ямская гоньба）的基层设施，起源于蒙古帝国的站赤（yam）制度，为过往信使和旅客提供换马和食宿服务。</div>
+</a>
+<a class="entry-item" href="驿站马.html">
+  <div class="noun">驿站马</div>
+  <div class="snippet">驿站提供的替换马匹，老公爵派了备用马匹在大路上等候来自莫斯科的德国医生。</div>
+</a>
+<a class="entry-item" href="驿马使用证.html">
+  <div class="noun">驿马使用证</div>
+  <div class="snippet">俄语подорожная（podorozhnaya），帝俄时期铁路普及前，证明旅客有权在驿道上使用国家驿马站的马匹的官方旅行证件。证件上注明持有人姓名、路线和官阶，官阶高低决定可配给的马匹数量。</div>
+</a>
+<a class="entry-item" href="骑兵长靴.html">
+  <div class="noun">骑兵长靴</div>
+  <div class="snippet">法国骑兵配备的长筒靴。在小说中，一个穿女外衣的高个子法国兵穿有一双又大又破的骑兵长靴，另一个没穿靴子的矮个法国兵则抢走了亚美尼亚老人的靴子。</div>
+</a>
+<a class="entry-item" href="骑卫团.html">
+  <div class="noun">骑卫团</div>
+  <div class="snippet">骑士近卫团（Chevalier Guard Regiment），俄罗斯帝国最精锐的近卫重骑兵团，1800年由保罗一世改组而成，军官全部来自高级贵族，是俄国军队中最尊贵的团队。</div>
+</a>
+<a class="entry-item" href="骠骑兵.html">
+  <div class="noun">骠骑兵</div>
+  <div class="snippet">骠骑兵（Hussars）是15世纪起源于匈牙利和波兰的一种轻骑兵兵种，16至18世纪盛行于欧洲各国军队。其名称一说源自匈牙利语&quot;húsz&quot;（二十）加&quot;ár&quot;（俸禄）。骠骑兵以高机动性著称，擅长侦察、突袭、包抄等战术，主要武器为马刀（弯刀）和</div>
+</a>
+<a class="entry-item" href="骠骑兵斗篷.html">
+  <div class="noun">骠骑兵斗篷</div>
+  <div class="snippet">俄罗斯骠骑兵的标志性服饰（mentik/pelisse），为披挂在左肩的斗篷式短外衣， 镶有毛皮装饰，胸前三排纽扣。灰色呢子制成，军官用灰色毛皮，士兵用白色毛皮。 在圣诞节夜晚化装舞会中，尼古拉身穿老太太服装外罩骠骑兵斗篷站在雪橇中间。</div>
+</a>
+<a class="entry-item" href="骷髅头.html">
+  <div class="noun">骷髅头</div>
+  <div class="snippet">共济会仪式中的象征物之一，代表对死亡的思考和崇尚。在暗室中放置于桌上点燃油灯，提醒入会者思考生命无常与死亡的真谛。</div>
+</a>
+<a class="entry-item" href="高卢战纪.html">
+  <div class="noun">高卢战纪</div>
+  <div class="snippet">《高卢战记》（Commentarii de Bello Gallico）是古罗马统帅凯撒创作的编年体史书，发表于公元前51年，共8卷（前7卷为凯撒亲撰，第8卷由其副将续写），记述了公元前58年至前52年凯撒征服高卢的军事行动，是研究古代高卢</div>
+</a>
+<a class="entry-item" href="高地炮台.html">
+  <div class="noun">高地炮台</div>
+  <div class="snippet">拉耶夫斯基多面堡的别称，因其修建在库尔干纳亚高地（Kurgan Hill）上而得名。该炮台居高临下，控制着俄军阵地中央的西面和西北面接近地，是波罗金诺战役中争夺最激烈的阵地之一，也是拿破仑大军东征中的重要战场。</div>
+</a>
+<a class="entry-item" href="高弹簧.html">
+  <div class="noun">高弹簧</div>
+  <div class="snippet">马车底盘上用于减震的弹性装置，使车身在行驶中更具舒适性。</div>
+</a>
+<a class="entry-item" href="高筒僧帽.html">
+  <div class="noun">高筒僧帽</div>
+  <div class="snippet">东正教神职人员（主教或高级僧侣）在礼仪中所佩戴的一种高耸的筒状礼帽，是东正教僧侣法衣的重要组成部分，象征着信仰的高升和属灵的权威。</div>
+</a>
+<a class="entry-item" href="高筒军帽.html">
+  <div class="noun">高筒军帽</div>
+  <div class="snippet">高筒军帽（Shako，沙科帽）是18世纪末至19世纪欧洲军队广泛使用的高筒圆柱形军用帽，帽顶通常收窄，前方饰有金属徽章（鹰徽、团号等）。其名称源自匈牙利语&quot;csákó&quot;，最早为匈牙利骠骑兵制服的一部分。拿破仑时代法军Shako由厚重毛毡和皮</div>
+</a>
+<a class="entry-item" href="高筒帽.html">
+  <div class="noun">高筒帽</div>
+  <div class="snippet">拿破仑战争时期法国军队佩戴的平顶高筒军帽，法文称为Shako。特点为高筒圆柱形，配有帽檐，顶部常有羽饰或绒球，正面饰有金属徽章。1800年起成为法军制式头饰，取代了之前的双角帽。材质由厚重的毡和皮革制成，具有一定的防护作用。</div>
+</a>
+<a class="entry-item" href="鲁加伊.html">
+  <div class="noun">鲁加伊</div>
+  <div class="snippet">大叔的猎狗，红毛驼背公狗。在猎兔比赛中超越米尔卡和叶尔扎，以惊人的毅力扑到兔子，成为最终获胜者。</div>
+</a>
+<a class="entry-item" href="鹰形招牌.html">
+  <div class="noun">鹰形招牌</div>
+  <div class="snippet">19世纪俄国酒馆（кабак）门外的标志性招牌，上面绘制双头鹰图案，象征沙皇俄国。拉斯托普钦传单中描述小市民卡尔普什卡·奇吉林在酒馆喝醉后，走出酒馆来到鹰形招牌下对聚集的民众发表抨击拿破仑的讲话。鹰形招牌是当时俄国街头的典型视觉符号。</div>
+</a>
+<a class="entry-item" href="麻布裤子.html">
+  <div class="noun">麻布裤子</div>
+  <div class="snippet">用粗麻布制成的裤子，通常是囚犯或下层民众的穿着。韦列夏金穿着脏污的麻布裤子。</div>
+</a>
+<a class="entry-item" href="鼻烟壶.html">
+  <div class="noun">鼻烟壶</div>
+  <div class="snippet">盛放鼻烟的专用器具，鼻烟于明代万历年间由意大利传教士利玛窦传入中国，清代发展至鼎盛。集绘画、书法、雕刻、镶嵌、烧造等诸艺术于一身，被誉为&quot;集中国工艺美术之大成的袖珍艺术品&quot;。小说中姑母展示别祖霍夫伯爵收藏的鼻烟壶，引发皮埃尔对鼻烟壶上微型彩</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

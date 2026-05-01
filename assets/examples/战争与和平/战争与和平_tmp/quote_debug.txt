@@ -1,0 +1,6 @@
+Line 58: 201c=False 201d=False 0022=True 0027=False starts_201c=False
+  First chars: ['0x22', '0x5982', '0x4eca', '0x90fd', '0x4e0d']
+Line 118: 201c=False 201d=False 0022=True 0027=False starts_201c=False
+  First chars: ['0x56db', '0x5e74', '0x524d', '0xff0c', '0x5728']
+Line 166: 201c=False 201d=False 0022=True 0027=False starts_201c=False
+  First chars: ['0x22', '0x4f2f', '0x7235', '0xff0c', '0x8bf7']

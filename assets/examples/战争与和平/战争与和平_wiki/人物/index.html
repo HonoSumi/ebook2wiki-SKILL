@@ -1,0 +1,3163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人物 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">人物 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+人物
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">743 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="Archduke Charles.html">
+  <div class="noun">Archduke Charles</div>
+  <div class="snippet">卡尔大公（卡尔·路德维希·约翰·约瑟夫·洛伦茨），奥地利军事统帅、切申公爵，神圣罗马帝国皇帝利奥波德二世第三子。他是奥地利最杰出的将领之一，1805年指挥意大利战场与马塞纳对峙。小说中菲利宾讽刺他&quot;一事无成&quot;。</div>
+</a>
+<a class="entry-item" href="Bilibin.html">
+  <div class="noun">Bilibin</div>
+  <div class="snippet">比利宾，俄国外交官，在维也纳担任重要职务，与安德烈公爵属于同一上流社会阶层。他机智幽默，善于说俏皮话，常以犀利的外交视角剖析时局，在小说中是安德烈公爵在布吕恩的对话者和信友。</div>
+</a>
+<a class="entry-item" href="Bolkonsky.html">
+  <div class="noun">Bolkonsky</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵，托尔斯泰《战争与和平》的核心人物之一，沙俄贵族，库图佐夫的副官。他孤傲正直、厌恶上流社会的虚伪，最初追求军功荣誉，历经奥斯特里茨战役重伤、妻子离世、与娜塔莎的爱情波折，最终在波罗底诺战役中重伤去世，临终领悟到爱的真谛</div>
+</a>
+<a class="entry-item" href="Edouard Mortier.html">
+  <div class="noun">Edouard Mortier</div>
+  <div class="snippet">爱德华·莫蒂埃，特雷维佐公爵，拿破仑授予的帝国元帅之一，以勇敢和忠诚著称。1805年率第8军在迪恩施泰因与库图佐夫交战，兵力居劣势遭重创，但成功突围。小说中他是安德烈公爵报捷时提到的被击溃的法军指挥官。</div>
+</a>
+<a class="entry-item" href="Franz II.html">
+  <div class="noun">Franz II</div>
+  <div class="snippet">弗朗茨二世，神圣罗马帝国末代皇帝（1792-1806年在位），同时也是奥地利帝国的第一位皇帝（称弗朗茨一世，1804-1835年在位）。他在拿破仑战争中多次战败，1806年被迫放弃神圣罗马帝国皇位。小说中他被提及为奥地利方面的最高君主。</div>
+</a>
+<a class="entry-item" href="Joachim Murat.html">
+  <div class="noun">Joachim Murat</div>
+  <div class="snippet">若阿尚·缪拉，拿破仑一世的帝国元帅，那不勒斯国王（1808-1815年在位），以杰出的骑兵指挥和勇武著称。1805年他率军参与占领维也纳，并曾试图通过欺诈手段诱骗库图佐夫停战。小说中比利宾提到他在维也纳检阅部队。</div>
+</a>
+<a class="entry-item" href="Johann Heinrich von Schmitt.html">
+  <div class="noun">Johann Heinrich von Schmitt</div>
+  <div class="snippet">约翰·海因里希·冯·施密特，奥地利中将，哈布斯堡王朝最成功的参谋长之一。他参与策划了迪恩施泰因战役包围法军莫蒂埃部队的行动，但在夜间混战中被友军误杀阵亡。小说中陆军大臣闻讯后悲痛地惊呼其名。</div>
+</a>
+<a class="entry-item" href="Prince Auersperg.html">
+  <div class="noun">Prince Auersperg</div>
+  <div class="snippet">奥尔斯珀格公爵，奥地利中将，1805年负责防守维也纳塔博尔桥。他被缪拉和拉纳的诡计欺骗，允许法军接近桥梁并拆除炸药装置，导致法军兵不血刃占领维也纳。小说中安德烈公爵听闻维也纳失守后问及他的防守情况。</div>
+</a>
+<a class="entry-item" href="万尼亚.html">
+  <div class="noun">万尼亚</div>
+  <div class="snippet">万尼亚是梅柳科娃家的男仆，与尼基塔一同被女主人呼来搬桌子。在俄国贵族家庭中，像万尼亚这样的仆人是家庭日常生活运转不可或缺的一部分，但在文学作品中通常只在需要时才被提及名字。</div>
+</a>
+<a class="entry-item" href="上校.html">
+  <div class="noun">上校</div>
+  <div class="snippet">《战争与和平》中在罗斯托夫家晚会上与将军争论西班牙问题的上校，属于社交场合的次要人物。</div>
+</a>
+<a class="entry-item" href="中学生.html">
+  <div class="noun">中学生</div>
+  <div class="snippet">被法军巡逻队逮捕的俄国嫌疑犯之一。两名中学生与其他平民一同被法军带走，关押在祖波夫土围子。</div>
+</a>
+<a class="entry-item" href="丹尼洛.html">
+  <div class="noun">丹尼洛</div>
+  <div class="snippet">罗斯托夫家的猎手长和驯犬长，经验丰富，对主人保持表面恭顺实则独立的特殊态度。 --- 丹尼洛是列夫·托尔斯泰《战争与和平》中罗斯托夫家的猎犬手首领（狩猎总管），留着长发，腰插短刀，手持皮鞭，负责管理罗斯托夫家的猎犬队伍。他狩猎技艺高超、勇敢</div>
+</a>
+<a class="entry-item" href="丹尼洛·捷连季奇.html">
+  <div class="noun">丹尼洛·捷连季奇</div>
+  <div class="snippet">罗斯托夫伯爵的老侍仆，被大家尊称为伯爵的侍仆。在罗斯托夫家撤离莫斯科途中停驻梅季希村时，他认出远方火光正是莫斯科在燃烧，不禁像老年人那样抽抽搭搭地哭了，称莫斯科为&quot;圣洁的母亲&quot;，体现了农奴对莫斯科和祖国的深厚感情。</div>
+</a>
+<a class="entry-item" href="丹麦使馆代办克鲁格.html">
+  <div class="noun">丹麦使馆代办克鲁格</div>
+  <div class="snippet">克鲁格是《战争与和平》中安娜·帕夫洛夫娜沙龙里的宾客之一，身份为丹麦驻俄国使馆代办（chargé d&#x27;affaires）。他被安娜·帕夫洛夫娜形容为&quot;才智出众的人&quot;，在沙龙讨论欧洲外交局势时，对维也纳内阁关于对法战争的可行性提出了质疑。</div>
+</a>
+<a class="entry-item" href="丽莎.html">
+  <div class="noun">丽莎</div>
+  <div class="snippet">即小公爵夫人丽莎·博尔孔斯卡娅，全名丽莎韦塔·卡尔洛夫娜·博尔孔斯卡娅，安德烈公爵的妻子。她被称为&quot;彼得堡最迷人的女人&quot;，短上唇是其标志性特征，最终因难产去世。</div>
+</a>
+<a class="entry-item" href="丽莎(小公爵夫人,安德烈亡妻).html">
+  <div class="noun">丽莎(小公爵夫人,安德烈亡妻)</div>
+  <div class="snippet">丽莎韦塔·卡尔洛夫娜，昵称丽莎，安德烈·博尔孔斯基的第一任妻子，常被称为&quot;小公爵夫人&quot;。性格热情活泼、喜爱社交，与性格孤傲的安德烈在志趣上有隔阂。在小说第二部中因难产去世，产下儿子尼古卢什卡后大出血而死。她的早逝对安德烈公爵造成巨大精神打击</div>
+</a>
+<a class="entry-item" href="丽莎·博尔孔斯卡娅.html">
+  <div class="noun">丽莎·博尔孔斯卡娅</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵的妻子，昵称小公爵夫人。活泼可爱、善于社交，以独特的翘上唇为标志性特征。在童山居住时对老公爵心怀恐惧，后因难产而死。</div>
+</a>
+<a class="entry-item" href="丽莎韦塔·卡尔洛夫娜.html">
+  <div class="noun">丽莎韦塔·卡尔洛夫娜</div>
+  <div class="snippet">小公爵夫人丽莎的全名（含本名和父称）。丽莎是安德烈·博尔孔斯基公爵的妻子，活泼美丽但热爱社交，与安德烈性格不合，最终在孤独中难产而死。</div>
+</a>
+<a class="entry-item" href="乌瓦尔卡.html">
+  <div class="noun">乌瓦尔卡</div>
+  <div class="snippet">罗斯托夫家的猎手，被派去打探狼窝情况。</div>
+</a>
+<a class="entry-item" href="乌瓦罗夫.html">
+  <div class="noun">乌瓦罗夫</div>
+  <div class="snippet">费奥多尔·彼得罗维奇·乌瓦罗夫（1769-1824），俄罗斯帝国骑兵上将。1812年卫国战争中指挥第1预备骑兵军，参加了博罗季诺战役、维亚济马战役等。1805年奥斯特利茨战役中指挥俄军骑兵部队。战后担任沙皇亚历山大一世侍从武官，1821年任</div>
+</a>
+<a class="entry-item" href="乌迪诺.html">
+  <div class="noun">乌迪诺</div>
+  <div class="snippet">尼古拉·夏尔·乌迪诺（1767—1847），拿破仑帝国的法国元帅，雷焦公爵，以作战极其勇猛著称。一生负伤三十余次，绰号&quot;法国军队的巴亚尔&quot;。在1807年战役中，其辎重马车队被俄军保罗格勒骠骑兵团截获。</div>
+</a>
+<a class="entry-item" href="乔治·当丹.html">
+  <div class="noun">乔治·当丹</div>
+  <div class="snippet">乔治·当丹是法国喜剧大师莫里哀1668年创作的三幕散文喜剧《乔治·当丹》（又译《乔治·唐丹》）中的主人公，一名富商为获得贵族身份娶了没落贵族之女，反遭妻子背叛和岳父母歧视。剧中台词&quot;你是自作自受，乔治·当丹&quot;成为法文谚语，意为自作自受。《战</div>
+</a>
+<a class="entry-item" href="乔治小姐.html">
+  <div class="noun">乔治小姐</div>
+  <div class="snippet">乔治小姐（1787—1867），本名玛格丽特-约瑟芬·韦默，法国著名女演员。1802年在法兰西喜剧院首次登台，以美貌和演技备受瞩目。曾赴俄罗斯、瑞典、德国等地演出，享誉欧洲。与拿破仑·波拿巴有过一段恋情，据传也与威灵顿公爵有过情感纠葛，是欧</div>
+</a>
+<a class="entry-item" href="书吏.html">
+  <div class="noun">书吏</div>
+  <div class="snippet">俄国帝政时期衙门中的低级文职人员，负责文书抄写、登记等杂务。在小说中指尤赫诺夫地方的一个书记官，因盗窃后备军物资被老公爵下令绞死。</div>
+</a>
+<a class="entry-item" href="乳娘.html">
+  <div class="noun">乳娘</div>
+  <div class="snippet">贵族家庭中负责喂养和照顾孩童的女性仆人，普拉斯科维亚·萨维什娜是玛丽亚公爵小姐的乳娘。</div>
+</a>
+<a class="entry-item" href="亚历山大·马其顿.html">
+  <div class="noun">亚历山大·马其顿</div>
+  <div class="snippet">即亚历山大大帝（公元前356–前323），马其顿国王，世界古代史上最著名的军事征服者之一。他建立了地跨欧亚非三大洲的亚历山大帝国，其远征到达中亚和印度河流域，本书中提到他进入西徐亚（斯基泰）地区。</div>
+</a>
+<a class="entry-item" href="亚历山大一世.html">
+  <div class="noun">亚历山大一世</div>
+  <div class="snippet">俄罗斯帝国第十位皇帝，1777年出生，1825年去世，1801年至1825年在位。他在拿破仑战争中领导反法同盟击败拿破仑，被尊称为&quot;欧洲的救世主&quot;。其统治前期推行自由主义改革，后期趋于保守。 --- 俄罗斯帝国皇帝（1801-1825），在</div>
+</a>
+<a class="entry-item" href="亚历山大皇上.html">
+  <div class="noun">亚历山大皇上</div>
+  <div class="snippet">亚历山大一世·帕夫洛维奇（1777-1825），俄罗斯罗曼诺夫王朝第十四位沙皇，1801年至1825年在位。在《战争与和平》中作为真实历史人物出现，小说涉及他参与的反法同盟、奥斯特里茨战役、1812年卫国战争等重大历史事件。托尔斯泰在尾声中</div>
+</a>
+<a class="entry-item" href="亚历山大皇帝.html">
+  <div class="noun">亚历山大皇帝</div>
+  <div class="snippet">即亚历山大一世·巴甫洛维奇（1777—1825），俄罗斯帝国沙皇，1801年至1825年在位。他在位期间领导反法同盟击败拿破仑，1814年率军攻入巴黎，被欧洲各国称为&quot;欧洲的救世主&quot;。战后发起组织神圣同盟，成为欧洲保守秩序的维护者。其性格神</div>
+</a>
+<a class="entry-item" href="亚当.html">
+  <div class="noun">亚当</div>
+  <div class="snippet">亚当是《圣经·创世记》中记载的人类始祖，上帝用尘土所造的第一个人类。希伯来语&quot;亚当&quot;（אָדָם）意为&quot;红土&quot;。上帝将生气吹入他鼻孔，使他成为&quot;有灵的活人&quot;，将他安置在伊甸园中，并为他造了配偶夏娃。亚当受命不可吃分别善恶树上的果子，但他和夏</div>
+</a>
+<a class="entry-item" href="亚当·恰尔托里日斯基.html">
+  <div class="noun">亚当·恰尔托里日斯基</div>
+  <div class="snippet">亚当·耶日·恰尔托里日斯基（1770-1861），波兰贵族、政治家和外交家，沙皇亚历山大一世的好友和亲密顾问，1804-1806年担任俄国外交大臣。在《战争与和平》中作为历史人物出现，安德烈公爵称其为最了不起但最讨厌的人。他是亚历山大一世早</div>
+</a>
+<a class="entry-item" href="亚美尼亚美人.html">
+  <div class="noun">亚美尼亚美人</div>
+  <div class="snippet">《战争与和平》中在莫斯科大火期间出现的一个亚美尼亚家庭中的年轻女子，被作者形容为东方美的化身。她有清秀弯弯的黑眉、毫无表情的美丽长脸、柔嫩红润的肌肤，身着富丽缎子长衫，头扎鲜艳紫色头巾。她在法国兵抢劫时遭到侵害。</div>
+</a>
+<a class="entry-item" href="亚美尼亚老人.html">
+  <div class="noun">亚美尼亚老人</div>
+  <div class="snippet">《战争与和平》中莫斯科大火期间出现的一个亚美尼亚人家庭的户主，穿新皮袄和新靴子，具有漂亮的东方脸型。法国兵抢劫时抓住他的腿强行脱下他的靴子，老人抽抽搭搭地哭诉。</div>
+</a>
+<a class="entry-item" href="产科医生.html">
+  <div class="noun">产科医生</div>
+  <div class="snippet">专门负责接生和孕产妇医疗的医生。丽莎和安德烈公爵原计划从莫斯科请一位产科医生。</div>
+</a>
+<a class="entry-item" href="亨利四世.html">
+  <div class="noun">亨利四世</div>
+  <div class="snippet">法国波旁王朝第一位国王（1553-1610），以结束胡格诺宗教战争、颁布南特敕令推行宗教和解而闻名。书中法军士兵莫雷尔在篝火旁所唱《亨利四世万岁》一曲正是歌颂这位国王，曾作为波旁王朝复辟时期法兰西王国的实际国歌。</div>
+</a>
+<a class="entry-item" href="亲王.html">
+  <div class="noun">亲王</div>
+  <div class="snippet">海伦的新常客，与海伦过从甚密的贵族亲王。海伦在上流社会中以其美貌和社交手腕吸引了众多追求者，皮埃尔因此深感痛苦和嫉妒。</div>
+</a>
+<a class="entry-item" href="仆人.html">
+  <div class="noun">仆人</div>
+  <div class="snippet">在贵族家庭中从事家务劳动的侍从。19世纪俄罗斯贵族家庭的仆人多数为农奴，1861年农奴制改革后方有变化。仆人中包括保姆、女仆、马车夫、厨子等。</div>
+</a>
+<a class="entry-item" href="伊万·卢基奇.html">
+  <div class="noun">伊万·卢基奇</div>
+  <div class="snippet">《战争与和平》中俄军的一名连长，多洛霍夫在散兵线上与之对话的上级军官。属于俄军基层指挥军官，在申格拉本战役前的对峙场景中出现。</div>
+</a>
+<a class="entry-item" href="伊万·米特里奇.html">
+  <div class="noun">伊万·米特里奇</div>
+  <div class="snippet">俄国军队中的司务长（军士长），在团队中负责日常管理和士兵训练，士兵们在行军和战斗时围绕在其周围。</div>
+</a>
+<a class="entry-item" href="伊万·西多内奇.html">
+  <div class="noun">伊万·西多内奇</div>
+  <div class="snippet">《战争与和平》中的一位莫斯科商人。当法军逼近、俄军撤退、士兵哄抢商场时，他表现出豁达态度，认为「脑袋都掉了，还哭头发」，主张任由士兵拿取商品。</div>
+</a>
+<a class="entry-item" href="伊万诺夫家.html">
+  <div class="noun">伊万诺夫家</div>
+  <div class="snippet">《战争与和平》中莫斯科大火期间群众提及的一户人家，被猜测可能是皮埃尔所救女孩所属的家庭。</div>
+</a>
+<a class="entry-item" href="伊丽莎白·阿列克谢耶夫娜皇后.html">
+  <div class="noun">伊丽莎白·阿列克谢耶夫娜皇后</div>
+  <div class="snippet">俄罗斯帝国沙皇亚历山大一世的皇后，原名巴登的路易丝公主（1779-1826）。1793年与亚历山大结婚，1801年加冕为皇后。在1812年卫国战争期间，被问及疏散命令时，她以爱国精神回答说不能给国家机关下命令，她个人将是最后一个离开彼得堡的</div>
+</a>
+<a class="entry-item" href="伊丽莎白公主.html">
+  <div class="noun">伊丽莎白公主</div>
+  <div class="snippet">伊丽莎白·菲利普·玛丽·埃莱娜·德·波旁（1764—1794），法国公主，路易十六的亲妹妹，尊称&quot;伊丽莎白夫人&quot;。法国大革命期间拒绝逃亡，坚持陪伴兄嫂一家，被囚禁于汤普尔宫。1794年5月10日被革命法庭判处死刑，在巴黎协和广场被处决，以虔</div>
+</a>
+<a class="entry-item" href="伊凡四世.html">
+  <div class="noun">伊凡四世</div>
+  <div class="snippet">伊凡四世·瓦西里耶维奇（1530—1584），别称伊凡雷帝，俄国首位沙皇（1547年加冕）。推行特辖制加强中央集权，灭亡喀山汗国和阿斯特拉罕汗国使俄国版图大幅扩张。以极端残暴著称。</div>
+</a>
+<a class="entry-item" href="伊利亚·伊万诺维奇.html">
+  <div class="noun">伊利亚·伊万诺维奇</div>
+  <div class="snippet">俄国沙皇亚历山大一世的专属马车夫，御用驭手。在1805年奥斯特利茨战役失败后，他驾着四匹黑马拉的轿式马车载着沙皇从战场疾驰撤退。罗斯托夫在混乱中认出他和马车，从而得知沙皇已离开前沿的消息。</div>
+</a>
+<a class="entry-item" href="伊利亚·安德烈伊奇.html">
+  <div class="noun">伊利亚·安德烈伊奇</div>
+  <div class="snippet">全名伊利亚·安德烈伊奇·罗斯托夫伯爵，托尔斯泰《战争与和平》中罗斯托夫家族族长，梁赞省首席贵族，为人善良慷慨好客但不善理财，导致家道日渐败落。原型为托尔斯泰的祖父。 --- 全名伊利亚·安德烈伊奇·罗斯托夫伯爵，罗斯托夫家族的家长，梁赞省首</div>
+</a>
+<a class="entry-item" href="伊利亚·安德烈伊奇·罗斯托夫.html">
+  <div class="noun">伊利亚·安德烈伊奇·罗斯托夫</div>
+  <div class="snippet">罗斯托夫家的老伯爵，善良好客但不善理财，置办大规模狩猎设备供儿子管理。</div>
+</a>
+<a class="entry-item" href="伊利亚·安德烈伊奇·罗斯托夫伯爵.html">
+  <div class="noun">伊利亚·安德烈伊奇·罗斯托夫伯爵</div>
+  <div class="snippet">罗斯托夫家的男主人，娜塔莎的父亲。热心善良但不善理财的莫斯科贵族。本节中他未直接出场，仅听到他在门外问话。</div>
+</a>
+<a class="entry-item" href="伊利亚·安德烈伊奇伯爵.html">
+  <div class="noun">伊利亚·安德烈伊奇伯爵</div>
+  <div class="snippet">罗斯托夫家族家长，曾任本县首席贵族，因职位花费巨大而辞职。为人慷慨好客、不善理财，家道日渐中落。辞去贵族长后经济仍未好转，面临变卖家产。他是罗斯托夫家族热情好客传统的代表，人物原型为托尔斯泰的祖父伊利亚·托尔斯泰。 --- 罗斯托夫家族家长</div>
+</a>
+<a class="entry-item" href="伊利亚·米特罗凡内奇.html">
+  <div class="noun">伊利亚·米特罗凡内奇</div>
+  <div class="snippet">伊利亚·米特罗凡内奇是《战争与和平》中尼古拉·罗斯托夫在坦波夫省田庄的管家。在小说尾声部分，他向尼古拉汇报有人出价八万卢布购买森林的消息，反映了尼古拉婚后精心经营田产、努力改善家庭经济状况的情节。</div>
+</a>
+<a class="entry-item" href="伊利亚·罗斯托夫伯爵.html">
+  <div class="noun">伊利亚·罗斯托夫伯爵</div>
+  <div class="snippet">罗斯托夫家族一家之主，梁赞省首席贵族。慷慨好客、热情善良，但不善理财导致家族败落。1813年病逝，身后留下巨额债务。原型为托尔斯泰的祖父。</div>
+</a>
+<a class="entry-item" href="伊拉金.html">
+  <div class="noun">伊拉金</div>
+  <div class="snippet">伊拉金是《战争与和平》中与罗斯托夫家族相邻的地主猎人，热衷狩猎。起初因在属于罗斯托夫家狩猎范围的地点狩猎而引起尼古拉·罗斯托夫的敌意，但二人见面后伊拉金以礼相待，主动示好并邀请尼古拉到自己的狩猎场狩猎，二人由此化解矛盾。他有一只以三户奴仆换</div>
+</a>
+<a class="entry-item" href="伊林.html">
+  <div class="noun">伊林</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的次要角色，保罗格勒骠骑兵团的一名年轻军官，年仅十六岁。他是尼古拉·罗斯托夫的下属和保护对象，努力模仿罗斯托夫，像弟弟一样依恋他。在战前雨夜的小酒馆场景中，他表现出活泼调皮的青年军官性格。 --- 保罗格勒骠骑兵团的</div>
+</a>
+<a class="entry-item" href="伊柳什卡.html">
+  <div class="noun">伊柳什卡</div>
+  <div class="snippet">吉普赛人歌唱队的领唱或乐师。多洛霍夫在英吉利饭店设宴话别时提到&quot;一会儿伊柳什卡带着歌唱队也要来&quot;，表明他是当时莫斯科贵族宴会上常见的吉普赛艺人，为赌博和宴饮场合助兴。</div>
+</a>
+<a class="entry-item" href="伊格纳特.html">
+  <div class="noun">伊格纳特</div>
+  <div class="snippet">罗斯托夫家的看门人。1812年莫斯科撤离期间，他留守在罗斯托夫家的大院中，与仆童米什卡一起看守空宅，曾对着镜子做鬼脸自娱，后被管家玛夫拉·库兹米尼什娜训斥。 --- 罗斯托夫伯爵家的男仆，一个年轻的小厮，在莫斯科撤退前夕被玛夫拉·库兹米尼什</div>
+</a>
+<a class="entry-item" href="伊波利特.html">
+  <div class="noun">伊波利特</div>
+  <div class="snippet">伊波利特·库拉金，瓦西里公爵之子，阿纳托利的哥哥，海伦的哥哥。俄国驻外使馆秘书，在社交圈中扮演丑角角色，说话东拉西扯、用词混乱，常讲法语却不知所云，被认为是风流浪荡子。 --- 伊波利特·库拉金公爵，瓦西里公爵的长子，阿纳托利的哥哥，驻外使</div>
+</a>
+<a class="entry-item" href="伊波利特·库拉金.html">
+  <div class="noun">伊波利特·库拉金</div>
+  <div class="snippet">伊波利特·库拉金是《战争与和平》中库拉金家族的长子，瓦西里公爵之子，海伦和阿纳托利的兄弟。他担任外交官职位，但智力低下、言行滑稽，在社交圈中充当丑角角色。托尔斯泰通过这个人物讽刺了凭借家族关系混迹上流社会的贵族寄生阶层。 --- 伊波利特·</div>
+</a>
+<a class="entry-item" href="伊波利特·库拉金公爵.html">
+  <div class="noun">伊波利特·库拉金公爵</div>
+  <div class="snippet">库拉金家族成员，父亲瓦西里公爵，弟弟阿纳托利，妹妹海伦。俄国驻外使馆秘书，头脑简单愚钝，在社交圈中扮演小丑角色。与安德烈公爵的妻子丽莎有暧昧关系。</div>
+</a>
+<a class="entry-item" href="伤员.html">
+  <div class="noun">伤员</div>
+  <div class="snippet">在战斗中负伤的人员。拿破仑战争中，拉雷医生创立了按伤情严重程度决定救治顺序的分检制度，改变了以往按军衔高低救治伤员的惯例。</div>
+</a>
+<a class="entry-item" href="伯爵夫人.html">
+  <div class="noun">伯爵夫人</div>
+  <div class="snippet">罗斯托夫家主母，心地善良但对家族财务忧虑，持有安娜·米哈伊洛夫娜的期票。 --- 罗斯托夫伯爵夫人，慈爱但焦虑的母亲，为改善家境想给尼古拉找有钱媳妇。15岁结婚，育有12个孩子。她善良但世俗，对没有陪嫁的索尼娅与尼古拉亲近感到恼怒。1812</div>
+</a>
+<a class="entry-item" href="佩佳·别祖霍夫.html">
+  <div class="noun">佩佳·别祖霍夫</div>
+  <div class="snippet">皮埃尔·别祖霍夫与娜塔莎·罗斯托娃之子，在小说尾声时刚满三个月。名字&quot;佩佳&quot;源自娜塔莎在战争中牺牲的弟弟彼佳·罗斯托夫，以此纪念。娜塔莎在丈夫皮埃尔远赴彼得堡期间，以照顾佩佳来排解思念之情。</div>
+</a>
+<a class="entry-item" href="佩尔涅提.html">
+  <div class="noun">佩尔涅提</div>
+  <div class="snippet">约瑟夫·马里·德·佩尔涅提（Joseph Marie de Pernety，1766—1856），法国炮兵将军，帝国男爵。拿破仑战争时期的炮兵指挥官，在1812年波罗金诺战役中指挥炮兵部队摧毁了拉耶夫斯基棱堡，后参加了别列津纳河战役。其名字</div>
+</a>
+<a class="entry-item" href="佩拉格娅·丹尼洛夫娜.html">
+  <div class="noun">佩拉格娅·丹尼洛夫娜</div>
+  <div class="snippet">佩拉格娅·丹尼洛夫娜·梅柳科娃是一位居住在罗斯托夫家附近的遗孀，性格开朗慈祥，是一群女儿的母亲。在圣诞期间她热情地接待罗斯托夫一家来做客，主持了热闹的化装舞会和集体游戏，在晚餐时还讲述占卜故事，是小说中一个生动有趣的次要人物。</div>
+</a>
+<a class="entry-item" href="佩拉格娅·丹尼洛夫娜·梅柳科娃.html">
+  <div class="noun">佩拉格娅·丹尼洛夫娜·梅柳科娃</div>
+  <div class="snippet">住在罗斯托夫家附近约四俄里处的寡妇遗孀，有几个不同年龄的孩子和家庭教师。 性格慈祥开朗、精力充沛。圣诞节期间罗斯托夫家的年轻人化装后到她家聚会， 在此举办了热闹的化装舞会。尼古拉与索尼娅正是在梅柳科娃家的这个夜晚感情升温。</div>
+</a>
+<a class="entry-item" href="佩龙斯卡娅.html">
+  <div class="noun">佩龙斯卡娅</div>
+  <div class="snippet">玛丽亚·伊格纳季耶夫娜·佩龙斯卡娅（Марья Игнатьевна Перонская），《战争与和平》中罗斯托夫伯爵夫人的亲戚和友人，一位衰老的宫廷女官。她熟悉彼得堡上流社会的规则，为初来乍到的罗斯托夫家充当社交引路人。在小说后文中，她</div>
+</a>
+<a class="entry-item" href="使女.html">
+  <div class="noun">使女</div>
+  <div class="snippet">贵族家庭中服侍女主人和小姐的女仆。</div>
+</a>
+<a class="entry-item" href="俄国军官.html">
+  <div class="noun">俄国军官</div>
+  <div class="snippet">俄罗斯帝国军队中的军官。19世纪初俄国军官主要来自贵族阶层，服役期为25年。在拿破仑战争中，俄国军官在奥斯特里茨、博罗季诺等战役中发挥了重要作用。</div>
+</a>
+<a class="entry-item" href="保克尔.html">
+  <div class="noun">保克尔</div>
+  <div class="snippet">亨利·托马斯·巴克尔（Henry Thomas Buckle，1821至1862），英国历史学家，实证主义史学代表人物。著有《英国文明史》，主张人类社会如同自然界一样受规律支配，历史可以成为一门科学。将文明分为欧洲文明与非欧洲文明两大类型。</div>
+</a>
+<a class="entry-item" href="保罗·彼得罗维奇.html">
+  <div class="noun">保罗·彼得罗维奇</div>
+  <div class="snippet">即保罗一世·彼得罗维奇（Павел I Петрович，1754-1801），俄罗斯帝国皇帝，1796年至1801年在位。彼得三世与叶卡捷琳娜二世之子，以推行普鲁士式军事改革和颁布皇位继承法闻名。1801年在米哈伊洛夫宫被贵族集团刺杀。小</div>
+</a>
+<a class="entry-item" href="保罗一世.html">
+  <div class="noun">保罗一世</div>
+  <div class="snippet">保罗一世（1754—1801），俄罗斯帝国沙皇，1796—1801年在位，叶卡捷琳娜二世之子，亚历山大一世之父。在位五年间推行《皇位继承法》等改革，外交上先加入反法同盟后转而与拿破仑结好。1801年在宫廷政变中被刺杀，其子亚历山大一世继位。</div>
+</a>
+<a class="entry-item" href="保罗西.html">
+  <div class="noun">保罗西</div>
+  <div class="snippet">菲利波·保卢奇（1779—1849），意大利侯爵，先后效力于撒丁王国、奥地利、意大利王国和俄罗斯帝国。1807年加入俄军，获上校衔。1812年拿破仑入侵前夕被召至圣彼得堡任俄军参谋长，因巴克莱反对而改任利沃尼亚总督。以敢于直言和果断著称。</div>
+</a>
+<a class="entry-item" href="保罗西侯爵.html">
+  <div class="noun">保罗西侯爵</div>
+  <div class="snippet">菲利波·保卢奇，意大利籍侯爵，拿破仑战争期间先后效力于撒丁王国、奥地利、法国，最终加入俄罗斯军队。在1812年俄国卫国战争初期曾任陆军参谋长，是沙皇亚历山大一世的重要军事顾问。他以直言不讳著称，曾当面批评普弗尔的德里萨阵地计划，称其设计者只</div>
+</a>
+<a class="entry-item" href="俾斯麦.html">
+  <div class="noun">俾斯麦</div>
+  <div class="snippet">奥托·冯·俾斯麦（Otto von Bismarck，1815—1898），普鲁士王国首相（1862—1890）、德意志帝国首任宰相（1871—1890），人称&quot;铁血宰相&quot;。通过普丹战争（1864）、普奥战争（1866）、普法战争（1870</div>
+</a>
+<a class="entry-item" href="儒略·凯撒.html">
+  <div class="noun">儒略·凯撒</div>
+  <div class="snippet">古罗马政治家、军事家、著作家和演说家，罗马共和国末期的军事统帅和独裁官，制定儒略历，著有《高卢战记》，公元前44年被元老院成员刺杀。</div>
+</a>
+<a class="entry-item" href="克劳塞维兹.html">
+  <div class="noun">克劳塞维兹</div>
+  <div class="snippet">卡尔·冯·克劳塞维茨（Carl von Clausewitz，1780—1831），普鲁士军事理论家和军事史学家，著有《战争论》。1812年拿破仑征俄期间辞去普鲁士军职，转投俄军服务，参加了博罗季诺战役。托尔斯泰在小说中让其作为背景人物出现</div>
+</a>
+<a class="entry-item" href="克律德涅夫人.html">
+  <div class="noun">克律德涅夫人</div>
+  <div class="snippet">芭芭拉·尤莉安娜·冯·克律德涅男爵夫人（Barbara Juliane von Krüdener，1764–1824），波罗的海德意志贵族出身，神秘主义宗教布道者和作家。1804年经历宗教皈依后成为虔敬主义布道者，1815年对沙皇亚历山大一</div>
+</a>
+<a class="entry-item" href="克拉帕雷德.html">
+  <div class="noun">克拉帕雷德</div>
+  <div class="snippet">米歇尔-玛丽·克拉帕雷德（Michel-Marie Claparède，1770—1842），拿破仑战争时期的法国少将，帝国伯爵。参与了从意大利、奥地利、西班牙到俄罗斯的几乎所有重大战役，多次负伤。1812年俄国远征中指挥波兰部队师（隶属于</div>
+</a>
+<a class="entry-item" href="克柳恰廖夫.html">
+  <div class="noun">克柳恰廖夫</div>
+  <div class="snippet">莫斯科邮政局长，共济会员，1812年拿破仑入侵期间被莫斯科总督拉斯托普钦以无确凿证据的嫌疑逮捕并流放，后于1816年恢复名誉并被任命为枢密官。</div>
+</a>
+<a class="entry-item" href="克罗萨.html">
+  <div class="noun">克罗萨</div>
+  <div class="snippet">一名在俄军服务的法国人，穿着西班牙军服，曾参与萨拉曼卡战役。在库图佐夫听取将领意见时，他向在场的人讲述萨拉曼卡战役的经过，并和一位在俄军服务的德国亲王议论萨拉戈萨城的保卫战，建议莫斯科也可以效仿萨拉戈萨进行防御。</div>
+</a>
+<a class="entry-item" href="兰斯科伊.html">
+  <div class="noun">兰斯科伊</div>
+  <div class="snippet">米哈伊尔·兰斯科伊（Mikhail Lanskoy，约1787—1836），俄国将军，1812年俄法战争期间参与后勤供应工作。在菲利的军事会议后，曾以管理粮秣官员的身份向库图佐夫报告军队给养主要集中在奥卡河沿岸的图拉和卡卢加省，指出若向下城</div>
+</a>
+<a class="entry-item" href="兹德尔任斯基.html">
+  <div class="noun">兹德尔任斯基</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的次要角色，保罗格勒骠骑兵团的一名留两撇胡子的军官。他向罗斯托夫和伊林眉飞色舞地讲述拉耶夫斯基将军在萨尔塔诺夫战役中的英雄事迹，将萨尔塔诺夫水坝比作俄国的忒摩比利。罗斯托夫对他的故事持怀疑态度，以此体现托尔斯泰对战争</div>
+</a>
+<a class="entry-item" href="内伊.html">
+  <div class="noun">内伊</div>
+  <div class="snippet">米歇尔·内伊（Michel Ney，1769-1815），拿破仑麾下著名元帅，封号埃尔欣根公爵。以勇猛著称，被称为&quot;勇士中的勇士&quot;。在波罗金诺战役中指挥中央部队，后在滑铁卢战役中指挥法军最后冲锋，波旁复辟后被处决。</div>
+</a>
+<a class="entry-item" href="军法检察官.html">
+  <div class="noun">军法检察官</div>
+  <div class="snippet">《战争与和平》中一名随军文职官员，属于俄军中的军事司法人员。小说中此人身材肥胖、圆脸盘，带着天真快活的微笑，出于好奇心骑马来到战场观战，坐在非军用的马鞍上颤颤巍巍，夹在骠骑兵、哥萨克兵和副官中间，显得格格不入。</div>
+</a>
+<a class="entry-item" href="农妇.html">
+  <div class="noun">农妇</div>
+  <div class="snippet">农村妇女，乳娘回忆玛丽亚出生时由摩尔达维亚农妇而非专业产婆接生。</div>
+</a>
+<a class="entry-item" href="冯·托尔.html">
+  <div class="noun">冯·托尔</div>
+  <div class="snippet">卡尔·威廉·冯·托尔伯爵（Karl Wilhelm von Toll，1777-1842），波罗的海德意志贵族，俄罗斯帝国步兵上将。在1805年奥斯特利茨战役中担任上尉军官，曾帮助沙皇亚历山大一世越过沟渠。后升任总军需官，在1812年卫国战</div>
+</a>
+<a class="entry-item" href="凯撒.html">
+  <div class="noun">凯撒</div>
+  <div class="snippet">盖乌斯·尤利乌斯·凯撒（Gaius Julius Caesar，公元前100—前44），古罗马杰出的军事统帅、政治家和作家。他征服高卢全境，率军渡过卢比孔河引发罗马内战，击败庞培后成为终身独裁官，推行儒略历等改革，最终被元老院贵族刺杀。其名</div>
+</a>
+<a class="entry-item" href="凯普勒.html">
+  <div class="noun">凯普勒</div>
+  <div class="snippet">约翰内斯·开普勒（1571—1630），德国天文学家，发现行星运动三大定律（椭圆轨道定律、面积定律、周期定律），被称天空立法者。其定律为牛顿万有引力定律奠定了关键基础。</div>
+</a>
+<a class="entry-item" href="凯萨罗夫.html">
+  <div class="noun">凯萨罗夫</div>
+  <div class="snippet">派西·谢尔盖伊奇·凯萨罗夫，库图佐夫的副官，随侍库图佐夫左右，参与了波罗金诺战役及后来的菲里军事会议等重大决策场合，是库图佐夫司令部的重要成员。</div>
+</a>
+<a class="entry-item" href="凯鲁比尼.html">
+  <div class="noun">凯鲁比尼</div>
+  <div class="snippet">路易吉·凯鲁比尼（1760—1842），意大利古典主义及早期浪漫主义作曲家。生于佛罗伦萨，长期活跃于巴黎，曾任巴黎音乐学院院长。以歌剧和宗教音乐闻名，代表作包括歌剧《美狄亚》和大量弥撒曲、安魂曲。贝多芬对其推崇备至。</div>
+</a>
+<a class="entry-item" href="切尔内绍夫.html">
+  <div class="noun">切尔内绍夫</div>
+  <div class="snippet">亚历山大·伊万诺维奇·切尔内绍夫，俄国军事将领、外交官和情报官，在1812年战争期间担任沙皇亚历山大一世的侍从武官长。他曾在1808至1812年间以军事外交代表身份驻巴黎，实际上是沙皇安插在拿破仑身边的高级间谍，成功获取了法军对俄作战计划的</div>
+</a>
+<a class="entry-item" href="列夫·托尔斯泰.html">
+  <div class="noun">列夫·托尔斯泰</div>
+  <div class="snippet">俄国伟大的批判现实主义作家、思想家，1828年出生于图拉省的亚斯纳亚波利亚纳庄园，1910年去世。代表作有《战争与和平》《安娜·卡列宁娜》《复活》等，对世界文学产生了巨大影响。</div>
+</a>
+<a class="entry-item" href="列普宁公爵.html">
+  <div class="noun">列普宁公爵</div>
+  <div class="snippet">尼古拉·瓦西里耶维奇·列普宁公爵，俄国近卫骑兵团上校指挥官，在奥斯特里茨战役中被法军俘虏，后在战俘营中与拿破仑有过简短对话。</div>
+</a>
+<a class="entry-item" href="列比赫.html">
+  <div class="noun">列比赫</div>
+  <div class="snippet">弗朗茨·列比赫（Franz Leppich），德国发明家，约1775年生。1812年向沙皇亚历山大一世提出建造可控军用飞艇的方案，在莫斯科郊外沃罗佐沃村建造长57米的梨形大气球，设计搭载40名桨手驱动，从空中投掷炸弹轰炸法军。但因技术缺陷，</div>
+</a>
+<a class="entry-item" href="刘辽逸.html">
+  <div class="noun">刘辽逸</div>
+  <div class="snippet">刘辽逸（1915—2001），原名刘长菘，安徽濉溪人，中国著名俄苏文学翻译家，人民文学出版社译审。他以翻译托尔斯泰的《战争与和平》而闻名，还译有《哈吉穆拉特》《杜布罗夫斯基》及高尔基作品等，1994年获鲁迅文学奖全国优秀文学翻译彩虹奖荣誉奖</div>
+</a>
+<a class="entry-item" href="利哈乔夫.html">
+  <div class="noun">利哈乔夫</div>
+  <div class="snippet">利哈乔夫（Likhachyov）是托尔斯泰《战争与和平》中的配角，一名哥萨克士兵，隶属于杰尼索夫领导的游击队。在小说中，他在战前夜为彼佳·罗斯托夫磨佩刀，被彼佳视为&quot;世上最善良、最勇敢、最奇特、最美好、还不为人认识的人&quot;，体现了托尔斯泰笔下</div>
+</a>
+<a class="entry-item" href="利希滕施泰因.html">
+  <div class="noun">利希滕施泰因</div>
+  <div class="snippet">约翰一世·冯·利希滕施泰因，奥地利元帅，拿破仑战争期间奥地利的重要军事指挥官，被拿破仑视为最有能力的对手之一，1805年和1809年代表奥地利进行和谈，其军事成就促成列支敦士登公国获得主权。</div>
+</a>
+<a class="entry-item" href="别洛娃.html">
+  <div class="noun">别洛娃</div>
+  <div class="snippet">全名安娜·玛卡罗夫娜·别洛娃（Анна Макаровна Белова），罗斯托夫伯爵家中常年寄居的老小姐。她耳聋，是老伯爵夫人晚年发泄情绪的主要对象。擅长用一副针同时织两只袜子，是家庭中默默无闻的编外成员，反映了19世纪俄国贵族家庭中寄</div>
+</a>
+<a class="entry-item" href="别祖霍夫.html">
+  <div class="noun">别祖霍夫</div>
+  <div class="snippet">俄国贵族姓氏，小说《战争与和平》四大家族之一。老伯爵基里尔·弗拉季米罗维奇·别祖霍夫是叶卡捷琳娜女皇时代的权贵，拥有巨额财富；其私生子皮埃尔继承爵位与家产后成为小说核心男主角之一。</div>
+</a>
+<a class="entry-item" href="别祖霍夫伯爵.html">
+  <div class="noun">别祖霍夫伯爵</div>
+  <div class="snippet">小说《战争与和平》中的重要贵族人物。全名基里尔·弗拉基米罗维奇·别祖霍夫（Кирилл Владимирович Безухов），是叶卡捷琳娜时代的达官要人，拥有巨额财富。他是私生子皮埃尔的父亲，临终前立下遗嘱将全部财产留给皮埃尔，并请求</div>
+</a>
+<a class="entry-item" href="加夫里洛.html">
+  <div class="noun">加夫里洛</div>
+  <div class="snippet">《战争与和平》中的仆人角色，属于罗斯托夫家的下人。在本书第42章中，他是被尼古拉·罗斯托夫派去买酒的老仆。此外书中还有另一位同名的加夫里洛，是玛丽亚·德米特里耶夫娜·阿赫罗西莫娃的跟班，身材魁梧，曾在阿纳托利·库拉金企图诱拐娜塔莎的关键情节</div>
+</a>
+<a class="entry-item" href="加夫里洛·伊凡内奇.html">
+  <div class="noun">加夫里洛·伊凡内奇</div>
+  <div class="snippet">莫斯科总督拉斯托普钦伯爵手下负责调查案件的官员。在拿破仑布告传播案中，他奉命追查，查出该布告曾经过六十三人之手。</div>
+</a>
+<a class="entry-item" href="勒洛涅·狄德维勒.html">
+  <div class="noun">勒洛涅·狄德维勒</div>
+  <div class="snippet">François Le Lorgne d&#x27;Ideville（1780–1852），法国外交官和翻译官，通晓德语和俄语。1812年拿破仑入侵俄国期间担任拿破仑的随行翻译，负责与俄军俘虏和当地居民沟通。</div>
+</a>
+<a class="entry-item" href="勒达.html">
+  <div class="noun">勒达</div>
+  <div class="snippet">希腊神话中斯巴达王后，廷达瑞斯之妻。宙斯化为天鹅与其交合，生下海伦（引发特洛伊战争的美女）和卡斯托尔等子女。</div>
+</a>
+<a class="entry-item" href="勒马鲁瓦.html">
+  <div class="noun">勒马鲁瓦</div>
+  <div class="snippet">让-莱奥诺尔-弗朗索瓦·勒马鲁瓦（1776-1836），拿破仑最资深的副官之一，帝国伯爵，荣誉军团大军官级勋章获得者。曾参加意大利战役、奥斯特里茨会战、耶拿之战等，1813-1814年坚守马格德堡直至拿破仑退位。拿破仑名言&quot;不可能只有在傻瓜</div>
+</a>
+<a class="entry-item" href="半文盲管家.html">
+  <div class="noun">半文盲管家</div>
+  <div class="snippet">皮埃尔田庄中文化水平较低的基层管理者，对皮埃尔的改革意图或感到恐惧或困惑，不知如何应对。</div>
+</a>
+<a class="entry-item" href="博尔孔斯基.html">
+  <div class="noun">博尔孔斯基</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵（Andrei Bolkonsky），托尔斯泰《战争与和平》核心男主角之一。沙俄公爵，博尔孔斯基家族长子，初登场时26岁。孤傲正直，厌恶上流社会虚伪。在1805年担任库图佐夫副官，后经历奥斯特利茨战役重伤、丧妻、与娜塔</div>
+</a>
+<a class="entry-item" href="博尔孔斯基家族.html">
+  <div class="noun">博尔孔斯基家族</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的核心贵族家族之一，是俄国旧式贵族精神的象征。家族成员包括老一代的尼古拉·安德烈伊奇·博尔孔斯基公爵（前朝高级将领，性格严厉倔强），长子安德烈·博尔孔斯基公爵（小说核心男主角，孤傲正直，历经战争与爱情的磨难后精神觉醒</div>
+</a>
+<a class="entry-item" href="博尔霍维季诺夫.html">
+  <div class="noun">博尔霍维季诺夫</div>
+  <div class="snippet">《战争与和平》中的一名俄国军官，被多赫图罗夫将军选派为信使，在深夜冒着泥泞道路骑马狂奔三十俄里（约32公里），从阿里斯托沃村到列塔舍夫卡俄军总司令部传递重要军事情报。托尔斯泰对其深夜赶路的场景有细腻描写。</div>
+</a>
+<a class="entry-item" href="博马舍.html">
+  <div class="noun">博马舍</div>
+  <div class="snippet">皮埃尔-奥古斯坦·卡隆·德·博马舍（Pierre-Augustin Caron de Beaumarchais，1732—1799），法国启蒙运动时期杰出的剧作家，被公认为继莫里哀之后法国最伟大的喜剧家。代表作&quot;费加罗三部曲&quot;包括《塞维利亚</div>
+</a>
+<a class="entry-item" href="卡季什.html">
+  <div class="noun">卡季什</div>
+  <div class="snippet">即卡捷琳娜·谢苗诺夫娜公爵小姐（Catiche为法语昵称），老别祖霍夫伯爵的大公爵小姐（长女/侄女）。她性格凶狠坚决，在伯爵临终时站在圣像前目不转睛地祈祷。她是遗产争夺中的关键人物，曾试图偷走装有遗嘱的嵌花公事包，后在安娜·米哈伊洛夫娜阻挠</div>
+</a>
+<a class="entry-item" href="卡尔·伊万内奇.html">
+  <div class="noun">卡尔·伊万内奇</div>
+  <div class="snippet">卡尔·伊万内奇是《战争与和平》中博尔孔斯基家族的家庭医生或看护，负责照顾安德烈公爵的儿子小尼古拉。在小尼古拉生病发烧时，玛丽亚公爵小姐引用他的医嘱说睡眠比什么都宝贵，但安德烈公爵因焦虑而暴躁地反驳。该角色也出现在托尔斯泰自传三部曲《童年·少</div>
+</a>
+<a class="entry-item" href="卡尔·奥古斯特·哈登贝格.html">
+  <div class="noun">卡尔·奥古斯特·哈登贝格</div>
+  <div class="snippet">普鲁士政治活动家，1810至1822年任普鲁士总理大臣，与施泰因共同推动普鲁士现代化改革，曾任普鲁士驻维也纳会议代表，参与神圣同盟政策。</div>
+</a>
+<a class="entry-item" href="卡尔·波格丹内奇·舒伯特.html">
+  <div class="noun">卡尔·波格丹内奇·舒伯特</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的虚构人物，姓氏表明其具有德国血统。军衔为上校（团长），担任保罗格勒骠骑兵团团长。在捷利亚宁偷窃事件中，舒伯特上校为了保护整个骑兵团的声誉和团结，公开指责年轻的尼古拉·罗斯托夫说谎，体现了军队内部荣誉观念与现实处境的</div>
+</a>
+<a class="entry-item" href="卡尔普.html">
+  <div class="noun">卡尔普</div>
+  <div class="snippet">托尔斯泰《战争与和平》中博古恰罗沃的一名农民，在村公社颇有势力。他在1812年法国入侵期间带回法军布告和假钞，动摇了村民的撤离意愿，是博古恰罗沃农民抵抗运动的代表人物之一。</div>
+</a>
+<a class="entry-item" href="卡尔普什卡·奇吉林.html">
+  <div class="noun">卡尔普什卡·奇吉林</div>
+  <div class="snippet">拉斯托普钦传单中塑造的莫斯科小市民形象，一名后备兵，听说拿破仑要进攻莫斯科后，在酒馆借酒痛骂法国人，走到鹰形招牌下对民众发表讲话。这一形象代表了普通俄国百姓对法国入侵者的愤怒与蔑视，是战时爱国宣传的民间符号。</div>
+</a>
+<a class="entry-item" href="卡拉塔耶夫.html">
+  <div class="noun">卡拉塔耶夫</div>
+  <div class="snippet">《战争与和平》中的农民士兵，全名普拉东·卡拉塔耶夫。他是皮埃尔在战俘营中结识的难友，象征着俄罗斯民间的纯朴智慧与善良。他不执着于个人得失，与万物和衷共济。托尔斯泰用&quot;圆&quot;的意象描绘他，代表和谐与完整。 --- 《战争与和平》中重要配角，全名</div>
+</a>
+<a class="entry-item" href="卡拉姆辛.html">
+  <div class="noun">卡拉姆辛</div>
+  <div class="snippet">尼古拉·米哈伊洛维奇·卡拉姆辛（1766—1826），俄国作家、历史学家，俄国感伤主义文学的奠基人。1789至1790年游历西欧，著有《一个俄国旅行家的书信》。1792年发表短篇小说《可怜的丽莎》，轰动俄国文坛。1804年起耗费二十余年撰著</div>
+</a>
+<a class="entry-item" href="卡捷奇卡.html">
+  <div class="noun">卡捷奇卡</div>
+  <div class="snippet">《战争与和平》中的小角色，莫斯科大火中的一名被困女童，是卡捷琳娜的小名爱称。在1812年莫斯科大火期间，她的母亲玛丽亚·尼古拉耶夫娜以为她被烧死，向路过的皮埃尔求救。皮埃尔随后冲入火场将其救出。</div>
+</a>
+<a class="entry-item" href="卡捷琳娜·谢苗诺夫娜.html">
+  <div class="noun">卡捷琳娜·谢苗诺夫娜</div>
+  <div class="snippet">小说《战争与和平》中的角色，别祖霍夫家的大公爵小姐。她是老别祖霍夫伯爵的侄女，小名卡季什（Катишь），是三姐妹中的大姐。在老伯爵临终之际，她与瓦西里公爵密谋争夺遗嘱，企图阻止私生子皮埃尔继承财产。她性格强硬、情绪化，认为安娜·米哈伊洛夫</div>
+</a>
+<a class="entry-item" href="卡缅斯基.html">
+  <div class="noun">卡缅斯基</div>
+  <div class="snippet">米哈伊尔·费奥多罗维奇·卡缅斯基（1738-1809），俄国元帅、伯爵。参加过七年战争和俄土战争，1806-1807年任俄军总司令。士兵歌中称其为&quot;卡缅斯基爷爷&quot;，是俄国军界的知名将领。</div>
+</a>
+<a class="entry-item" href="卡缅斯基元帅.html">
+  <div class="noun">卡缅斯基元帅</div>
+  <div class="snippet">米哈伊尔·费奥多罗维奇·卡缅斯基，俄军元帅，1738-1809年，1806年被选为对法战争俄军总司令，但因年老精神崩溃很快离职，后被农奴杀害。</div>
+</a>
+<a class="entry-item" href="卢梭.html">
+  <div class="noun">卢梭</div>
+  <div class="snippet">法国启蒙思想家、哲学家、文学家，18世纪法国大革命的思想先驱，著有《社会契约论》（民约论）、《论人类不平等的起源和基础》、《爱弥儿》等，主张&quot;主权在民&quot;。</div>
+</a>
+<a class="entry-item" href="叶卡捷琳娜·谢苗诺娃.html">
+  <div class="noun">叶卡捷琳娜·谢苗诺娃</div>
+  <div class="snippet">叶卡捷琳娜·谢苗诺夫娜·谢苗诺娃（1786—1849），十九世纪初俄国最著名的悲剧女演员，主要活跃于圣彼得堡帝国剧院。她以饰演法国古典主义悲剧中拉辛和高乃依作品的女主角著称，演技具有极强的悲剧感染力。普希金曾高度赞美其表演，称其为&quot;灵魂的完</div>
+</a>
+<a class="entry-item" href="叶卡捷琳娜女皇.html">
+  <div class="noun">叶卡捷琳娜女皇</div>
+  <div class="snippet">即叶卡捷琳娜二世（1729—1796），又称叶卡捷琳娜大帝，俄罗斯罗曼诺夫王朝女皇，1762年至1796年在位。她是俄罗斯历史上唯一被冠以&quot;大帝&quot;称号的女皇，在位期间推行开明专制，通过两次俄土战争打通黑海出海口，三次参与瓜分波兰，使俄罗斯成</div>
+</a>
+<a class="entry-item" href="叶夫斯塔菲耶维奇.html">
+  <div class="noun">叶夫斯塔菲耶维奇</div>
+  <div class="snippet">皮埃尔的车夫，闻名全莫斯科，经验丰富。</div>
+</a>
+<a class="entry-item" href="叶尔莫洛夫.html">
+  <div class="noun">叶尔莫洛夫</div>
+  <div class="snippet">阿列克谢·彼得罗维奇·叶尔莫洛夫（1777-1861），俄国步兵上将、炮兵上将。1812年俄法战争期间担任西第1集团军参谋长，在博罗季诺战役中成功指挥反攻夺回拉耶夫斯基炮垒。在小雅罗斯拉维茨战役中主张便宜行事，但被多赫图罗夫坚持等候命令的做</div>
+</a>
+<a class="entry-item" href="叶尔莫洛夫将军.html">
+  <div class="noun">叶尔莫洛夫将军</div>
+  <div class="snippet">阿列克谢·彼得罗维奇·叶尔莫洛夫（1777-1861），俄国帝国时期著名将领，1812年卫国战争中担任俄军总参谋长，以果断刚毅著称。在《战争与和平》中，他下令卸掉大炮前车，做出向大桥开炮的姿态，从而疏通了被堵塞的莫斯科河桥。</div>
+</a>
+<a class="entry-item" href="叶菲姆.html">
+  <div class="noun">叶菲姆</div>
+  <div class="snippet">罗斯托夫伯爵夫人的专用老车夫，有三十年的驾车经验，沉稳耐心。</div>
+</a>
+<a class="entry-item" href="叶连娜·瓦西里耶夫娜.html">
+  <div class="noun">叶连娜·瓦西里耶夫娜</div>
+  <div class="snippet">海伦·库拉金娜的全名（含本名和父称）。她是瓦西里·库拉金公爵的女儿，以绝美著称但内心空虚，后嫁给皮埃尔·别祖霍夫，是彼得堡上流社会的交际花。</div>
+</a>
+<a class="entry-item" href="吉洪.html">
+  <div class="noun">吉洪</div>
+  <div class="snippet">博尔孔斯基公爵家的老仆、贴身侍从，服侍老公爵穿衣、扑粉、梳头。性格忠诚严谨，深知主人的习惯和规矩，是老公爵最信任的仆人。</div>
+</a>
+<a class="entry-item" href="吉洪·谢尔巴特.html">
+  <div class="noun">吉洪·谢尔巴特</div>
+  <div class="snippet">《战争与和平》中的人物，原是格扎特附近波克罗夫斯科耶村的农民，杰尼索夫游击队中最出色的一名侦察员。他携带一支短火枪、一柄长矛和一把斧头，不善骑马却从不落后于骑兵。他每夜外出侦察总能带回法国人的衣物、武器或俘虏，在队伍中占有一个特殊而不可替代</div>
+</a>
+<a class="entry-item" href="吉里尔奇克.html">
+  <div class="noun">吉里尔奇克</div>
+  <div class="snippet">大叔的猎手。</div>
+</a>
+<a class="entry-item" href="哈伦.html">
+  <div class="noun">哈伦</div>
+  <div class="snippet">亦译作卡戎（Charon），希腊神话中冥王哈迪斯的船夫，负责将亡魂渡过冥河斯堤克斯（Styx）送往冥界。古希腊人常在死者口中放置一枚钱币（奥波勒斯）作为渡河费用。</div>
+</a>
+<a class="entry-item" href="哈登贝格.html">
+  <div class="noun">哈登贝格</div>
+  <div class="snippet">全名卡尔·奥古斯特·冯·哈登贝格（1750—1822），普鲁士政治家、改革家，1810年起任普鲁士首相。他与施泰因男爵共同推动&quot;施泰因-哈登贝格改革&quot;，废除农奴制、推行经济自由化和行政现代化，为普鲁士在拿破仑战败后的复兴奠定了基础，并参与维</div>
+</a>
+<a class="entry-item" href="哥弗雷.html">
+  <div class="noun">哥弗雷</div>
+  <div class="snippet">即布永的戈弗雷（Godfrey of Bouillon，约1060—1100），第一次十字军东征的主要将领，耶路撒冷王国的建立者。他虽实际统治耶路撒冷，但拒绝称王，自号&quot;圣墓守护者&quot;。1099年率十字军攻陷耶路撒冷，建立了拉丁东方四大十字军</div>
+</a>
+<a class="entry-item" href="哥白尼.html">
+  <div class="noun">哥白尼</div>
+  <div class="snippet">尼古拉·哥白尼（1473—1543），波兰天文学家，日心说创立者。1543年出版《天体运行论》，提出太阳为宇宙中心，推翻了统治西方一千多年的托勒密地心说，开启了近代科学革命。</div>
+</a>
+<a class="entry-item" href="商人布龙尼科夫.html">
+  <div class="noun">商人布龙尼科夫</div>
+  <div class="snippet">19世纪初俄罗斯雅罗斯拉夫尔的一位富商。在1812年卫国战争期间，他的宅邸被用作收治伤兵的战地医院。托尔斯泰在《战争与和平》中将其作为安德烈·博尔孔斯基公爵负伤后被送往的医院所在地。这座被称为&quot;布龙尼科夫之家&quot;（后称&quot;博尔孔斯基之家&quot;）的建</div>
+</a>
+<a class="entry-item" href="图奇科夫.html">
+  <div class="noun">图奇科夫</div>
+  <div class="snippet">尼古拉·阿列克谢耶维奇·图奇科夫（1765-1812），俄国中将，在1812年战争中指挥俄军第3步兵军，负责波罗金诺战役左翼防线。在乌季察高地的战斗中身负重伤，不久去世。其弟亚历山大·图奇科夫亦在波罗金诺战役中阵亡，是安德烈·博尔孔斯基公爵</div>
+</a>
+<a class="entry-item" href="图托尔明.html">
+  <div class="noun">图托尔明</div>
+  <div class="snippet">伊万·阿列克谢耶维奇·图托尔明（Иван Акинфиевич Тутолмин，1752-1836），俄国慈善家，莫斯科帝国教育之家（育幼院）总监。1812年法军占领莫斯科期间组织孤儿疏散，被拿破仑召见并派往彼得堡进行和谈试探。</div>
+</a>
+<a class="entry-item" href="图申.html">
+  <div class="noun">图申</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的俄军炮兵上尉。身材矮小、其貌不扬，外表笨拙胆怯，但作战时极其英勇顽强。在申格拉本战役中，他指挥炮兵连以燃烧弹轰击申格拉本村，在无掩护的情况下坚守阵地，为俄军主力撤退争取了宝贵时间，是托尔斯泰笔下&quot;平凡人英雄&quot;的典型</div>
+</a>
+<a class="entry-item" href="图申上尉.html">
+  <div class="noun">图申上尉</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》中的炮兵上尉，是平凡英雄的典型代表。个子矮小、其貌不扬，性格腼腆憨厚，但在战场上展现出非凡勇气和责任感。在申格拉本战役中灵活操纵仅剩的四门大炮，为俄军撤退赢得宝贵时间。</div>
+</a>
+<a class="entry-item" href="土耳其人.html">
+  <div class="noun">土耳其人</div>
+  <div class="snippet">土耳其民族成员。在19世纪俄罗斯历史语境中，土耳其人主要指奥斯曼帝国的居民。俄国与奥斯曼帝国在18-19世纪多次交战。</div>
+</a>
+<a class="entry-item" href="圣徒尼古拉.html">
+  <div class="noun">圣徒尼古拉</div>
+  <div class="snippet">基督教圣人，约公元4世纪小亚细亚米拉（今土耳其境内）的主教。他以慷慨和仁慈著称，是儿童、水手、商人和贫困者的保护圣徒。在俄罗斯东正教中，圣尼古拉（俄语：Святитель Николай）是最受崇敬的圣徒之一，地位尤为尊崇。他在西方文化中演</div>
+</a>
+<a class="entry-item" href="圣约翰.html">
+  <div class="noun">圣约翰</div>
+  <div class="snippet">耶稣十二门徒之一，圣经新约中《约翰福音》、《约翰一书》、《约翰二书》、《约翰三书》和《启示录》的传统作者。小说中皮埃尔的朋友引用圣约翰《启示录》中关于兽的数目的预言来解释拿破仑的历史角色。</div>
+</a>
+<a class="entry-item" href="圣谢尔吉依.html">
+  <div class="noun">圣谢尔吉依</div>
+  <div class="snippet">俄罗斯东正教最伟大的圣徒之一，又称拉多涅日的圣谢尔盖（约1314—1392年）。他创立了谢尔盖圣三一修道院，被誉为&quot;全罗斯主保圣人&quot;。1380年库里科沃会战前为莫斯科大公德米特里·顿斯科伊祈福，预言俄军取胜。1812年俄法战争期间，主教将圣</div>
+</a>
+<a class="entry-item" href="埃克木尔王.html">
+  <div class="noun">埃克木尔王</div>
+  <div class="snippet">埃克木尔王（Prince d&#x27;Eckmühl，亦译埃克米尔亲王）是拿破仑赐予元帅路易·尼古拉·达武（1770-1823）的贵族头衔，源自1809年埃克米尔战役的胜利。达武是拿破仑帝国最杰出的元帅之一，绰号&quot;钢铁元帅&quot;，以治军严明、战术精湛著</div>
+</a>
+<a class="entry-item" href="埃克米尔公爵.html">
+  <div class="noun">埃克米尔公爵</div>
+  <div class="snippet">路易-尼古拉·达乌（Louis-Nicolas Davout，1770-1823），拿破仑麾下最优秀的元帅之一，封号埃克米尔公爵（源于1809年埃克米尔战役的胜利）。以治军严格和战术天才著称，在波罗金诺战役中指挥法军右翼，提出迂回俄军左翼的</div>
+</a>
+<a class="entry-item" href="埃尔欣根公爵.html">
+  <div class="noun">埃尔欣根公爵</div>
+  <div class="snippet">米歇尔·内伊（Michel Ney）的封号。埃尔欣根是德国巴伐利亚的一座小镇，1805年内伊在此以少胜多击败奥军，拿破仑因此赐其埃尔欣根公爵称号。此条目与内伊为同一人，为其爵位封号。</div>
+</a>
+<a class="entry-item" href="埃科诺莫夫.html">
+  <div class="noun">埃科诺莫夫</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》中的一个次要角色，俄军少校。在申格拉本战役结束后，他与团长一同站在桥边检视撤退的连队。是小说中用于丰富军事指挥体系背景的次要军官角色。</div>
+</a>
+<a class="entry-item" href="基尔斯坚.html">
+  <div class="noun">基尔斯坚</div>
+  <div class="snippet">《战争与和平》中保罗格勒骠骑兵团的骑兵上尉，身材高大、头发斑白、满脸皱纹。曾两次因决斗被降为士兵又两次复职，极为重视军人荣誉，在罗斯托夫与团长的冲突中以老前辈身份出面调解，强调兵团名誉高于一切。 --- 保罗格勒骠骑兵团的骑兵上尉，身材高大</div>
+</a>
+<a class="entry-item" href="基甸.html">
+  <div class="noun">基甸</div>
+  <div class="snippet">圣经旧约士师记中的以色列士师，率领三百人击败米甸大军，被视为以少胜多的典范。小说祷文中引用此典故祈求上帝帮助俄国击败拿破仑大军。</div>
+</a>
+<a class="entry-item" href="基邦.html">
+  <div class="noun">基邦</div>
+  <div class="snippet">托尔斯泰在历史哲学论述中将其与保克尔并列为现代史学家的代表。很可能是弗朗索瓦·基佐（Francois Guizot，1787至1874，法国历史学家、政治家，著有《欧洲文明史》）或爱德华·吉本（Edward Gibbon，1737至1794</div>
+</a>
+<a class="entry-item" href="基里尔先生.html">
+  <div class="noun">基里尔先生</div>
+  <div class="snippet">法军俘虏对皮埃尔的称呼。皮埃尔的父名为&quot;基里洛维奇&quot;，法国人不熟悉俄国的父名制度，将其简称为&quot;基里尔先生&quot;（Monsieur Kiril），反映了跨文化互动中的语言趣味。</div>
+</a>
+<a class="entry-item" href="基里拉·马特维奇.html">
+  <div class="noun">基里拉·马特维奇</div>
+  <div class="snippet">伯爵夫人的表兄，在伯爵夫人给娜塔莎讲自己年少故事时被提及。娜塔莎知道此人但认为&quot;他是个老头子&quot;。这个细节展现了伯爵夫人试图用自身经历来教导女儿。</div>
+</a>
+<a class="entry-item" href="塔列兰.html">
+  <div class="noun">塔列兰</div>
+  <div class="snippet">夏尔·莫里斯·德·塔列兰-佩里戈尔（1754—1838），法国外交家、政治家，贝内文托亲王。以圆滑善变著称，历经旧制度、大革命、拿破仑帝国、波旁复辟和七月王朝六届政权均身居要职。在维也纳会议上提出&quot;正统主义原则&quot;，成功维护了战败的法国领土完</div>
+</a>
+<a class="entry-item" href="塔塔利诺娃.html">
+  <div class="noun">塔塔利诺娃</div>
+  <div class="snippet">叶卡捷琳娜·菲利波芙娜·塔塔利诺娃（Екатерина Филипповна Татаринова），俄国神秘主义宗教领袖，在彼得堡领导&quot;属灵兄弟会&quot;团体。其教派结合东正教与狂喜崇拜，信徒通过旋转、舞蹈等仪式体验圣灵降临，吸引了不少贵族成员</div>
+</a>
+<a class="entry-item" href="塔尔马.html">
+  <div class="noun">塔尔马</div>
+  <div class="snippet">弗朗索瓦-约瑟夫·塔尔马（Francois-Joseph Talma，1763-1826），法国著名悲剧演员，拿破仑时代的戏剧大师。他改革了法国戏剧服饰和表演风格，首创历史准确的舞台服装取代当代戏装，以写实的表演风格取代了古典主义的刻板朗诵</div>
+</a>
+<a class="entry-item" href="塞巴斯蒂安尼.html">
+  <div class="noun">塞巴斯蒂安尼</div>
+  <div class="snippet">奥拉斯·塞巴斯蒂亚尼（Horace Sébastiani，1771-1851），法国军人、外交官、政治家，科西嘉人，拿破仑的同乡与支持者，1812年征俄期间指挥第2骑兵军，后获法国元帅衔。</div>
+</a>
+<a class="entry-item" href="夏尔姆夫人.html">
+  <div class="noun">夏尔姆夫人</div>
+  <div class="snippet">19世纪初莫斯科一家服务于贵族阶层的女装时装店的店主，娜塔莎·罗斯托娃经常光顾其店铺定制时装。在小说中，夏尔姆夫人时装店反映了当时俄国贵族社会对巴黎时尚的追随与崇拜。</div>
+</a>
+<a class="entry-item" href="多尔戈鲁科夫.html">
+  <div class="noun">多尔戈鲁科夫</div>
+  <div class="snippet">彼得·彼得罗维奇·多尔戈鲁科夫，俄国公爵、将军，亚历山大一世的副官长，1805年奥斯特利茨战役前作为沙皇代表与拿破仑谈判，因傲慢态度和主战立场被认为对奥斯特里茨惨败负有责任。</div>
+</a>
+<a class="entry-item" href="多尔戈鲁科夫公爵.html">
+  <div class="noun">多尔戈鲁科夫公爵</div>
+  <div class="snippet">《战争与和平》中的历史人物，沙皇亚历山大一世的侍从武官长和近臣，维绍之战的胜利者。他是联军中少壮派主战派的代表人物，主张立即进攻拿破仑，支持奥地利将军魏罗特尔的作战计划，对库图佐夫的谨慎持重缺乏耐心。他的冒进主张是奥斯特利茨战役惨败的重要原</div>
+</a>
+<a class="entry-item" href="多洛霍夫.html">
+  <div class="noun">多洛霍夫</div>
+  <div class="snippet">费奥多尔·多洛霍夫是托尔斯泰《战争与和平》中的关键配角，谢苗诺夫团的年轻军官，彼得堡上流社会中赫赫有名的赌徒、决斗家和浪子。他中等身材，鬈发，生着一对明亮的蓝眼睛，约摸二十五岁左右。他性格极为复杂矛盾：表面上是冷酷残忍的恶棍，与皮埃尔的妻子</div>
+</a>
+<a class="entry-item" href="多赫图罗夫.html">
+  <div class="noun">多赫图罗夫</div>
+  <div class="snippet">德米特里·谢尔盖耶维奇·多赫图罗夫（Dmitry Sergeyevich Dokhturov，1756—1816），俄国步兵上将，1812年卫国战争英雄。以坚韧可靠著称，参与过奥斯特里茨战役、博罗季诺战役、小雅罗斯拉韦茨之战等关键战役。托尔</div>
+</a>
+<a class="entry-item" href="大公爵小姐.html">
+  <div class="noun">大公爵小姐</div>
+  <div class="snippet">俄语Великая Княжна，俄罗斯帝国时期沙皇/皇帝未出嫁的女儿或女性皇室成员的称号。在小说中指别祖霍夫伯爵的侄女们，即老伯爵死后住在别祖霍夫家的三位公爵小姐，其中最大的那位身材修长、发型如洋娃娃，最年幼的生有黑痣。</div>
+</a>
+<a class="entry-item" href="大卫.html">
+  <div class="noun">大卫</div>
+  <div class="snippet">圣经旧约中的以色列国王，少年时以投石击杀非利士巨人歌利亚而闻名。小说祷文中引用大卫战胜歌利亚的典故祈求上帝护佑俄国。</div>
+</a>
+<a class="entry-item" href="大叔.html">
+  <div class="noun">大叔</div>
+  <div class="snippet">罗斯托夫家的远亲乡邻，不富裕的邻人，口头禅&quot;没得说哇&quot;，参与联合猎狼。 --- 大叔全名米哈伊尔·尼卡诺雷奇，是《战争与和平》中尼古拉·罗斯托夫和娜塔莎·罗斯托娃的叔叔，属于罗斯托夫家族的旁系亲属。他是一位老派的贵族猎人，性格直率、固执而富</div>
+</a>
+<a class="entry-item" href="大叔（米哈伊尔·尼卡诺雷奇）.html">
+  <div class="noun">大叔（米哈伊尔·尼卡诺雷奇）</div>
+  <div class="snippet">罗斯托夫家的亲戚，住在米哈伊洛夫卡村。经验丰富的老猎人，打猎高手。打猎后邀请尼古拉、娜塔莎和彼佳到家中过夜，弹吉他唱民歌，娜塔莎随之跳起俄罗斯民间舞蹈（著名的&quot;娜塔莎之舞&quot;）。 --- 罗斯托夫伯爵夫人的兄弟，乡村地主，全省闻名的最高尚最无</div>
+</a>
+<a class="entry-item" href="大耗子贝科夫.html">
+  <div class="noun">大耗子贝科夫</div>
+  <div class="snippet">《战争与和平》中军官们给一名军官起的外号，意为&quot;大耗子&quot;。杰尼索夫在赌局中提到被此人赢光了钱，称其&quot;见小注就让，见大注就吃&quot;。</div>
+</a>
+<a class="entry-item" href="奇恰戈夫.html">
+  <div class="noun">奇恰戈夫</div>
+  <div class="snippet">帕维尔·瓦西里耶维奇·奇恰戈夫（1767-1849），俄国海军上将，1807年任海军大臣，1812年卫国战争中出任俄国第三集团军（多瑙河集团军）司令。在别列津纳河战役中负责拦截拿破仑退路，因被法军佯动迷惑、未能与维特根施泰因部紧密配合，导致</div>
+</a>
+<a class="entry-item" href="奥古斯丁神父.html">
+  <div class="noun">奥古斯丁神父</div>
+  <div class="snippet">1812年莫斯科东正教神父（都主教），拿破仑逼近莫斯科时，拉斯托普钦时而禁止他搬走圣者遗骸和圣像，行为反复无常。</div>
+</a>
+<a class="entry-item" href="奥国公主.html">
+  <div class="noun">奥国公主</div>
+  <div class="snippet">玛丽·路易丝（Marie Louise of Austria，1791-1847），奥地利帝国公主，神圣罗马帝国末代皇帝弗朗茨二世之女。1810年成为拿破仑一世的第二任皇后，1811年生下拿破仑二世（罗马王）。拿破仑战败后离开法国，后成为帕</div>
+</a>
+<a class="entry-item" href="奥尔斯珀格.html">
+  <div class="noun">奥尔斯珀格</div>
+  <div class="snippet">卡尔·冯·奥尔斯珀格伯爵（Karl Fürst von Auersperg），奥地利将军，负责守卫维也纳塔博尔桥。1805年11月13日被缪拉和拉纳的诈术欺骗，未炸毁桥梁便将其拱手让给法军，后被军事法庭定罪。</div>
+</a>
+<a class="entry-item" href="奥尔洛夫－杰尼索夫伯爵.html">
+  <div class="noun">奥尔洛夫－杰尼索夫伯爵</div>
+  <div class="snippet">瓦西里·瓦西里耶维奇·奥尔洛夫-杰尼索夫（1775—1843），俄国顿河哥萨克名将，伯爵。出身哥萨克名门，12岁服役，13岁升百人长。1812年卫国战争中指挥哥萨克部队在塔鲁丁诺战役突袭缪拉法军前卫，缴获38门大炮、俘虏1500人；后参加利</div>
+</a>
+<a class="entry-item" href="奥尔登堡大公.html">
+  <div class="noun">奥尔登堡大公</div>
+  <div class="snippet">奥尔登堡公国的统治者，俄国沙皇亚历山大一世的亲戚（其妹夫）。1810年拿破仑吞并了奥尔登堡公国，这一行为直接冒犯了沙皇亚历山大一世，成为俄法关系破裂的重要导火索之一，也是小说中众多人物反复讨论的政治事件。</div>
+</a>
+<a class="entry-item" href="奥斯特曼-托尔斯泰伯爵.html">
+  <div class="noun">奥斯特曼-托尔斯泰伯爵</div>
+  <div class="snippet">亚历山大·伊万诺维奇·奥斯特曼-托尔斯泰伯爵（1770-1857），俄军步兵上将，出身托尔斯泰家族。14岁从军，参加俄土战争和伊兹梅尔战役。拿破仑战争中指挥第4步兵军参加1812年卫国战争，在奥斯特罗夫纳战役中以&quot;坚守阵地，战死为止&quot;的命令</div>
+</a>
+<a class="entry-item" href="奥斯特曼师长.html">
+  <div class="noun">奥斯特曼师长</div>
+  <div class="snippet">亚历山大·伊万诺维奇·奥斯特曼·托尔斯泰，1770-1857年，1806年任俄军第2师师长，后成为1812年卫国战争的独臂英雄，列夫·托尔斯泰的远亲。</div>
+</a>
+<a class="entry-item" href="奥皇.html">
+  <div class="noun">奥皇</div>
+  <div class="snippet">指神圣罗马帝国末代皇帝兼奥地利帝国第一位皇帝弗朗茨二世（Franz II，1768–1835年在世）。他在拿破仑战争期间扮演关键角色，1805年与沙皇亚历山大一世组成第三次反法同盟，在奥斯特里茨战役（即三皇会战）中惨败于拿破仑。战后面临神圣</div>
+</a>
+<a class="entry-item" href="奥西普·阿列克谢耶维奇.html">
+  <div class="noun">奥西普·阿列克谢耶维奇</div>
+  <div class="snippet">皮埃尔的精神导师，资深共济会员。他在驿站偶遇皮埃尔并指引其走上道德修养之路，是促使皮埃尔加入共济会的关键人物。</div>
+</a>
+<a class="entry-item" href="奥西普·阿列克谢耶维奇·巴兹杰耶夫.html">
+  <div class="noun">奥西普·阿列克谢耶维奇·巴兹杰耶夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的人物，共济会成员，在驿站与精神迷茫的皮埃尔相遇，引导其皈依共济会。原名Осип Алексеевич Баздеев，为诺维科夫时期最有名望的共济会员和马丁主义者。</div>
+</a>
+<a class="entry-item" href="女仆.html">
+  <div class="noun">女仆</div>
+  <div class="snippet">贵族家庭中做杂役的女性仆人，此章中女仆提醒玛丽亚去叫接生婆。</div>
+</a>
+<a class="entry-item" href="威廉·皮特.html">
+  <div class="noun">威廉·皮特</div>
+  <div class="snippet">英国政治家，通称小皮特，1783年24岁出任首相至今仍是英国史上最年轻首相，领导英国对抗法国大革命和拿破仑战争，三次筹组反法同盟，推行财政改革与自由市场政策。</div>
+</a>
+<a class="entry-item" href="娜塔什卡.html">
+  <div class="noun">娜塔什卡</div>
+  <div class="snippet">娜塔莎·罗斯托娃的俄语昵称（Наташка/Natashka）的中文音译。尼古拉·罗斯托夫在半睡半醒中念叨妹妹名字，语音粘连听起来近似&quot;图囊&quot;。</div>
+</a>
+<a class="entry-item" href="娜塔莎.html">
+  <div class="noun">娜塔莎</div>
+  <div class="snippet">娜塔莎·罗斯托娃，托尔斯泰《战争与和平》中的女主角，罗斯托夫伯爵的次女。她是生命和幸福的化身，性格热情活泼、天真浪漫。经历了与安德烈订婚、被阿纳托利诱惑、战争中成长等历程，最终与皮埃尔结婚，成为贤妻良母。 --- 娜塔莉娅·伊里尼奇娜·罗斯</div>
+</a>
+<a class="entry-item" href="娜塔莎(罗斯托娃).html">
+  <div class="noun">娜塔莎(罗斯托娃)</div>
+  <div class="snippet">全名纳塔利娅·伊利尼奇娜·罗斯托娃，昵称娜塔莎，小说核心女主人公。罗斯托夫伯爵的小女儿。在本章中，安德烈公爵造访罗斯托夫家时，她穿蓝色家常连衣裙，比穿舞衣还好看。她的歌声深深打动了安德烈公爵，使他感动得流泪。她在贝格家的晚会上见到安德烈公爵</div>
+</a>
+<a class="entry-item" href="娜塔莎·罗斯托娃.html">
+  <div class="noun">娜塔莎·罗斯托娃</div>
+  <div class="snippet">娜塔莎·罗斯托娃（Natasha Rostova），全名纳塔利娅·伊里奇娜·罗斯托娃，罗斯托夫伯爵的次女，小说女主角。活泼天真，热情奔放，是&quot;生命和幸福的化身&quot;。与安德烈·博尔孔斯基订婚，后被阿纳托利·库拉金诱惑导致婚约破裂。1812年战争</div>
+</a>
+<a class="entry-item" href="娜塔莎（别祖霍娃）.html">
+  <div class="noun">娜塔莎（别祖霍娃）</div>
+  <div class="snippet">娜塔莎·伊里尼奇娜·罗斯托娃婚后随夫姓别祖霍娃，是《战争与和平》的女主角。1813年初春与皮埃尔·别祖霍夫结婚，到1820年已生了三个女儿和一个儿子。婚后她发胖变宽，从苗条活泼的少女转变为健壮、美丽的贤妻良母，全心投入家庭和育儿，不再参加社</div>
+</a>
+<a class="entry-item" href="娜斯塔西娅·伊万诺夫娜.html">
+  <div class="noun">娜斯塔西娅·伊万诺夫娜</div>
+  <div class="snippet">罗斯托夫家的小丑，身穿敞胸女上衣，说话诙谐无忌。在俄国贵族家庭中常有养着小丑或食客的传统，他们多为破落贵族或家奴出身，以插科打诨供主人取乐。当娜塔莎问她会生什么时，她以跳蚤、蜻蜓、蝈蝈玩笑作答。</div>
+</a>
+<a class="entry-item" href="孟德斯鸠.html">
+  <div class="noun">孟德斯鸠</div>
+  <div class="snippet">查理·路易·孟德斯鸠（1689-1755），法国启蒙思想家、法学家，代表作《论法的精神》（1748年）。 提出著名的三权分立学说和政体分类理论：共和政体以品德为原则、君主政体以荣誉为原则、 专制政体以恐惧为原则。认为君主政体无需人民具备政治</div>
+</a>
+<a class="entry-item" href="季姆勒.html">
+  <div class="noun">季姆勒</div>
+  <div class="snippet">罗斯托夫家寄居的德国籍音乐教师，全名爱德华·卡尔雷奇·季姆勒（Herr Dimmler）。 携妻子一同住在伯爵家，擅长弹奏竖琴和古钢琴。伯爵夫人请他弹奏菲尔德《夜曲》时， 他闭目谛听娜塔莎的歌声并赞叹为欧洲水平的才能。圣诞节化装舞会中化装成</div>
+</a>
+<a class="entry-item" href="季特.html">
+  <div class="noun">季特</div>
+  <div class="snippet">俄语名字Тит（Tit）的音译。在《战争与和平》中，&quot;季特&quot;与&quot;打禾&quot;（молотить）在俄语中形成押韵的民间俏皮话，是士兵间相互调侃的玩笑。</div>
+</a>
+<a class="entry-item" href="季莫欣.html">
+  <div class="noun">季莫欣</div>
+  <div class="snippet">俄军上尉，第三连连长，红鼻子，在伊兹梅尔战役中被枪托打掉两颗门牙。库图佐夫的老战友，被其称为&quot;勇敢的军官&quot;和&quot;巴克斯的信徒&quot;。季莫欣性格和善忠实，是托尔斯泰塑造的普通俄罗斯军官的典型形象。</div>
+</a>
+<a class="entry-item" href="安内特.html">
+  <div class="noun">安内特</div>
+  <div class="snippet">安娜·帕夫洛夫娜·舍列尔（Annette Scherer），太后玛丽亚·费奥多罗夫娜的宫廷女官，彼得堡著名沙龙的女性主人，全书第一个出场的人物，以热情而略带做作的社交风格闻名。</div>
+</a>
+<a class="entry-item" href="安娜·帕夫洛夫娜.html">
+  <div class="noun">安娜·帕夫洛夫娜</div>
+  <div class="snippet">安娜·帕夫洛夫娜·舍列尔，彼得堡上流社会的宫廷女官，太后玛丽亚·费奥多罗夫娜的亲信，约40岁，在彼得堡主持著名沙龙，是小说开篇第一个出场的重要人物。她善于社交应酬，充满活力，通过她的晚会将主要人物一一引入读者视野。</div>
+</a>
+<a class="entry-item" href="安娜·帕夫洛夫娜·舍列尔.html">
+  <div class="noun">安娜·帕夫洛夫娜·舍列尔</div>
+  <div class="snippet">太后玛丽亚·费奥多罗夫娜的宫廷女官和亲信，小说中第一个出场的人物。1805年7月在彼得堡举办沙龙晚会，全书主要人物在此悉数登场。善于周旋于上流社会，具有廷臣的机敏灵活，强烈反拿破仑，拥护亚历山大皇帝。托尔斯泰形容她像一台晚会的&quot;机器&quot;。</div>
+</a>
+<a class="entry-item" href="安娜·玛卡罗夫娜.html">
+  <div class="noun">安娜·玛卡罗夫娜</div>
+  <div class="snippet">《战争与和平》尾声中出现的人物，是罗斯托夫/别祖霍夫大家庭中的一位老年女仆或女伴。她的独特绝技是能用一副织针同时织出一双袜子，织好后从一只袜子里抽出另一只来，令孩子们惊叹不已。她所引发的孩子们的欢笑声被皮埃尔称为&quot;悦耳的音乐&quot;，象征着战后和</div>
+</a>
+<a class="entry-item" href="安娜·米哈伊洛夫娜.html">
+  <div class="noun">安娜·米哈伊洛夫娜</div>
+  <div class="snippet">小说《战争与和平》中的配角，全名安娜·米哈伊洛夫娜·德鲁别茨卡娅（Анна Михайловна Друбецкая）。她是一位没落贵族出身的公爵夫人，将全部希望寄托在独生子鲍里斯的前程上，为此不惜四处奔走钻营。她是别祖霍夫伯爵的远房亲戚，</div>
+</a>
+<a class="entry-item" href="安娜·米哈伊洛夫娜(德鲁别茨卡娅).html">
+  <div class="noun">安娜·米哈伊洛夫娜(德鲁别茨卡娅)</div>
+  <div class="snippet">安娜·米哈伊洛夫娜·德鲁别茨卡娅（Анна Михайловна Друбецкая），《战争与和平》中鲍里斯·德鲁别茨科伊的母亲。她出身古老的公爵家族但已没落，为了儿子的前程四处奔走，善于钻营。在小说开头她成功为儿子在近卫军中谋得职位。在</div>
+</a>
+<a class="entry-item" href="安德烈·博尔孔斯基.html">
+  <div class="noun">安德烈·博尔孔斯基</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的核心男主角之一，博尔孔斯基家族继承人，库图佐夫的副官。他性格孤傲正直，追求功名却经历幻灭，在1812年战争中受重伤去世。他在临终前领悟到爱与宽恕的真谛，是小说中最具悲剧色彩和精神成长弧光的角色。 --- 小说核心男</div>
+</a>
+<a class="entry-item" href="安德烈·博尔孔斯基(安德烈公爵).html">
+  <div class="noun">安德烈·博尔孔斯基(安德烈公爵)</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵，博尔孔斯基家族长子，小说核心男主角之一。聪明正直、孤傲不群，厌恶上流社会虚伪，追求理想与功名。经历了奥斯特利茨战役受重伤、妻子丽莎难产去世、与娜塔莎订婚又解除婚约等重大人生波折，最终在1812年波罗底诺战役中受重伤去</div>
+</a>
+<a class="entry-item" href="安德烈·博尔孔斯基公爵.html">
+  <div class="noun">安德烈·博尔孔斯基公爵</div>
+  <div class="snippet">《战争与和平》核心人物之一，沙俄公爵，博尔孔斯基家族长子，库图佐夫的副官。性格孤傲正直、才华出众，追求荣誉与理想。经历了从崇拜拿破仑到幻灭再到领悟生命真谛的精神转变，最终在波罗底诺战役中受重伤去世。 --- 全书核心男主角之一，博尔孔斯基公</div>
+</a>
+<a class="entry-item" href="安德烈·库尔布斯基.html">
+  <div class="noun">安德烈·库尔布斯基</div>
+  <div class="snippet">安德烈·库尔布斯基亲王（1528—1583），俄国贵族、军事统帅，留里克王朝后裔。曾为伊凡四世重臣，1564年叛逃立陶宛。以与伊凡四世的长篇书信论战闻名。</div>
+</a>
+<a class="entry-item" href="安德烈·萨沃斯季亚诺夫.html">
+  <div class="noun">安德烈·萨沃斯季亚诺夫</div>
+  <div class="snippet">菲利村的一位农民，他的农舍被用作1812年俄军军事会议的会场。他是库图佐夫召开决定莫斯科命运的重要会议时借住的屋主。他的孙女玛拉莎在炕炉上目睹了会议过程。</div>
+</a>
+<a class="entry-item" href="安德烈·谢瓦斯季扬内奇.html">
+  <div class="noun">安德烈·谢瓦斯季扬内奇</div>
+  <div class="snippet">保罗格勒骠骑兵团的一名大尉（连长），经验丰富的骑兵军官。在奥斯特罗夫纳战役中，罗斯托夫在率领骑兵连发起冲锋前向他征求意见，他肯定了罗斯托夫的判断，是一位稳重干练、得到部下信任的基层指挥官。</div>
+</a>
+<a class="entry-item" href="安德烈公爵.html">
+  <div class="noun">安德烈公爵</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵，托尔斯泰《战争与和平》的核心男主角之一，沙俄公爵，博尔孔斯基家族长子。性格孤傲正直，追求理想，厌恶上流社会虚伪，后参加1812年卫国战争并在波罗底诺战役中受重伤去世。 --- 全名安德烈·博尔孔斯基公爵，托尔斯泰《战</div>
+</a>
+<a class="entry-item" href="安德烈公爵(博尔孔斯基).html">
+  <div class="noun">安德烈公爵(博尔孔斯基)</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵是《战争与和平》的男主角之一，博尔孔斯基家族长子。他才智超群、孤傲正直，厌恶上流社会虚伪。本卷中他在彼得堡结识斯佩兰斯基并出任军事条例委员会委员。一生经历追求荣誉与幻灭、爱情与背叛、献身与超脱三个阶段，临终领悟&quot;爱是生</div>
+</a>
+<a class="entry-item" href="安德留沙.html">
+  <div class="noun">安德留沙</div>
+  <div class="snippet">《战争与和平》中尼古拉·罗斯托夫与玛丽亚公爵小姐的长子，全名安德烈·尼古拉耶维奇·罗斯托夫，昵称安德留沙。名字继承自舅舅安德烈·博尔孔斯基公爵。在尾声部分，玛丽亚写育儿日记记录安德留沙的成长，是个活泼任性、对母亲充满依恋的孩子。 --- 全</div>
+</a>
+<a class="entry-item" href="安菲罗夫家.html">
+  <div class="noun">安菲罗夫家</div>
+  <div class="snippet">《战争与和平》中提到的莫斯科一户人家，在莫斯科大火期间遭遇混乱。人群中的助祭和麻脸女人讨论皮埃尔所寻小孩是否属于安菲罗夫家，最终被认为安菲罗夫家一早就已撤离。</div>
+</a>
+<a class="entry-item" href="家奴.html">
+  <div class="noun">家奴</div>
+  <div class="snippet">俄国贵族家庭中的农奴仆人，没有人身自由。此章描写家奴们在分娩之夜点着松明守候。</div>
+</a>
+<a class="entry-item" href="富歇.html">
+  <div class="noun">富歇</div>
+  <div class="snippet">路易-弗朗索瓦·富歇·德·卡雷伊（Louis-François Fouché de Careil，1762—1835），法国炮兵将军，1812年俄法战争期间担任内伊元帅第三军炮兵司令，参加了波罗金诺战役，负责指挥第三、第八兵团的榴弹炮轰击俄</div>
+</a>
+<a class="entry-item" href="将军.html">
+  <div class="noun">将军</div>
+  <div class="snippet">《战争与和平》中在罗斯托夫家晚会上与皮埃尔打牌、后又与上校争论西班牙问题的将军，属于社交场合的次要人物，体现了当时贵族聚会的日常消遣场景。</div>
+</a>
+<a class="entry-item" href="小公爵夫人.html">
+  <div class="noun">小公爵夫人</div>
+  <div class="snippet">丽莎·博尔孔斯卡娅，安德烈公爵的妻子，俄军总司令库图佐夫的侄女。性格活泼迷人，热爱社交，因安德烈厌倦上流社会而被送往乡下童山庄园，最终难产而死。 --- 全名丽莎·博尔孔斯卡娅（丽莎韦塔·卡尔洛夫娜），安德烈公爵的妻子，被称为&quot;小公爵夫人&quot;</div>
+</a>
+<a class="entry-item" href="小博尔孔斯基公爵.html">
+  <div class="noun">小博尔孔斯基公爵</div>
+  <div class="snippet">安德烈·博尔孔斯基与玛丽亚之父，全名尼古拉·安德烈耶维奇·博尔孔斯基公爵，曾任沙俄陆军元帅。以严厉闻名，在家中绝对主导。退居庄园后与朝廷疏远，保持忠贞为国的老贵族古风。不同意安德烈续娶娜塔莎，要求驻守边疆一年以考验爱情。1812年卫国战争中</div>
+</a>
+<a class="entry-item" href="小娜塔莎（罗斯托夫之女）.html">
+  <div class="noun">小娜塔莎（罗斯托夫之女）</div>
+  <div class="snippet">全名纳塔利娅·尼古拉耶夫娜·罗斯托娃，尼古拉·罗斯托夫与玛丽亚伯爵夫人的女儿（三岁），是尾声中出现的小女儿。她活泼大胆，趁母亲不备跑到父亲睡觉的房间，发现父亲在微笑，展现了她天真可爱的性格。小说中称其为&quot;爸爸的宝贝女儿，三岁的黑眼睛的小娜塔</div>
+</a>
+<a class="entry-item" href="小店主.html">
+  <div class="noun">小店主</div>
+  <div class="snippet">被法军巡逻队逮捕的俄国嫌疑犯之一，属于莫斯科城中经营小商铺的平民阶层。在小说中他与中学生、农民、家奴等人一同被法军怀疑为纵火犯。</div>
+</a>
+<a class="entry-item" href="小科科.html">
+  <div class="noun">小科科</div>
+  <div class="snippet">小科科是《战争与和平》中安德烈·博尔孔斯基公爵的儿子（尼古拉·安德烈耶维奇·博尔孔斯基的昵称），玛丽亚公爵小姐的侄子。母亲已故，由姑母玛丽亚和祖父老博尔孔斯基公爵抚养。在本卷开头，玛丽亚公爵小姐因深爱小科科而放弃了自己出走的念头。</div>
+</a>
+<a class="entry-item" href="尤苏波娃公爵夫人.html">
+  <div class="noun">尤苏波娃公爵夫人</div>
+  <div class="snippet">小说中极次要的贵族人物，出自俄国历史上最显赫的贵族家族之一尤苏波夫家族。在本章中被贝格提及一次——他指着薇拉的披肩说与尤苏波娃公爵夫人的一模一样，以此炫耀妻子的衣着品位和自身社交地位。</div>
+</a>
+<a class="entry-item" href="尼古卢什卡.html">
+  <div class="noun">尼古卢什卡</div>
+  <div class="snippet">全名尼古拉·安德烈耶维奇·博尔孔斯基（昵称尼古卢什卡、尼古连卡），安德烈·博尔孔斯基公爵与第一任妻子丽莎所生的儿子。母亲在他出生时难产去世，父亲战死于1812年波罗底诺战役后由姑母玛丽亚公爵小姐抚养长大。在小说尾声中，少年尼古连卡做了一个有</div>
+</a>
+<a class="entry-item" href="尼古卢什卡(小尼古拉·安德烈耶维奇·博尔孔斯基).html">
+  <div class="noun">尼古卢什卡(小尼古拉·安德烈耶维奇·博尔孔斯基)</div>
+  <div class="snippet">小尼古拉·安德烈耶维奇·博尔孔斯基，昵称尼古卢什卡或尼古连卡，安德烈公爵与亡妻丽莎的儿子。母亲丽莎因难产去世，由姑姑玛丽亚公爵小姐在童山抚养长大。老尼古拉公爵曾担忧孩子被玛丽亚&quot;养成老处女&quot;。在小说尾声中长大成为少年，梦见自己继承父亲的英雄</div>
+</a>
+<a class="entry-item" href="尼古拉.html">
+  <div class="noun">尼古拉</div>
+  <div class="snippet">全名尼古拉·伊里奇·罗斯托夫，罗斯托夫伯爵家的长子，单纯善良、崇尚荣誉的贵族青年军官。在申格拉本战役中初次参战，后被多洛霍夫设局赌博输掉巨款，最终与玛丽亚公爵小姐结婚，成为精明的庄园主。他是小说中最能体现俄国宗法制贵族精神的人物之一。 --</div>
+</a>
+<a class="entry-item" href="尼古拉·博尔孔斯基老公爵.html">
+  <div class="noun">尼古拉·博尔孔斯基老公爵</div>
+  <div class="snippet">尼古拉·安德烈伊奇·博尔孔斯基公爵，退役大将，博尔孔斯基家族族长，安德烈公爵和玛丽亚公爵小姐的父亲。性格严厉专制冷酷，崇尚理性和秩序，鄙视迷信和上流社会的浮华，隐居在童山庄园。曾参加叶卡捷琳娜女皇时代的战争，在上流社会有&quot;普鲁士王&quot;之称。</div>
+</a>
+<a class="entry-item" href="尼古拉·博尔孔斯基（小尼古卢什卡）.html">
+  <div class="noun">尼古拉·博尔孔斯基（小尼古卢什卡）</div>
+  <div class="snippet">小尼古拉·安德烈耶维奇·博尔孔斯基，昵称小尼古卢什卡，是安德烈·博尔孔斯基公爵与已故妻子丽莎（小公爵夫人）的儿子。祖父老博尔孔斯基公爵叫他尼古拉小公爵，由保姆萨维什娜和奶母照料，姑姑玛丽亚公爵小姐视其为生活中最大的欢乐之一。</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈伊奇.html">
+  <div class="noun">尼古拉·安德烈伊奇</div>
+  <div class="snippet">安德烈公爵与已故小公爵夫人丽莎之子，即小尼古拉·博尔孔斯基公爵。在小公爵夫人难产死后五天受洗，祖父老公爵尼古拉·安德烈伊奇（与孙子同名）担任教父，玛丽亚公爵小姐担任教母。</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈伊奇·博尔孔斯基.html">
+  <div class="noun">尼古拉·安德烈伊奇·博尔孔斯基</div>
+  <div class="snippet">托尔斯泰《战争与和平》中博尔孔斯基家族的家长，安德烈·博尔孔斯基公爵和玛丽亚公爵小姐的父亲，一位退休的上将级老将军。性格严厉固执、脾气暴躁，人生信条为两大美德是&quot;活动和智慧&quot;，两大万恶之源是&quot;游手好闲和迷信&quot;。生活极其规律精确到分秒。极度蔑</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈伊奇·博尔孔斯基公爵.html">
+  <div class="noun">尼古拉·安德烈伊奇·博尔孔斯基公爵</div>
+  <div class="snippet">博尔孔斯基家族的家长，叶卡捷琳娜二世时代的陆军上将，退休后隐居童山庄园。性格严厉专制、精力充沛，视无所事事和迷信为人类罪恶根源，崇尚活动与才智。对女儿玛丽亚严苛却深藏父爱，后于1812年战争中中风去世。 --- 安德烈公爵的父亲，退役陆军元</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈耶维奇·博尔孔斯基.html">
+  <div class="noun">尼古拉·安德烈耶维奇·博尔孔斯基</div>
+  <div class="snippet">退役陆军上将，在社交界绰号&quot;普鲁士王&quot;，博尔孔斯基家族的族长，安德烈·博尔孔斯基公爵和玛丽亚·博尔孔斯卡娅的父亲。在保罗皇帝时代被放逐到乡下领地童山，性格严厉倔强，崇尚秩序和活动，认为人有两个万恶之源（游手好闲和迷信）和两个美德（活动和智慧</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈耶维奇·博尔孔斯基(老公爵).html">
+  <div class="noun">尼古拉·安德烈耶维奇·博尔孔斯基(老公爵)</div>
+  <div class="snippet">尼古拉·安德烈耶维奇·博尔孔斯基公爵，博尔孔斯基家族的一家之长，安德烈公爵和玛丽亚公爵小姐的父亲。叶卡捷琳娜女皇时期的退役大将，绰号&quot;普鲁士王&quot;，因保罗皇帝时期被放逐而隐居童山庄园。性格严厉暴躁、高傲自尊，晚年脾气每况愈下，将对儿子不满的情</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈耶维奇·博尔孔斯基公爵.html">
+  <div class="noun">尼古拉·安德烈耶维奇·博尔孔斯基公爵</div>
+  <div class="snippet">博尔孔斯基家族的一家之长，陆军上将，绰号&quot;普鲁士王&quot;。安德烈·博尔孔斯基公爵的父亲，玛丽亚公爵小姐的父亲。性格严厉专制，崇尚行动与智慧，生活高度有序，在保罗皇帝时代被流放到乡下后隐居庄园&quot;童山&quot;（秃山），亲自教授女儿代数和几何。</div>
+</a>
+<a class="entry-item" href="尼古拉·安德烈耶维奇公爵.html">
+  <div class="noun">尼古拉·安德烈耶维奇公爵</div>
+  <div class="snippet">博尔孔斯基家族的族长，安德烈公爵和玛丽亚公爵小姐的父亲，陆军上将，退隐庄园后以严厉、刻板和智慧著称，是旧式俄罗斯贵族的典型代表。 --- 托尔斯泰《战争与和平》中博尔孔斯基家族的家长，安德烈公爵和玛丽亚公爵小姐的父亲，退职老军官，绰号&quot;普鲁</div>
+</a>
+<a class="entry-item" href="尼古拉·拉斯托普钦.html">
+  <div class="noun">尼古拉·拉斯托普钦</div>
+  <div class="snippet">即拉斯托普钦伯爵，1812年莫斯科总督，负责莫斯科的防务和秩序。沙皇亚历山大一世曾致信他关于列比赫气球的制造和使用。</div>
+</a>
+<a class="entry-item" href="尼古拉·罗斯托夫.html">
+  <div class="noun">尼古拉·罗斯托夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的核心人物之一，罗斯托夫伯爵的长子。他是一名骠骑兵军官，性格单纯热情、崇尚武力和爱国精神。他狂热崇拜沙皇亚历山大一世，坚信&quot;俄国人要么是死，要么是胜利&quot;。青年时期与表妹索尼娅相恋，后与玛丽亚·博尔孔斯卡娅公爵小姐结婚</div>
+</a>
+<a class="entry-item" href="尼古拉（化装舞会中的骠骑兵）.html">
+  <div class="noun">尼古拉（化装舞会中的骠骑兵）</div>
+  <div class="snippet">此处指化装舞会上扮骠骑兵的年轻人，实际上是娜塔莎·罗斯托娃所扮（而非指尼古拉·罗斯托夫）。文本中众人欢呼「骠骑兵，骠骑兵」称赞的是装扮成骠骑兵的娜塔莎，她穿上男装后「简直像男孩子」，展现了圣诞化装舞会中性别反串的欢乐气氛。</div>
+</a>
+<a class="entry-item" href="尼古连卡·博尔孔斯基.html">
+  <div class="noun">尼古连卡·博尔孔斯基</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵与第一位妻子丽莎所生之子，全名尼古拉·安德烈耶维奇·博尔孔斯基（尼古连卡为昵称）。父亲安德烈在1812年战争中阵亡后，由姑母玛丽亚公爵小姐抚养长大。在小说完结时约15岁，生性聪慧、孱弱，崇拜皮埃尔·别祖霍夫，渴望继承父</div>
+</a>
+<a class="entry-item" href="尼基塔.html">
+  <div class="noun">尼基塔</div>
+  <div class="snippet">尼基塔是梅柳科娃家的男仆，在化装舞会上被女主人招呼搬动桌子以便腾出空间跳舞做游戏。他是俄国贵族家庭中众多无名仆役之一，在这个片段中体现了贵族家庭中主仆关系的日常运作。</div>
+</a>
+<a class="entry-item" href="尼基琴科.html">
+  <div class="noun">尼基琴科</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》中的一个次要角色，保罗格勒骠骑兵团的一名士兵。在申格拉本战役中，他在骑兵冲锋时奔驰在尼古拉·罗斯托夫的前面，后来从罗斯托夫身边离开。是一个用于丰富战争场景真实感的次要人物。</div>
+</a>
+<a class="entry-item" href="屠格涅夫.html">
+  <div class="noun">屠格涅夫</div>
+  <div class="snippet">伊万·谢尔盖耶维奇·屠格涅夫，俄国现实主义小说家、诗人、剧作家，1818年出生，1883年去世。代表作有《猎人笔记》《父与子》《罗亭》《贵族之家》等，与托尔斯泰、陀思妥耶夫斯基并称为俄国文学三大巨匠。</div>
+</a>
+<a class="entry-item" href="巡礼者.html">
+  <div class="noun">巡礼者</div>
+  <div class="snippet">指东正教传统中四处朝拜圣地、修道院的宗教信徒，即朝圣者。在俄国文化中，巡礼者被视为具有宗教虔诚的修行者。小说中老公爵命令把他们赶走，而玛丽亚公爵小姐则坚持接待。</div>
+</a>
+<a class="entry-item" href="巴克莱·德·托利.html">
+  <div class="noun">巴克莱·德·托利</div>
+  <div class="snippet">Mikhail Bogdanovich Barclay de Tolly（1761–1818），俄罗斯帝国陆军元帅，苏格兰裔。1810–1812年任俄罗斯战争大臣，1812年俄法战争初期任第一西方军团司令，提出并实施焦土战术和诱敌深入战略。</div>
+</a>
+<a class="entry-item" href="巴克莱和巴格拉季翁.html">
+  <div class="noun">巴克莱和巴格拉季翁</div>
+  <div class="snippet">俄军两位重要将领，巴克莱·德·托利和巴格拉季翁。在舍瓦尔金诺战役时两人都认为舍瓦尔金诺多面堡是俄军阵地的左翼而非前哨。</div>
+</a>
+<a class="entry-item" href="巴克雷.html">
+  <div class="noun">巴克雷</div>
+  <div class="snippet">米哈伊尔·波格丹诺维奇·巴克莱·德·托利（1761-1818），俄国陆军元帅、亲王。1810-1813年任俄国战争大臣，1812年拿破仑侵俄期间任西部第一军团司令，提出并实施焦土战略和战略撤退。因撤退策略遭朝野误解，后由库图佐夫接替总司令职</div>
+</a>
+<a class="entry-item" href="巴克雷·德·托利.html">
+  <div class="noun">巴克雷·德·托利</div>
+  <div class="snippet">俄国陆军元帅（1761-1818），全名米哈伊尔·巴克雷·德·托利，苏格兰裔。1812年俄法战争时期任俄军第一西方军团司令兼陆军大臣，提出并实施向俄国腹地战略性撤退的持久战方针，保存了俄军主力，但因放弃大片领土而遭受舆论抨击，后由库图佐夫接</div>
+</a>
+<a class="entry-item" href="巴兹杰耶夫.html">
+  <div class="noun">巴兹杰耶夫</div>
+  <div class="snippet">即奥西普·阿列克谢耶维奇·巴兹杰耶夫的简称，托尔斯泰《战争与和平》中的重要配角，共济会员，皮埃尔的精神导师，去世后皮埃尔曾住进其空宅并整理其图书手稿。</div>
+</a>
+<a class="entry-item" href="巴戈乌特.html">
+  <div class="noun">巴戈乌特</div>
+  <div class="snippet">卡尔·费奥多罗维奇·巴戈乌特（1761—1812），俄国步兵上将，波罗的海德意志裔。参加过俄土战争等多场战役。在1812年卫国战争的塔鲁丁诺战役中，因俄军纵队混乱而遭托尔斥责，盛怒之下率师冒法军炮火冲锋，被第一排子弹击中阵亡。托尔斯泰以他为</div>
+</a>
+<a class="entry-item" href="巴拉加.html">
+  <div class="noun">巴拉加</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的配角，莫斯科著名的三驾马车车夫，服务于阿纳托利·库拉金和多洛霍夫已有六年。二十七岁，淡褐色头发、红脸膛、粗脖子、矮个子、翘鼻子、小眼放光。他热爱每小时十八俄里的疯狂驰骋，曾多次在夜晚驱车往返于特韦尔和莫斯科之间，帮</div>
+</a>
+<a class="entry-item" href="巴拉舍夫.html">
+  <div class="noun">巴拉舍夫</div>
+  <div class="snippet">亚历山大·德米特里耶维奇·巴拉舍夫，俄国将军、亚历山大一世的亲信侍从武官，曾任彼得堡警察总监和陆军大臣。1812年拿破仑入侵前夕，他被皇帝派去给拿破仑送信，成为关键的外交信使。 --- 亚历山大·德米特里耶维奇·巴拉舍夫（1770-1837</div>
+</a>
+<a class="entry-item" href="巴格拉季昂.html">
+  <div class="noun">巴格拉季昂</div>
+  <div class="snippet">即巴格拉季翁，彼得·伊万诺维奇·巴格拉季昂（1765-1812），俄国陆军上将，出身格鲁吉亚王族。在《战争与和平》中为巴格拉季翁公爵，热尔科夫在其手下担任传令官。此处为小说中巴格拉季昂公爵手下传令官前去传令的情节。</div>
+</a>
+<a class="entry-item" href="巴格拉季翁.html">
+  <div class="noun">巴格拉季翁</div>
+  <div class="snippet">彼得·伊万诺维奇·巴格拉季昂（1765-1812），拿破仑战争时期俄罗斯帝国最著名的少壮派将领，陆军上将、亲王。出身于格鲁吉亚巴格拉季昂王族。1805年申格拉本战役率6000人阻击3万法军，1812年博罗季诺战役中指挥俄军左翼，遭炮击负致命</div>
+</a>
+<a class="entry-item" href="巴格拉季翁公爵.html">
+  <div class="noun">巴格拉季翁公爵</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的人物，原型为历史人物彼得·伊万诺维奇·巴格拉季昂（1765-1812），出身格鲁吉亚王族，是拿破仑战争时期俄国著名将领。小说中他被塑造为沉稳、勇猛而寡言的统帅形象，以自身存在赋予部下信心和勇气，体现了托尔斯泰对理想</div>
+</a>
+<a class="entry-item" href="巴格拉季翁将军.html">
+  <div class="noun">巴格拉季翁将军</div>
+  <div class="snippet">彼得·伊万诺维奇·巴格拉季昂亲王（1765-1812），俄罗斯帝国陆军上将，出身格鲁吉亚巴格拉季昂王族，拿破仑战争时期俄军著名将领。在《战争与和平》中，他被塑造成沉着冷静、英勇果敢、深受士兵爱戴的指挥官形象。小说中他参加申格拉本战役和奥斯特</div>
+</a>
+<a class="entry-item" href="巴索夫.html">
+  <div class="noun">巴索夫</div>
+  <div class="snippet">巴索夫是《战争与和平》中短暂出现的角色，罗斯托夫在军队中的同僚。在罗斯托夫请假返乡的饯行会上与他一起跳特列帕克舞，属于烘托军营氛围的群像人物。</div>
+</a>
+<a class="entry-item" href="巴萨诺公爵.html">
+  <div class="noun">巴萨诺公爵</div>
+  <div class="snippet">于格-贝尔纳·马雷，巴萨诺公爵，法国外交大臣和政治家。他是拿破仑最忠诚的幕僚之一，长期担任外交大臣，负责执行拿破仑的大陆封锁政策和外交事务。</div>
+</a>
+<a class="entry-item" href="布克斯格夫登.html">
+  <div class="noun">布克斯格夫登</div>
+  <div class="snippet">费奥多尔·费奥多罗维奇·布克斯格夫登伯爵（Friedrich Wilhelm Graf von Buxhoeveden，1750-1811），俄罗斯帝国炮兵上将，波罗的海德意志人。在1805年第三次反法同盟期间担任俄军将领，后于1808-1</div>
+</a>
+<a class="entry-item" href="布拉尼茨基.html">
+  <div class="noun">布拉尼茨基</div>
+  <div class="snippet">波兰权贵家族（Branicki），分为格里夫（Gryf）和科尔恰克（Korczak）两个分支。扬·克莱门斯·布拉尼茨基（1689—1771）是18世纪波兰首富之一，拥有12座城镇和257个村庄，曾任大盖特曼，建造了被称为&quot;波德拉谢凡尔赛&quot;的</div>
+</a>
+<a class="entry-item" href="布里安小姐.html">
+  <div class="noun">布里安小姐</div>
+  <div class="snippet">全名阿马利娅·叶夫根尼耶夫娜·布里安，是玛丽亚·博尔孔斯卡娅的法国女伴，寄居在博尔孔斯基家的童山庄园。她年轻貌美但无社会地位，为人表面温柔体贴实则自私精明。当阿纳托利·库拉金来求婚时她暗自幻想被选中。1812年法军逼近时，她劝说玛丽亚不要逃</div>
+</a>
+<a class="entry-item" href="布里安小姐(法国女伴).html">
+  <div class="noun">布里安小姐(法国女伴)</div>
+  <div class="snippet">布里安小姐，法国人，在童山博尔孔斯基庄园担任玛丽亚公爵小姐的女伴。性格活泼轻佻，与玛丽亚公爵小姐的深沉内省形成鲜明对比。老尼古拉公爵后期故意亲近她以气女儿。在小说关键情节中，与前来求婚的阿纳托利·库拉金有暧昧关系，伤害了玛丽亚的感情。</div>
+</a>
+<a class="entry-item" href="希什科夫.html">
+  <div class="noun">希什科夫</div>
+  <div class="snippet">亚历山大·谢苗诺维奇·希什科夫，俄国海军上将、国务秘书和保守派文学家。他以反对卡拉姆津的语言改革而闻名，1812年战争期间担任国务秘书，为亚历山大一世起草重要文告和军事命令。</div>
+</a>
+<a class="entry-item" href="希托夫.html">
+  <div class="noun">希托夫</div>
+  <div class="snippet">希托夫是《战争与和平》中的一个次要角色，出现在安娜·帕夫洛夫娜的彼得堡沙龙中。安娜·帕夫洛夫娜在介绍他时说&quot;希托夫先生，一个品格高尚的人&quot;，暗示这是他在社交圈中的固定评价或头衔。托尔斯泰未对他进行更多的情节展开，属于烘托沙龙氛围的背景人物。</div>
+</a>
+<a class="entry-item" href="帕伦.html">
+  <div class="noun">帕伦</div>
+  <div class="snippet">全名彼得·路德维希·冯·德·帕伦伯爵，俄罗斯帝国骑兵上将，出身波罗的海德意志贵族。曾任库尔兰总督，以策划刺杀沙皇保罗一世（1801年）而闻名。</div>
+</a>
+<a class="entry-item" href="帕里斯.html">
+  <div class="noun">帕里斯</div>
+  <div class="snippet">希腊神话中特洛伊国王普里阿摩斯的王子。在&quot;金苹果之争&quot;中将苹果判给阿佛洛狄忒，获赐世上最美女人海伦，将其从斯巴达诱走，引发了特洛伊战争。</div>
+</a>
+<a class="entry-item" href="帕金塔.html">
+  <div class="noun">帕金塔</div>
+  <div class="snippet">老伯爵伊利亚·安德烈伊奇戏谑称呼的人物。伯爵听闻要化装去梅柳科娃家时兴奋地说 &quot;我要好好逗逗帕金塔&quot;，可能指梅柳科娃家的某位成员或仆从。</div>
+</a>
+<a class="entry-item" href="库图佐夫.html">
+  <div class="noun">库图佐夫</div>
+  <div class="snippet">米哈伊尔·伊拉里奥诺维奇·库图佐夫，俄罗斯帝国元帅，1745年出生，1813年去世。1812年俄法战争中担任俄军总司令，通过博罗季诺战役和放弃莫斯科的焦土策略最终击败拿破仑大军，是俄罗斯民族英雄。 --- 全名米哈伊尔·伊拉里奥诺维奇·库图</div>
+</a>
+<a class="entry-item" href="库尔布斯基.html">
+  <div class="noun">库尔布斯基</div>
+  <div class="snippet">安德烈·米哈伊洛维奇·库尔布斯基（Andrei Kurbsky，1528—1583），俄国贵族、军事统帅和作家，出身于留里克王朝分支。曾为伊凡四世（伊凡雷帝）的重臣，在喀山围城战中立有战功。1564年因失宠叛逃至立陶宛，成为俄国历史上最早的</div>
+</a>
+<a class="entry-item" href="库泰索夫.html">
+  <div class="noun">库泰索夫</div>
+  <div class="snippet">亚历山大·伊凡诺维奇·库泰索夫（1784—1812），俄军少将，1812年俄法战争中担任俄军炮兵指挥官。他在波罗金诺战役（博罗季诺战役）中指挥全部火炮，在最危险的地段骑马穿梭于各炮连之间，组织步兵反击时中弹身亡，遗体未被寻获。阵亡时年仅28</div>
+</a>
+<a class="entry-item" href="店东.html">
+  <div class="noun">店东</div>
+  <div class="snippet">莫扎伊斯克客栈的老板，在夜晚与勤务兵交谈，代表着皮埃尔渴望回归的日常生活的平凡一角。</div>
+</a>
+<a class="entry-item" href="康士坦丁·帕夫洛维奇大公.html">
+  <div class="noun">康士坦丁·帕夫洛维奇大公</div>
+  <div class="snippet">俄罗斯帝国大公，沙皇保罗一世次子、亚历山大一世之弟。参加过奥斯特里茨战役等拿破仑战争，1812年俄法战争期间曾因妨碍军务被库图佐夫调离军队，后返回通知沙皇对作战缓慢的不满。1825年主动放弃皇位继承权。</div>
+</a>
+<a class="entry-item" href="康庞.html">
+  <div class="noun">康庞</div>
+  <div class="snippet">让-多米尼克·康庞（Jean-Dominique Compans，1769-1845），拿破仑麾下的法国将军，在波罗金诺战役中负责指挥进攻俄军凸角堡的部队。</div>
+</a>
+<a class="entry-item" href="康斯坦丁·帕夫洛维奇大公.html">
+  <div class="noun">康斯坦丁·帕夫洛维奇大公</div>
+  <div class="snippet">康斯坦丁·帕夫洛维奇大公（1779-1831），俄国沙皇保罗一世之子、亚历山大一世的弟弟。拿破仑战争期间担任俄国近卫军总指挥。在小说中作为背景历史人物出现，罗斯托夫家通过他向在前线的尼古拉寄信。历史上他曾放弃皇位继承权，间接引发了1825年</div>
+</a>
+<a class="entry-item" href="廖莉娅.html">
+  <div class="noun">廖莉娅</div>
+  <div class="snippet">海伦（叶连娜·库拉金娜）的俄语爱称/昵称（Лёля/Lelya），由她的父亲瓦西里公爵使用。在俄语中，Елена的昵称形式包括Лена、Лёля等。</div>
+</a>
+<a class="entry-item" href="建筑师.html">
+  <div class="noun">建筑师</div>
+  <div class="snippet">在贵族庄园任职的设计和建造人员，童山家中有建筑师为老公爵服务。</div>
+</a>
+<a class="entry-item" href="弗拉斯.html">
+  <div class="noun">弗拉斯</div>
+  <div class="snippet">《战争与和平》中出场的普通俄国农民，与卡尔普一同被提及。在1812年法军退出莫斯科后，他们赶着大车进城参与全城抢掠。与趁乱抢劫形成对比的是，托尔斯泰用&quot;宁肯烧掉干草也不卖给法国人&quot;来表现众多俄国农民宁牺牲个人利益也不资敌的爱国精神和抵抗意志</div>
+</a>
+<a class="entry-item" href="弗朗茨二世.html">
+  <div class="noun">弗朗茨二世</div>
+  <div class="snippet">神圣罗马帝国末代皇帝（1792-1806年在位），同时为奥地利帝国第一位皇帝（称弗朗茨一世，1804-1835年在位）。拿破仑战争期间多次组织反法同盟，1806年被迫放弃神圣罗马皇帝尊号。</div>
+</a>
+<a class="entry-item" href="弗朗茨皇帝.html">
+  <div class="noun">弗朗茨皇帝</div>
+  <div class="snippet">弗朗茨二世（Franz II，1768—1835），神圣罗马帝国末代皇帝（1792—1806在位），后为奥地利帝国第一位皇帝（称弗朗茨一世，1804—1835在位）。拿破仑战争期间多次参加反法同盟，奥斯特里茨战役惨败后被迫解散神圣罗马帝国。</div>
+</a>
+<a class="entry-item" href="弗洛拉和拉夫拉.html">
+  <div class="noun">弗洛拉和拉夫拉</div>
+  <div class="snippet">东正教圣徒，弗洛尔（Флор）和拉夫尔（Лавр）是2世纪的基督教殉道者，原籍君士坦丁堡，职业为石匠。在俄罗斯东正教传统中，他们被尊为马的守护神（马神），因传说其遗骸被发现时一场严重的马瘟恰好结束。他们的纪念日为8月18日（儒略历），在这一</div>
+</a>
+<a class="entry-item" href="弗罗拉斯和劳拉斯.html">
+  <div class="noun">弗罗拉斯和劳拉斯</div>
+  <div class="snippet">弗罗拉斯（Флор，Florus）和劳拉斯（Лавр，Laurus）是东正教传统中的一对兄弟圣徒，殉道于古罗马帝国戴克里先朝（284—305年）。在东正教尤其是斯拉夫东正教传统中，他们被尊为马的守护神（马神），俄国农民常将他们与马匹的保护联</div>
+</a>
+<a class="entry-item" href="弗里昂.html">
+  <div class="noun">弗里昂</div>
+  <div class="snippet">路易·弗里昂（Louis Friant，1758-1829），拿破仑麾下的法国将军，指挥一个师参加波罗金诺战役。他是法军老近卫军将领之一，参与了拿破仑的多场主要战役。</div>
+</a>
+<a class="entry-item" href="彼·帕伦.html">
+  <div class="noun">彼·帕伦</div>
+  <div class="snippet">彼得·路德维希·冯·德·帕伦伯爵，德意志裔俄国宫廷要员，1798至1801年任圣彼得堡军事总督，1801年参与策划并亲自执行刺杀沙皇保罗一世。</div>
+</a>
+<a class="entry-item" href="彼佳.html">
+  <div class="noun">彼佳</div>
+  <div class="snippet">彼得·伊里奇·罗斯托夫（彼佳是昵称），罗斯托夫伯爵的小儿子，尼古拉和娜塔莎的弟弟。在1812年卫国战争中执意参军，最终在一次游击行动中阵亡，是小说中最令人心碎的角色之一。 --- 彼得·伊里奇·罗斯托夫（昵称彼佳），《战争与和平》中罗斯托夫</div>
+</a>
+<a class="entry-item" href="彼佳·罗斯托夫.html">
+  <div class="noun">彼佳·罗斯托夫</div>
+  <div class="snippet">彼佳·罗斯托夫（Petya Rostov），全名彼得·伊里奇·罗斯托夫，罗斯托夫家族的小儿子，娜塔莎和尼古拉的弟弟。充满热情、天真烂漫的爱国少年，执意参军报国。后来成为骠骑兵军官，在杰尼索夫的游击队中执行任务时英勇冲锋，不幸牺牲，是小说中最</div>
+</a>
+<a class="entry-item" href="彼得·基里洛维奇.html">
+  <div class="noun">彼得·基里洛维奇</div>
+  <div class="snippet">皮埃尔的本名和父名（即彼得·基里洛维奇·别祖霍夫）。他在士兵询问名字时报出了自己的名字和父名，士兵们此后便以此称呼他，体现了士兵对他的接纳。</div>
+</a>
+<a class="entry-item" href="彼得·基里雷奇.html">
+  <div class="noun">彼得·基里雷奇</div>
+  <div class="snippet">皮埃尔·别祖霍夫的俄语父名尊称（Пётр Кириллович），俄国贵族社会中对皮埃尔的正式称呼。娜塔莎在莫斯科撤退途中遇见穿车夫长褂的皮埃尔时以此称呼他。</div>
+</a>
+<a class="entry-item" href="彼得·米哈伊洛维奇·沃尔孔斯基公爵.html">
+  <div class="noun">彼得·米哈伊洛维奇·沃尔孔斯基公爵</div>
+  <div class="snippet">俄国公爵、陆军元帅，1812年卫国战争期间担任沙皇亚历山大一世的参谋长，被认为是俄军总参谋部的奠基人。他主持了德里萨的军事会议，转达沙皇的问题并听取各方意见。曾参加奥斯特利茨战役表现英勇，后创立军需官学校和总参谋部图书馆，1843年晋升陆军</div>
+</a>
+<a class="entry-item" href="彼得·费奥多罗维奇.html">
+  <div class="noun">彼得·费奥多罗维奇</div>
+  <div class="snippet">即彼得三世·费奥多罗维奇（Пётр III Фёдорович，1728-1762），俄罗斯帝国皇帝，1762年在位仅185天。彼得大帝外孙，因亲普鲁士政策和轻视东正教触怒贵族，被妻子叶卡捷琳娜二世发动政变推翻后被杀。死后有约四十人冒充他发</div>
+</a>
+<a class="entry-item" href="彼得修道士.html">
+  <div class="noun">彼得修道士</div>
+  <div class="snippet">隐士彼得（约1050—1115），法国亚眠人，天主教司铎、苦修隐士，第一次十字军东征的重要布道者，平民十字军的领袖。1096年率数万平民东征，队伍在奇维托特战役中被塞尔柱土耳其人全歼。</div>
+</a>
+<a class="entry-item" href="彼得大帝.html">
+  <div class="noun">彼得大帝</div>
+  <div class="snippet">彼得一世·阿列克谢耶维奇（Peter the Great，1672—1725），俄国沙皇，1682年至1725年在位，俄罗斯帝国的奠基人。在位期间推行全面西化改革，建立正规陆军和海军，迁都圣彼得堡，击败瑞典取得波罗的海出海口，使俄国跻身欧洲</div>
+</a>
+<a class="entry-item" href="彼得鲁沙.html">
+  <div class="noun">彼得鲁沙</div>
+  <div class="snippet">彼得鲁沙是《战争与和平》中博尔孔斯基家族的仆人兼信差。在小说中他被派往城里取回公文和信件，返回童山庄园后将老博尔孔斯基公爵的信件和公文封套交给安德烈公爵。此外，彼得鲁沙也是主人公皮埃尔·别祖霍夫（本名彼得）的小名爱称。</div>
+</a>
+<a class="entry-item" href="德利涅公爵.html">
+  <div class="noun">德利涅公爵</div>
+  <div class="snippet">查尔斯-约瑟夫·德·利涅亲王（Charles-Joseph, Prince de Ligne，1735—1814），18世纪欧洲著名的哈布斯堡王朝将领、作家和外交家，被誉为&quot;欧洲亲王&quot;。他曾官至奥匈帝国陆军元帅，与伏尔泰、卢梭、歌德、叶卡捷</div>
+</a>
+<a class="entry-item" href="德国医生.html">
+  <div class="noun">德国医生</div>
+  <div class="snippet">童山一家从莫斯科请来的产科医生，在丽莎分娩之夜被期待在大风雪中到达。反映了俄国贵族阶层偏爱聘请德国医生的风气。</div>
+</a>
+<a class="entry-item" href="德塞.html">
+  <div class="noun">德塞</div>
+  <div class="snippet">德塞将军，拿破仑麾下的法军将领，全名可能为约瑟夫-马里·德塞（Joseph-Marie Dessaix），在波罗金诺战役中指挥法军一个师参与主攻。</div>
+</a>
+<a class="entry-item" href="德塞尔.html">
+  <div class="noun">德塞尔</div>
+  <div class="snippet">小尼古拉·博尔孔斯基（尼古连卡）的瑞士家庭教师。在尾声第一部中，德塞尔陪伴尼古连卡就寝，在尼古连卡做噩梦后关切地询问其健康状况。他是一位尽职尽责的家庭教师，也在小说第三卷中与玛丽亚公爵小姐谈论战况。</div>
+</a>
+<a class="entry-item" href="德摩西尼.html">
+  <div class="noun">德摩西尼</div>
+  <div class="snippet">古希腊雅典最伟大的演说家、雄辩家（前384–前322）。先天口吃，通过含石子朗诵等苦练成为演说大师。发表《反腓力辞》号召抵抗马其顿扩张。书中比利宾用此名讽刺伊波利特拙劣的演讲。</div>
+</a>
+<a class="entry-item" href="德波塞.html">
+  <div class="noun">德波塞</div>
+  <div class="snippet">路易-弗朗索瓦·德波塞，拿破仑宫廷的皇宫长官（prefect of the palace），1812年波罗金诺战役前夕奉命从巴黎携带罗马王画像到前线献给拿破仑。</div>
+</a>
+<a class="entry-item" href="德米特里·奥努夫里伊奇.html">
+  <div class="noun">德米特里·奥努夫里伊奇</div>
+  <div class="snippet">小说《战争与和平》中的小角色，身份是别祖霍夫伯爵家的家庭法律顾问。瓦西里公爵为了说服卡捷琳娜·谢苗诺夫娜接受皮埃尔为合法继承人的事实，引用了他的法律意见作为依据。他虽然出场极少，但在遗产继承的冲突中起到了为情节提供法律依据的重要作用。</div>
+</a>
+<a class="entry-item" href="德若贝尔.html">
+  <div class="noun">德若贝尔</div>
+  <div class="snippet">在彼得堡活动的年长耶稣会教士，发白如雪、黑眼睛炯炯有神，受耶稣会派遣引导海伦·别祖霍娃改信天主教，成为海伦的&quot;良心指导者&quot;。</div>
+</a>
+<a class="entry-item" href="德萨尔.html">
+  <div class="noun">德萨尔</div>
+  <div class="snippet">德萨尔（M. Dessalle）是《战争与和平》中的次要角色，一位瑞士籍家庭教师，受雇于博尔孔斯基家族，负责教育安德烈公爵与第一位妻子留下的儿子小尼古拉·博尔孔斯基（尼古卢什卡）。他忠诚负责，关心时局，在1812年法军逼近时主动预警并协助童</div>
+</a>
+<a class="entry-item" href="德鲁别茨科伊.html">
+  <div class="noun">德鲁别茨科伊</div>
+  <div class="snippet">鲍里斯·德鲁别茨科伊的姓氏。他是安娜·米哈伊洛夫娜公爵夫人的儿子，皮埃尔童年好友，精明务实、善于攀附权贵，后娶富家女成为富翁，是小说中典型的钻营者形象。</div>
+</a>
+<a class="entry-item" href="德鲁别茨科伊家族.html">
+  <div class="noun">德鲁别茨科伊家族</div>
+  <div class="snippet">托尔斯泰《战争与和平》中一个没落贵族家族，主要人物包括精明能干的母亲安娜·米哈伊洛夫娜公爵夫人及其子鲍里斯·德鲁别茨科伊。安娜公爵夫人为给儿子谋前程不惜一切手段，鲍里斯则善于钻营，从骠骑军官调入近卫军，后为前程娶富有的朱莉·卡拉金娜。该家族</div>
+</a>
+<a class="entry-item" href="德龙.html">
+  <div class="noun">德龙</div>
+  <div class="snippet">托尔斯泰《战争与和平》中博古恰罗沃村的村长，老公爵戏称其为&quot;德龙努什卡&quot;和&quot;家务大臣&quot;。他管理村庄三十余年，目不识丁但记忆力极好，六十岁仍如三十岁般挺拔有力，从不生病醉酒。他在农奴与地主之间摇摆不定，老公爵死后面对农民抗命时陷入两难境地。</div>
+</a>
+<a class="entry-item" href="思想保守的人.html">
+  <div class="noun">思想保守的人</div>
+  <div class="snippet">彼得堡上流社会中仍坚守传统婚姻道德观念的少数人，他们不认同海伦在丈夫在世时改嫁的计划，但在舆论压力下选择保持沉默。</div>
+</a>
+<a class="entry-item" href="总督拉斯托普钦.html">
+  <div class="noun">总督拉斯托普钦</div>
+  <div class="snippet">即莫斯科总督拉斯托普钦伯爵，在1812年战争期间负责莫斯科的防务、民团组织和撤退事宜。</div>
+</a>
+<a class="entry-item" href="总管.html">
+  <div class="noun">总管</div>
+  <div class="snippet">管理皮埃尔各田庄事务的总负责人，表面顺应皮埃尔的改革意图，实则敷衍拖延以维护既有利益和权力。</div>
+</a>
+<a class="entry-item" href="恰尔托里日斯基.html">
+  <div class="noun">恰尔托里日斯基</div>
+  <div class="snippet">亚当·耶日·恰尔托雷斯基，波兰贵族、俄国政治家，1804-1806年任俄罗斯帝国外交大臣，亚历山大一世的亲密顾问，第三次反法同盟的组织者之一。</div>
+</a>
+<a class="entry-item" href="恰特罗夫将军.html">
+  <div class="noun">恰特罗夫将军</div>
+  <div class="snippet">老博尔孔斯基公爵的老战友，小说中极其次要的边缘角色，仅在公爵宴会上被提及一次，没有独立情节或对话。</div>
+</a>
+<a class="entry-item" href="戈利岑.html">
+  <div class="noun">戈利岑</div>
+  <div class="snippet">亚历山大·尼古拉耶维奇·戈利岑公爵（1773—1844），俄国政治家，亚历山大一世时期的宗教事务与国民教育大臣、正教院院长。他本人是神秘主义者，曾庇护和支持反教会的内在宗教运动，后因福蒂和阿拉克切耶夫的攻击而失势，其部门被裁撤。</div>
+</a>
+<a class="entry-item" href="戈利岑公爵.html">
+  <div class="noun">戈利岑公爵</div>
+  <div class="snippet">戈利岑家族是俄罗斯历史上最显赫的贵族世家之一，源于立陶宛大公国格迪米纳斯王朝的后裔。家族成员多人担任过陆军元帅、驻外大使、国务大臣等要职。书中提到的戈利岑公爵当指德米特里·米哈伊洛维奇·戈利岑公爵（1758—1843），俄国著名外交官，沙皇</div>
+</a>
+<a class="entry-item" href="戈利岑家族.html">
+  <div class="noun">戈利岑家族</div>
+  <div class="snippet">俄罗斯历史上最显赫的贵族世家之一，源于立陶宛大公国格迪米纳斯后裔，家名意为&quot;铁手套&quot;。家族在俄罗斯政治、军事、外交史上影响深远，出过多位陆军元帅、大使和内阁总理。在《战争与和平》中，戈利岑公爵请俄国教师学俄语的情节，反映了1812年战争期间</div>
+</a>
+<a class="entry-item" href="戈利津.html">
+  <div class="noun">戈利津</div>
+  <div class="snippet">亚历山大·尼古拉耶维奇·戈利津公爵（1773—1844），俄罗斯帝国公爵，曾任东正教最高宗教会议首席检察官，1812至1824年担任俄罗斯圣经会首任主席。深受神秘主义和跨宗派基督教合一运动影响，主张将圣经翻译成现代俄语，是亚历山大一世时期宗</div>
+</a>
+<a class="entry-item" href="戈卢霍夫斯基伯爵.html">
+  <div class="noun">戈卢霍夫斯基伯爵</div>
+  <div class="snippet">戈卢霍夫斯基伯爵是《战争与和平》中一闪而过的小人物，有意购买罗斯托夫三匹黑鬃烈马的贵族。罗斯托夫与人打赌要将马以两千卢布卖给他，但交易尚未完成就因家事离开了团队。</div>
+</a>
+<a class="entry-item" href="戈尔恰科夫.html">
+  <div class="noun">戈尔恰科夫</div>
+  <div class="snippet">俄国著名的贵族家族，在小说中戈尔恰科夫公爵家的两位美貌小姐在约格尔的舞会上物色到未婚夫并结了婚，使该舞会因而更加出名。历史上著名的戈尔恰科夫包括19世纪俄国外交大臣亚历山大·米哈伊洛维奇·戈尔恰科夫公爵。</div>
+</a>
+<a class="entry-item" href="戈斯涅尔.html">
+  <div class="noun">戈斯涅尔</div>
+  <div class="snippet">约翰内斯·埃万格利斯塔·戈斯涅尔（Johannes Evangelista Gossner，1773–1858），德国神秘主义布道者和传教士。原为天主教神父，受新教因信称义思想影响，1826年改宗新教。1820至1824年间在彼得堡布道，与</div>
+</a>
+<a class="entry-item" href="戴克里先.html">
+  <div class="noun">戴克里先</div>
+  <div class="snippet">戴克里先（Diocletian，约244—312年），古罗马帝国皇帝，284年至305年在位。他出身于伊利里亚（今克罗地亚一带），被军队拥立为帝。他结束了罗马帝国的三世纪危机，建立了四帝共治制（Tetrarchy），将帝国分为东西两部，各设</div>
+</a>
+<a class="entry-item" href="扎哈尔.html">
+  <div class="noun">扎哈尔</div>
+  <div class="snippet">罗斯托夫家族熟识的马车夫，在莫斯科某十字路口经常停靠等客。对久别归家的尼古拉·罗斯托夫来说，看到扎哈尔是离家越来越近、即将到家的熟悉标志。</div>
+</a>
+<a class="entry-item" href="扎哈尔琴科.html">
+  <div class="noun">扎哈尔琴科</div>
+  <div class="snippet">《战争与和平》中俄军炮兵上尉图申手下的司务长（上士），深受图申尊重。在申格拉本战役中，图申与他商量后决定用燃烧弹焚烧申格拉本村以阻止法军前进，体现了士兵之间的信任与默契。</div>
+</a>
+<a class="entry-item" href="托勒密.html">
+  <div class="noun">托勒密</div>
+  <div class="snippet">克劳狄乌斯·托勒密（约公元100—约170年），古希腊数学家、天文学家、地理学家、占星家，在埃及亚历山大港从事研究。其著作《天文学大成》（《至大论》）系统总结了地心说（天动说），《地理学指南》首次系统采用经纬度坐标并绘制世界地图，是西方古代</div>
+</a>
+<a class="entry-item" href="托勒美.html">
+  <div class="noun">托勒美</div>
+  <div class="snippet">克罗狄斯·托勒密（约90—168年），古希腊天文学家、地理学家，创立托勒密地心体系（天动说），在《天文学大成》中系统提出地球静止于宇宙中心的理论。该体系统治西方天文学约1400年。</div>
+</a>
+<a class="entry-item" href="托尔.html">
+  <div class="noun">托尔</div>
+  <div class="snippet">卡尔·威廉·冯·托尔，波罗的海德意志贵族出身的俄国步兵上将，1812年卫国战争期间担任俄军第一军团军务总监，后任库图佐夫司令部代理联合集团军军务总监。他以勤恳踏实的实地勘察著称，曾亲自一天行军一百俄里进行侦察。参与斯摩棱斯克军事会议力主进攻</div>
+</a>
+<a class="entry-item" href="托尔斯泰伯爵.html">
+  <div class="noun">托尔斯泰伯爵</div>
+  <div class="snippet">伊万·马特维耶维奇·托尔斯泰伯爵，俄国宫廷官员，亚历山大一世时期的内务大臣，在《战争与和平》中库图佐夫向他转达了对奥斯特里茨战役将失败的判断。</div>
+</a>
+<a class="entry-item" href="托尔马索夫.html">
+  <div class="noun">托尔马索夫</div>
+  <div class="snippet">亚历山大·彼得罗维奇·托尔马索夫（1752—1819），俄罗斯帝国骑兵上将，伯爵。1812年俄法战争中任第三西军团司令，在科布林战役中取得俄军首次重大胜利，俘虏近2500名敌军。后接替阵亡的巴格拉季翁指挥第二军团，参与小雅罗斯拉维茨等战役。</div>
+</a>
+<a class="entry-item" href="托马斯(法军士兵).html">
+  <div class="noun">托马斯(法军士兵)</div>
+  <div class="snippet">《战争与和平》中的一名法国士兵，曾向法军班长提到皮埃尔&quot;是个有教养的人、会说法语、是落魄的俄国贵族&quot;，促成了法军班长对皮埃尔的照顾。</div>
+</a>
+<a class="entry-item" href="托马斯·肯庇斯.html">
+  <div class="noun">托马斯·肯庇斯</div>
+  <div class="snippet">文艺复兴时期德意志神秘主义宗教作家（1380—1471），奥斯定会修士，现代虔敬运动代表人物，代表作《效法基督》（又译《师主篇》），是基督教灵修经典中影响力仅次于《圣经》的著作。</div>
+</a>
+<a class="entry-item" href="担架兵.html">
+  <div class="noun">担架兵</div>
+  <div class="snippet">战场上负责搬运伤员的士兵。在拿破仑战争中，担架兵是战场救护体系的重要组成部分，负责将伤员从前线抬到救护站。</div>
+</a>
+<a class="entry-item" href="拉夫鲁什卡.html">
+  <div class="noun">拉夫鲁什卡</div>
+  <div class="snippet">托尔斯泰《战争与和平》中杰尼索夫大尉的勤务兵/仆人，全团有名的滑头鬼。机灵狡猾而胆大，敢于在老爷情绪不好时走近，是杰尼索夫的贴身军仆。 --- 托尔斯泰《战争与和平》中尼古拉·罗斯托夫和瓦西里·杰尼索夫的勤务兵，全名拉夫尔，拉夫鲁什卡是其爱</div>
+</a>
+<a class="entry-item" href="拉封丹.html">
+  <div class="noun">拉封丹</div>
+  <div class="snippet">让·德·拉封丹（1621—1695），法国古典文学代表作家，以《寓言诗》（Fables）闻名于世，被誉为&quot;法国的荷马&quot;。另著有《故事集》（Contes et nouvelles en vers），其中《约康德》一篇因内容大胆被认为有伤风化。</div>
+</a>
+<a class="entry-item" href="拉扎列夫.html">
+  <div class="noun">拉扎列夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的一名俄国普通士兵，隶属普列奥布拉任斯基近卫团。在1807年蒂尔西特和约签订后的俄法和平庆典上，他被选为代表，由拿破仑亲自将荣誉团勋章别在他的制服上，并获1200法郎的终身年金。他在小说中作为象征性角色，与受罚的杰尼</div>
+</a>
+<a class="entry-item" href="拉斯托普钦.html">
+  <div class="noun">拉斯托普钦</div>
+  <div class="snippet">费奥多尔·瓦西里耶维奇·拉斯托普钦（1763-1826），1812年拿破仑入侵俄国时任莫斯科总督。他在小说中发布传单号召民众保卫莫斯科，在法军逼近时其命令矛盾混乱，托尔斯泰通过这个人物批判了英雄史观。</div>
+</a>
+<a class="entry-item" href="拉斯托普钦伯爵.html">
+  <div class="noun">拉斯托普钦伯爵</div>
+  <div class="snippet">1812年莫斯科总督（卫戍司令），性格暴躁、充满爱国热情但虚荣无能。与库图佐夫在放弃莫斯科问题上意见不合。为平息民愤将无辜文官韦列夏金交给群众处死。托尔斯泰对他持批判态度，认为他代表了虚假的爱国主义和上层官僚的虚荣。 --- 莫斯科卫戍司令</div>
+</a>
+<a class="entry-item" href="拉普.html">
+  <div class="noun">拉普</div>
+  <div class="snippet">让·拉普（Jean Rapp，1771—1821），法国少将，帝国伯爵，拿破仑的副官和亲信将领。以其无比的勇敢著称，军事生涯中受伤二十余次。1812年波罗金诺战役中接手指挥孔潘将军的师，身中四弹。曾在奥斯特利茨战役中率近卫骑兵冲锋，战后升任</div>
+</a>
+<a class="entry-item" href="拉法特.html">
+  <div class="noun">拉法特</div>
+  <div class="snippet">全名约翰·卡斯帕·拉法特（1741—1801），瑞士神学家、牧师，面相学（观相术）的创始人。他主张通过人的面部特征和身体结构来判断其性格与内在品质，于1775年发表《相面术断想》，在18至19世纪的欧洲广为流行。虽然面相学后来被归为伪科学，</div>
+</a>
+<a class="entry-item" href="拉祖莫夫斯基家族.html">
+  <div class="noun">拉祖莫夫斯基家族</div>
+  <div class="snippet">俄罗斯著名贵族世家，原为扎波罗热哥萨克出身。家族崛起始于阿列克谢·拉祖莫夫斯基，他因嗓音优美被带入宫廷，后成为伊丽莎白女皇的情夫乃至秘密配偶，被称为&quot;夜间的皇帝&quot;。其弟基里尔曾任乌克兰最后一位盖特曼和俄罗斯科学院院长。家族在文化史上以赞助贝</div>
+</a>
+<a class="entry-item" href="拉纳.html">
+  <div class="noun">拉纳</div>
+  <div class="snippet">让·拉纳（Jean Lannes，1769–1809），拿破仑麾下最受信任的法国元帅之一，绰号&quot;勇者中的勇者&quot;。出身寒微，以超凡勇气闻名，身先士卒。1809年在阿斯佩恩-埃斯灵战役中双腿被炮弹击中，因伤口感染去世，是第一位战死沙场的帝国元帅</div>
+</a>
+<a class="entry-item" href="拉耶夫斯基.html">
+  <div class="noun">拉耶夫斯基</div>
+  <div class="snippet">尼古拉·尼古拉耶维奇·拉耶夫斯基（1771-1829），俄国骑兵上将，1812年卫国战争英雄。在萨尔塔诺夫战役中率第七军阻击达武元帅的法军，传说他带着两个儿子冲上水坝鼓舞士气。在波罗底诺战役中防守著名的&quot;拉耶夫斯基堡&quot;。托尔斯泰在《战争与和</div>
+</a>
+<a class="entry-item" href="拉莫将军.html">
+  <div class="noun">拉莫将军</div>
+  <div class="snippet">法国将军，在1812年拿破仑入侵俄国期间出现在博古恰罗沃地区。他发布文告晓谕当地居民不得离家逃走，声称法国当局将给予保护。布里安小姐将此文告转交给玛丽亚公爵小姐，引发了玛丽亚公爵小姐对屈尊接受法国保护的愤怒与羞耻。拉莫将军在小说中作为法国占</div>
+</a>
+<a class="entry-item" href="拉雷.html">
+  <div class="noun">拉雷</div>
+  <div class="snippet">多米尼克·让·拉雷（1766-1842），拿破仑大军的军医总长，现代军事外科奠基人。发明了&quot;飞行救护车&quot;（ambulances volantes）和战伤分检制度（triage）。</div>
+</a>
+<a class="entry-item" href="拿破仑.html">
+  <div class="noun">拿破仑</div>
+  <div class="snippet">拿破仑·波拿巴（1769—1821），法兰西第一帝国皇帝，杰出的军事家和政治家。生于科西嘉岛，在法国大革命中崛起，1799年发动雾月政变成为第一执政，1804年加冕称帝。他颁布《拿破仑法典》，多次击败反法同盟，鼎盛时期几乎统治整个欧洲大陆。</div>
+</a>
+<a class="entry-item" href="拿破仑·波拿巴.html">
+  <div class="noun">拿破仑·波拿巴</div>
+  <div class="snippet">法国军事家、政治家，法兰西第一帝国皇帝（1804-1814/1815）。生于科西嘉岛，一生指挥约60场战役，以奥斯特里茨战役等经典胜利闻名。1812年远征俄国惨败，1815年滑铁卢战役后流放圣赫勒拿岛。 --- 法兰西第一帝国皇帝（1804</div>
+</a>
+<a class="entry-item" href="拿破仑一世.html">
+  <div class="noun">拿破仑一世</div>
+  <div class="snippet">法兰西第一帝国皇帝，杰出的军事家、政治家，1799年发动雾月政变，1804年加冕称帝，多次击败反法同盟，1812年远征俄国失败，1815年滑铁卢战败后被流放。</div>
+</a>
+<a class="entry-item" href="拿破仑三世.html">
+  <div class="noun">拿破仑三世</div>
+  <div class="snippet">拿破仑三世（Napoléon III，1808—1873），全名夏尔-路易-拿破仑·波拿巴，拿破仑一世的侄子，法兰西第二共和国总统（1848—1851）和法兰西第二帝国皇帝（1852—1870）。他先后于1836年和1840年两次密谋政变失</div>
+</a>
+<a class="entry-item" href="捷利亚宁.html">
+  <div class="noun">捷利亚宁</div>
+  <div class="snippet">《战争与和平》中的反面小角色，是一名中尉军官，原在近卫军服役，出征前调入保罗格勒骠骑兵团。外表干净但品行不端、懒散令人生厌，在小说中因偷窃杰尼索夫的钱包而被罗斯托夫揭发，代表了军队中道德堕落的一类人。 --- 托尔斯泰《战争与和平》中的配角</div>
+</a>
+<a class="entry-item" href="捷连季.html">
+  <div class="noun">捷连季</div>
+  <div class="snippet">托尔斯泰《战争与和平》中主人公皮埃尔·别祖霍夫的贴身仆人，与瓦西卡一同照顾皮埃尔的起居。他最先察觉到皮埃尔被俘释后性格变得随和，常主动与主人聊天。在奥廖尔期间陪伴皮埃尔康复，是反映皮埃尔精神变化的侧面见证者。</div>
+</a>
+<a class="entry-item" href="接生婆.html">
+  <div class="noun">接生婆</div>
+  <div class="snippet">19世纪俄国乡村中从事接生工作的女性，玛丽亚·波格丹诺夫娜是县城里的接生婆。</div>
+</a>
+<a class="entry-item" href="摩西.html">
+  <div class="noun">摩西</div>
+  <div class="snippet">圣经旧约中的先知和立法者，带领以色列人出埃及，在西奈山领受十诫。在《战争与和平》的祷文中作为上帝帮助其子民战胜敌人的历史先例出现。</div>
+</a>
+<a class="entry-item" href="政治犯梅什科夫.html">
+  <div class="noun">政治犯梅什科夫</div>
+  <div class="snippet">俄国政治犯，与韦列夏金一同被拉斯托普钦关押。具体身份不详，在小说中仅被提及名字。</div>
+</a>
+<a class="entry-item" href="斯佩兰斯基.html">
+  <div class="noun">斯佩兰斯基</div>
+  <div class="snippet">全名米哈伊尔·米哈伊洛维奇·斯佩兰斯基（1772-1839），俄国著名改良派政治活动家，出身寒微（乡村牧师之子），凭借卓越才能成为亚历山大一世事实上的&quot;首相&quot;，被誉为&quot;俄国自由主义之父&quot;。在小说中，安德烈公爵于1809年到彼得堡时，正值斯佩</div>
+</a>
+<a class="entry-item" href="斯塔埃尔夫人.html">
+  <div class="noun">斯塔埃尔夫人</div>
+  <div class="snippet">斯塔埃尔夫人（Madame de Staël，1766—1817），原名日尔曼娜·内克尔，法国著名作家、文艺理论家，浪漫主义文学的重要代表人物。她是法国大革命前后欧洲文化界的重要人物，在巴黎和瑞士科佩的沙龙成为欧洲思想交流中心。她因反对拿破</div>
+</a>
+<a class="entry-item" href="斯托雷平.html">
+  <div class="noun">斯托雷平</div>
+  <div class="snippet">斯佩兰斯基亲密朋友圈子中的一员，出席斯佩兰斯基府第的私人午宴。在午宴上曾激动地谈及旧的诉讼程序的流弊，给谈话带来郑重性质的危险，后被马格尼茨基嘲弄。性格较其他宾客更为严肃认真。</div>
+</a>
+<a class="entry-item" href="斯特恩.html">
+  <div class="noun">斯特恩</div>
+  <div class="snippet">全名劳伦斯·斯特恩，18世纪英国小说家、牧师，感伤主义文学代表人物。代表作《项狄传》以打破传统叙事规则著称，被誉为意识流小说鼻祖，对后世文学影响深远。 --- 劳伦斯·斯特恩，英国小说家、牧师，感伤主义文学代表，代表作《项狄传》以奇特形式和</div>
+</a>
+<a class="entry-item" href="斯特罗加诺夫.html">
+  <div class="noun">斯特罗加诺夫</div>
+  <div class="snippet">巴维尔·亚历山德罗维奇·斯特罗加诺夫伯爵（1772-1817），俄国贵族，亚历山大一世的亲密顾问和密友，秘密委员会核心成员，参加过1805年奥斯特利茨战役。</div>
+</a>
+<a class="entry-item" href="斯罗萨.html">
+  <div class="noun">斯罗萨</div>
+  <div class="snippet">弗里德利希·克里斯托夫·施洛塞尔（1776-1861），德国历史学家，海德堡大学教授，南德史学代表，著有18卷《德意志民族的世界史》，强调历史道德评判功能，与兰克的客观主义史学形成对立。</div>
+</a>
+<a class="entry-item" href="斯莫利亚尼诺夫.html">
+  <div class="noun">斯莫利亚尼诺夫</div>
+  <div class="snippet">共济会训导师，负责皮埃尔入会前的教导与考验。他向皮埃尔阐述共济会的三大宗旨及七项美德，指导他完成入会的各项仪式环节。</div>
+</a>
+<a class="entry-item" href="施奈德.html">
+  <div class="noun">施奈德</div>
+  <div class="snippet">库图佐夫的副官，在菲利军事会议结束后深夜走进总司令房间，劝库图佐夫休息。</div>
+</a>
+<a class="entry-item" href="施泰因.html">
+  <div class="noun">施泰因</div>
+  <div class="snippet">海因里希·弗里德里希·卡尔·冯·施泰因男爵（1757-1831），普鲁士著名政治家和改革家。1807年任普鲁士首席大臣，推行废除农奴制、城市自治等改革（史称施泰因-哈登贝格改革）。因密谋反拿破仑遭通缉，逃亡俄国担任沙皇顾问。 --- 普鲁士</div>
+</a>
+<a class="entry-item" href="施泰因伯爵.html">
+  <div class="noun">施泰因伯爵</div>
+  <div class="snippet">海因里希·弗里德里希·卡尔·冯·施泰因帝国男爵，普鲁士民族主义政治家、改革家，曾任普鲁士首相。1807年领导普鲁士改革，废除农奴制度、推行地方自治。因被拿破仑通缉而流亡俄国。1812年在圣彼得堡成为沙皇亚历山大一世的重要顾问，是劝说沙皇拒绝</div>
+</a>
+<a class="entry-item" href="施特劳赫.html">
+  <div class="noun">施特劳赫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的奥地利将军，驻库图佐夫司令部专管俄国军队的粮食供应。在小说走廊场景中与奥地利军事参议院议员一同出场。</div>
+</a>
+<a class="entry-item" href="施瓦岑贝格.html">
+  <div class="noun">施瓦岑贝格</div>
+  <div class="snippet">卡尔·菲利普·施瓦岑贝格侯爵（1771-1820），奥地利帝国陆军元帅、外交家，拿破仑战争时期反法联军统帅之一。在《战争与和平》中作为奥地利老将军出现，与库图佐夫一同反对冒进进攻拿破仑，主张谨慎行事。1813年莱比锡战役中担任反法联军总司令</div>
+</a>
+<a class="entry-item" href="施瓦茨.html">
+  <div class="noun">施瓦茨</div>
+  <div class="snippet">费奥多尔·叶夫斯塔菲耶维奇·施瓦茨（Ф.Е. Шварц），谢苗诺夫近卫团上校团长，以推行严苛粗暴的军纪而臭名昭著。1820年其暴虐管理引发谢苗诺夫团兵变——士兵自行列队点名拒绝上哨，抗议体罚虐待。事件导致精锐的谢苗诺夫团被解散，施瓦茨本人</div>
+</a>
+<a class="entry-item" href="施米特.html">
+  <div class="noun">施米特</div>
+  <div class="snippet">施米特（Schmidt）是奥地利将军，在1805年第三次反法同盟战争中参与俄奥联军对法作战，在克雷姆斯战役（迪恩施泰因之战）中阵亡。小说中安德烈公爵在战斗中跟随其侧。 --- 约翰·海因里希·冯·施密特（Johann Heinrich vo</div>
+</a>
+<a class="entry-item" href="施米特将军.html">
+  <div class="noun">施米特将军</div>
+  <div class="snippet">约翰·海因里希·冯·施密特（Johann Heinrich von Schmitt，1743–1805），奥地利中将，哈布斯堡军队总司令部参谋长。在迪恩施泰因战役（1805年11月11日）中阵亡，被认为是在混战中被友军误击身亡。</div>
+</a>
+<a class="entry-item" href="日拉尔.html">
+  <div class="noun">日拉尔</div>
+  <div class="snippet">弗朗索瓦·热拉尔（François Gérard，1770-1837），法国新古典主义画家，大卫的学生。以绘制历史画和肖像画闻名，创作了著名的《罗马王》肖像画。</div>
+</a>
+<a class="entry-item" href="日林斯基.html">
+  <div class="noun">日林斯基</div>
+  <div class="snippet">《战争与和平》中的波兰伯爵，在巴黎受教育，富有且热爱法国人。在蒂尔西特期间与鲍里斯同住，几乎每天宴请法国近卫军和司令部军官，反映了拿破仑战争时期波兰贵族同情拿破仑、期待波兰复国的立场。 --- 托尔斯泰《战争与和平》中的次要角色，波兰伯爵，</div>
+</a>
+<a class="entry-item" href="昂吉安公爵.html">
+  <div class="noun">昂吉安公爵</div>
+  <div class="snippet">昂吉安公爵路易·安托万·亨利·德·波旁（1772—1804），法国波旁王朝王室成员，孔代亲王之子。法国大革命期间流亡国外。1804年，拿破仑派兵越境将其从巴登公国绑架回法国，经草率审判后在文森城堡处决，年仅31岁。这一事件在欧洲引起极大震动</div>
+</a>
+<a class="entry-item" href="昂季安公爵.html">
+  <div class="noun">昂季安公爵</div>
+  <div class="snippet">昂季安公爵（路易·安托万·德·波旁-孔代，1772—1804），法国波旁王室成员。1804年被拿破仑派兵从巴登公国绑架回法国，经仓促军事审判后在文森城堡被枪决。这一事件震惊欧洲，成为拿破仑最具争议的行为之一，并加强了反法同盟的敌对情绪。</div>
+</a>
+<a class="entry-item" href="普加乔夫.html">
+  <div class="noun">普加乔夫</div>
+  <div class="snippet">叶梅利扬·伊万诺维奇·普加乔夫（Yemelyan Pugachev，约1742–1775），顿河哥萨克，俄国历史上最大规模农民起义（1773–1775年）的领袖。他自称沙皇彼得三世，率领哥萨克、农民和乌拉尔工厂工人起义，一度控制数十万平方公</div>
+</a>
+<a class="entry-item" href="普卢塔赫.html">
+  <div class="noun">普卢塔赫</div>
+  <div class="snippet">Plutarch（约46–约120年），罗马帝国时期的希腊作家、哲学家和历史学家，生于希腊喀罗尼亚。代表作为《希腊罗马名人传》（又称《比较列传》），收录50篇人物传记，开创西方传记文学先河，对后世影响深远。中文也译作&quot;普鲁塔克&quot;。</div>
+</a>
+<a class="entry-item" href="普弗尔.html">
+  <div class="noun">普弗尔</div>
+  <div class="snippet">卡尔·路德维希·奥古斯特·冯·普富尔（1757-1826），普鲁士将军，1806年耶拿战役后转入俄军，成为沙皇亚历山大一世的军事顾问。他制定了1812年抗法战略的&quot;德里萨大营计划&quot;，但因计划存在严重缺陷（低估法军兵力、营地位置不佳）而未能实</div>
+</a>
+<a class="entry-item" href="普拉东·卡拉塔耶夫.html">
+  <div class="noun">普拉东·卡拉塔耶夫</div>
+  <div class="snippet">列夫·托尔斯泰小说《战争与和平》中的重要人物，一名被俘的俄国农民士兵。托尔斯泰以&quot;圆形&quot;意象塑造他——圆圆的脑袋、肩膀、双手，象征圆满与和谐。他体现了俄罗斯农民的朴素智慧、顺应天命的生活态度和无差别的博爱精神。他对主角皮埃尔·别祖霍夫产生了</div>
+</a>
+<a class="entry-item" href="普拉东·卡拉达耶夫.html">
+  <div class="noun">普拉东·卡拉达耶夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的一位俄国农民士兵，皮埃尔在法军战俘营中结识的人物。他代表俄罗斯农民的纯朴智慧和宿命论生活哲学，其圆形体态象征着圆满与和谐。他对皮埃尔的精神觉醒产生了关键影响，是托尔斯泰&quot;勿以暴力抗恶&quot;思想的具象化体现。</div>
+</a>
+<a class="entry-item" href="普拉托什.html">
+  <div class="noun">普拉托什</div>
+  <div class="snippet">法国士兵对普拉东·卡拉塔耶夫的法语昵称。将俄语名字&quot;普拉东&quot;（Platon）加上法语后缀&quot;-oche&quot;改造而成，带有亲切意味，反映了法军士兵与俄国俘虏之间朴素友好的人际关系。</div>
+</a>
+<a class="entry-item" href="普拉托夫.html">
+  <div class="noun">普拉托夫</div>
+  <div class="snippet">马特维·伊万诺维奇·普拉托夫（1751—1818），俄罗斯帝国顿河哥萨克首领，骑兵上将。在拿破仑战争中以指挥哥萨克骑兵的游击战术闻名，因战功获封伯爵。小说中普拉托夫师在1807年战役期间脱离主力单独作战。 --- 马特维·伊万诺维奇·普拉托</div>
+</a>
+<a class="entry-item" href="普拉斯科维亚·萨维什娜.html">
+  <div class="noun">普拉斯科维亚·萨维什娜</div>
+  <div class="snippet">玛丽亚公爵小姐的老乳娘，深受信任，在丽莎分娩时陪伴玛丽亚，拿出公爵结婚时用过的蜡烛供在圣徒面前祈祷。</div>
+</a>
+<a class="entry-item" href="普热贝舍夫斯基.html">
+  <div class="noun">普热贝舍夫斯基</div>
+  <div class="snippet">伊格纳季·雅科夫列维奇·普热贝舍夫斯基（Ignacy Przybyszewski），波兰裔俄军中将，在奥斯特利茨战役中担任俄奥联军第三纵队司令，后被法军包围并被俘。 --- 伊格纳齐·普热贝舍夫斯基（1755-?），波兰裔俄军中将。1805</div>
+</a>
+<a class="entry-item" href="普罗佐罗夫斯基.html">
+  <div class="noun">普罗佐罗夫斯基</div>
+  <div class="snippet">亚历山大·亚历山德罗维奇·普罗佐罗夫斯基，俄国陆军元帅，1732-1809年，参加七年战争和俄土战争，1808年任多瑙河战区总司令，与苏沃洛夫有姻亲关系。</div>
+</a>
+<a class="entry-item" href="普里亚尼奇尼科夫.html">
+  <div class="noun">普里亚尼奇尼科夫</div>
+  <div class="snippet">一位老官员的下属，六十岁，被用作反对俄国官阶考试制度的例子。在《战争与和平》中， 一位叶卡捷琳娜女皇时代的老头子以普里亚尼奇尼科夫为例，质疑考试制度是否适用于 年长的有经验官员。</div>
+</a>
+<a class="entry-item" href="普鲁塔赫.html">
+  <div class="noun">普鲁塔赫</div>
+  <div class="snippet">普鲁塔克（约公元46—120年），罗马帝国时代的希腊作家、哲学家和历史学家，被誉为西方传记文学之父。代表作《希腊罗马名人传》采用希腊与罗马名人对照合传的形式，对后世文学和史学影响深远，曾受莎士比亚、蒙田等人推崇。</div>
+</a>
+<a class="entry-item" href="普鲁士国王.html">
+  <div class="noun">普鲁士国王</div>
+  <div class="snippet">小说中提到的普鲁士国王指腓特烈·威廉三世（Friedrich Wilhelm III，1770-1840），1797年至1840年在位。他在拿破仑战争期间领导普鲁士，经历了1806年耶拿战役惨败、王国沦为法国附庸的屈辱，后通过施泰因-哈登堡</div>
+</a>
+<a class="entry-item" href="朗巴.html">
+  <div class="noun">朗巴</div>
+  <div class="snippet">法国第十三轻骑兵团上尉（Captain Ramballe），拿破仑战争时期的一名法国军官。在莫斯科占领期间与皮埃尔相遇，皮埃尔从他手中救下了醉汉马卡尔·阿列克谢伊奇的枪击，朗巴因此感激并视皮埃尔为朋友。他曾在瓦格拉木和斯摩棱斯克战役中负伤，</div>
+</a>
+<a class="entry-item" href="朗巴上尉.html">
+  <div class="noun">朗巴上尉</div>
+  <div class="snippet">《战争与和平》中的法国军官，第十三轻骑兵团上尉，因九月七日战功获荣誉团勋章。在拿破仑占领莫斯科期间，皮埃尔从一名持枪法国兵手中救下他，两人共进晚餐并彻夜交谈。朗巴性格开朗健谈，狂热崇拜拿破仑，他向皮埃尔讲述自己的风流韵事，也使皮埃尔原本刺杀</div>
+</a>
+<a class="entry-item" href="朗巴莱.html">
+  <div class="noun">朗巴莱</div>
+  <div class="snippet">托尔斯泰小说《战争与和平》中的法国军官，第十三轻骑兵团上尉。在法军占领莫斯科时与皮埃尔相遇并共进晚餐，改变了皮埃尔刺杀拿破仑的计划；后在法军大撤退中与勤务兵莫雷尔被俄军第五连士兵发现并救助。</div>
+</a>
+<a class="entry-item" href="朗弗里.html">
+  <div class="noun">朗弗里</div>
+  <div class="snippet">皮埃尔·朗弗里（1828-1877），法国共和派史学家，著有五卷本《拿破仑一世史》，以批判性视角破除拿破仑个人崇拜，认为拿破仑的权力建立在&quot;欺诈和愚弄人民&quot;之上。</div>
+</a>
+<a class="entry-item" href="朗热隆.html">
+  <div class="noun">朗热隆</div>
+  <div class="snippet">路易·亚历山大·安德罗·德·朗热隆伯爵，法国贵族出身，美国独立战争老兵，后加入俄军，参加奥斯特里茨战役、1812年卫国战争、莱比锡战役，曾任新罗西斯克总督。</div>
+</a>
+<a class="entry-item" href="朝圣者.html">
+  <div class="noun">朝圣者</div>
+  <div class="snippet">指在俄罗斯乡间四处游历、朝拜圣地圣迹的东正教巡礼者，也被称为&quot;神亲&quot;或&quot;巡礼者&quot;。在小说中，玛丽亚公爵小姐不顾父亲禁令在家中接待这些流浪朝圣者，代表人物有佩拉格尤什卡（老太婆）和伊万努什卡（女扮男装的年轻巡礼者）。</div>
+</a>
+<a class="entry-item" href="木脚肖斯太太.html">
+  <div class="noun">木脚肖斯太太</div>
+  <div class="snippet">罗斯托夫家的家庭女教师，德国人，因装有木制假腿而被称为木脚肖斯太太。</div>
+</a>
+<a class="entry-item" href="朱丽安·克律德涅夫人.html">
+  <div class="noun">朱丽安·克律德涅夫人</div>
+  <div class="snippet">芭芭拉·朱丽安·冯·克律德涅男爵夫人（1764—1824），出生于里加的波罗的海德意志贵族后裔，经历了从社交名流到小说家再到神秘主义者的转变。1815年成为沙皇亚历山大一世的精神导师，影响其起草《神圣同盟》宣言。其神秘主义思想是敬虔主义与末</div>
+</a>
+<a class="entry-item" href="朱莉.html">
+  <div class="noun">朱莉</div>
+  <div class="snippet">莫斯科贵族卡拉金家的女儿，兄弟去世后继承大笔遗产成为富有的未婚姑娘。矫揉造作，摆出忧郁姿态吸引追求者，实际上热衷社交享乐。最终与鲍里斯·德鲁别茨科伊基于利益关系结婚。托尔斯泰通过她讽刺上流社会贵族婚姻中的功利与虚伪。</div>
+</a>
+<a class="entry-item" href="朱莉·卡拉金娜.html">
+  <div class="noun">朱莉·卡拉金娜</div>
+  <div class="snippet">《战争与和平》中莫斯科贵族卡拉金之女，在兄弟相继去世后继承庞大遗产，成为莫斯科最富有的未婚女子之一。她喜欢摆出一副忧郁、失望的姿态，但这并不妨碍她寻欢作乐、举办舞会和晚会。鲍里斯·德鲁别茨基为钱财追求她，最终在得知阿纳托利·库拉金也在追求她</div>
+</a>
+<a class="entry-item" href="朱莉·卡拉金娜(玛丽亚的女友).html">
+  <div class="noun">朱莉·卡拉金娜(玛丽亚的女友)</div>
+  <div class="snippet">朱莉·卡拉金娜，卡拉金家族的千金，巨额财产继承人，玛丽亚公爵小姐的彼得堡女友。故作忧郁多愁善感，实则以财富为资本精于算计。玛丽亚曾希望她嫁给哥哥安德烈公爵。朱莉最终以丰厚的嫁妆吸引了鲍里斯·德鲁别茨科伊求婚，两人的婚姻是典型的上流社会利益结</div>
+</a>
+<a class="entry-item" href="朱莉·德鲁别茨卡娅.html">
+  <div class="noun">朱莉·德鲁别茨卡娅</div>
+  <div class="snippet">小说中的次要角色，莫斯科贵族富家女，玛丽亚公爵小姐的闺中密友和笔友。她因兄弟去世继承巨额遗产，以矫揉造作的感伤风格著称。后与追逐财富的鲍里斯·德鲁别茨科伊结婚，是托尔斯泰讽刺俄国上层社会虚伪婚姻的典型代表。</div>
+</a>
+<a class="entry-item" href="朱诺元帅.html">
+  <div class="noun">朱诺元帅</div>
+  <div class="snippet">让-安多什·朱诺（Jean-Andoche Junot，1771—1813），第一代阿布兰特什公爵，拿破仑麾下将领。他原在第戎攻读法律，法国大革命后从军，在土伦战役中结识拿破仑并成为其副官，因作战勇敢获绰号&quot;暴风雨&quot;。曾远征埃及和叙利亚，1</div>
+</a>
+<a class="entry-item" href="李明滨.html">
+  <div class="noun">李明滨</div>
+  <div class="snippet">李明滨（1933年出生），台湾新北市淡水区人，著名俄语和俄国文学专家，北京大学俄罗斯语言文学系教授、博士生导师。研究方向为中俄比较文学和俄罗斯国情学，曾获俄罗斯联邦政府普希金奖章和马克西姆·高尔基奖。</div>
+</a>
+<a class="entry-item" href="杜仑伯爵.html">
+  <div class="noun">杜仑伯爵</div>
+  <div class="snippet">拿破仑宫廷的侍从官，奉命引导俄国使者巴拉舍夫觐见拿破仑。在《战争与和平》的叙述中，杜伦伯爵（Comte de Turenne）是拿破仑的内廷侍从之一，负责安排外邦使节的谒见事务，是拿破仑皇帝身边负责礼仪与接见事务的近臣。</div>
+</a>
+<a class="entry-item" href="杜伦.html">
+  <div class="noun">杜伦</div>
+  <div class="snippet">热罗-克里斯托夫-米歇尔·迪罗克（1772-1813），拿破仑的亲密战友，弗里乌尔公爵，曾任拿破仑宫廷大元帅，负责皇帝安全、皇宫管理及典礼组织。从土伦围城战起追随拿破仑，参与雾月政变、奥斯特利茨战役等，多次执行外交使命。1813年包岑战役后</div>
+</a>
+<a class="entry-item" href="杜塞克.html">
+  <div class="noun">杜塞克</div>
+  <div class="snippet">扬·拉迪斯拉夫·杜塞克（Jan Ladislav Dussek，1760-1812），波西米亚钢琴家、作曲家，欧洲早期浪漫主义钢琴音乐的代表人物之一，其奏鸣曲在《战争与和平》中被玛丽亚公爵小姐练习弹奏。</div>
+</a>
+<a class="entry-item" href="杜尼亚莎.html">
+  <div class="noun">杜尼亚莎</div>
+  <div class="snippet">罗斯托夫家的女仆。娜塔莎在准备睡觉时叫她吹灭蜡烛。这是小说中的一个小角色。 --- 罗斯托夫家年轻女仆，果断能干，在娜塔莎准备首次舞会时跪在地板上为其缝改裙衫。属于小说中的小人物。 --- 杜尼亚莎是娜塔莎·罗斯托娃的贴身使女（女仆），忠心</div>
+</a>
+<a class="entry-item" href="杜尼亚莎与女仆.html">
+  <div class="noun">杜尼亚莎与女仆</div>
+  <div class="snippet">博尔孔斯基家的女仆们。杜尼亚莎是玛丽亚公爵小姐的女仆，在罗斯托夫和伊林来到庄园时首先出来迎接。伊林一眼看中穿粉红色衣裳的杜尼亚莎，与她调笑。</div>
+</a>
+<a class="entry-item" href="杜罗克.html">
+  <div class="noun">杜罗克</div>
+  <div class="snippet">热罗·克里斯托夫·米歇尔·杜罗克（1772-1813），弗里乌尔公爵，法国师级将军、帝国宫廷大元帅。他是拿破仑最亲密的助手之一，自1796年起担任拿破仑副官，负责皇帝的人身安全和宫廷事务，被誉为&quot;拿破仑的影子&quot;。曾参加意大利战役、埃及远征和</div>
+</a>
+<a class="entry-item" href="杰尼斯·达维多夫.html">
+  <div class="noun">杰尼斯·达维多夫</div>
+  <div class="snippet">杰尼斯·瓦西里耶维奇·达维多夫（1784-1839），俄国军事家、诗人，中将军衔。1812年卫国战争期间，他率先向巴格拉季昂将军提出以小股骑兵袭击法军后勤补给线的游击战策略，成为俄国游击战之父之一。他也是俄国文学中&quot;骠骑兵诗歌&quot;体裁的创始人</div>
+</a>
+<a class="entry-item" href="杰尼索夫.html">
+  <div class="noun">杰尼索夫</div>
+  <div class="snippet">瓦西里·费奥多罗维奇·杰尼索夫，《战争与和平》中保罗格勒骠骑兵团的骑兵连长，尼古拉·罗斯托夫的亲密战友。性格豪爽急躁、重情重义，曾向娜塔莎求婚被拒，后在1812年战争中领导游击队。 --- 瓦西里·费奥多罗维奇·杰尼索夫，保罗格勒骠骑兵团的</div>
+</a>
+<a class="entry-item" href="杰尼索夫大尉.html">
+  <div class="noun">杰尼索夫大尉</div>
+  <div class="snippet">全名瓦西里·费奥多罗维奇·杰尼索夫，外号瓦西卡·杰尼索夫。托尔斯泰《战争与和平》中保罗格勒骠骑兵团的骑兵大尉、骑兵连长，与尼古拉·罗斯托夫同住。性格豪爽直率、好赌爱酒。后期成为游击队指挥官。</div>
+</a>
+<a class="entry-item" href="杰米扬.html">
+  <div class="noun">杰米扬</div>
+  <div class="snippet">童山博尔康斯基家的管家，在安德烈公爵归来时站在楼下回答询问。</div>
+</a>
+<a class="entry-item" href="柏尔纳道特.html">
+  <div class="noun">柏尔纳道特</div>
+  <div class="snippet">让-巴蒂斯特·贝尔纳多特（1763-1844），法国元帅，蓬特-科沃亲王。1810年被选为瑞典王储，改名卡尔·约翰。1812年领导瑞典加入反法同盟，在莱比锡战役中指挥北路联军对抗拿破仑。1818年加冕为瑞典国王卡尔十四世·约翰，开创至今仍在</div>
+</a>
+<a class="entry-item" href="柏拉图·卡拉塔耶夫.html">
+  <div class="noun">柏拉图·卡拉塔耶夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的关键配角，一名俄国农夫出身的士兵。皮埃尔在法军战俘营中遇见他，他代表了俄罗斯人民的纯朴智慧和顺应自然的生活哲学，最终在法军撤退途中被枪杀。托尔斯泰以&quot;圆&quot;的意象反复描绘他，象征其完满自足的生命状态。</div>
+</a>
+<a class="entry-item" href="查理一世.html">
+  <div class="noun">查理一世</div>
+  <div class="snippet">查理一世（Charles I，1600—1649），斯图亚特王朝的英格兰、苏格兰和爱尔兰国王（1625—1649年在位）。他奉行&quot;君权神授&quot;理念，与议会矛盾尖锐，1629年解散议会，开始了长达11年的个人专制统治。1642年英国内战爆发，1</div>
+</a>
+<a class="entry-item" href="查理九世.html">
+  <div class="noun">查理九世</div>
+  <div class="snippet">查理九世（Charles IX，1550—1574），法国瓦卢瓦王朝国王，1560年至1574年在位，十岁登基，由母亲凯瑟琳·德·美第奇摄政。在位期间法国宗教战争激化，1572年在母后压力下下令屠杀胡格诺派新教徒，导致圣巴托洛缪大屠杀。二十</div>
+</a>
+<a class="entry-item" href="查理十世.html">
+  <div class="noun">查理十世</div>
+  <div class="snippet">查理十世（Charles X，1757—1836），法国波旁王朝末代国王（1824—1830年在位），路易十五之孙，路易十八之弟。即位前长期称阿图瓦伯爵，是极端保王派的领袖。在位期间推行极端保守政策，加强天主教统治地位，压制新闻和出版自由。</div>
+</a>
+<a class="entry-item" href="查理十二.html">
+  <div class="noun">查理十二</div>
+  <div class="snippet">瑞典国王（1682-1718），卡尔十二世，在大北方战争中率军入侵俄国，1709年在波尔塔瓦战役中被彼得大帝击败，后流亡奥斯曼帝国。他是欧洲军事史上著名的年轻统帅，其远征俄国的失败历史成为拿破仑入侵俄国的前车之鉴。《战争与和平》中巴拉舍夫在</div>
+</a>
+<a class="entry-item" href="柳博米尔斯基.html">
+  <div class="noun">柳博米尔斯基</div>
+  <div class="snippet">波兰最显赫的贵族家族之一（Lubomirski），源自小波兰地区，16至17世纪成为波兰-立陶宛联邦最富有的权贵家族之一，仅次于拉齐维乌家族。家族成员拥有亲王头衔，担任过城堡长官、总督、大元帅、参议员等要职，拥有多处宫殿城堡。拿破仑战争期间</div>
+</a>
+<a class="entry-item" href="柳比姆.html">
+  <div class="noun">柳比姆</div>
+  <div class="snippet">柳比姆是《战争与和平》中尼古拉·罗斯托夫的一只红毛猎犬，在俄语中意为&quot;亲爱的&quot;。它勇猛迅猛，在追狼过程中从米尔卡后面窜出，箭也似地向狼扑去，咬住了狼的后腿，但在狼反击的一瞬间惊慌跳到旁边。它是罗斯托夫猎犬群中重要的成员之一。</div>
+</a>
+<a class="entry-item" href="格列科夫.html">
+  <div class="noun">格列科夫</div>
+  <div class="snippet">蒂莫菲·德米特里耶维奇·格列科夫（1770—1831），俄罗斯帝国少将，顿河哥萨克军官。在1812年卫国战争中指挥哥萨克团，因战功晋升上校；1813—1814年国外远征中指挥哥萨克旅，在莱比锡战役表现突出晋升少将。在《战争与和平》的塔鲁丁诺</div>
+</a>
+<a class="entry-item" href="格拉西姆.html">
+  <div class="noun">格拉西姆</div>
+  <div class="snippet">巴兹杰耶夫家的老仆人，面黄无须，身材矮小。五年前曾在托尔若克伴随约瑟夫·阿列克谢耶维奇，为人忠厚沉稳。皮埃尔躲进巴兹杰耶夫空宅时，他负责照料，并协助皮埃尔弄来农民服装和手枪。</div>
+</a>
+<a class="entry-item" href="格林卡.html">
+  <div class="noun">格林卡</div>
+  <div class="snippet">谢尔盖·尼古拉耶维奇·格林卡（Sergey Nikolaevich Glinka，1769—1847），俄国作家、出版家、记者，1808年在莫斯科创办并主编文学政治月刊《俄罗斯导报》，持爱国君主主义立场，在1812年拿破仑战争期间对俄国社会</div>
+</a>
+<a class="entry-item" href="格洛高城防司令.html">
+  <div class="noun">格洛高城防司令</div>
+  <div class="snippet">1806年普鲁士格洛高要塞的城防司令，在法军兵临城下时未做抵抗而向普鲁士国王请示，托尔斯泰用以讽刺普鲁士军方的软弱无能。</div>
+</a>
+<a class="entry-item" href="梅什科夫.html">
+  <div class="noun">梅什科夫</div>
+  <div class="snippet">俄国政治犯，与韦列夏金一同被拉斯托普钦伯爵关押的囚犯。</div>
+</a>
+<a class="entry-item" href="梅德韦杰夫.html">
+  <div class="noun">梅德韦杰夫</div>
+  <div class="snippet">《战争与和平》中俄军炮兵上尉图申手下的一名炮手（二号炮手）姓氏。在图申指挥炮击申格拉本村的激战场面中被提及，是托尔斯泰笔下众多基层无名士兵形象的缩影。</div>
+</a>
+<a class="entry-item" href="梅斯特.html">
+  <div class="noun">梅斯特</div>
+  <div class="snippet">约瑟夫·德·梅斯特（1753-1821），萨瓦公国出身的哲学家、外交家，欧洲保守主义思想奠基人之一，与伯克并称。1792年法国占领萨瓦后流亡，1803-1817年任撒丁王国驻俄罗斯大使，在圣彼得堡居留14年。代表作《论法国》《论教皇》《圣彼</div>
+</a>
+<a class="entry-item" href="梅柳科娃家的女儿们.html">
+  <div class="noun">梅柳科娃家的女儿们</div>
+  <div class="snippet">梅柳科娃家的女儿们是佩拉格娅·丹尼洛夫娜的一群女儿，人数众多。在圣诞夜化装舞会前她们在安静地滴蜡油占卜，随后兴高采烈地参与化装活动，与娜塔莎等人一起用软木炭画胡子、换男装。她们在晚餐时好奇地听老姑娘讲澡堂算卦的故事，展现了俄国贵族少女的日常</div>
+</a>
+<a class="entry-item" href="梅特涅.html">
+  <div class="noun">梅特涅</div>
+  <div class="snippet">克莱门斯·文策尔·冯·梅特涅（1773—1859），奥地利帝国首相兼外交大臣，欧洲保守主义政治的代表人物。他在拿破仑战争后期主导奥地利外交，巧妙利用大国矛盾为奥地利赢得喘息之机。1814至1815年主持维也纳会议，建立以&quot;正统主义&quot;和&quot;大国</div>
+</a>
+<a class="entry-item" href="梅蒂维埃.html">
+  <div class="noun">梅蒂维埃</div>
+  <div class="snippet">1811年在莫斯科红极一时的法国医生，身材高大，仪容俊美，性格和蔼可亲。常出入上流社会，被当作平等身份的人接待。在一次公爵命名日擅闯书房，被情绪恶劣的老公爵怒斥为法国间谍、波拿巴的走狗并赶出家门。反映了当时俄国社会对法国人的猜疑与矛盾心态。</div>
+</a>
+<a class="entry-item" href="梯也尔.html">
+  <div class="noun">梯也尔</div>
+  <div class="snippet">路易-阿道夫·梯也尔（1797-1877），法国政治家和历史学家。著有《法国大革命史》（10卷）和《执政府与帝国史》（20卷）。历任七月王朝首相、法兰西第三共和国首任总统（1871-1873）。因残酷镇压巴黎公社而极具争议。在《战争与和平》</div>
+</a>
+<a class="entry-item" href="樊尚·博斯.html">
+  <div class="noun">樊尚·博斯</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》中的一个次要角色，被俄军俘虏的法国少年小鼓手。法文名Vincent Bosse，俄军中将其名字叫得走了音：哥萨克叫他&quot;韦辛尼&quot;（Весенний，意为&quot;春天的&quot;），农民和士兵叫他&quot;韦辛纳&quot;。在杰尼索夫游击队营地中</div>
+</a>
+<a class="entry-item" href="歌利亚.html">
+  <div class="noun">歌利亚</div>
+  <div class="snippet">圣经旧约中非利士人的巨人战士，被少年大卫用投石机击杀。在小说中作为强大但终将失败的敌人象征。</div>
+</a>
+<a class="entry-item" href="比利宾.html">
+  <div class="noun">比利宾</div>
+  <div class="snippet">俄国外交官，驻维也纳使馆秘书，安德烈·博尔孔斯基公爵的旧识与好友。以善于说俏皮话闻名，是社交场合的&quot;金句制造机&quot;。精于分析和文字工作，略带犬儒主义色彩，属于文职智慧型人物。 --- 俄国作家列夫·托尔斯泰小说《战争与和平》中的人物，一位在维</div>
+</a>
+<a class="entry-item" href="比茨基.html">
+  <div class="noun">比茨基</div>
+  <div class="snippet">彼得堡官场与社交界的活动家，在形形色色的委员会里供职，热烈崇拜斯佩兰斯基和新思想。托尔斯泰用讽刺笔调将他比作&quot;把选择流派视如挑选时装的人&quot;，暗示他随波逐流追求时髦思想。在舞会次日兴奋地向安德烈公爵讲述沙皇在国务会议上的演讲，认为这是&quot;开辟了</div>
+</a>
+<a class="entry-item" href="民兵军官.html">
+  <div class="noun">民兵军官</div>
+  <div class="snippet">皮埃尔在向士兵介绍自己时编造的身份，俄国在1812年战争期间征召了大量民兵，民兵军官的地位低于正规军军官，更接近普通士兵。</div>
+</a>
+<a class="entry-item" href="气球制造者列比赫.html">
+  <div class="noun">气球制造者列比赫</div>
+  <div class="snippet">德国人列比赫，受俄国聘请制造大型载人热气球，计划用于对法作战。沙皇对此高度重视并亲自过问。</div>
+</a>
+<a class="entry-item" href="求爱者.html">
+  <div class="noun">求爱者</div>
+  <div class="snippet">指向海伦求婚的两位上流社会人物——一位年轻亲王和一位年老的大官。海伦利用二人同时追求自己的局面在社交界散布自己面临选择的舆论。</div>
+</a>
+<a class="entry-item" href="汉德里科夫.html">
+  <div class="noun">汉德里科夫</div>
+  <div class="snippet">汉德里科夫是《战争与和平》中一个非常次要的配角，身份是科尔切瓦（特维尔省的一个县城）的地方长官。在小说中被老博尔孔斯基公爵在信中斥责办事不力，因未能及时将补充人员和粮食送到前方而受到严厉批评。</div>
+</a>
+<a class="entry-item" href="沃尔佐根.html">
+  <div class="noun">沃尔佐根</div>
+  <div class="snippet">路德维希·冯·沃尔佐根（1773—1845），普鲁士男爵，军事理论家。1807年加入俄军任参谋军官，1812年任职于巴克雷·德·托利的司令部。他是普鲁士军事理论家比洛和沙恩霍斯特学派的重要人物，其战略思想（诱敌深入、断敌补给）对俄军1812</div>
+</a>
+<a class="entry-item" href="沃尔孔斯基公爵.html">
+  <div class="noun">沃尔孔斯基公爵</div>
+  <div class="snippet">彼得·米哈伊洛维奇·沃尔孔斯基公爵（1776—1852），俄国陆军元帅，亚历山大一世的亲信和参谋长。1812年卫国战争中担任执行特别任务的御使，负责在沙皇和库图佐夫之间传递诏书与军情。1813年出任库图佐夫的参谋长，后成为俄军第一任总参谋长</div>
+</a>
+<a class="entry-item" href="沃尔托恩.html">
+  <div class="noun">沃尔托恩</div>
+  <div class="snippet">沃尔托恩是《战争与和平》中罗斯托夫家的一只猎狐犬，尼古拉·罗斯托夫非常熟悉它的叫声。在狩猎场景中，当猎犬被撒入幼林丛生的山谷后，沃尔托恩最先发出时断时续的嗥叫，其他猎犬随即响应，开启了追狐狸的行动。它是一只在狩猎中负责追踪和示踪的关键猎犬。</div>
+</a>
+<a class="entry-item" href="法军厨子.html">
+  <div class="noun">法军厨子</div>
+  <div class="snippet">被指控为奸细而在莫斯科沼泽广场遭受鞭刑的法国厨师，身材肥胖，穿蓝裤子和绿坎肩，被鞭打后痛苦哭泣，引起了皮埃尔的同情和强烈反感。</div>
+</a>
+<a class="entry-item" href="法国人.html">
+  <div class="noun">法国人</div>
+  <div class="snippet">法兰西民族成员。在小说《战争与和平》中，法国人是俄国在拿破仑战争中的主要对手。19世纪俄罗斯贵族普遍使用法语，深受法国文化影响。</div>
+</a>
+<a class="entry-item" href="法国军官.html">
+  <div class="noun">法国军官</div>
+  <div class="snippet">1812年拿破仑军队占领莫斯科时，一名来到皮埃尔藏身的巴兹杰耶夫宅邸征用法军军官。他高个子、英武俊秀，态度和蔼，用俄语向屋中众人打招呼。在后续章节中揭示名叫朗巴，第十三轻骑兵团上尉，因波罗金诺战役负伤，后与皮埃尔共进晚餐并彻夜交谈。</div>
+</a>
+<a class="entry-item" href="法国大使.html">
+  <div class="noun">法国大使</div>
+  <div class="snippet">出席海伦·瓦西里耶夫娜伯爵夫人盛大招待会的法国大使。当时拿破仑战争期间，俄法之间既有战争又有外交往来，法国大使仍是彼得堡社交界的重要人物。</div>
+</a>
+<a class="entry-item" href="法国小鼓手.html">
+  <div class="noun">法国小鼓手</div>
+  <div class="snippet">《战争与和平》中被杰尼索夫游击队俘虏的法国少年鼓手。</div>
+</a>
+<a class="entry-item" href="法国店员翻译.html">
+  <div class="noun">法国店员翻译</div>
+  <div class="snippet">《战争与和平》中在法军枪骑兵巡逻队中担任翻译的人，原是一家莫斯科商店的法国店员，穿着俄国平民衣服。他用法语与皮埃尔交谈，认出皮埃尔不像普通老百姓。</div>
+</a>
+<a class="entry-item" href="法布维埃.html">
+  <div class="noun">法布维埃</div>
+  <div class="snippet">拿破仑麾下的法军上校，1812年波罗金诺战役前夕从西班牙萨拉曼卡战场返回，向拿破仑报告法军在西班牙战场的战况。</div>
+</a>
+<a class="entry-item" href="波利娅.html">
+  <div class="noun">波利娅</div>
+  <div class="snippet">罗斯托夫家的使女（侍女）。俄语名波利娅是佩拉格娅（或波琳娜）的昵称。 在故事中负责通报家事，向娜塔莎报告公鸡拿来了。</div>
+</a>
+<a class="entry-item" href="波将金.html">
+  <div class="noun">波将金</div>
+  <div class="snippet">全名格里戈里·亚历山德罗维奇·波将金，俄国政治家、军事家、陆军元帅，叶卡捷琳娜二世最著名的情人和核心谋士。主导将克里米亚并入俄国版图，建有黑海舰队。&quot;波将金村&quot;成为弄虚作假的代名词。 --- 格奥尔基·亚历山德罗维奇·波将金，俄国陆军元帅、</div>
+</a>
+<a class="entry-item" href="波尼亚托夫斯基.html">
+  <div class="noun">波尼亚托夫斯基</div>
+  <div class="snippet">波兰亲王，拿破仑麾下的法军元帅，在波罗金诺战役中率部进攻乌季察地区。</div>
+</a>
+<a class="entry-item" href="波拿巴.html">
+  <div class="noun">波拿巴</div>
+  <div class="snippet">波拿巴是拿破仑·波拿巴的姓氏，源自意大利的欧洲贵族家族，1529年迁居科西嘉岛。拿破仑·波拿巴（1769—1821）在1804年建立法兰西第一帝国，使该家族达到鼎盛。在《战争与和平》的语境中，波拿巴即指拿破仑。 --- 即拿破仑·波拿巴（N</div>
+</a>
+<a class="entry-item" href="波拿巴(拿破仑).html">
+  <div class="noun">波拿巴(拿破仑)</div>
+  <div class="snippet">拿破仑·波拿巴（1769-1821），法兰西第一帝国皇帝，是《战争与和平》中重要的历史人物。小说描写了奥斯特利茨战役中安德烈受伤后仰望天空感到拿破仑渺小、蒂尔西特会面等经典场景。本卷文本中，托尔斯泰以安德烈曾对拿破仑的崇拜之情作比，描写他对</div>
+</a>
+<a class="entry-item" href="波拿巴将军.html">
+  <div class="noun">波拿巴将军</div>
+  <div class="snippet">俄国方面对拿破仑·波拿巴的不承认其帝位时的折中称呼。拿破仑1804年称帝后，俄国因未承认其皇帝头衔而在外交文书中使用此称呼。小说中多尔戈鲁科夫提到，既不能称&quot;执政&quot;也不能称&quot;皇帝&quot;，因此考虑称其为&quot;波拿巴将军&quot;。这一称号之争反映了当时欧洲外</div>
+</a>
+<a class="entry-item" href="波拿巴（拿破仑）.html">
+  <div class="noun">波拿巴（拿破仑）</div>
+  <div class="snippet">拿破仑·波拿巴（Napoleon Bonaparte，1769-1821），法兰西第一帝国皇帝。生于科西嘉，法国大革命中崛起，1799年雾月政变成为第一执政，1804年加冕称帝。颁布《拿破仑法典》，数次击败反法同盟，巅峰时控制西欧大部分地区</div>
+</a>
+<a class="entry-item" href="波格丹内奇.html">
+  <div class="noun">波格丹内奇</div>
+  <div class="snippet">保罗格勒骠骑兵团的团长（团指挥官），是一位正直勇敢但爱记仇的老上校， 在军官中享有威望。</div>
+</a>
+<a class="entry-item" href="波格丹诺维奇.html">
+  <div class="noun">波格丹诺维奇</div>
+  <div class="snippet">莫杰斯特·伊万诺维奇·波格丹诺维奇（1805—1882），俄军中将、军事史学家，著有《1812年卫国战争史》（三卷，1859年出版），是帝俄时代最权威的1812年战争官方史学家。</div>
+</a>
+<a class="entry-item" href="波罗金诺战役后的皮埃尔.html">
+  <div class="noun">波罗金诺战役后的皮埃尔</div>
+  <div class="snippet">经历波罗金诺战役后的皮埃尔·别祖霍夫，其精神状态发生了深刻变化。他从一个对战争抱有好奇心的旁观者变成了被战争现实深深震撼的创伤者，为后续的精神觉醒和人生转变奠定基础。</div>
+</a>
+<a class="entry-item" href="波蒂埃.html">
+  <div class="noun">波蒂埃</div>
+  <div class="snippet">夏尔-加布里埃尔·波蒂埃（Charles-Gabriel Potier，1774-1838），法国著名喜剧演员，长期在巴黎综艺剧院（Theatre des Varietes）演出。以机智幽默的表演风格、双关语和俏皮话著称，被公认为当时最伟大</div>
+</a>
+<a class="entry-item" href="泰塔斯.html">
+  <div class="noun">泰塔斯</div>
+  <div class="snippet">即提图斯（Titus，39—81年），罗马帝国弗拉维王朝皇帝，公元79—81年在位，以攻陷耶路撒冷和宽厚仁政著称。书中将其比作沙皇亚历山大一世。</div>
+</a>
+<a class="entry-item" href="洛普欣.html">
+  <div class="noun">洛普欣</div>
+  <div class="snippet">一位公爵，属于老博尔孔斯基公爵的贵族社交圈。在老博尔孔斯基公爵家的命名日宴会上与侄儿一同出席，属于衬托时代背景和贵族社交氛围的背景角色，非贯穿全书的核心人物。</div>
+</a>
+<a class="entry-item" href="洛普欣公爵.html">
+  <div class="noun">洛普欣公爵</div>
+  <div class="snippet">小说中次要角色，出现在老博尔孔斯基公爵的宴会上。与侄子一同赴宴，谈论市井新闻和政治新闻，但在议论皇帝陛下时谨慎地住口。</div>
+</a>
+<a class="entry-item" href="洛里斯东.html">
+  <div class="noun">洛里斯东</div>
+  <div class="snippet">雅克·洛里斯东，法国将军和外交官，拿破仑的侍从武官，1811年被任命为法国驻圣彼得堡大使。他是拿破仑战争期间重要的外交人物，曾试图在1812年战争爆发前调解法俄矛盾。</div>
+</a>
+<a class="entry-item" href="洛里斯顿.html">
+  <div class="noun">洛里斯顿</div>
+  <div class="snippet">雅克·亚历山大·伯纳德·劳，洛里斯顿侯爵（Jacques Alexandre Bernard Law, marquis de Lauriston，1768—1828），法国军官、外交官、法国元帅。拿破仑战争期间的重要将领，曾任拿破仑的副官和</div>
+</a>
+<a class="entry-item" href="海伦.html">
+  <div class="noun">海伦</div>
+  <div class="snippet">叶莲娜·瓦西里耶夫娜·库拉金娜，简称海伦，瓦西里公爵之女，彼得堡上流社会社交明星。绝色美人但放荡虚荣，在父亲安排下嫁给继承巨额遗产的皮埃尔，后与多洛霍夫偷情导致皮埃尔与多洛霍夫决斗，最终在两难抉择中抱病而终。是托尔斯泰笔下虚伪、贪婪与道德堕</div>
+</a>
+<a class="entry-item" href="海伦·别祖霍娃.html">
+  <div class="noun">海伦·别祖霍娃</div>
+  <div class="snippet">彼得堡第一美人，皮埃尔·别祖霍夫的妻子，社交界女王。外表极美但内心空虚，典型的上流社会交际花。鲍里斯凭借与她的亲密关系在上流社会获得显赫地位。 --- 全名海伦·瓦西里耶夫娜·别祖霍娃，库拉金公爵之女，皮埃尔的前妻。彼得堡社交界第一美人，外</div>
+</a>
+<a class="entry-item" href="海伦·库拉金娜.html">
+  <div class="noun">海伦·库拉金娜</div>
+  <div class="snippet">全名叶莲娜·瓦西里耶夫娜·库拉金娜，托尔斯泰《战争与和平》中的重要人物，库拉金家族成员。瓦西里公爵的女儿，阿纳托利的妹妹。以美貌著称，被称为&quot;美艳与野心交织的欲望化身&quot;。后嫁给皮埃尔·别祖霍夫，因品行不端与多洛霍夫偷情导致婚姻破裂，最终抱病</div>
+</a>
+<a class="entry-item" href="海伦·瓦西里耶夫娜.html">
+  <div class="noun">海伦·瓦西里耶夫娜</div>
+  <div class="snippet">全名海伦·瓦西里耶夫娜·别祖霍娃，原名叶连娜·库拉金娜，皮埃尔的妻子。瓦西里·库拉金公爵的女儿，被誉为俄国最迷人的绝色美女。外表美艳，内心愚昧堕落。在本章中，只有她认为同贝格这类人交往有失身份，因此拒绝参加贝格的晚会。</div>
+</a>
+<a class="entry-item" href="海伦两个求爱者.html">
+  <div class="noun">海伦两个求爱者</div>
+  <div class="snippet">指同时向海伦求婚的两位上流社会人物——一位年轻亲王和一位年老的大官。海伦在二人之间徘徊，借以制造舆论，使社交界讨论她应该嫁给谁而非能否离婚再嫁的问题。</div>
+</a>
+<a class="entry-item" href="涅斯维茨基.html">
+  <div class="noun">涅斯维茨基</div>
+  <div class="snippet">俄军校官，公爵，库图佐夫的随从副官之一。身材高大肥胖，生着一张俊秀和善的笑脸和一对水汪汪的眼睛，性格幽默开朗。 --- 托尔斯泰《战争与和平》中俄军参谋部军官，拥有公爵头衔。性格开朗幽默，体格肥胖，好美食美酒，是安德烈公爵在军中的同僚。 -</div>
+</a>
+<a class="entry-item" href="涅韦罗夫斯基.html">
+  <div class="noun">涅韦罗夫斯基</div>
+  <div class="snippet">德米特里·彼得罗维奇·涅韦罗夫斯基（1771—1813），俄国中将，1812年卫国战争英雄。指挥第27步兵师，在克拉斯内阻击战中率约6000步兵对抗法军元帅内伊率领的15000骑兵，以巨大方阵且战且退，打退法军约40次冲击，成功保存主力，被</div>
+</a>
+<a class="entry-item" href="温岑格罗德.html">
+  <div class="noun">温岑格罗德</div>
+  <div class="snippet">全名斐迪南·冯·温岑格罗德（1770—1818），俄国将领，德意志裔贵族出身。在拿破仑战争期间效力于俄军，担任亚历山大一世麾下的骑兵指挥官和游击战领导人。1812年俄法战争中参与追击拿破仑大军，1814年巴黎战役中率领混成骑兵军牵制拿破仑主</div>
+</a>
+<a class="entry-item" href="温普芬.html">
+  <div class="noun">温普芬</div>
+  <div class="snippet">马克西米利安·冯·温普芬男爵，奥地利元帅，毕业于维也纳新城军事学院，参加过奥斯特里茨战役、阿斯佩恩-埃斯灵战役，一生八次负伤，曾任奥地利军队总参谋长。</div>
+</a>
+<a class="entry-item" href="热尔科夫.html">
+  <div class="noun">热尔科夫</div>
+  <div class="snippet">俄军骠骑兵少尉，曾是多洛霍夫在彼得堡所属暴徒集团的成员，后调入司令部任副官。性格轻浮爱开玩笑，在检阅时摹仿团长的动作逗乐同僚。 --- 托尔斯泰《战争与和平》中的俄国军官（副官），性格轻浮爱开玩笑。在马克将军战败的消息传来时戏谑祝贺，遭安德</div>
+</a>
+<a class="entry-item" href="热尔韦.html">
+  <div class="noun">热尔韦</div>
+  <div class="snippet">斯佩兰斯基亲密朋友圈子中的一员，出席斯佩兰斯基府第的私人午宴。在午宴上讲述了一桩监察事件的笑话，其精彩之处在于有关人物的荒诞不经。后又插科打诨使谈话恢复欢快的调子。</div>
+</a>
+<a class="entry-item" href="热拉尔.html">
+  <div class="noun">热拉尔</div>
+  <div class="snippet">艾蒂安·莫里斯·热拉尔（Étienne Maurice Gérard，1773—1852），法国将军，1830年晋升法国元帅。1812年俄法战争期间在居丹将军的师中指挥一个旅，居丹阵亡后接任第三师指挥官，参加了波罗金诺战役。同年升任少将，后</div>
+</a>
+<a class="entry-item" href="爱德华·卡尔雷奇.html">
+  <div class="noun">爱德华·卡尔雷奇</div>
+  <div class="snippet">季姆勒的名字和父称。罗斯托夫家称他为爱德华·卡尔雷奇，即德国音乐教师季姆勒。 老伯爵夫人从客厅发话请爱德华·卡尔雷奇弹奏她最喜爱的菲尔德先生的《夜曲》。 --- 爱德华·卡尔雷奇即季姆勒（Dimmler），是罗斯托夫家中的德国裔乐师。卡尔雷</div>
+</a>
+<a class="entry-item" href="牛顿.html">
+  <div class="noun">牛顿</div>
+  <div class="snippet">艾萨克·牛顿（1643—1727），英国物理学家、数学家，经典力学创始人。1687年出版《自然哲学的数学原理》，提出万有引力定律和三大运动定律，统一了天上与地上的力学，被誉为现代科学之父。</div>
+</a>
+<a class="entry-item" href="狄安娜.html">
+  <div class="noun">狄安娜</div>
+  <div class="snippet">罗马神话中的月亮女神、狩猎女神，对应希腊神话中的阿尔忒弥斯。她是朱庇特与拉托娜之女，太阳神阿波罗的孪生姐妹，罗马十二主神之一，以美丽、贞洁和善射著称，被视为纯洁与自然的化身。</div>
+</a>
+<a class="entry-item" href="狄德罗.html">
+  <div class="noun">狄德罗</div>
+  <div class="snippet">德尼·狄德罗（Denis Diderot，1713—1784），法国启蒙思想家、唯物主义哲学家、文学家，&quot;百科全书派&quot;的核心领袖，与伏尔泰、卢梭并称为法国启蒙运动的&quot;三大领袖&quot;。他历时21年主编完成28卷《百科全书》（后增补至35卷），以启</div>
+</a>
+<a class="entry-item" href="玛丽.html">
+  <div class="noun">玛丽</div>
+  <div class="snippet">玛丽亚公爵小姐的法语称谓（Marie）。19世纪俄罗斯贵族深受法国文化影响，常在家庭和社交场合使用法语称呼。玛丽亚·博尔孔斯卡娅是安德烈公爵的妹妹。</div>
+</a>
+<a class="entry-item" href="玛丽亚·亨里霍夫娜.html">
+  <div class="noun">玛丽亚·亨里霍夫娜</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的次要角色，保罗格勒团随军医生的妻子，一位胖胖的、淡黄色头发的德国年轻女人。医生因新婚不久便带着她随军东奔西走。在战前雨夜，军官们在小酒馆中围着她献殷勤，成为一段充满生活气息的经典插曲，体现了战争阴影下俄国青年军官对</div>
+</a>
+<a class="entry-item" href="玛丽亚·伊格纳季耶夫娜·佩龙斯卡娅.html">
+  <div class="noun">玛丽亚·伊格纳季耶夫娜·佩龙斯卡娅</div>
+  <div class="snippet">罗斯托夫伯爵夫人的朋友和亲戚，前朝（叶卡捷琳娜女皇时代）宫中女官，人长得又黄又瘦。担任罗斯托夫家在彼得堡上层社交界的引路人，指导他们参加上流社交活动。住在道利达花园附近。</div>
+</a>
+<a class="entry-item" href="玛丽亚·博尔孔斯卡娅.html">
+  <div class="noun">玛丽亚·博尔孔斯卡娅</div>
+  <div class="snippet">尼古拉·安德烈耶维奇·博尔孔斯基公爵的女儿，安德烈·博尔孔斯基公爵的妹妹。她与父亲一起生活在童山庄园，相貌不美但有一双深邃明亮的大眼睛，眼中时常射出温暖的光芒。她性情虔诚善良、坚韧隐忍，默默忍受父亲的严厉管教。她与好友朱莉·卡拉金娜保持书信</div>
+</a>
+<a class="entry-item" href="玛丽亚·博尔孔斯卡娅(玛丽亚公爵小姐).html">
+  <div class="noun">玛丽亚·博尔孔斯卡娅(玛丽亚公爵小姐)</div>
+  <div class="snippet">玛丽亚·博尔孔斯卡娅公爵小姐，安德烈公爵的妹妹，博尔孔斯基家族的成员。性格虔诚温顺、隐忍善良，以宗教为精神支柱，认为人类所有复杂的法则归结为&quot;怀着仁爱为人类而受苦受难的上帝本身教导的爱和牺牲的法则&quot;。面对父亲的苛刻对待毫无怨言，将照顾侄子尼</div>
+</a>
+<a class="entry-item" href="玛丽亚·博尔孔斯卡娅公爵小姐.html">
+  <div class="noun">玛丽亚·博尔孔斯卡娅公爵小姐</div>
+  <div class="snippet">尼古拉·博尔孔斯基公爵的女儿，安德烈公爵的妹妹。性格虔诚善良、温柔自卑，在父亲的严厉管教下长期生活在童山庄园。她有着美丽的大眼睛但容貌平凡，内心充满宗教精神与自我牺牲的爱，后与尼古拉·罗斯托夫结婚。</div>
+</a>
+<a class="entry-item" href="玛丽亚·安东诺夫娜·纳雷什金娜.html">
+  <div class="noun">玛丽亚·安东诺夫娜·纳雷什金娜</div>
+  <div class="snippet">沙皇亚历山大一世的情妇，真实历史人物（1779-1854）。在宫廷舞会中紧随沙皇之后出场，显示其在宫廷中的显赫地位。</div>
+</a>
+<a class="entry-item" href="玛丽亚·尼古拉耶夫娜.html">
+  <div class="noun">玛丽亚·尼古拉耶夫娜</div>
+  <div class="snippet">《战争与和平》中莫斯科大火期间群众提及的一位妇女，被推测可能是皮埃尔所救女孩的母亲。一个家奴指出玛丽亚·尼古拉耶夫娜是位太太，而皮埃尔描述的是普通女人。</div>
+</a>
+<a class="entry-item" href="玛丽亚·德米特里耶夫娜.html">
+  <div class="noun">玛丽亚·德米特里耶夫娜</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的重要配角，全名玛丽亚·德米特里耶夫娜·阿赫罗西莫娃。她是一个身材高大肥胖的莫斯科贵妇人，以心地豪爽、待人坦诚、直言无忌而闻名，上流社会人称&quot;le terrible dragon&quot;（可怕的龙）。她始终坚持说俄语而非法</div>
+</a>
+<a class="entry-item" href="玛丽亚·德米特里耶夫娜·阿赫罗西莫娃.html">
+  <div class="noun">玛丽亚·德米特里耶夫娜·阿赫罗西莫娃</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的配角，年约五十岁的老太太，身材高大肥胖，为人耿介、胸襟坦荡，社交界绰号叫&quot;恐龙&quot;（le terrible dragon）。她在上流社会中以直言不讳著称，整个莫斯科和彼得堡无人不晓，连皇室也知道她，人人都敬重而又惧怕</div>
+</a>
+<a class="entry-item" href="玛丽亚·波格丹诺夫娜.html">
+  <div class="noun">玛丽亚·波格丹诺夫娜</div>
+  <div class="snippet">童山当地的接生婆，在小说中被请来为小公爵夫人丽莎接生，经验丰富，镇定自若。 --- 托尔斯泰《战争与和平》中的产科女医生/助产士，在童山为小公爵夫人丽莎接生。她沉稳老练、经验丰富，面对分娩从容不迫，体现了民间助产士的专业与可靠。在她的照料下</div>
+</a>
+<a class="entry-item" href="玛丽亚·特雷西娅.html">
+  <div class="noun">玛丽亚·特雷西娅</div>
+  <div class="snippet">玛丽亚·特蕾西娅（Maria Theresia，1717-1780），哈布斯堡家族史上唯一的女性统治者，奥地利女大公、匈牙利女王、波希米亚女王。在位四十年推行开明专制改革，被称为&quot;奥地利国母&quot;。</div>
+</a>
+<a class="entry-item" href="玛丽亚·费奥多罗夫娜.html">
+  <div class="noun">玛丽亚·费奥多罗夫娜</div>
+  <div class="snippet">玛丽亚·费奥多罗夫娜（1759—1828），原名符腾堡的索菲·多萝西亚，俄罗斯帝国皇后，沙皇保罗一世之妻。她是亚历山大一世和尼古拉一世的母亲，在保罗一世遇刺后成为俄罗斯首位皇太后，管理全国慈善机构，对儿子们保持很大影响力。 --- 原名符腾</div>
+</a>
+<a class="entry-item" href="玛丽亚·费奥多罗夫娜皇太后.html">
+  <div class="noun">玛丽亚·费奥多罗夫娜皇太后</div>
+  <div class="snippet">玛丽亚·费奥多罗夫娜（1759-1828），原名索菲·多萝西娅，符腾堡公爵之女，俄罗斯沙皇保罗一世的第二任妻子，亚历山大一世和尼古拉一世的母亲。保罗一世遇刺后成为皇太后，在宫廷中地位崇高，是俄罗斯帝国首位皇太后。</div>
+</a>
+<a class="entry-item" href="玛丽亚·路易莎皇后.html">
+  <div class="noun">玛丽亚·路易莎皇后</div>
+  <div class="snippet">奥地利公主，神圣罗马帝国皇帝弗朗茨二世之女，1810年嫁给拿破仑一世成为法兰西皇后。拿破仑为获取哈布斯堡家族的政治支持而与她联姻，她为拿破仑生下独子罗马王。在拿破仑战败后被盟军安排成为帕尔马公爵夫人。</div>
+</a>
+<a class="entry-item" href="玛丽亚伯爵夫人（罗斯托娃）.html">
+  <div class="noun">玛丽亚伯爵夫人（罗斯托娃）</div>
+  <div class="snippet">原名玛丽亚·尼古拉耶夫娜·博尔孔斯卡娅公爵小姐，嫁给尼古拉·罗斯托夫后成为玛丽亚·罗斯托娃伯爵夫人。她是安德烈·博尔孔斯基公爵的妹妹，性格温柔虔诚，婚后与尼古拉育有子女（包括安德留沙和小娜塔莎），在尾声部分展现了深沉的母爱与家庭幸福。</div>
+</a>
+<a class="entry-item" href="玛丽亚公爵小姐.html">
+  <div class="noun">玛丽亚公爵小姐</div>
+  <div class="snippet">玛丽亚·博尔孔斯卡娅公爵小姐，托尔斯泰《战争与和平》中博尔孔斯基公爵的女儿、安德烈公爵的妹妹。外貌不美但有一双深邃动人的大眼睛，性格虔诚善良、温柔内向，生活在父权严厉的童山庄园中。 --- 全名玛丽亚·博尔孔斯卡娅，安德烈公爵的妹妹，博尔孔</div>
+</a>
+<a class="entry-item" href="玛夫拉·库兹米尼什娜.html">
+  <div class="noun">玛夫拉·库兹米尼什娜</div>
+  <div class="snippet">托尔斯泰小说《战争与和平》中的次要角色，罗斯托夫伯爵家的女管家，一位忠诚慈祥的老仆人。在莫斯科撤退前夕，她协助娜塔莎将受伤士兵安置到罗斯托夫家的院子里，并在主人离开后留守空宅，曾将自己的积蓄25卢布送给一位素不相识的青年军官。 --- 罗斯</div>
+</a>
+<a class="entry-item" href="玛夫鲁莎.html">
+  <div class="noun">玛夫鲁莎</div>
+  <div class="snippet">罗斯托夫家女仆，在娜塔莎准备首次舞会时参与缝改裙衫。属于小说中的小人物，是19世纪初俄国贵族家庭仆人群像的一部分。</div>
+</a>
+<a class="entry-item" href="玛拉莎.html">
+  <div class="noun">玛拉莎</div>
+  <div class="snippet">菲利村农民安德烈·萨沃斯季亚诺夫的六岁孙女。在1812年俄军于菲利村举行的军事会议上，她留在屋内的炕炉上，以儿童的视角观察了库图佐夫和诸位将军的会议过程，成为这一历史时刻的独特见证者。 --- 托尔斯泰笔下菲利军事会议场景中的六岁农民女孩，</div>
+</a>
+<a class="entry-item" href="玛特廖娜·季莫费耶夫娜.html">
+  <div class="noun">玛特廖娜·季莫费耶夫娜</div>
+  <div class="snippet">罗斯托夫伯爵夫人做姑娘时的侍女，在故事中已成为伯爵夫人身边掌管事务的贴身女仆，负责向伯爵夫人汇报家中情况和执行夫人的指令。</div>
+</a>
+<a class="entry-item" href="玛特廖莎·马特维耶夫娜.html">
+  <div class="noun">玛特廖莎·马特维耶夫娜</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的茨冈（吉普赛）姑娘，在多洛霍夫府上侍奉。容貌俊俏、瘦削、面色苍白，有一双乌黑闪亮的眼睛和泛着灰蓝色的卷曲黑发，披红色围巾。在阿纳托利·库拉金策划诱拐娜塔莎·罗斯托娃之前，多洛霍夫命她取来貂皮大衣用来裹住出逃的娜塔莎</div>
+</a>
+<a class="entry-item" href="玛蒂尔达.html">
+  <div class="noun">玛蒂尔达</div>
+  <div class="snippet">《战争与和平》中提到的女性人物，罗斯托夫在本章中提到&quot;见过玛蒂尔达小姐&quot;，是驻扎地附近的一位女性，具体身份为驻扎地所在村庄或附近庄园的小姐。</div>
+</a>
+<a class="entry-item" href="瓦夏.html">
+  <div class="noun">瓦夏</div>
+  <div class="snippet">杰尼索夫的昵称，由他的名字瓦西里衍生而来。尼古拉·罗斯托夫在亲密场合用此称呼叫他。在舞会上娜塔莎邀请杰尼索夫跳舞时，尼古拉也用&quot;得了，得了，瓦夏&quot;来帮妹妹说服他。</div>
+</a>
+<a class="entry-item" href="瓦西卡·杰尼索夫.html">
+  <div class="noun">瓦西卡·杰尼索夫</div>
+  <div class="snippet">全名瓦西里·费奥多罗维奇·杰尼索夫，托尔斯泰《战争与和平》中保罗格勒骠骑兵团的骑兵大尉（后晋升为将军）。性格豪爽直率、暴躁易怒但重情重义，是尼古拉·罗斯托夫的密友与连长。在1812年卫国战争中指挥游击队。小说中其外貌特征为身材矮小、红润面庞</div>
+</a>
+<a class="entry-item" href="瓦西里·利沃维奇·普希金.html">
+  <div class="noun">瓦西里·利沃维奇·普希金</div>
+  <div class="snippet">俄国诗人（1766—1830），著名诗人亚历山大·普希金的伯父，被称为普希金的&quot;诗父&quot;。擅长轻诗歌和讽刺诗，代表作《危险的邻居》。他曾旅居巴黎，是狂热的藏书家，其藏书在1812年莫斯科大火中被焚毁。在莫斯科文学圈中以限韵诗闻名。</div>
+</a>
+<a class="entry-item" href="瓦西里·库拉金.html">
+  <div class="noun">瓦西里·库拉金</div>
+  <div class="snippet">托尔斯泰《战争与和平》中库拉金家族的家长，全名瓦西里·谢尔盖耶维奇·库拉金公爵，为人贪婪虚伪、善于钻营，育有伊波利特、阿纳托利和海伦三子女，为谋财产不择手段。</div>
+</a>
+<a class="entry-item" href="瓦西里·库拉金公爵.html">
+  <div class="noun">瓦西里·库拉金公爵</div>
+  <div class="snippet">全名瓦西里·谢尔盖耶维奇·库拉金公爵，托尔斯泰《战争与和平》中库拉金家族的家长，彼得堡上流社会的重要人物和宫廷达官显贵。性格贪婪自私、虚伪圆滑、工于心计。曾试图争夺别祖霍夫伯爵遗产失败后，转而安排女儿海伦引诱皮埃尔成婚以图谋财富，又为儿子阿</div>
+</a>
+<a class="entry-item" href="瓦西里·德米特里奇.html">
+  <div class="noun">瓦西里·德米特里奇</div>
+  <div class="snippet">即瓦西里·德米特里奇·杰尼索夫，尼古拉·罗斯托夫的战友和挚友，豪爽勇敢的骠骑兵军官。以跳波兰玛祖卡舞的才艺闻名，曾在波兰以舞技出名。在罗斯托夫家中以娜塔莎的&quot;骑士&quot;自居，对她怀有爱慕之情。娜塔莎用&quot;小仙女，爱要我怎么就怎么&quot;说服他跳舞。</div>
+</a>
+<a class="entry-item" href="瓦西里·杰尼索夫.html">
+  <div class="noun">瓦西里·杰尼索夫</div>
+  <div class="snippet">瓦西里·杰尼索夫（Vasily Denisov），骠骑兵军官，尼古拉·罗斯托夫的挚友和战友。身材矮小、红脸、黑胡须，说话发不出卷舌音。英勇善战、豪爽直率。曾深爱娜塔莎并向她求婚被拒。1812年战争中指挥游击队，彼佳·罗斯托夫在他的队伍中牺牲</div>
+</a>
+<a class="entry-item" href="瓦西里公爵.html">
+  <div class="noun">瓦西里公爵</div>
+  <div class="snippet">小说《战争与和平》中的反面贵族角色。全名瓦西里·谢尔盖耶维奇·库拉金公爵（Василий Сергеевич Курагин），是库拉金家族的家长。他贪婪自私、虚伪善变、精于钻营。在老别祖霍夫伯爵病危时，他守在病榻旁企图争夺遗产，试图说服大</div>
+</a>
+<a class="entry-item" href="瓦西里公爵夫人.html">
+  <div class="noun">瓦西里公爵夫人</div>
+  <div class="snippet">瓦西里·库拉金公爵夫人（玛丽亚·伊万诺夫娜·库拉金娜），是《战争与和平》中瓦西里·库拉金公爵的妻子，海伦、伊波利特和阿纳托利·库拉金的母亲，皮埃尔的岳母。她在小说中戏份较少，是一位典型的贵族妇人，主要在其丈夫和子女的故事中作为家庭背景人物出</div>
+</a>
+<a class="entry-item" href="瓦西里奇.html">
+  <div class="noun">瓦西里奇</div>
+  <div class="snippet">罗斯托夫伯爵家的管家（餐厅侍者兼管家），负责指挥仆人收拾行装、安排车辆等事务，是伯爵信赖的老仆。 --- 罗斯托夫家的老仆，忠心耿耿的资深仆人，在罗斯托夫家撤离莫斯科后留守宅邸。</div>
+</a>
+<a class="entry-item" href="瓦西里奇科夫.html">
+  <div class="noun">瓦西里奇科夫</div>
+  <div class="snippet">俄国将军，1812年法军逼近莫斯科时，曾与哥萨克统领普拉托夫一同会见莫斯科总督拉斯托普钦，报告莫斯科已无法防守、必须放弃的消息。历史原型为伊拉里翁·瓦西里耶维奇·瓦西里奇科夫（1776-1847），1812年任俄军第12步兵师师长，参加了博</div>
+</a>
+<a class="entry-item" href="瓦西里萨.html">
+  <div class="noun">瓦西里萨</div>
+  <div class="snippet">《战争与和平》中一闪而过但极具象征意义的人物——一名村长的老婆，在1812年游击战中独自打死数百名法国人。托尔斯泰用这一形象来表现全民抗战的规模：连普通农妇也拿起武器，体现了游击战的人民性和&quot;人民战争&quot;思想——战争不仅是正规军的事，更是全体</div>
+</a>
+<a class="entry-item" href="申申.html">
+  <div class="noun">申申</div>
+  <div class="snippet">《战争与和平》中罗斯托娃伯爵夫人的堂兄，莫斯科交际场中绰号&quot;毒舌&quot;。他是一位上了年纪的文官，举止不拘小节，说话夹杂俄语和法语，以机智幽默、略带讽刺的言谈见长。在罗斯托夫家的晚宴上，他对俄国对法宣战持怀疑态度，引用谚语调侃战争，质疑苏沃洛夫也</div>
+</a>
+<a class="entry-item" href="留下的仆人.html">
+  <div class="noun">留下的仆人</div>
+  <div class="snippet">罗斯托夫家撤离莫斯科时留守宅邸的仆人，包括老仆瓦西里奇和女管家玛夫拉·库兹米尼什娜等人。</div>
+</a>
+<a class="entry-item" href="留里克.html">
+  <div class="noun">留里克</div>
+  <div class="snippet">瓦良格人首领，俄罗斯留里克王朝的创立者，诺夫哥罗德大公。据《往年纪事》记载，862年应邀率领亲兵来到诺夫哥罗德建立政权，其后继者奥列格建立基辅罗斯，开启了俄罗斯第一个王朝。</div>
+</a>
+<a class="entry-item" href="疯人院监督.html">
+  <div class="noun">疯人院监督</div>
+  <div class="snippet">精神病院的负责人，在莫斯科撤退期间向拉斯托普钦请示如何处理病人。</div>
+</a>
+<a class="entry-item" href="皇太后.html">
+  <div class="noun">皇太后</div>
+  <div class="snippet">皇太后指俄国皇帝的母亲玛丽亚·费奥多罗夫娜（Maria Feodorovna，保罗一世之妻，亚历山大一世之母）。在《战争与和平》中，瓦西里公爵提到皇太后对皮埃尔与海伦的决裂事件非常关切，因为她非常宠爱海伦，以此向皮埃尔施压，试图迫使他与海伦</div>
+</a>
+<a class="entry-item" href="皇帝亚历山大一世.html">
+  <div class="noun">皇帝亚历山大一世</div>
+  <div class="snippet">俄国罗曼诺夫王朝沙皇（1777-1825）。年轻俊美、温和有魅力，既有改革理想又优柔寡断。领导俄国打赢1812年卫国战争，最终打败拿破仑。</div>
+</a>
+<a class="entry-item" href="皮埃尔.html">
+  <div class="noun">皮埃尔</div>
+  <div class="snippet">皮埃尔·别祖霍夫，托尔斯泰《战争与和平》中的核心男主角之一，别祖霍夫家族的继承人。他善良单纯、热爱思考但意志薄弱，经历了从放浪贵族到精神探索者再到内心觉醒者的思想转变，最终与娜塔莎结婚，投身十二月党人运动。 --- 皮埃尔·别祖霍夫（Pie</div>
+</a>
+<a class="entry-item" href="皮埃尔(别祖霍夫).html">
+  <div class="noun">皮埃尔(别祖霍夫)</div>
+  <div class="snippet">皮埃尔·别祖霍夫是《战争与和平》的核心男主角之一，老别祖霍夫伯爵的私生子，继承巨额遗产成为莫斯科首富。他善良、单纯、热爱思考但意志薄弱。本卷中他担任彼得堡共济会首领，对俄国共济会日益形式化的状况不满，赴国外领受高级秘诀，回国后在支会发表激进</div>
+</a>
+<a class="entry-item" href="皮埃尔(别祖霍夫伯爵).html">
+  <div class="noun">皮埃尔(别祖霍夫伯爵)</div>
+  <div class="snippet">全名彼得·基里洛维奇·别祖霍夫伯爵，昵称皮埃尔，小说核心男主角之一。俄国最富有的贵族继承人。在本章中，他参加贝格家的晚会，在牌桌上观察安德烈公爵和娜塔莎之间的微妙变化，敏锐地意识到&quot;他们之间一定发生了一件非常重要的事&quot;，感到又欢喜又痛苦。</div>
+</a>
+<a class="entry-item" href="皮埃尔·别祖霍夫.html">
+  <div class="noun">皮埃尔·别祖霍夫</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》的核心男主角之一，老别祖霍夫伯爵的私生子，后继承爵位与巨额财产。性格正直善良、喜欢思考但意志薄弱。在小说中经历精神探索，加入共济会，亲历1812年战争，最终与娜塔莎·罗斯托娃结婚并投身十二月党人运动。 --- 皮</div>
+</a>
+<a class="entry-item" href="皮特先生.html">
+  <div class="noun">皮特先生</div>
+  <div class="snippet">小威廉·皮特（William Pitt the Younger，1759-1806），英国第14任首相，1783年首次组阁时年仅24岁，是英国历史上最年轻的首相。他在任期间领导英国对抗拿破仑法国，组建了三次反法同盟，并推动了所得税改革。18</div>
+</a>
+<a class="entry-item" href="祖博夫.html">
+  <div class="noun">祖博夫</div>
+  <div class="snippet">即普拉通·亚历山德罗维奇·祖博夫（Платон Александрович Зубов，1767—1822），俄国贵族，叶卡捷琳娜二世晚年最后一位宠臣。曾参与1801年刺杀保罗一世的宫廷政变。小说中老博尔孔斯基公爵在回忆叶卡捷琳娜二世葬礼时</div>
+</a>
+<a class="entry-item" href="神父太太.html">
+  <div class="noun">神父太太</div>
+  <div class="snippet">《战争与和平》中察列沃-扎伊米希村神父的妻子（未具名）。在库图佐夫抵达驻地时，她身穿粉红衣裳、包雪青色丝头巾，以俄罗斯传统&quot;献盐和面包&quot;的礼仪迎接总司令。库图佐夫称赞她&quot;漂亮的美人儿&quot;，并从裤袋掏出几枚金币放在她的盘子里。这一场景展现了俄国</div>
+</a>
+<a class="entry-item" href="福卡.html">
+  <div class="noun">福卡</div>
+  <div class="snippet">童山博尔康斯基家的厨师，小公爵夫人引用他对早餐的说法。 --- 罗斯托夫家管餐室的仆人，被托尔斯泰描写为全家脾气最坏的人。娜塔莎喜欢拿他试自己的权威，福卡虽然表面上皱眉质疑，最终仍会服从。反映了罗斯托夫家宽松的主仆关系——仆人们对娜塔莎的使</div>
+</a>
+<a class="entry-item" href="福楼拜.html">
+  <div class="noun">福楼拜</div>
+  <div class="snippet">古斯塔夫·福楼拜，法国现实主义文学大师，1821年出生，1880年去世。代表作《包法利夫人》被视为现代小说的奠基之作。他强调&quot;恰当的字&quot;的写作理念，对后世文学影响深远。</div>
+</a>
+<a class="entry-item" href="福蒂.html">
+  <div class="noun">福蒂</div>
+  <div class="snippet">修士大司祭福蒂（1792—1838），俄罗斯东正教极端保守的修士大司祭兼神秘主义者。他在亚历山大一世统治后期具有极大政治影响力，与阿拉克切耶夫合谋扳倒了宗教事务大臣戈利岑公爵，并促使沙皇下令禁止共济会。他以激烈抨击圣经协会和宗教神秘主义运动</div>
+</a>
+<a class="entry-item" href="科丘别伊.html">
+  <div class="noun">科丘别伊</div>
+  <div class="snippet">维克托·帕夫洛维奇·科丘别伊伯爵（1768-1834），俄国大国务活动家，亚历山大一世的密友与核心顾问之一。他是亚历山大一世即位前&quot;年轻朋友&quot;圈子成员，1802年出任首任内务部部长，是内务部建部方案的首创者。在小说中，安德烈公爵正是在科丘别</div>
+</a>
+<a class="entry-item" href="科丘别伊伯爵.html">
+  <div class="noun">科丘别伊伯爵</div>
+  <div class="snippet">维克托·帕夫洛维奇·科丘别伊伯爵（1768-1834），俄国著名外交官和政治家， 曾任内务大臣和国务会议主席。亚历山大一世时期&quot;秘密委员会&quot;核心成员之一， 参与推动俄国早期自由化改革。出身乌克兰哥萨克贵族世家（科丘别伊家族为哥萨克酋长国贵族</div>
+</a>
+<a class="entry-item" href="科兰库尔.html">
+  <div class="noun">科兰库尔</div>
+  <div class="snippet">阿尔芒·德·科兰古（Armand de Caulaincourt，1773—1827），法国外交官和军事将领，维琴察公爵。1807—1811年出任法国驻俄罗斯大使，是拿破仑最忠诚的部下之一。他曾在1812年随拿破仑远征俄罗斯，强烈建议放弃远</div>
+</a>
+<a class="entry-item" href="科兹洛夫斯基.html">
+  <div class="noun">科兹洛夫斯基</div>
+  <div class="snippet">托尔斯泰《战争与和平》中库图佐夫总司令部的值班副官，负责接待和文书工作，在司令部接待室值班时曾阻拦径直闯入的马克将军。</div>
+</a>
+<a class="entry-item" href="科维扎尔.html">
+  <div class="noun">科维扎尔</div>
+  <div class="snippet">让-尼古拉·科维扎尔（Jean-Nicolas Corvisart des Marets，1755—1821），法国男爵，拿破仑一世的首席御医，现代心脏病学奠基人之一。复兴了胸部叩诊法，著有《心脏及大血管器质性疾病论》，首次区分了心脏肥大与</div>
+</a>
+<a class="entry-item" href="科诺夫尼岑.html">
+  <div class="noun">科诺夫尼岑</div>
+  <div class="snippet">彼得·彼得罗维奇·科诺夫尼岑（1764—1822），俄国步兵上将，1812年卫国战争中的重要将领。战争初期指挥第3步兵师，在维捷布斯克战役中成功阻滞法军。博罗季诺战役中在巴格拉季翁受伤后临时指挥第2西部军团。1815年至1819年任俄国陆军</div>
+</a>
+<a class="entry-item" href="穆德罗夫.html">
+  <div class="noun">穆德罗夫</div>
+  <div class="snippet">马特维·雅科夫列维奇·穆德罗夫（Матвей Яковлевич Мудров，1776—1831），19世纪俄罗斯著名内科医生、医学教育改革者，俄罗斯临床学派的奠基人之一。1800年毕业于莫斯科大学医学系，曾赴德、奥、法进修。他是俄罗斯第</div>
+</a>
+<a class="entry-item" href="穆顿.html">
+  <div class="noun">穆顿</div>
+  <div class="snippet">穆顿（Georges Mouton，1770—1838），全名乔治·穆东，法国将军，后晋封洛博伯爵，1831年获封法国元帅。他出身平民，从列兵升至元帅，以勇猛和直言不讳著称。拿破仑曾称他为&quot;雄狮&quot;（Mon Mouton est un lio</div>
+</a>
+<a class="entry-item" href="穆齐·塞服拉.html">
+  <div class="noun">穆齐·塞服拉</div>
+  <div class="snippet">盖乌斯·穆齐乌斯·斯凯沃拉，古罗马传说中的英雄。公元前6世纪末伊特鲁里亚国王波塞纳围攻罗马时，穆齐潜入敌营刺杀国王未遂，被捕后为证明勇气将右手伸入火盆灼烧而面不改色。国王为其勇气所感，与罗马议和。穆齐因此得绰号Scaevola（左撇子）。</div>
+</a>
+<a class="entry-item" href="穿厚呢大衣的小职员.html">
+  <div class="noun">穿厚呢大衣的小职员</div>
+  <div class="snippet">1812年莫斯科撤退前夕在街头宣读拉斯托普钦伯爵告示的普通文职人员，身份低微。当他被群众围住要求宣读告示时有些窘迫，读到最后几句关于&quot;回来吃中饭&quot;的措辞时，他和听众都感到这样的官方语言过于简单粗浅，与民众激昂的情绪不相称。</div>
+</a>
+<a class="entry-item" href="穿女外衣的法国兵.html">
+  <div class="noun">穿女外衣的法国兵</div>
+  <div class="snippet">《战争与和平》中趁火打劫的法国士兵之一，个子细高、驼背、头发淡黄、精瘦、动作迟钝、一脸白痴相。他穿一件厚呢女外衣和蓝裤子，一双又大又破的骑兵长靴，是侵害亚美尼亚美女的主要施暴者。</div>
+</a>
+<a class="entry-item" href="穿灰色长衣剃光头的人.html">
+  <div class="noun">穿灰色长衣剃光头的人</div>
+  <div class="snippet">指19世纪俄国被流放的囚犯或苦役犯，他们穿着标志性的灰色长囚衣，头发被剃光，在《战争与和平》中混入哄抢商场的士兵群中乘乱劫掠。</div>
+</a>
+<a class="entry-item" href="符腾堡公爵.html">
+  <div class="noun">符腾堡公爵</div>
+  <div class="snippet">亚历山大·弗里德里希·卡尔·冯·符腾堡（Alexander Friedrich Karl von Württemberg，1771—1833），符腾堡国王腓特烈一世之弟，俄国沙皇亚历山大一世和尼古拉一世的亲舅舅（因姐姐玛丽亚·费奥多罗芙娜嫁</div>
+</a>
+<a class="entry-item" href="符腾堡的叶夫根尼亲王.html">
+  <div class="noun">符腾堡的叶夫根尼亲王</div>
+  <div class="snippet">符腾堡的叶夫根尼亲王（1788—1857），俄罗斯帝国步兵上将，沙皇保罗一世的侄子。1812年拿破仑入侵俄国期间，他担任第4步兵师师长，隶属于巴克雷·德·托利的第一西方军团。他参与了斯摩棱斯克战役、博罗季诺战役、塔鲁季诺战役、克拉斯诺耶战役</div>
+</a>
+<a class="entry-item" href="管家.html">
+  <div class="noun">管家</div>
+  <div class="snippet">贵族家庭中管理家务的仆人，童山的管家是杰米扬。</div>
+</a>
+<a class="entry-item" href="米什卡.html">
+  <div class="noun">米什卡</div>
+  <div class="snippet">罗斯托夫家的小厮（仆童），与祖父瓦西里奇一起留守在莫斯科的罗斯托夫宅邸。他在空荡荡的大厅中弹奏古钢琴取乐，被管家玛夫拉·库兹米尼什娜责备。</div>
+</a>
+<a class="entry-item" href="米哈伊尔·伊万内奇.html">
+  <div class="noun">米哈伊尔·伊万内奇</div>
+  <div class="snippet">博尔孔斯基公爵家的建筑师，受到老公爵的另类尊重，被允许与公爵一家同桌吃饭。老公爵常拿他做例子证明人人平等，是餐桌上老公爵喜欢攀谈的对象。</div>
+</a>
+<a class="entry-item" href="米哈伊尔·伊万诺维奇.html">
+  <div class="noun">米哈伊尔·伊万诺维奇</div>
+  <div class="snippet">博尔孔斯基老公爵家中的建筑师，受到老公爵破例优待，可以同桌吃饭。老公爵常以他为例子教导女儿&quot;人人平等&quot;，并喜欢在饭桌上与他谈论战争和政治话题。</div>
+</a>
+<a class="entry-item" href="米哈伊尔·伊万诺维奇(老公爵的管事_谈话对象).html">
+  <div class="noun">米哈伊尔·伊万诺维奇(老公爵的管事/谈话对象)</div>
+  <div class="snippet">米哈伊尔·伊万诺维奇，尼古拉·安德烈耶维奇·博尔孔斯基老公爵的管事和日常谈话对象。老公爵经常与他谈论政治事务和世界大事，是童山庄园中除了家人之外与老公爵关系最为亲近的随从。玛丽亚公爵小姐在信中提及：&quot;从我父亲的言谈中，从他和米哈伊尔·伊万诺</div>
+</a>
+<a class="entry-item" href="米哈伊尔·伊拉里奥诺维奇·库图佐夫.html">
+  <div class="noun">米哈伊尔·伊拉里奥诺维奇·库图佐夫</div>
+  <div class="snippet">俄罗斯帝国元帅，1812年俄法战争中任俄军总司令，击败拿破仑入侵，实施焦土战术和主动放弃莫斯科的战略，被拿破仑称为&quot;北方的老狐狸&quot;。</div>
+</a>
+<a class="entry-item" href="米哈伊尔·库图佐夫.html">
+  <div class="noun">米哈伊尔·库图佐夫</div>
+  <div class="snippet">米哈伊尔·伊拉里奥诺维奇·库图佐夫（1745-1813），俄罗斯帝国陆军元帅，1812年卫国战争中击败拿破仑大军的俄军总司令。在1805年奥斯特利茨战役中担任俄奥联军总司令，因战略分歧遭沙皇反对而战败。以&quot;北方的老狐狸&quot;之称闻名，擅长保存实</div>
+</a>
+<a class="entry-item" href="米哈伊尔·米哈伊洛维奇·斯佩兰斯基.html">
+  <div class="noun">米哈伊尔·米哈伊洛维奇·斯佩兰斯基</div>
+  <div class="snippet">米哈伊尔·米哈伊洛维奇是斯佩兰斯基的俄罗斯式名字和父称（имя и отчество）。父称&quot;米哈伊洛维奇&quot;意为&quot;米哈伊尔之子&quot;，是俄罗斯人姓名中尊称的组成部分。</div>
+</a>
+<a class="entry-item" href="米坚卡.html">
+  <div class="noun">米坚卡</div>
+  <div class="snippet">米坚卡（Митенька），俄语名德米特里的昵称，《战争与和平》中罗斯托夫伯爵家的管家。他精明狡猾，利用老伯爵宽厚善良、不善理财的弱点，多年侵吞伯爵家产，账目混乱不堪。尼古拉·罗斯托夫回家后曾抓住他的脖子将他拖出庄园。但老伯爵仍信任他，认为</div>
+</a>
+<a class="entry-item" href="米季卡.html">
+  <div class="noun">米季卡</div>
+  <div class="snippet">伯爵的马夫，不要命的骑手和狂热的猎手。 --- 米季卡是《战争与和平》中罗斯托夫家的猎手/车夫，在狩猎场景中负责与伯爵配合堵截狼。他在追狼过程中眼疾手快，最先发现狼的踪迹，用帽子指向同伴示意狼的方向。在后来的章节中，他还以弹奏巴拉莱卡琴的形</div>
+</a>
+<a class="entry-item" href="米洛拉多维奇.html">
+  <div class="noun">米洛拉多维奇</div>
+  <div class="snippet">米哈伊尔·安德烈耶维奇·米洛拉多维奇，俄国步兵上将，拿破仑战争中的杰出将领，参加奥斯特里茨战役、博罗季诺战役，追击拿破仑大军直至巴黎，曾任圣彼得堡军事总督，1825年十二月党人起义中被刺杀。</div>
+</a>
+<a class="entry-item" href="米绍.html">
+  <div class="noun">米绍</div>
+  <div class="snippet">即米绍上校，法国人，服务于俄国军队的上校军官，在1812年拿破仑侵俄战争期间担任库图佐夫元帅与沙皇亚历山大一世之间的专使。详见&quot;米绍上校&quot;词条。</div>
+</a>
+<a class="entry-item" href="米绍上校.html">
+  <div class="noun">米绍上校</div>
+  <div class="snippet">法国人，服务于俄国军队的上校军官，在1812年拿破仑侵俄战争期间担任库图佐夫元帅与沙皇亚历山大一世之间的专使。他不会说俄语，但自称&quot;身为外国人，却有一颗俄国心&quot;。他最著名的使命是在莫斯科失守后向沙皇报告这一噩耗，并以其巧妙的外交辞令激励沙皇</div>
+</a>
+<a class="entry-item" href="米罗诺夫.html">
+  <div class="noun">米罗诺夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中保罗格勒骠骑兵团的士官生。在恩斯河桥场景中，因每次听见炮弹飞过都弯下身子而被连长杰尼索夫训斥。属于小说中的边缘配角。</div>
+</a>
+<a class="entry-item" href="索尔比埃.html">
+  <div class="noun">索尔比埃</div>
+  <div class="snippet">让-巴泰勒莫·索尔比埃（Jean-Barthélemot Sorbier，1762—1827），法国炮兵将军，帝国伯爵。1809年起担任拿破仑近卫军炮兵司令，1812年俄法战争中指挥近卫军预备炮兵参加斯摩棱斯克和波罗金诺会战，曾在波罗金诺战</div>
+</a>
+<a class="entry-item" href="索尼娅.html">
+  <div class="noun">索尼娅</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的人物，全名索菲娅·亚历山德罗夫娜，是罗斯托夫伯爵夫人的侄女，自幼父母双亡，被罗斯托夫家收养。她温顺善良、深情而克制，与尼古拉·罗斯托夫青梅竹马、两情相悦，但因家境贫寒且是表亲关系，最终未能结合。娜塔莎称她为&quot;表姐&quot;</div>
+</a>
+<a class="entry-item" href="索尼娅(罗斯托夫家养女).html">
+  <div class="noun">索尼娅(罗斯托夫家养女)</div>
+  <div class="snippet">索尼娅·亚历山德罗夫娜（Соня Александровна），《战争与和平》中罗斯托夫家的养女，是伯爵夫人的外甥女。她温柔忠诚、沉静无私，深爱尼古拉·罗斯托夫，却因没有陪嫁而无法与他结婚。她的自我牺牲性格贯穿全书，她终身未嫁，在尼古拉与玛</div>
+</a>
+<a class="entry-item" href="索尼娅·罗斯托娃.html">
+  <div class="noun">索尼娅·罗斯托娃</div>
+  <div class="snippet">罗斯托夫伯爵夫人的外甥女，自幼父母双亡被罗斯托夫家收养。托尔斯泰形容她&quot;像一只可爱的小猫&quot;。深爱着表哥尼古拉·罗斯托夫，一生忠诚但命运堪怜。本节中她协助娜塔莎准备舞会着装。 --- 罗斯托夫伯爵夫人的侄女，父母早亡后被罗斯托夫家收养。她深爱</div>
+</a>
+<a class="entry-item" href="索尼娅（战争与和平）.html">
+  <div class="noun">索尼娅（战争与和平）</div>
+  <div class="snippet">全名索菲娅·亚历山德罗夫娜，罗斯托夫伯爵夫人的侄女，父母双亡后被罗斯托夫家收养。她与尼古拉·罗斯托夫青梅竹马、两情相悦，但终因家族衰落和现实考量未能结合。在本书中，她在奥特拉德诺耶的月夜与娜塔莎对话，展现了温柔顺从的性格。她是小说中最令人怜</div>
+</a>
+<a class="entry-item" href="索尼娅（索菲娅·亚历山德罗夫娜）.html">
+  <div class="noun">索尼娅（索菲娅·亚历山德罗夫娜）</div>
+  <div class="snippet">索尼娅是老罗斯托夫伯爵的外甥女，娜塔莎的表姐兼密友，与尼古拉青梅竹马相恋。她曾拒绝多洛霍夫的求婚，忠诚于尼古拉。但在小说的结局中，尼古拉最终娶了玛丽亚公爵小姐，索尼娅未能获得圆满的爱情，是一个温柔善良、具有自我牺牲精神的悲剧性人物。</div>
+</a>
+<a class="entry-item" href="索科洛夫.html">
+  <div class="noun">索科洛夫</div>
+  <div class="snippet">《战争与和平》中一名病重的俄国俘虏士兵，患痢疾身体极度虚弱。皮埃尔曾试图为他向法军班长求情，但最终他被法军遗弃在莫斯科。体现了战争中被忽视的底层士兵的悲惨命运。 --- 索科洛夫是《战争与和平》中一个短暂的配角，为一名患赤痢的俄军士兵。在1</div>
+</a>
+<a class="entry-item" href="索菲.html">
+  <div class="noun">索菲</div>
+  <div class="snippet">索菲娅·亚历山德罗夫娜的法语称呼形式，即索尼娅。罗斯托夫家的寄养孤女，与尼古拉青梅竹马并深爱他。她拒绝了多洛霍夫的求婚，因为心中只有尼古拉。性格温顺隐忍，最终牺牲自己成全尼古拉的婚姻，终身未嫁。</div>
+</a>
+<a class="entry-item" href="索菲公爵小姐.html">
+  <div class="noun">索菲公爵小姐</div>
+  <div class="snippet">老别祖霍夫伯爵三位公爵小姐中最年幼的一位，面颊绯红、爱笑，唇上有一颗黑痣（胎痣），天性活泼滑稽。在终敷礼仪式上因憋不住笑而躲到圆柱后面。与罗斯托夫家的索尼娅（索菲娅·亚历山德罗夫娜）并非同一人物。</div>
+</a>
+<a class="entry-item" href="索菲娅·丹尼洛夫娜.html">
+  <div class="noun">索菲娅·丹尼洛夫娜</div>
+  <div class="snippet">共济会员约瑟夫·阿列克谢耶维奇·巴兹杰耶夫的遗孀。法军逼近莫斯科时，她带着孩子前往托尔若克乡下避难，临行前吩咐仆人照看好已故丈夫的书房和图书。</div>
+</a>
+<a class="entry-item" href="约书亚.html">
+  <div class="noun">约书亚</div>
+  <div class="snippet">约书亚（嫩的儿子），《旧约圣经》中的重要人物，摩西的继任者，带领以色列人进入迦南应许之地。主要事迹包括过约旦河、攻陷耶利哥城、分地给十二支派。相传曾祈求日月停留以助战。</div>
+</a>
+<a class="entry-item" href="约格尔.html">
+  <div class="noun">约格尔</div>
+  <div class="snippet">莫斯科的舞蹈教师，每逢节日在家中为男女学生举办舞会。长期居住于罗斯托夫伯爵家中，属于罗斯托夫家的常客式人物。娜塔莎邀请哥哥尼古拉去参加约格尔家的舞会。此角色有真实历史原型，是当时莫斯科贵族圈知名的舞蹈教师。 --- 莫斯科的舞蹈教师，举办莫</div>
+</a>
+<a class="entry-item" href="约瑟夫·阿列克谢耶维奇.html">
+  <div class="noun">约瑟夫·阿列克谢耶维奇</div>
+  <div class="snippet">约瑟夫·阿列克谢耶维奇（奥西普·阿列克谢耶维奇·巴兹杰耶夫）是《战争与和平》中的资深共济会会员，皮埃尔的精神导师。他辞去彼得堡支会事务后在莫斯科深居简出，潜心研究共济会的奥秘教义（三位一体称号、硫磺-水银-盐三元素、所罗门圣殿的象征等）。皮</div>
+</a>
+<a class="entry-item" href="约瑟夫·阿列克谢耶维奇·巴兹杰耶夫.html">
+  <div class="noun">约瑟夫·阿列克谢耶维奇·巴兹杰耶夫</div>
+  <div class="snippet">共济会的资深会员，皮埃尔的精神导师。皮埃尔在托尔若克驿站遇到他，被其说教打动。他向皮埃尔揭示共济会教义，认为最高智慧需要自我净化和信心。给了皮埃尔推荐信让其加入共济会。后来辞去会务在莫斯科深居简出，身患膀胱病但从不抱怨。法军占领莫斯科前去世</div>
+</a>
+<a class="entry-item" href="约翰·卡斯帕·拉法特.html">
+  <div class="noun">约翰·卡斯帕·拉法特</div>
+  <div class="snippet">瑞士诗人、作家、哲学家和神学家，以面相学（相面术）研究闻名，著有《相面学片段》，与歌德有过交往，曾任苏黎世圣彼得教堂牧师。</div>
+</a>
+<a class="entry-item" href="纳斯塔西娅·伊万诺夫娜.html">
+  <div class="noun">纳斯塔西娅·伊万诺夫娜</div>
+  <div class="snippet">罗斯托夫家中的小丑（弄臣），胡须花白，身穿肥大的女长衣，头戴尖顶帽。 --- 纳斯塔西娅·伊万诺夫娜是《战争与和平》中罗斯托夫家的侍从丑角（小丑/弄臣），属于庄园中的食客阶层。她穿着女短棉袄，常常带着悲伤的面容，在书中以滑稽戏谑的形象出现。</div>
+</a>
+<a class="entry-item" href="维利埃.html">
+  <div class="noun">维利埃</div>
+  <div class="snippet">詹姆斯·怀利（James Wylie），苏格兰裔医生，俄国沙皇亚历山大一世的御医，随军参加拿破仑战争，在《战争与和平》中译作维利埃。</div>
+</a>
+<a class="entry-item" href="维尔纳夫.html">
+  <div class="noun">维尔纳夫</div>
+  <div class="snippet">皮埃尔-夏尔·维尔纳夫（Pierre-Charles Villeneuve，1763-1806），法国海军上将。1805年任土伦舰队司令，奉命佯攻西印度群岛以引开纳尔逊舰队，但因优柔寡断错失战机，后被封锁在加的斯港。同年10月21日在特拉法</div>
+</a>
+<a class="entry-item" href="维拉尔斯基.html">
+  <div class="noun">维拉尔斯基</div>
+  <div class="snippet">即维拉尔斯基伯爵的简称，托尔斯泰《战争与和平》中的波兰伯爵，共济会成员，平日社交场合面带殷勤微笑，但在执行共济会事务时态度冷峻严厉。 --- 波兰伯爵，皮埃尔加入共济会的引荐人（保人）。他带领皮埃尔前往共济会分会大厦，蒙上他的眼睛，引导他经</div>
+</a>
+<a class="entry-item" href="维拉尔斯基伯爵.html">
+  <div class="noun">维拉尔斯基伯爵</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的人物，年轻的波兰伯爵，共济会成员，受巴兹杰耶夫委托担任皮埃尔加入共济会的保人，以冷淡严峻的态度引导皮埃尔参加入会仪式。</div>
+</a>
+<a class="entry-item" href="维涅斯.html">
+  <div class="noun">维涅斯</div>
+  <div class="snippet">约瑟夫-马里·维恩（Joseph-Marie Vien，1716-1809），法国画家，新古典主义绘画的先驱之一，1776年任罗马法兰西学院院长，1789年任国王首席画师，拿破仑时期被封为伯爵。其妻子玛丽-泰蕾兹·勒布·维恩是著名的微型画（</div>
+</a>
+<a class="entry-item" href="维特根施泰因.html">
+  <div class="noun">维特根施泰因</div>
+  <div class="snippet">彼得·克里斯蒂亚诺维奇·维特根施泰因（1769—1843），俄军陆军元帅，德裔贵族出身。1812年俄法战争中指挥俄军北翼部队，在两次波洛茨克战役中成功阻止法军向圣彼得堡的进攻，被彼得堡称为&quot;彼得堡的英雄&quot;。库图佐夫去世后曾短暂担任俄军总司令</div>
+</a>
+<a class="entry-item" href="维特根施泰因伯爵.html">
+  <div class="noun">维特根施泰因伯爵</div>
+  <div class="snippet">彼得·赫里斯季安诺维奇·维特根施泰因（1769—1843），俄国伯爵、陆军元帅。1812年俄法战争中率第1步兵军负责保卫圣彼得堡的北线，在波洛茨克战役中击败法军元帅乌迪诺和圣西尔，阻止了法军向圣彼得堡的进军。库图佐夫去世后曾短暂担任俄军总司</div>
+</a>
+<a class="entry-item" href="缪拉.html">
+  <div class="noun">缪拉</div>
+  <div class="snippet">若阿尚·缪拉（Joachim Murat，1767–1815），拿破仑麾下著名骑兵统帅、法国元帅，被封为那不勒斯国王。以骁勇善战和华丽的着装著称。在塔博尔桥事件中与拉纳一起用计谋不费一枪一弹夺取桥梁。 --- 若阿尚·缪拉（Joachim </div>
+</a>
+<a class="entry-item" href="罗伯斯庇尔.html">
+  <div class="noun">罗伯斯庇尔</div>
+  <div class="snippet">法国大革命时期雅各宾派领袖，1793-1794年实行恐怖统治，1794年热月政变后被处死。皮埃尔在决斗后的内心独白中以罗伯斯庇尔和路易十六为例，思考历史评判的相对性。</div>
+</a>
+<a class="entry-item" href="罗兰.html">
+  <div class="noun">罗兰</div>
+  <div class="snippet">老别祖霍夫伯爵的法国主治医生（原文为Dr. Lorrain，中文译本译作罗兰）。在伯爵临终时以恭敬的姿态倚柱站立，虽然信仰不同但理解东正教终敷礼仪式的重要性。他负责为伯爵诊脉和下达医疗判断，是伯爵临终场景中的重要见证人物之一。</div>
+</a>
+<a class="entry-item" href="罗兰医生.html">
+  <div class="noun">罗兰医生</div>
+  <div class="snippet">小说《战争与和平》中的小角色，法文名为Dr. Lorrain。他是老别祖霍夫伯爵临终时的主治医生，在伯爵的宅邸中守候病情。托尔斯泰描写他姿态优雅地坐在叶卡捷琳娜女皇画像下面，能&quot;确切了解并预言病人的情况&quot;并因此感到满足。他预测伯爵将在当晚去</div>
+</a>
+<a class="entry-item" href="罗斯托夫.html">
+  <div class="noun">罗斯托夫</div>
+  <div class="snippet">尼古拉·伊里奇·罗斯托夫，《战争与和平》核心人物之一，罗斯托夫伯爵之子，娜塔莎的哥哥。他是一名骠骑兵军官，从士官生起步，历经1805年对法战争和1812年卫国战争，性格单纯尚武、热血爱国，最终与玛丽亚·博尔孔斯卡娅结婚。 --- 尼古拉·伊</div>
+</a>
+<a class="entry-item" href="罗斯托夫伯爵.html">
+  <div class="noun">罗斯托夫伯爵</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的人物，全名伊利亚·安德烈耶维奇·罗斯托夫伯爵，罗斯托夫家族的一家之主。他为人善良、热情好客，喜欢举办宴会和打猎活动，家中常常宾客盈门。但他不擅理财，长期挥霍导致家道中落。他曾担任梁赞省的首席贵族。晚年在经历莫斯科大</div>
+</a>
+<a class="entry-item" href="罗斯托夫伯爵夫人.html">
+  <div class="noun">罗斯托夫伯爵夫人</div>
+  <div class="snippet">娜塔莎的母亲，慈爱而务实的贵族妇人。深知鲍里斯家世清寒，明确告诉娜塔莎不能与鲍里斯结婚。与娜塔莎有亲密母女关系，娜塔莎夜间来访谈心的场景是二人最大的乐趣。随后她与鲍里斯谈话，使其不再来访。 --- 娜塔莎之母，具有东方型瘦削面孔。慈爱温柔，</div>
+</a>
+<a class="entry-item" href="罗斯托夫伯爵（伊利亚·安德烈耶维奇）.html">
+  <div class="noun">罗斯托夫伯爵（伊利亚·安德烈耶维奇）</div>
+  <div class="snippet">罗斯托夫伯爵，肥胖快活，热情好客，慷慨大方，不善理财，导致家族逐渐败落。喜欢热闹，爱请客，宠爱孩子。管家能力弱，与管家米坚卡一起导致家道中落。因家庭经济亏空必须卖掉莫斯科的房子和田产。原型为托尔斯泰的祖父伊利亚·托尔斯泰。</div>
+</a>
+<a class="entry-item" href="罗斯托夫家.html">
+  <div class="noun">罗斯托夫家</div>
+  <div class="snippet">罗斯托夫家族是《战争与和平》中的四大贵族家族之一，与博尔孔斯基家族、别祖霍夫家族、库拉金家族并列。家长是伊利亚·安德烈耶维奇伯爵，妻子是纳塔利娅·罗斯托娃伯爵夫人。子女包括长女薇拉、长子尼古拉、次女娜塔莎（全书的标志性女主角）、幼子彼佳。另</div>
+</a>
+<a class="entry-item" href="罗斯托夫家族.html">
+  <div class="noun">罗斯托夫家族</div>
+  <div class="snippet">《战争与和平》中的核心虚构家族之一，是托尔斯泰笔下宗法制庄园贵族的典型代表。家族成员包括热情好客但不善理财的老伯爵伊利亞·安德烈耶維奇、长子尼古拉（后成为军人并继承家业）、次女娜塔莎（小说的女一号，后嫁给皮埃尔）、幼子彼佳（在战争中牺牲）以</div>
+</a>
+<a class="entry-item" href="罗斯托娃伯爵小姐.html">
+  <div class="noun">罗斯托娃伯爵小姐</div>
+  <div class="snippet">小说女主角，罗斯托夫伯爵的次女，全名娜塔莉娅·伊利尼奇娜·罗斯托娃。活泼天真、热情奔放，充满青春朝气。经历了与安德烈的订婚、被阿纳托利诱惑导致婚约破裂的挫折、1812年战争中照料伤兵的成长，最终与皮埃尔结婚，完成了从天真少女到成熟女性的蜕变</div>
+</a>
+<a class="entry-item" href="罗昂.html">
+  <div class="noun">罗昂</div>
+  <div class="snippet">罗昂家族是法国历史最悠久、最显赫的贵族家族之一，源自布列塔尼，在法国宫廷中享有亲王级别地位。该家族成员担任过公爵、亲王、大主教等要职，与法国王室、吉斯家族、洛林家族等有密切联姻关系，在法国历史上具有重大影响力。</div>
+</a>
+<a class="entry-item" href="罗森坎普夫.html">
+  <div class="noun">罗森坎普夫</div>
+  <div class="snippet">古斯塔夫·罗森坎普夫（1762-1832），俄国法学家和法律编纂专家，出身波罗的海德意志贵族家庭，1804-1826年间担任俄国法典编纂委员会的实际负责人。他以欧洲大陆法典为蓝本对俄国法律体系进行系统化整理，其工作长期被斯佩兰斯基的光环所掩</div>
+</a>
+<a class="entry-item" href="罗马王.html">
+  <div class="noun">罗马王</div>
+  <div class="snippet">拿破仑·弗朗索瓦·约瑟夫·夏尔·波拿巴（Napoléon François Joseph Charles Bonaparte，1811-1832），拿破仑一世与奥地利公主玛丽·路易丝之子。出生即被封为&quot;罗马王&quot;，是拿破仑一世名义上的继承人。</div>
+</a>
+<a class="entry-item" href="老伯爵.html">
+  <div class="noun">老伯爵</div>
+  <div class="snippet">伊利亚·安德烈耶维奇·罗斯托夫伯爵，罗斯托夫家族的家长。性格善良宽厚、热情好客，但优柔寡断、不善理财，导致家族经济日渐衰败。原型是托尔斯泰的祖父伊利亚·托尔斯泰。在儿子尼古拉卷入多洛霍夫与别祖霍夫的决斗事件后，他出面斡旋私下解决。</div>
+</a>
+<a class="entry-item" href="老伯爵(罗斯托夫伯爵).html">
+  <div class="noun">老伯爵(罗斯托夫伯爵)</div>
+  <div class="snippet">伊利亚·安德烈耶维奇·罗斯托夫伯爵（Граф Илья Андреевич Ростов），《战争与和平》中罗斯托夫家族的一家之主。他为人慷慨好客、善良宽厚，但生性散漫、不善理财，导致家道中落。他在莫斯科和彼得堡都广交朋友，餐桌上总坐满各色</div>
+</a>
+<a class="entry-item" href="老伯爵夫人.html">
+  <div class="noun">老伯爵夫人</div>
+  <div class="snippet">全名纳塔利娅·罗斯托娃，娘家姓申申娜，伊利亚·安德烈耶维奇·罗斯托夫伯爵之妻。四十五岁上下，长着东方型的瘦削脸盘，生育了十二个儿女，动作和言谈迟缓但令人肃然起敬。她代表旧式俄国贵族母亲的慈爱与守旧形象。 --- 纳塔利娅·罗斯托娃伯爵夫人（</div>
+</a>
+<a class="entry-item" href="老伯爵夫人(罗斯托夫伯爵夫人).html">
+  <div class="noun">老伯爵夫人(罗斯托夫伯爵夫人)</div>
+  <div class="snippet">罗斯托夫伯爵夫人（Графиня Ростова），《战争与和平》中伊利亚·安德烈耶维奇·罗斯托夫伯爵的妻子，娜塔莎、尼古拉、薇拉、彼佳的母亲。她是一位慈爱而感性的母亲，对孩子们的幸福极为关心，但面对家道中落无能为力。在本书第77段中，她对</div>
+</a>
+<a class="entry-item" href="老元帅.html">
+  <div class="noun">老元帅</div>
+  <div class="snippet">安德烈父亲（老博尔孔斯基公爵）的朋友，一位老元帅。在《战争与和平》中， 他帮助安德烈公爵将军事法规草案呈递给皇上。</div>
+</a>
+<a class="entry-item" href="老公爵.html">
+  <div class="noun">老公爵</div>
+  <div class="snippet">尼古拉·安德烈伊奇·博尔孔斯基公爵，叶卡捷琳娜女皇时代的退役老将军，安德烈公爵和玛丽亚公爵小姐的父亲。性格严厉暴躁、崇尚秩序，住在童山庄园，坚决不承认拿破仑的地位。 --- 全名尼古拉·安德烈耶维奇·博尔孔斯基公爵，安德烈和玛丽亚的父亲，退</div>
+</a>
+<a class="entry-item" href="老博尔孔斯基公爵.html">
+  <div class="noun">老博尔孔斯基公爵</div>
+  <div class="snippet">尼古拉·安德烈耶维奇·博尔孔斯基公爵，沙俄陆军上将，社交界诨名普鲁士王。保罗皇帝时期被流放到乡下，退居童山庄园。性格严厉倔强、孤傲正直，认为人类的恶习只有无所事事和迷信，美德只有行动和智慧。是安德烈公爵和玛丽亚公爵小姐的父亲。</div>
+</a>
+<a class="entry-item" href="老姑娘.html">
+  <div class="noun">老姑娘</div>
+  <div class="snippet">老姑娘是一位住在梅柳科娃家中的年长未婚女性（老处女），在圣诞晚餐时讲述了一个关于澡堂算卦遇鬼的恐怖故事——一位少女在澡堂摆好公鸡和餐具，引来军官鬼魂共餐，少女吓得以手掩面，直到使女们赶来才得救。这个故事反映了俄国圣诞占卜传统中神秘恐怖的一面</div>
+</a>
+<a class="entry-item" href="耶尔莫洛夫.html">
+  <div class="noun">耶尔莫洛夫</div>
+  <div class="snippet">阿列克谢·彼得罗维奇·叶尔莫洛夫（1777-1861），俄国将军，拿破仑战争时期著名将领。在1812年卫国战争中担任第一西方面军参谋长，博罗季诺战役中指挥炮兵并亲自率军反攻夺回大棱堡，负伤。1816年后任高加索俄军总司令，以征服高加索和镇压</div>
+</a>
+<a class="entry-item" href="肖斯太太.html">
+  <div class="noun">肖斯太太</div>
+  <div class="snippet">列夫·托尔斯泰长篇小说《战争与和平》中的次要人物，全名路易萨·伊万诺夫娜·肖斯（Madame Schoss），罗斯托夫伯爵家中的家庭教师兼女伴，长期住在罗斯托夫宅邸中。在娜塔莎生病期间，她喜好收集药瓶药盒等小玩艺儿；后在莫斯科大撤离前夕，她</div>
+</a>
+<a class="entry-item" href="肖斯小姐.html">
+  <div class="noun">肖斯小姐</div>
+  <div class="snippet">罗斯托夫家的女家庭教师。在19世纪俄国贵族家庭中聘请法籍或德籍女教师教授子女外语和礼仪十分普遍。当娜塔莎因思念安德烈公爵而心神不宁随口说马达加斯加岛时，肖斯小姐问她说了什么，娜塔莎不回答便离去。 --- 罗斯托夫伯爵家的家庭女教师，全名路易</div>
+</a>
+<a class="entry-item" href="脸上有黑痣的法国人.html">
+  <div class="noun">脸上有黑痣的法国人</div>
+  <div class="snippet">《战争与和平》中一个帮助皮埃尔寻救火灾中女孩的法国士兵，黑眼睛、小个子，脸上有一颗黑痣，只穿一件衬衫。他告诉皮埃尔听见花园中有孩子哭声，并带路前往，随后表示&quot;总得讲点人情&quot;，跑回同伴处。</div>
+</a>
+<a class="entry-item" href="腓特烈.html">
+  <div class="noun">腓特烈</div>
+  <div class="snippet">即腓特烈大帝（腓特烈二世），1740年至1786年在位的普鲁士国王，霍亨索伦王朝著名君主。杰出的军事统帅和开明专制君主，发动西里西亚战争，参与七年战争，将普鲁士提升为欧洲强国。</div>
+</a>
+<a class="entry-item" href="腓特烈二世.html">
+  <div class="noun">腓特烈二世</div>
+  <div class="snippet">普鲁士国王，史称腓特烈大帝，1740至1786年在位，发动西里西亚战争夺取富庶的西里西亚，七年战争中以弱势兵力对抗奥法俄联军，推行开明专制与宗教宽容。</div>
+</a>
+<a class="entry-item" href="腓特烈大帝.html">
+  <div class="noun">腓特烈大帝</div>
+  <div class="snippet">腓特烈大帝（腓特烈二世，1712-1786），普鲁士国王（1740-1786在位），霍亨索伦王朝最著名的君主。军事天才，创斜线式战术，通过西里西亚战争和七年战争使普鲁士跃升欧洲第五大强国。开明专制代表，推行法律改革、全民教育、宗教宽容，与伏</div>
+</a>
+<a class="entry-item" href="良心指导者.html">
+  <div class="noun">良心指导者</div>
+  <div class="snippet">指为海伦·库拉金娜进行宗教指导的天主教或东正教神父，在小说中被海伦利用来为自己的离婚和改嫁计划寻求宗教上的合法性。</div>
+</a>
+<a class="entry-item" href="艾克米尔公爵.html">
+  <div class="noun">艾克米尔公爵</div>
+  <div class="snippet">艾克米尔公爵即路易·尼古拉·达乌元帅（Louis-Nicolas Davout，1770—1823），拿破仑时代法国最杰出的元帅之一。因1809年在埃克米尔（Eckmühl）战役中击退奥军包抄，成功与主力会合，被拿破仑封为埃克米尔亲王（即艾</div>
+</a>
+<a class="entry-item" href="艾加特豪森.html">
+  <div class="noun">艾加特豪森</div>
+  <div class="snippet">卡尔·冯·艾加特豪森（Karl von Eckartshausen，1752–1803），德国天主教神秘主义哲学家和作家，曾任巴伐利亚宫廷顾问和图书馆审查官。著有69部作品，最著名的是《圣所上的云》（Die Wolke über dem H</div>
+</a>
+<a class="entry-item" href="花匠.html">
+  <div class="noun">花匠</div>
+  <div class="snippet">在贵族庄园中负责园艺的仆人，老公爵散步时对花匠也一言不发。</div>
+</a>
+<a class="entry-item" href="苏扎夫人.html">
+  <div class="noun">苏扎夫人</div>
+  <div class="snippet">全名阿代拉伊德-玛丽-埃米莉·菲勒尔，德·苏扎-博特略侯爵夫人（1761—1836），法国女作家，以书信体小说著称。皮埃尔在驿站阅读其小说。</div>
+</a>
+<a class="entry-item" href="苏沃洛夫.html">
+  <div class="noun">苏沃洛夫</div>
+  <div class="snippet">亚历山大·瓦西里耶维奇·苏沃洛夫（1730—1800），俄罗斯帝国伟大的军事家、军事理论家，俄罗斯军事学术的奠基人之一。他一生指挥60余场战役从未遭遇重大失败，被誉为&quot;常胜将军&quot;。曾任俄罗斯帝国大元帅，获封雷姆尼克伯爵、意大利公爵。他的军事</div>
+</a>
+<a class="entry-item" href="苏赫特伦.html">
+  <div class="noun">苏赫特伦</div>
+  <div class="snippet">全名扬·皮特·范·苏赫特伦（1751-1836），荷兰裔俄罗斯军事工程师和将领。小说中以其子帕维尔·苏赫特伦中尉的形象出现，是一位年轻的俄国近卫军军官。</div>
+</a>
+<a class="entry-item" href="若阿尚·缪拉.html">
+  <div class="noun">若阿尚·缪拉</div>
+  <div class="snippet">若阿尚·缪拉（Joachim Murat，1767—1815），拿破仑麾下法国元帅，那不勒斯国王，以卓越的骑兵指挥才能和华丽的着装著称，参与拿破仑多数重大战役。</div>
+</a>
+<a class="entry-item" href="莎士比亚.html">
+  <div class="noun">莎士比亚</div>
+  <div class="snippet">威廉·莎士比亚，英国文学史上最杰出的戏剧家，1564年出生，1616年去世。代表作有《哈姆雷特》《奥赛罗》《李尔王》《麦克白》《罗密欧与朱丽叶》等，被公认为西方文艺史上最卓越的作家之一。</div>
+</a>
+<a class="entry-item" href="莫朗.html">
+  <div class="noun">莫朗</div>
+  <div class="snippet">夏尔·安托万·莫朗（Charles Antoine Morand，1771—1835），法国帝国伯爵，拿破仑战争时期的法国将军。1812年担任达武元帅第一军第一师师长，在波罗金诺战役中率部进攻拉耶夫斯基多面堡，下颌被炮弹碎片击中身负重伤。后</div>
+</a>
+<a class="entry-item" href="莫特马尔.html">
+  <div class="noun">莫特马尔</div>
+  <div class="snippet">莫特马尔子爵（Vicomte de Mortemart），侨居俄国的法国贵族，流亡的保皇党人，出现在安娜·帕夫洛夫娜的晚会上，被女主人当作&quot;珍馐佳肴&quot;款待宾客。相貌漂亮、心地和善，是个善于讲故事的人，在晚会上讲述关于拿破仑和昂吉安公爵的轶闻</div>
+</a>
+<a class="entry-item" href="莫特马尔子爵.html">
+  <div class="noun">莫特马尔子爵</div>
+  <div class="snippet">莫特马尔子爵是《战争与和平》中出现的法国侨居贵族角色，在安娜·帕夫洛夫娜的彼得堡沙龙中登场。他是讲故事的能手，在晚会上被当作&quot;珍馐美味&quot;款待宾客。他曾讲述关于昂吉安公爵与拿破仑之间的一则趣闻，反映了当时俄国上流社会对法国文化的追捧。</div>
+</a>
+<a class="entry-item" href="莫罗.html">
+  <div class="noun">莫罗</div>
+  <div class="snippet">全名让·维克多·马里·莫罗，法国大革命战争时期的杰出将领。以霍恩林登战役大胜著称，与拿破仑由合作走向对立，被流放美国。后在第六次反法同盟中参战，于德累斯顿战役中阵亡。 --- 让·维克托·马里·莫罗，法国大革命和拿破仑时期著名将领，共和第一</div>
+</a>
+<a class="entry-item" href="莫蒂埃.html">
+  <div class="noun">莫蒂埃</div>
+  <div class="snippet">爱德华·阿道夫·卡西米尔·约瑟夫·莫蒂埃（Edouard Mortier，1768—1835），特雷维索公爵，拿破仑麾下法国帝国元帅。1805年任第八军军长，在克雷姆斯战役中被俄军包围，突围后参加奥斯特里茨等战役。1812年任莫斯科总督。1</div>
+</a>
+<a class="entry-item" href="莫里哀.html">
+  <div class="noun">莫里哀</div>
+  <div class="snippet">17世纪法国古典主义喜剧大师，代表作有《吝啬鬼》《伪君子》等。皮埃尔在痛苦自责时想起莫里哀喜剧《吝啬鬼》中的台词&quot;为什么要上那条船呢？&quot;，以此来嘲弄自己的愚蠢选择。</div>
+</a>
+<a class="entry-item" href="莫里约神甫.html">
+  <div class="noun">莫里约神甫</div>
+  <div class="snippet">即夏尔·伊雷内·卡斯特尔·德·圣皮埃尔神甫（1658—1743），法国教士和政治思想家。他于1713年提出《永久和平计划》，主张通过建立一个欧洲国家联盟来实现持久和平，是欧洲思想史上最早的永久和平方案之一。该思想对卢梭、康德等人的和平理念产</div>
+</a>
+<a class="entry-item" href="莫雷尔.html">
+  <div class="noun">莫雷尔</div>
+  <div class="snippet">法国军官朗巴的勤务兵（Morel），负责照料上尉的饮食起居。在莫斯科占领期间，他从厨房取来热水、羊肉、煎蛋和葡萄酒供朗巴与皮埃尔共餐。朗巴称克瓦斯为&quot;猪的柠檬水&quot;，莫雷尔则赞赏他在厨房里找到的这种饮料。 --- 朗巴上尉的勤务兵，负责照料朗</div>
+</a>
+<a class="entry-item" href="菲利普.html">
+  <div class="noun">菲利普</div>
+  <div class="snippet">童山博尔康斯基家的仆人，在丽莎分娩之夜手拿蜡烛站在楼梯平台上，神情惊慌。 --- 博尔孔斯基公爵家的仆人。因在饭后先给玛丽亚公爵小姐递咖啡（而非布里安小姐），触怒了有意抬高布里安小姐地位的公爵，公爵向他掷拐杖并下令送他去当兵。体现了老公爵暴</div>
+</a>
+<a class="entry-item" href="菲尔霍夫男爵.html">
+  <div class="noun">菲尔霍夫男爵</div>
+  <div class="snippet">小说中次要角色，在彼得堡舞会上与安德烈公爵谈论即将召开的第一次国务会议。身份为男爵，关注政治与改革事务。</div>
+</a>
+<a class="entry-item" href="萨尔特科夫.html">
+  <div class="noun">萨尔特科夫</div>
+  <div class="snippet">尼古拉·伊万诺维奇·萨尔蒂科夫（1736-1816），俄国陆军元帅、伯爵，亚历山大一世时期的元老重臣，曾任陆军院院长、国务会议主席。1812年战争爆发时，沙皇通过他发布战争动员上谕。</div>
+</a>
+<a class="entry-item" href="萨尔特科夫公爵.html">
+  <div class="noun">萨尔特科夫公爵</div>
+  <div class="snippet">尼古拉·伊万诺维奇·萨尔特科夫，俄国陆军元帅，曾任陆军院院长和国务会议主席。他是保罗一世和亚历山大一世时期的元老重臣，在1812年战争期间名义上担任大元帅职务。</div>
+</a>
+<a class="entry-item" href="萨洛莫妮.html">
+  <div class="noun">萨洛莫妮</div>
+  <div class="snippet">萨洛莫妮（Salomoni）是18世纪末至19世纪初活跃于俄国上流社会的意大利歌剧歌唱家，其具体身世记载有限。在拿破仑战争前后的俄国，意大利歌剧风靡贵族阶层，许多意大利歌唱家受邀到圣彼得堡和莫斯科演出，萨洛莫妮是其中知名的一位。托尔斯泰在《</div>
+</a>
+<a class="entry-item" href="萨瓦里.html">
+  <div class="noun">萨瓦里</div>
+  <div class="snippet">安尼·让·马里·雷尼·萨瓦里，拿破仑麾下的法国将军、外交官，曾任警务大臣，1805年奥斯特利茨战役前受拿破仑派遣与沙皇亚历山大一世谈判。</div>
+</a>
+<a class="entry-item" href="萨维什娜.html">
+  <div class="noun">萨维什娜</div>
+  <div class="snippet">萨维什娜是博尔孔斯基家族的保姆，负责照顾安德烈公爵去世后留下的幼子尼古拉（小尼古卢什卡）。她是托尔斯泰笔下典型的俄国旧式忠诚仆人形象，与小尼古拉的奶母共同照料孩子，也是玛丽亚公爵小姐的亲密陪伴者。</div>
+</a>
+<a class="entry-item" href="萨韦利伊奇.html">
+  <div class="noun">萨韦利伊奇</div>
+  <div class="snippet">托尔斯泰《战争与和平》中别祖霍夫家族的老管家，曾侍奉老别祖霍夫伯爵，后在皮埃尔·别祖霍夫家中管理事务。1812年莫斯科大火后他从莫斯科赶来奥廖尔向皮埃尔汇报城市受损状况和重建预算。他是俄国宗法制忠仆形象的典型代表。</div>
+</a>
+<a class="entry-item" href="蒙莫朗西.html">
+  <div class="noun">蒙莫朗西</div>
+  <div class="snippet">蒙莫朗西家族是法国最古老、最显赫的贵族家族之一，历史可追溯至10世纪，家族首领传统上被称为&quot;法兰西首席男爵&quot;。该家族成员多次出任法国王室统帅、元帅等要职，著名人物包括首任蒙莫朗西公爵、三朝重臣安内·德·蒙莫朗西等。该家族在法国政治和军事史上</div>
+</a>
+<a class="entry-item" href="薇拉.html">
+  <div class="noun">薇拉</div>
+  <div class="snippet">全名薇拉·伊利尼奇娜·罗斯托娃，罗斯托夫伯爵的长女。嫁给了德国血统军官阿道夫·贝格。性格冷静理性，与活泼奔放的妹妹娜塔莎形成鲜明对比。在本章中，托尔斯泰以讽刺的笔调描写了她与丈夫之间互相轻视又彼此满意的关系——薇拉认为所有男人都无知自私狂妄</div>
+</a>
+<a class="entry-item" href="薇拉·罗斯托娃.html">
+  <div class="noun">薇拉·罗斯托娃</div>
+  <div class="snippet">薇拉·罗斯托娃（Vera Rostova），全名薇拉·伊利尼奇娜·罗斯托娃，罗斯托夫伯爵的长女。性格刻板理性，与活泼热闹的罗斯托夫家族氛围格格不入，不受家人喜爱。她常以理性态度指责弟妹们的热情行为，后嫁给军官别尔格。 --- 薇拉·伊里尼奇</div>
+</a>
+<a class="entry-item" href="薇鲁什卡.html">
+  <div class="noun">薇鲁什卡</div>
+  <div class="snippet">罗斯托夫家大女儿薇拉·罗斯托娃的爱称，贝格的妻子，性格务实冷静。</div>
+</a>
+<a class="entry-item" href="被叫醒的拉斯托普钦.html">
+  <div class="noun">被叫醒的拉斯托普钦</div>
+  <div class="snippet">指深夜被从睡梦中叫醒的莫斯科总督拉斯托普钦，接到库图佐夫命令式的便函后感到恼火和自责。</div>
+</a>
+<a class="entry-item" href="西多罗夫.html">
+  <div class="noun">西多罗夫</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》中的一名普通俄国列兵，出现于第一卷第二部。在俄法两军对峙的散兵线上，他被同伴称为擅长法语的士兵，展现了普通士兵在战争间隙中的人性化互动。</div>
+</a>
+<a class="entry-item" href="西拉·安德烈伊奇.html">
+  <div class="noun">西拉·安德烈伊奇</div>
+  <div class="snippet">阿拉克切耶夫伯爵的绰号（西拉·安德烈伊奇），含有嘲讽意味。在《战争与和平》中， 彼得堡社交界人士以此称呼阿拉克切耶夫，表达对其统治风格的不满和讽刺。</div>
+</a>
+<a class="entry-item" href="西斯蒙第.html">
+  <div class="noun">西斯蒙第</div>
+  <div class="snippet">让·沙尔·列奥纳尔·德·西斯蒙第（1773—1842），瑞士历史学家和经济学家，法国古典政治经济学的完成者，小资产阶级政治经济学的创始人，经济浪漫主义鼻祖。著有《政治经济学新原理》《意大利共和国史》《法兰西人史》等，第一个论证了资本主义制度</div>
+</a>
+<a class="entry-item" href="警察局长.html">
+  <div class="noun">警察局长</div>
+  <div class="snippet">1812年莫斯科撤退前夕负责执行拉斯托普钦伯爵命令的警官，被派往烧毁货船以防落入法军之手，趁机中饱私囊。在街头面对聚众骚乱的人群时，他以&quot;伯爵会给你们指示&quot;搪塞，随后惊慌逃离。托尔斯泰通过这一形象揭露了沙俄官僚在战争中的腐败和渎职。</div>
+</a>
+<a class="entry-item" href="让利斯夫人.html">
+  <div class="noun">让利斯夫人</div>
+  <div class="snippet">斯特凡妮·费莉西泰·让利斯伯爵夫人（1746—1830），法国女作家、教育家。曾任奥尔良公爵子女的家庭教师，学生中包括后来的法国国王路易-菲利普。创作逾百部作品，包括小说《阿黛尔和泰奥多尔》、回忆录等。拿破仑曾任命她为小学督学。库图佐夫在军</div>
+</a>
+<a class="entry-item" href="让莉夫人.html">
+  <div class="noun">让莉夫人</div>
+  <div class="snippet">让莉夫人（Madame de Genlis，1746—1830），本名斯特凡妮·费莉西泰·杜克雷·德·圣奥班，法国作家、教育家。她是18世纪末至19世纪初法国最多产的女作家之一，撰写了一百多部作品，涵盖教育论著、历史小说、戏剧和回忆录。她以</div>
+</a>
+<a class="entry-item" href="诺斯蒂茨伯爵.html">
+  <div class="noun">诺斯蒂茨伯爵</div>
+  <div class="snippet">诺斯蒂茨家族是古老而极具影响力的西里西亚贵族家族，在神圣罗马帝国、奥地利等处担任重要职位。文中指约翰·内波穆克·冯·诺斯蒂茨-林内克伯爵（1768-1840），拿破仑战争期间担任奥地利帝国骑兵师指挥官，在1805年战役中担任前哨。</div>
+</a>
+<a class="entry-item" href="诺沃西利采夫.html">
+  <div class="noun">诺沃西利采夫</div>
+  <div class="snippet">尼古拉·尼古拉耶维奇·诺沃西利采夫（1761—1838），俄国政治家，沙皇亚历山大一世&quot;非官方委员会&quot;核心成员之一，历任圣彼得堡科学院院长、波兰会议王国沙皇全权代表、国务会议主席等职。他曾为俄罗斯帝国起草宪法草案。 --- 全名尼古拉·尼古</div>
+</a>
+<a class="entry-item" href="诺维科夫.html">
+  <div class="noun">诺维科夫</div>
+  <div class="snippet">全名尼古拉·伊万诺维奇·诺维科夫（1744—1818），俄罗斯启蒙思想家、作家、出版家，18世纪俄国共济会和玫瑰十字会的重要成员，创办印刷厂出版书籍占当时俄国图书品种三分之一，因宣传自由思想被叶卡捷琳娜二世囚禁。</div>
+</a>
+<a class="entry-item" href="谢多勃良.html">
+  <div class="noun">谢多勃良</div>
+  <div class="snippet">弗朗索瓦-勒内·德·夏多布里昂（1768—1848），法国浪漫主义作家、政治家、外交官。代表作《阿达拉》《勒内》《基督教真谛》和自传《墓中回忆录》，被誉为法国浪漫主义文学的奠基人。他曾任外交大臣，是法国文学史上承前启后的重要人物。</div>
+</a>
+<a class="entry-item" href="谢尔比宁.html">
+  <div class="noun">谢尔比宁</div>
+  <div class="snippet">亚历山大·安德烈耶维奇·谢尔比宁（Alexander Andreyevich Shcherbinin，1791—1876），1812年卫国战争期间俄军第一西方军团军需部门准尉，担任卡尔·托尔上校的副官。在波罗金诺战役中从左翼驰来向库图佐夫报</div>
+</a>
+<a class="entry-item" href="谢尔盖·尼古拉耶维奇·格林卡.html">
+  <div class="noun">谢尔盖·尼古拉耶维奇·格林卡</div>
+  <div class="snippet">俄国作家、诗人、编辑（1774—1847），生于斯摩棱斯克。曾在俄军中服役三年，退役后从事教育及文学创作。1808至1820年担任月刊《俄国信使》主编，著有《俄国史（青少年用）》十卷、《俄国阅读》两卷等历史作品。其弟费奥多尔·格林卡是著名诗</div>
+</a>
+<a class="entry-item" href="谢尔盖·库兹米奇.html">
+  <div class="noun">谢尔盖·库兹米奇</div>
+  <div class="snippet">谢尔盖·库兹米奇·维亚兹米季诺夫（Sergey Kuzmich Vyazmitinov，1744—1819），俄国步兵上将、彼得堡总督，小说中瓦西里公爵在宴会上讲述他在国务会议上念敕令时激动哽咽的故事，成为上流社会的一个谈资和笑料。</div>
+</a>
+<a class="entry-item" href="谢尔盖·库兹米奇·维亚济米季诺夫.html">
+  <div class="noun">谢尔盖·库兹米奇·维亚济米季诺夫</div>
+  <div class="snippet">俄罗斯帝国将军和政治家，1744-1819。历任俄罗斯帝国首位陆军大臣（1802-1808）、圣彼得堡总督（1805-1808及1816-1818）、警务大臣（1812-1819）及大臣委员会主席。1818年获封伯爵。曾在国务会议上宣读亚历</div>
+</a>
+<a class="entry-item" href="谢尔盖公爵.html">
+  <div class="noun">谢尔盖公爵</div>
+  <div class="snippet">皮埃尔·别祖霍夫在彼得堡社交圈中提及的人物，被皮埃尔评价为&quot;好人，很聪明&quot;，出现在皮埃尔阐述其&quot;积极行善&quot;思想的对话中。该人物在小说中着墨不多，可能是上流社会中倾向进步的贵族代表。</div>
+</a>
+<a class="entry-item" href="谢德莫列茨基师长.html">
+  <div class="noun">谢德莫列茨基师长</div>
+  <div class="snippet">1806年俄军师长之一，与奥斯特曼师长一同向卡缅斯基元帅报告部队已断炊的严重情况。</div>
+</a>
+<a class="entry-item" href="谢林.html">
+  <div class="noun">谢林</div>
+  <div class="snippet">弗里德里希·威廉·约瑟夫·冯·谢林（1775—1854），德国古典唯心主义哲学家，与康德、费希特、黑格尔并称德国古典哲学四大家。他先后提出自然哲学、同一哲学和启示哲学，主张&quot;自然是可见的精神，精神是不可见的自然&quot;，对德国浪漫主义和后世存在主</div>
+</a>
+<a class="entry-item" href="谢苗.html">
+  <div class="noun">谢苗</div>
+  <div class="snippet">谢苗是《战争与和平》中罗斯托夫伯爵的马夫兼猎手，在狩猎场景中作为伯爵身边的随行人员出现。他熟悉猎犬和狩猎事务，管理伯爵身旁的猎犬，在追狼过程中一直提醒伯爵注意狼的方向。他性格沉稳老练，当伯爵放走了狼惊慌失措时，他早已绕道去拦截逃窜的狼。</div>
+</a>
+<a class="entry-item" href="谢苗·切克马尔.html">
+  <div class="noun">谢苗·切克马尔</div>
+  <div class="snippet">老伯爵身边的老跟班骑手，与伯爵相处三十年，动作已不灵活但熟悉狩猎。</div>
+</a>
+<a class="entry-item" href="谢苗诺娃.html">
+  <div class="noun">谢苗诺娃</div>
+  <div class="snippet">叶卡捷琳娜·谢苗诺夫娜·谢苗诺娃（1786—1849），俄国19世纪著名的悲剧女演员，后封为加加林公爵夫人。她毕业于圣彼得堡戏剧学校，以美貌、深沉嗓音和富有激情的表演著称，是莎士比亚、拉辛、席勒戏剧的主要诠释者。普希金曾在诗中赞美她的演技。</div>
+</a>
+<a class="entry-item" href="豪格维茨.html">
+  <div class="noun">豪格维茨</div>
+  <div class="snippet">全名克里斯蒂安·奥古斯特·海因里希·库尔特·冯·豪格维茨（1752—1832），普鲁士外交大臣。在拿破仑战争期间主持普鲁士外交，以优柔寡断著称。1805年奉命向拿破仑递交最后通牒，却因故意拖延行程错失时机，在奥斯特里茨战役后被迫签署屈辱的《</div>
+</a>
+<a class="entry-item" href="贝利亚尔.html">
+  <div class="noun">贝利亚尔</div>
+  <div class="snippet">奥古斯特-丹尼尔·贝利亚尔（Auguste-Daniel Belliard，1769–1832），拿破仑战争时期法国将军，曾任缪拉元帅的参谋长。参加了奥斯特利茨战役、耶拿战役、远征俄国等重大战役。</div>
+</a>
+<a class="entry-item" href="贝尼格森.html">
+  <div class="noun">贝尼格森</div>
+  <div class="snippet">莱温·奥古斯特·冯·本尼希森（Levin August von Bennigsen，1745-1826），德裔俄罗斯帝国骑兵上将。在拿破仑战争期间担任俄军主要统帅，1807年指挥俄普联军在普鲁士-艾劳战役中与拿破仑交战，双方均损失惨重未分胜</div>
+</a>
+<a class="entry-item" href="贝格.html">
+  <div class="noun">贝格</div>
+  <div class="snippet">《战争与和平》中谢苗诺夫团的军官，全名阿尔方斯·卡尔雷奇·贝格（阿道夫·贝格），出身利沃尼亚的德国裔贵族家庭。他说话精确沉着，只关心与自己直接相关的事务，具有极强的事务性利己主义。他精于算计，在军饷问题上滔滔不绝，讲述调到近卫军后收入从二百</div>
+</a>
+<a class="entry-item" href="贝格(阿道夫·贝格).html">
+  <div class="noun">贝格(阿道夫·贝格)</div>
+  <div class="snippet">全名阿道夫·贝格（又称别尔格），利沃尼亚地方小贵族出身，具有德意志血统。从最低军职步步高升至上校。精于算计、善于结交权贵，把人生按升官次数来计算。娶了罗斯托夫家的长女薇拉。在新居举办晚会，刻意模仿上流社会的一切，是托尔斯泰讽刺的市侩形象典型</div>
+</a>
+<a class="entry-item" href="贝歇尔.html">
+  <div class="noun">贝歇尔</div>
+  <div class="snippet">让-巴蒂斯特·贝西埃（1768-1813），拿破仑帝国元帅。长期指挥近卫军骑兵，跟随拿破仑参加马伦戈、奥斯特利茨、耶拿、瓦格拉姆等重大战役，以勇猛忠诚著称。1813年5月在吕岑战役前侦察时阵亡。</div>
+</a>
+<a class="entry-item" href="贝蒂埃.html">
+  <div class="noun">贝蒂埃</div>
+  <div class="snippet">路易·亚历山大·贝蒂埃，法国元帅和拿破仑的参谋长，以卓越的组织和参谋能力著称。他自1796年意大利战役起担任拿破仑参谋长，负责军队调动、后勤和命令传达，对拿破仑军事体系至关重要。 --- 路易-亚历山大·贝尔蒂埃（1753-1815），拿破</div>
+</a>
+<a class="entry-item" href="贞德.html">
+  <div class="noun">贞德</div>
+  <div class="snippet">圣女贞德（Jeanne d&#x27;Arc，1412—1431），法国民族英雄，百年战争期间带领法军对抗英军，后被俘被处以火刑。在小说中，朱莉用贞德自比，表示自己离开莫斯科并非因为勇敢无畏，不是像贞德那样的女英雄，解释了贵族们纷纷撤离莫斯科的普遍心</div>
+</a>
+<a class="entry-item" href="费多秀什卡(女巡礼者).html">
+  <div class="noun">费多秀什卡(女巡礼者)</div>
+  <div class="snippet">费多秀什卡，一位五十岁左右、沉默寡言、满脸麻子的女巡礼者（东正教女朝圣者），赤脚、脖子上挂着铁链，已巡行三十年。她是经常拜访童山博尔孔斯基庄园的&quot;神亲&quot;之一，受到玛丽亚公爵小姐的特别喜爱。她所代表的以苦行寻求精神解脱的生活方式，深深打动了玛</div>
+</a>
+<a class="entry-item" href="费奥多尔公爵.html">
+  <div class="noun">费奥多尔公爵</div>
+  <div class="snippet">小说尾声（Epilogue）部分出现的次要角色，彼得堡一个秘密协会（早期十二月党人性质组织）的核心成员，皮埃尔·别祖霍夫的挚友与政治同道。他写信邀请皮埃尔去彼得堡参加协会的重要讨论，成为尾声部分的关键情节动因。这一角色象征着拿破仑战争后俄国</div>
+</a>
+<a class="entry-item" href="费希特.html">
+  <div class="noun">费希特</div>
+  <div class="snippet">约翰·戈特利布·费希特（1762—1814），德国古典哲学家，德国唯心主义代表人物。他提出&quot;知识学&quot;体系，以&quot;绝对自我&quot;为核心原理，主张自我设定自身与非我，否定了康德的&quot;物自体&quot;概念。他的民族主义思想对德国统一运动影响深远，代表作有《全部知</div>
+</a>
+<a class="entry-item" href="费德琴科.html">
+  <div class="noun">费德琴科</div>
+  <div class="snippet">俄国骠骑兵军士（非commissioned officer），在奥斯特里茨战役前夜随罗斯托夫执行侦察任务。</div>
+</a>
+<a class="entry-item" href="费拉蓬托夫.html">
+  <div class="noun">费拉蓬托夫</div>
+  <div class="snippet">托尔斯泰《战争与和平》中虚构的斯摩棱斯克商人。阿尔帕特奇每次到斯摩棱斯克都住在他店中。法军逼近斯摩棱斯克时，费拉蓬托夫起初不让士兵抢粮，后转而主动开仓散粮并自焚店铺，不愿物资落入法军手中，是俄国全民抗战精神的代表人物。</div>
+</a>
+<a class="entry-item" href="费迪南大公.html">
+  <div class="noun">费迪南大公</div>
+  <div class="snippet">指奥地利-埃斯特的费迪南德·卡尔·约瑟夫大公（1781—1850），神圣罗马帝国皇帝利奥波德二世之子，卡尔大公之弟，拿破仑战争时期担任奥地利军队指挥官。</div>
+</a>
+<a class="entry-item" href="赫尔德.html">
+  <div class="noun">赫尔德</div>
+  <div class="snippet">约翰·戈特弗里德·赫尔德（Johann Gottfried Herder，1744—1803），德国哲学家、神学家，启蒙运动时期的重要思想家。其&quot;存在之链&quot;宇宙观认为宇宙从低级到高级存在连续的等级阶梯，人类是其中的一个环节。托尔斯泰借皮埃尔</div>
+</a>
+<a class="entry-item" href="赫拉克勒斯.html">
+  <div class="noun">赫拉克勒斯</div>
+  <div class="snippet">赫拉克勒斯（Heracles），希腊神话中最伟大的英雄，主神宙斯与凡间女子阿尔克墨涅之子，天生神力。因赫拉的诅咒在疯狂中杀害了自己的孩子，为赎罪完成了著名的&quot;十二项伟业&quot;，包括杀死涅墨亚狮子、斩杀九头蛇许德拉、清扫奥革阿斯的牛棚等。死后被众</div>
+</a>
+<a class="entry-item" href="赫沃斯季科夫.html">
+  <div class="noun">赫沃斯季科夫</div>
+  <div class="snippet">列夫·托尔斯泰小说《战争与和平》中的极小配角。原为小官吏，后专门为多洛霍夫的赌局跑腿充当帮手。在阿纳托利·库拉金策划拐走娜塔莎·罗斯托娃的计划中，作为证婚人之一出现。</div>
+</a>
+<a class="entry-item" href="路德.html">
+  <div class="noun">路德</div>
+  <div class="snippet">马丁·路德（Martin Luther，1483—1546），16世纪德国宗教改革运动的发起者，新教路德宗的奠基人。1517年他在维滕贝格教堂门前张贴《九十五条论纲》，公开质疑赎罪券的效力，成为宗教改革的导火线。他提出&quot;因信称义&quot;的核心神学</div>
+</a>
+<a class="entry-item" href="路易·菲力普.html">
+  <div class="noun">路易·菲力普</div>
+  <div class="snippet">路易·菲力普（Louis Philippe I，1773—1850），法国奥尔良王朝（七月王朝）唯一一位国王（1830—1848年在位），波旁王朝旁支奥尔良家族成员。1830年七月革命后接替查理十世登基，接受君主立宪制，代表金融大资产阶级利</div>
+</a>
+<a class="entry-item" href="路易十一.html">
+  <div class="noun">路易十一</div>
+  <div class="snippet">路易十一（Louis XI，1423—1483），法国瓦卢瓦王朝国王（1461—1483年在位），绰号&quot;万能蜘蛛&quot;。他以精于外交谋略和权术著称，通过联合瑞士和洛林对抗勃艮第，在大胆的查理战死后吞并勃艮第公国大部分领土，又兼并安茹、曼恩、普罗</div>
+</a>
+<a class="entry-item" href="路易十五.html">
+  <div class="noun">路易十五</div>
+  <div class="snippet">路易十五（1710—1774），法国波旁王朝第四位国王，1715年至1774年在位，共59年，是法国历史上在位时间最长的国王之一。五岁登基，早期由摄政王奥尔良公爵辅政。其统治时期法国卷入多场战争（波兰王位继承战、奥地利王位继承战、七年战争）</div>
+</a>
+<a class="entry-item" href="路易十八.html">
+  <div class="noun">路易十八</div>
+  <div class="snippet">法国波旁王朝国王（1755-1824），路易十六之弟，1814年拿破仑退位后第一次复辟，颁布《1814年宪章》实行君主立宪；1815年拿破仑百日王朝后第二次复辟，在位至1824年。 --- 路易十八（Louis XVIII，1755—182</div>
+</a>
+<a class="entry-item" href="路易十六.html">
+  <div class="noun">路易十六</div>
+  <div class="snippet">路易十六（1754—1793），法国波旁王朝末代国王，1774年至1792年在位。性格善良但优柔寡断，酷爱制锁而有&quot;锁匠国王&quot;之称。面对财政危机推行改革受阻，1789年被迫召开三级会议，引发法国大革命。1791年出逃瓦雷讷失败，1793年被</div>
+</a>
+<a class="entry-item" href="路易十四.html">
+  <div class="noun">路易十四</div>
+  <div class="snippet">法国波旁王朝国王（1638-1715），自号&quot;太阳王&quot;，在位72年，推行绝对君主专制，建造凡尔赛宫，实行重商主义，废除南特敕令迫害胡格诺派，使法国成为欧洲霸权，但其穷兵黩武为法国大革命埋下伏笔。</div>
+</a>
+<a class="entry-item" href="路易小姐.html">
+  <div class="noun">路易小姐</div>
+  <div class="snippet">路易小姐（Mademoiselle Louis）是《战争与和平》中罗斯托夫家的法国家庭女教师，负责教养尼古拉和玛丽亚的孩子们。在小说尾声部分，她出现在玛丽亚伯爵夫人的育儿日记中，在安德留沙不肯穿衣服时派人向玛丽亚求助。</div>
+</a>
+<a class="entry-item" href="路易莎·伊万诺夫娜.html">
+  <div class="noun">路易莎·伊万诺夫娜</div>
+  <div class="snippet">即肖斯小姐的全名和父称。罗斯托夫家的法国或德国籍家庭女教师。 在圣诞出游计划中，索尼娅极力劝说她同意陪同前往梅柳科娃家。 --- 路易莎·伊万诺夫娜（又称肖斯小姐 / Miss Schoss）是罗斯托夫伯爵家的德籍家庭女教师，负责教育罗斯托</div>
+</a>
+<a class="entry-item" href="车夫.html">
+  <div class="noun">车夫</div>
+  <div class="snippet">驾驶马车的人，俄语称извозчик或кучер。19世纪俄罗斯城市中车夫数量庞大，分为服务于贵族的私人车夫和在街头拉客的出租马车夫（&quot;万卡&quot;）。</div>
+</a>
+<a class="entry-item" href="车夫叶菲姆.html">
+  <div class="noun">车夫叶菲姆</div>
+  <div class="snippet">罗斯托夫伯爵夫人的专用老车夫，有三十年驾龄，沉稳而经验丰富。</div>
+</a>
+<a class="entry-item" href="达乌.html">
+  <div class="noun">达乌</div>
+  <div class="snippet">路易·尼古拉·达武（1770-1823），法国元帅，奥尔施泰特公爵、埃克米尔亲王，绰号&quot;钢铁元帅&quot;。他是拿破仑麾下最杰出的军事指挥官之一，以纪律严明和战术精湛著称，是唯一一位到1815年从未在战场上被打败的拿破仑元帅。1805年率第三军团参</div>
+</a>
+<a class="entry-item" href="达维多夫老爷.html">
+  <div class="noun">达维多夫老爷</div>
+  <div class="snippet">波罗金诺战场土地的所有者，托尔斯泰以此指代当地的俄国贵族地主，其田地和农奴的草地在波罗金诺战役中被用作战场。</div>
+</a>
+<a class="entry-item" href="迪歇努瓦.html">
+  <div class="noun">迪歇努瓦</div>
+  <div class="snippet">卡特琳-约瑟芬·迪歇努瓦（Catherine-Josephine Duchesnois，1777-1835），法国古典悲剧女演员，长期在法兰西喜剧院（Comedie-Francaise）演出。1802年以拉辛的《费德尔》在巴黎崭露头角，与著</div>
+</a>
+<a class="entry-item" href="迪罗涅尔.html">
+  <div class="noun">迪罗涅尔</div>
+  <div class="snippet">《战争与和平》中提到的法国军官，负责指挥在莫斯科街道巡逻、制止抢劫和捉拿纵火犯的巡逻队。他的巡逻队在莫斯科城中抓获了多名俄国嫌疑犯，包括皮埃尔。</div>
+</a>
+<a class="entry-item" href="那不勒斯王.html">
+  <div class="noun">那不勒斯王</div>
+  <div class="snippet">指若阿尚·缪拉（Joachim Murat），法国元帅，拿破仑的妹夫，1808年被封为那不勒斯国王。在1812年征俄战争中担任法军骑兵总指挥，率部进入莫斯科。</div>
+</a>
+<a class="entry-item" href="邦达尔丘克.html">
+  <div class="noun">邦达尔丘克</div>
+  <div class="snippet">列夫·托尔斯泰《战争与和平》中的一个次要角色，保罗格勒骠骑兵团的一名骠骑兵。在申格拉本战役的骑兵冲锋中，他从后面追上受伤的尼古拉·罗斯托夫，骑马从他身旁绕过。是一个用于丰富战争场景真实感的次要人物。</div>
+</a>
+<a class="entry-item" href="邦达连科.html">
+  <div class="noun">邦达连科</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的骠骑兵，负责为尼古拉·罗斯托夫照料马匹。原文称其为&quot;霍霍尔&quot;（旧时俄罗斯人对乌克兰人的俗称），因罗斯托夫给酒钱慷慨而殷勤伺候。</div>
+</a>
+<a class="entry-item" href="阿什男爵.html">
+  <div class="noun">阿什男爵</div>
+  <div class="snippet">1812年拿破仑入侵俄国期间的斯摩棱斯克文职总督（民政长官），属于波罗的海德意志贵族家庭（von Asch）。在法军逼近斯摩棱斯克时，他接到巴克莱·德·托利的指令，向市民保证城市安全，但局势很快失控，他建议居民撤离前往莫斯科。</div>
+</a>
+<a class="entry-item" href="阿佛洛狄忒.html">
+  <div class="noun">阿佛洛狄忒</div>
+  <div class="snippet">希腊神话中的爱与美女神，对应于罗马神话中的维纳斯。在特洛伊战争传说中，她承诺帕里斯得到海伦，从而赢得金苹果，并在整个战争中支持特洛伊一方。</div>
+</a>
+<a class="entry-item" href="阿列克谢·奥尔洛夫伯爵.html">
+  <div class="noun">阿列克谢·奥尔洛夫伯爵</div>
+  <div class="snippet">俄国政治活动家、上将，奥尔洛夫五兄弟之一，参与1762年宫廷政变拥立叶卡捷琳娜二世，1770年切什梅海战中大败土耳其舰队，退役后培育出奥尔洛夫快步马品种。</div>
+</a>
+<a class="entry-item" href="阿奇里斯.html">
+  <div class="noun">阿奇里斯</div>
+  <div class="snippet">古希腊神话中的英雄，特洛伊战争中最著名的希腊勇士。母亲海洋女神忒提斯曾将其浸入冥河水，使其全身刀枪不入，唯脚跟未浸成为致命弱点（阿喀琉斯之踵）。在本书中以&quot;阿奇里斯追乌龟&quot;典故出现。</div>
+</a>
+<a class="entry-item" href="阿姆菲尔德.html">
+  <div class="noun">阿姆菲尔德</div>
+  <div class="snippet">古斯塔夫·莫里茨·阿姆菲尔德伯爵（1757-1814），瑞典-芬兰贵族，政治家与外交家。早年深得瑞典国王古斯塔夫三世信任，后因政治斗争流亡俄国，成为亚历山大一世的重要顾问，参与策划俄国抗法防御战略，并促成芬兰大公国在俄帝国内的自治地位。 -</div>
+</a>
+<a class="entry-item" href="阿姆菲尔德将军.html">
+  <div class="noun">阿姆菲尔德将军</div>
+  <div class="snippet">古斯塔夫·毛里茨·阿姆菲尔特，芬兰裔瑞典将军、外交官，后效力于俄罗斯帝国。在1812年战争中担任沙皇亚历山大一世的军事顾问。他曾任瑞典在波美拉尼亚的军队总司令，后因政治流亡俄国。他对确保芬兰大公国的自治地位有重要贡献，并说服亚历山大一世将芬</div>
+</a>
+<a class="entry-item" href="阿尔哈罗夫.html">
+  <div class="noun">阿尔哈罗夫</div>
+  <div class="snippet">18世纪末至19世纪初莫斯科的著名贵族家族名称。在小说中，阿尔哈罗夫家是莫斯科上流社会的社交中心之一，经常举办晚会、化装舞会等。尼古拉·罗斯托夫曾答应去阿尔哈罗夫家参加晚会。该家族名在小说中还出现在后续娜塔莎与阿纳托利相遇的社交场景中。 -</div>
+</a>
+<a class="entry-item" href="阿尔巴尼亚人.html">
+  <div class="noun">阿尔巴尼亚人</div>
+  <div class="snippet">阿尔巴尼亚民族成员，主要分布在巴尔干半岛西部。在奥斯曼帝国时期，阿尔巴尼亚人以勇猛著称，大量在奥斯曼军队中服兵役，被土耳其人称为&quot;阿尔瑙&quot;。</div>
+</a>
+<a class="entry-item" href="阿尔帕特奇.html">
+  <div class="noun">阿尔帕特奇</div>
+  <div class="snippet">博尔孔斯基公爵庄园的管家，管理童山田庄二十余年，是模范管家。忠心耿耿，一切生活兴趣局限于执行公爵命令。模仿主人的举止神态，戴白绒毛帽、持手杖，说话语气如老公爵般急促。</div>
+</a>
+<a class="entry-item" href="阿尔方斯·卡尔雷奇.html">
+  <div class="noun">阿尔方斯·卡尔雷奇</div>
+  <div class="snippet">贝格（Alphons Karlovich Berg）的德语名字与俄式父称组合。他是俄罗斯化了的德国裔军官，严谨刻板但正派可靠，后娶了罗斯托夫家长女薇拉为妻。</div>
+</a>
+<a class="entry-item" href="阿尼西娅·费奥多罗夫娜.html">
+  <div class="noun">阿尼西娅·费奥多罗夫娜</div>
+  <div class="snippet">大叔的管家婆（也是没有正式名分的女主人），体态丰满，勤劳能干。她制作各种俄罗斯传统美食款待客人，代表着俄罗斯民间文化与质朴精神的化身。当娜塔莎跳起俄罗斯民间舞时她被感动落泪，因为看到贵族小姐竟能体会到普通俄罗斯妇女的内心世界。</div>
+</a>
+<a class="entry-item" href="阿拉克切耶夫.html">
+  <div class="noun">阿拉克切耶夫</div>
+  <div class="snippet">阿列克谢·安德烈耶维奇·阿拉克切耶夫，俄国伯爵、炮兵上将，亚历山大一世的首席军事顾问，曾任陆军大臣，推行严酷的军垦制度，其统治时期被称为阿拉克切耶夫暴政时期。 --- 阿列克谢·安德烈耶维奇·阿拉克切耶夫（1769—1834），俄国军官、政</div>
+</a>
+<a class="entry-item" href="阿拉克切耶夫伯爵.html">
+  <div class="noun">阿拉克切耶夫伯爵</div>
+  <div class="snippet">阿列克谢·安德烈耶维奇·阿拉克切耶夫伯爵（1769-1834），俄国陆军大臣（1808-1810年）， 亚历山大一世宠臣。炮兵上将，推行了&quot;1805年体系&quot;炮兵改革。1808-1809年俄瑞战争中率军 跨过冰冻的芬兰湾进攻奥兰群岛。1812</div>
+</a>
+<a class="entry-item" href="阿拉克契耶夫.html">
+  <div class="noun">阿拉克契耶夫</div>
+  <div class="snippet">阿列克谢·阿拉克契耶夫，俄国炮兵上将、亚历山大一世的军事顾问。1815年后以铁腕手段控制内政，推行军屯制，其统治时期被称为&quot;阿拉克契耶夫时期&quot;。在文本中他是1812年随亚历山大一世前往维尔纳的侍从之一。</div>
+</a>
+<a class="entry-item" href="阿提拉.html">
+  <div class="noun">阿提拉</div>
+  <div class="snippet">匈奴王（约406-453年），曾率游牧民族大举入侵欧洲，被称为&quot;上帝之鞭&quot;。托尔斯泰在《战争与和平》中以阿提拉为例论证历史哲学：关于各民族的迁徙，已无人认为欧洲的复兴取决于阿提拉的任意作为，历史对象越远，造成事件之人的自由意志就越可疑。 -</div>
+</a>
+<a class="entry-item" href="阿普拉克辛娜伯爵夫人.html">
+  <div class="noun">阿普拉克辛娜伯爵夫人</div>
+  <div class="snippet">托尔斯泰《战争与和平》中的极次要背景角色，在上流社会的谈话中被提及，属于营造时代氛围、展现贵族社交网络的背景人物，并无直接登场。</div>
+</a>
+<a class="entry-item" href="阿杰莉.html">
+  <div class="noun">阿杰莉</div>
+  <div class="snippet">小说尾声部分出现的极次要人物，身份推测为法籍女伴或商店售货员。皮埃尔从彼得堡购物归来时，正是阿杰莉极力推荐他购买那把镶嵌珍珠和金丝的梳子作为给娜塔莎的礼物。</div>
+</a>
+<a class="entry-item" href="阿格拉菲娜·伊万诺夫娜·别洛娃.html">
+  <div class="noun">阿格拉菲娜·伊万诺夫娜·别洛娃</div>
+  <div class="snippet">列夫·托尔斯泰长篇小说《战争与和平》中的次要人物，罗斯托夫家在奥特拉德诺耶的女邻居，一位虔诚的东正教信徒。在娜塔莎因与安德烈公爵解除婚约而精神崩溃后，她来到莫斯科朝拜圣徒，建议娜塔莎进行严格的斋戒祈祷，并每天凌晨三点陪她去教堂参加晨祷、晚祷</div>
+</a>
+<a class="entry-item" href="阿梅莉.html">
+  <div class="noun">阿梅莉</div>
+  <div class="snippet">阿梅莉（Amelie，即布里安小姐），法国女子，玛丽亚公爵小姐的法国女伴和家庭教师。她在小说中与前来求婚的阿纳托利·库拉金发生暧昧关系，玛丽亚公爵小姐得知后一度想成全他们。在1812年法军逼近时，她劝说玛丽亚不要撤离，暴露了民族立场上的分歧</div>
+</a>
+<a class="entry-item" href="阿波隆·尼古拉耶维奇.html">
+  <div class="noun">阿波隆·尼古拉耶维奇</div>
+  <div class="snippet">莫斯科社交界的熟人，英国俱乐部的常客。功能性角色，皮埃尔在感到人生困惑时找他闲聊社会新闻以转移注意力，逃避对人生意义的思考。&quot;阿波隆&quot;源自希腊神话太阳神阿波罗。体现19世纪初俄国上流社会沉迷闲聊的生活侧面。</div>
+</a>
+<a class="entry-item" href="阿琳卡.html">
+  <div class="noun">阿琳卡</div>
+  <div class="snippet">大叔家的女仆/家奴。当娜塔莎以女性身份侧骑马来访时，被同伴叫来看热闹，只提及一次。</div>
+</a>
+<a class="entry-item" href="阿纳托利.html">
+  <div class="noun">阿纳托利</div>
+  <div class="snippet">阿纳托利·库拉金，瓦西里公爵的小儿子，库拉金家族的纨绔子弟代表。长相俊美但放荡不羁，频繁出入赌场酒场，毫无道德感，曾在波兰被迫娶一地主女儿后遗弃妻子。追求已与安德烈公爵订婚的娜塔莎·罗斯托娃并策划拐走她，成为小说重要转折点。最后在波罗金诺战</div>
+</a>
+<a class="entry-item" href="阿纳托利·库拉金.html">
+  <div class="noun">阿纳托利·库拉金</div>
+  <div class="snippet">阿纳托利·库拉金是托尔斯泰《战争与和平》中库拉金家族的重要成员，瓦西里·库拉金公爵的小儿子，海伦的哥哥。他外表俊美，但品行不端，是小说中俄国堕落贵族的典型代表。他一年要花掉父亲数万卢布，频繁出入赌场酒场，与损友多洛霍夫一起胡作非为。他曾为钱</div>
+</a>
+<a class="entry-item" href="阿耳忒弥斯.html">
+  <div class="noun">阿耳忒弥斯</div>
+  <div class="snippet">阿耳忒弥斯（Artemis）是希腊神话中的月亮与狩猎女神，奥林匹斯十二主神之一，宙斯与勒托之女，太阳神阿波罗的孪生姐姐（或妹妹）。在罗马神话中对应狄安娜。她是一位多职能女神，掌管狩猎、荒野、野兽、月亮，也是少女的保护神和助产女神。她与雅典娜</div>
+</a>
+<a class="entry-item" href="阿金菲神甫(玛丽亚的忏悔师).html">
+  <div class="noun">阿金菲神甫(玛丽亚的忏悔师)</div>
+  <div class="snippet">阿金菲神甫，玛丽亚公爵小姐的忏悔师（东正教神甫），在童山所在的教区服务。当玛丽亚公爵小姐决定要像女巡礼者一样离家朝圣时，她将自己的打算告知了阿金菲神甫，而神甫称赞了她的志向。在玛丽亚的宗教生活中，阿金菲神甫担任精神指导的角色，认可并鼓励她的</div>
+</a>
+<a class="entry-item" href="陆军大臣.html">
+  <div class="noun">陆军大臣</div>
+  <div class="snippet">指阿列克谢·阿拉克切耶夫伯爵，1808年至1810年任俄国陆军大臣，以冷酷、傲慢和严厉著称。他在小说中接见了前来报捷的安德烈公爵，态度冷淡，对俄军胜利不以为意，反映出官场的虚伪与冷漠。</div>
+</a>
+<a class="entry-item" href="随从.html">
+  <div class="noun">随从</div>
+  <div class="snippet">跟随主人出行、负责侍奉的下人。</div>
+</a>
+<a class="entry-item" href="随军小贩.html">
+  <div class="noun">随军小贩</div>
+  <div class="snippet">跟随军队移动、向士兵出售食品饮料烟草等生活用品的平民商人。在19世纪欧洲军队中普遍存在，在俄军后勤补给不足时承担了重要的信贷和供应功能。</div>
+</a>
+<a class="entry-item" href="雅科夫·阿尔帕特奇.html">
+  <div class="noun">雅科夫·阿尔帕特奇</div>
+  <div class="snippet">托尔斯泰《战争与和平》中博尔孔斯基家族的忠实管家，管理田庄二十余年，精明能干，被书中称为&quot;模范总管&quot;。他善于揣摩主人心意，也能凭直觉了解农民的需求和情绪，在1812年战争期间负责处理庄园撤退事务，是博尔孔斯基家族命运的重要见证者。</div>
+</a>
+<a class="entry-item" href="雅科夫列夫.html">
+  <div class="noun">雅科夫列夫</div>
+  <div class="snippet">伊万·阿列克谢耶维奇·雅科夫列夫（Иван Алексеевич Яковлев，1767-1846），俄国贵族、近卫军上尉，著名作家赫尔岑的父亲。1812年拿破仑占领莫斯科期间被召见，受命携带拿破仑的信件前往彼得堡递交沙皇亚历山大一世。</div>
+</a>
+<a class="entry-item" href="霍恩洛厄.html">
+  <div class="noun">霍恩洛厄</div>
+  <div class="snippet">路德维希·阿洛伊斯·霍恩洛厄-瓦尔登堡-巴滕施泰因亲王，先后服务于奥地利和法国军队，在阿斯佩恩-埃斯林战役和瓦格拉姆战役中指挥奥地利第IV军的一个师，后成为法国元帅。</div>
+</a>
+<a class="entry-item" href="革飞努斯.html">
+  <div class="noun">革飞努斯</div>
+  <div class="snippet">格奥尔格·戈特弗里德·盖尔维努斯（1805-1871），德国历史学家，&quot;格丁根七君子&quot;之一，著有《德意志民族文学史》和《维也纳条约以来19世纪史》，主张历史书写应关注多种因素的交互作用。</div>
+</a>
+<a class="entry-item" href="韦列夏金.html">
+  <div class="noun">韦列夏金</div>
+  <div class="snippet">小说中的莫斯科老商人，在石桥附近经营一家小饭馆。其子因被指撰写并散发拿破仑的布告（传单）而被逮捕，韦列夏金本人为此前来向总督拉斯托普钦求情。其子后被交付法庭审判，判了苦役。历史上韦列夏金事件是莫斯科弃守前夕的真实事件，被处决的是商人儿子，托</div>
+</a>
+<a class="entry-item" href="韦辛尼.html">
+  <div class="noun">韦辛尼</div>
+  <div class="snippet">韦辛尼是《战争与和平》中的小配角，一名被俄军俘虏的法国少年鼓手。其本名是樊尚·博斯（Vincent Bosse），俄国哥萨克士兵用俄语俗称叫他&quot;韦辛尼&quot;（俄语对Vincent的变音/昵称，意含&quot;春天般的&quot;）。在杰尼索夫游击队营地中，他被好心</div>
+</a>
+<a class="entry-item" href="马克.html">
+  <div class="noun">马克</div>
+  <div class="snippet">卡尔·马克·冯·莱贝里希男爵，奥地利军人和拿破仑战争期间担任实际司令官，以1805年乌尔姆战役中向拿破仑投降而闻名，后被军事法庭判处两年徒刑。 --- 卡尔·马克·冯·莱贝里希，奥地利骑兵元帅， 1805年乌尔姆战役中率奥地利军队向拿破仑投</div>
+</a>
+<a class="entry-item" href="马克将军.html">
+  <div class="noun">马克将军</div>
+  <div class="snippet">卡尔·马克·冯·莱贝里希（Karl Mack von Leiberich，1752-1828），神圣罗马帝国（奥地利）将领，在拿破仑战争中担任奥军实际司令官。1805年乌尔姆战役中率奥军向拿破仑投降。</div>
+</a>
+<a class="entry-item" href="马克西米连.html">
+  <div class="noun">马克西米连</div>
+  <div class="snippet">马克西米连一世（1832—1867），奥地利哈布斯堡家族成员，1864至1867年任墨西哥皇帝。在法国拿破仑三世支持下建立墨西哥第二帝国，推行自由派改革。1867年被胡亚雷斯的共和军俘虏并枪决。</div>
+</a>
+<a class="entry-item" href="马卡尔·阿列克谢伊奇.html">
+  <div class="noun">马卡尔·阿列克谢伊奇</div>
+  <div class="snippet">战争与和平中的次要角色，是皮埃尔的共济会导师约瑟夫·阿列克谢耶维奇·巴兹杰耶夫的弟弟。他嗜酒如命、神志不太清醒，住在已故兄长的宅邸中。法军进入莫斯科时，他趁皮埃尔不备抓起手枪跑向走廊企图袭击法国人，被仆人格拉西姆和看门人拦住。</div>
+</a>
+<a class="entry-item" href="马卡尔·阿列克谢耶维奇.html">
+  <div class="noun">马卡尔·阿列克谢耶维奇</div>
+  <div class="snippet">约瑟夫·阿列克谢耶维奇·巴兹杰耶夫的兄弟，身材高大、秃顶、红鼻子，是一个半疯的嗜酒老人。皮埃尔住在巴兹杰耶夫家时，他屡次好奇地来到书房门口窥视，但又害羞地匆匆走开。</div>
+</a>
+<a class="entry-item" href="马卡林.html">
+  <div class="noun">马卡林</div>
+  <div class="snippet">列夫·托尔斯泰小说《战争与和平》中的小配角，退役骠骑兵，性格温和软弱，对阿纳托利·库拉金抱有无限的敬爱和盲目崇拜。在阿纳托利策划拐走娜塔莎的计划中作为证婚人之一出现，绰号&quot;马卡尔卡&quot;。 --- 马卡林（昵称马卡尔卡）是《战争与和平》中的次要</div>
+</a>
+<a class="entry-item" href="马夫.html">
+  <div class="noun">马夫</div>
+  <div class="snippet">负责照料和驾驭马匹的仆人。</div>
+</a>
+<a class="entry-item" href="马尔科夫伯爵.html">
+  <div class="noun">马尔科夫伯爵</div>
+  <div class="snippet">阿尔卡季·伊万诺维奇·马尔科夫（1747-1827），俄国著名外交官、伯爵，在拿破仑战争期间担任俄国驻法公使。《战争与和平》中记载了他与拿破仑之间著名的&quot;手绢故事&quot;——拿破仑故意丢下手绢试探马尔科夫是否会为其拾起，马尔科夫则丢下自己的手绢并</div>
+</a>
+<a class="entry-item" href="马尔维纳斯.html">
+  <div class="noun">马尔维纳斯</div>
+  <div class="snippet">尼古拉·罗斯托夫在谈论爱情时提到的一个名字，指代仅因美貌而被爱的女人类型。这是一个法语/俄文人名的音译，在原文中指代一种女性——只有像&quot;马尔维纳斯之流&quot;的女人才仅仅因为姿色被别人所爱，与尼古拉对妻子玛丽亚的&quot;因可爱而美丽&quot;的爱情形成对比。</div>
+</a>
+<a class="entry-item" href="马拉.html">
+  <div class="noun">马拉</div>
+  <div class="snippet">让-保尔·马拉（Jean-Paul Marat，1743—1793），法国大革命时期雅各宾派核心领导人之一，创办《人民之友报》，代表底层民众利益，主张暴力革命和革命专政。1793年7月被吉伦特派同情者夏洛特·科黛刺杀于浴缸中。在《战争与和平</div>
+</a>
+<a class="entry-item" href="马林.html">
+  <div class="noun">马林</div>
+  <div class="snippet">谢尔盖·尼基福罗维奇·马林（1776-1813），俄国军官、讽刺诗人，普列奥布拉任斯基近卫军团出身，1812年卫国战争期间在巴格拉季翁麾下任值班将军。以讽刺诗闻名，库图佐夫在波罗金诺战役前夕曾当众背诵其诗作。</div>
+</a>
+<a class="entry-item" href="马格尼茨基.html">
+  <div class="noun">马格尼茨基</div>
+  <div class="snippet">俄国陆军条例委员会（军事条令委员会）主任，斯佩兰斯基的好友。在《战争与和平》中， 斯佩兰斯基主动提出将安德烈公爵引荐给马格尼茨基，因为马格尼茨基主管陆军条例委员会， 而安德烈公爵当时正关注军事改革和条例制定事宜。 --- 米哈伊尔·列昂季耶</div>
+</a>
+<a class="entry-item" href="马格达林.html">
+  <div class="noun">马格达林</div>
+  <div class="snippet">即抹大拉的马利亚（Mary Magdalene），《圣经·新约》中耶稣的重要女性门徒。耶稣曾从她身上赶出七个鬼，她见证耶稣被钉十字架和复活，是第一个看见复活耶稣并向门徒传报消息的人，被称为&quot;使徒中的使徒&quot;。</div>
+</a>
+<a class="entry-item" href="马特维·叶尔米什.html">
+  <div class="noun">马特维·叶尔米什</div>
+  <div class="snippet">《战争与和平》中的次要人物，尼古拉·罗斯托夫庄园上的富裕农民。尼古拉常在妻子玛丽亚面前谈起马特维·叶尔米什一家人如何勤劳能干——整夜运庄稼，别人尚未收割时他们已把禾捆垛好。这个角色体现了托尔斯泰笔下理想化的朴实勤劳的俄国农民形象。</div>
+</a>
+<a class="entry-item" href="马莫诺夫伯爵.html">
+  <div class="noun">马莫诺夫伯爵</div>
+  <div class="snippet">19世纪初俄国贵族，1812年俄法战争期间自费出资组建一个步兵团支援抗法战争。在《战争与和平》中与皮埃尔·别祖霍夫一同被提及，两人均各自捐助成立民团。历史上一般认为对应亚历山大·伊万诺维奇·德米特里耶夫-马莫诺夫（1787—1836），他本</div>
+</a>
+<a class="entry-item" href="马蒙诺夫.html">
+  <div class="noun">马蒙诺夫</div>
+  <div class="snippet">真实历史人物在小说中的投影，全名马特维·亚历山德罗维奇·德米特里耶夫-马蒙诺夫（1790-1863），俄国贵族伯爵。在1812年卫国战争期间自费组建并装备了一个哥萨克团，被称为&quot;马蒙诺夫团&quot;或&quot;马蒙诺夫的哥萨克&quot;。小说中其部队在小梅季希村放</div>
+</a>
+<a class="entry-item" href="骑者.html">
+  <div class="noun">骑者</div>
+  <div class="snippet">骑马的人，老公爵派了提着灯笼的骑者在乡间路口为医生引路。</div>
+</a>
+<a class="entry-item" href="骠骑军传令兵.html">
+  <div class="noun">骠骑军传令兵</div>
+  <div class="snippet">骠骑兵部队中负责传递命令、联络通讯的士兵。罗斯托夫出行时带了一名传令兵随行，负责照料马匹和执行传达任务。</div>
+</a>
+<a class="entry-item" href="高个儿小伙子.html">
+  <div class="noun">高个儿小伙子</div>
+  <div class="snippet">1812年莫斯科撤退前夕在酒馆一带出现的一名平民青年领袖，淡黄色头发，穿青灰色长外衣。他带领工人们在酒馆饮酒作乐，卷入与铁匠的斗殴，随后又带领人群追赶酒馆老板，成为街头群众运动的鼓动者。托尔斯泰通过这一形象展示了战争前夕莫斯科底层民众的骚动</div>
+</a>
+<a class="entry-item" href="高尔基.html">
+  <div class="noun">高尔基</div>
+  <div class="snippet">马克西姆·高尔基，原名阿列克赛·马克西姆维奇·彼什科夫，苏联作家、社会主义现实主义文学奠基人，1868年出生，1936年去世。代表作有自传体三部曲《童年》《在人间》《我的大学》和长篇小说《母亲》等。</div>
+</a>
+<a class="entry-item" href="魏罗特尔.html">
+  <div class="noun">魏罗特尔</div>
+  <div class="snippet">奥地利将军，在1805年第三次反法同盟战争中接替阵亡的施米特担任俄奥联军的参谋长。他在奥斯特里茨战役前制定了联军的进攻计划，该计划遭到库图佐夫反对，但获得沙皇亚历山大一世支持，最终导致联军惨败。 --- 弗朗茨·冯·魏罗特尔（1755-18</div>
+</a>
+<a class="entry-item" href="鲁斯坦.html">
+  <div class="noun">鲁斯坦</div>
+  <div class="snippet">鲁斯坦·拉扎（Roustam Raza，约1783-1845），亚美尼亚裔，出生于格鲁吉亚第比利斯。13岁被绑架贩卖为奴，在开罗加入马木留克骑兵团。1799年被赠予拿破仑，此后15年担任拿破仑的贴身侍卫和保镖，负责守卫、试毒和保管武器，睡在</div>
+</a>
+<a class="entry-item" href="鲁缅采夫.html">
+  <div class="noun">鲁缅采夫</div>
+  <div class="snippet">尼古拉·彼得罗维奇·鲁缅采夫（1754—1826），俄国伯爵，1807年至1814年任俄国外交大臣、总理大臣。在拿破仑战争期间主管俄国外交事务，参与《提尔西特和约》等重大外交谈判。他也是著名的文化庇护人和收藏家，其收藏品捐赠后成为俄罗斯国家</div>
+</a>
+<a class="entry-item" href="鲁缅采夫伯爵.html">
+  <div class="noun">鲁缅采夫伯爵</div>
+  <div class="snippet">尼古拉·彼得罗维奇·鲁缅采夫伯爵（1754—1826），俄国政治家、外交大臣和总理大臣（1807—1814）。他担任外交大臣期间推行亲法政策，是《蒂尔西特和约》后法俄同盟的重要推动者。在《战争与和平》中，他是彼得堡上流社会&quot;法兰西小圈子&quot;的</div>
+</a>
+<a class="entry-item" href="鲍里斯.html">
+  <div class="noun">鲍里斯</div>
+  <div class="snippet">鲍里斯·德鲁别茨科伊，是德鲁别茨卡娅公爵夫人安娜·米哈伊洛夫娜的独子，在《战争与和平》中与皮埃尔、安德烈、尼古拉并列为重要青年人物。他幼年在罗斯托夫家长大，后在其母的钻营下调入谢苗诺夫团近卫队担任准尉。他精明世故、善于钻营，有着强烈的向上爬</div>
+</a>
+<a class="entry-item" href="鲍里斯·德鲁别茨科伊.html">
+  <div class="noun">鲍里斯·德鲁别茨科伊</div>
+  <div class="snippet">鲍里斯·德鲁别茨科伊（Boris Drubetskoy），安娜·米哈伊洛夫娜的独生子，出身没落名门。从小在罗斯托夫家长大，与娜塔莎有过懵懂恋情。在其母四处奔走下进入近卫军，精于钻营、善于利用关系向上攀爬，后来娶了有钱妻子，成为上流社会中功利</div>
+</a>
+<a class="entry-item" href="麻脸女人.html">
+  <div class="noun">麻脸女人</div>
+  <div class="snippet">《战争与和平》中莫斯科大火期间出现在人群中的一个妇女，脸上有麻子。她与年老的助祭交谈，帮忙辨认皮埃尔所救女孩的家庭，后来皮埃尔将女孩交给她照看。</div>
+</a>
+<a class="entry-item" href="龙骑兵军官.html">
+  <div class="noun">龙骑兵军官</div>
+  <div class="snippet">俄国龙骑兵部队的军官。在韦列夏金被处决的场景中，龙骑兵军官命令士兵拔刀执行死刑。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

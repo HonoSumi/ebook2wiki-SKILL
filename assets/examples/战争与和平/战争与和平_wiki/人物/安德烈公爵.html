@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>安德烈公爵 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">安德烈公爵 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">人物</a>
+<span>/</span>
+安德烈公爵
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>安德烈公爵</h1>
+  <span class="meta-tag">人物</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>安德烈·博尔孔斯基公爵，托尔斯泰《战争与和平》的核心男主角之一，沙俄公爵，博尔孔斯基家族长子。性格孤傲正直，追求理想，厌恶上流社会虚伪，后参加1812年卫国战争并在波罗底诺战役中受重伤去世。<br>---<br>全名安德烈·博尔孔斯基公爵，托尔斯泰《战争与和平》的核心人物之一，博尔孔斯基家族长子。性格孤傲正直、才华横溢，两次投身战场，最终在波罗金诺战役中重伤去世。<br>---<br>安德烈·博尔孔斯基公爵，托尔斯泰《战争与和平》核心男主角之一。沙俄公爵，博尔孔斯基家族长子。 初登场时26岁，相貌清秀冷峻，性格孤傲正直，不随流俗。1805年担任库图佐夫将军副官上前线， 奥斯特里茨战役重伤后顿悟功名虚无。妻子丽莎难产去世后意志消沉， 1809年遇见娜塔莎·罗斯托娃后重新燃起生活希望。1812年卫国战争再度参战， 波罗底诺战役重伤后与娜塔莎重逢，在陪伴下安然离世。<br>---<br>安德烈·博尔孔斯基公爵（Prince Andrei Bolkonsky），托尔斯泰《战争与和平》的核心男主角之一，博尔孔斯基家族继承人，库图佐夫的副官。他性格孤傲正直、才智过人，追求功名却经历幻灭。在奥斯特利茨战役中身负重伤，目睹天空后对名誉感到虚无。妻子丽莎难产去世后陷入消沉，后被娜塔莎的活力唤醒。本篇中他向皮埃尔表白对娜塔莎的爱情，但父亲要求婚期推迟一年。<br>---<br>娜塔莎的未婚夫，博尔孔斯基公爵之子，在罗马养伤推迟回国。他是全书核心男主之一，孤傲正直，对上流社会的虚伪深恶痛绝。经历了奥斯特利茨战役重伤、妻子难产去世后的消沉、与娜塔莎订婚又解除、波罗金诺战役身负重伤，弥留之际领悟爱是生命的真谛。<br>---<br>小说的男主角之一，全名安德烈·博尔孔斯基公爵。博尔孔斯基家族长子。<br>孤傲正直，才华出众，厌恶上流社会虚伪。在奥斯特利茨战役中重伤，<br>仰望天空对功名产生幻灭。妻子丽莎难产去世后意志消沉。<br>与娜塔莎订婚后被解除婚约。在1812年波罗底诺战役中再次重伤，<br>最终在娜塔莎照料下领悟爱与宽恕而离世。<br>---<br>安德烈·博尔孔斯基公爵是《战争与和平》的核心男主角之一，理性深沉、追求精神超越。他与娜塔莎相爱并订婚，但因父亲反对需等待一年。在娜塔莎受阿纳托尔诱惑私奔失败后婚约解除。1812年战争中他身受重伤，在娜塔莎的照料下去世。镜卜中索尼娅谎称看见了他。<br>---<br>博尔孔斯基家族长子，小说核心人物之一。孤傲正直、追求理想。经历了奥斯特利茨战役的幻灭、丧妻之痛、与娜塔莎的爱情悲剧、1812年重伤等曲折人生。临终领悟了爱与宽恕的真谛——爱是生命，甚至死亡也不能摧毁爱。是全书最具思想深度的角色之一。<br>---<br>全名安德烈·博尔孔斯基，小说核心男主角之一。孤傲正直，反感上流社会的虚伪，追求理想和功名。初登场时担任库图佐夫的副官，参加奥斯特利茨战役身负重伤后对战争荣耀幻灭。后与娜塔莎·罗斯托娃订婚，因娜塔莎被阿纳托利诱惑而解除婚约。1812年再度参战，在博罗季诺战役中受重伤，临终前与娜塔莎和解。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>安德烈公爵从轿式马车上下来，把娇小的太太扶下车，让她走在前面。<br>---<br>安德烈公爵在观看一副他以前没见过的金色大镜框，镜框里装着博尔孔斯基公爵家的谱系图<br>---<br>安德烈公爵在服役期间——大部分时间是当副官，见过很多大人物的接待室，各种类型的接待室， 他都很清楚。阿拉克切耶夫伯爵的接待室是非常特殊的。在阿拉克切耶夫伯爵接待室里，在等待召见 的不重要的人物的脸上，有一种羞愧和卑顺的表情；在大官的脸上，共同的表情是侷促不安， 但为了掩饰这种侷促不安，却装作满不在乎，装作嘲笑自己，嘲笑自己的处境和嘲笑他们所等待召见的人。<br>---<br>&quot;如果有人对我说，我会这么一往情深，我简直不相信，&quot;安德烈公爵说，&quot;我从前的感情完全不是这样的。对我来说，整个世界分成两部分：一部分有她，那儿全是幸福、希望、光明；另一部分没有她，那儿全是苦闷和黑暗……&quot;<br>---<br>安德烈公爵从罗马寄来第四封信，信中说，如果不是他的伤口在温暖的气候中突然裂开，他的行期不得不推延到明年初春的话，他早已在回国的途中了。<br>---<br>老伯爵夫人……在想娜塔莎，想自己的青春，想娜塔莎和安德烈公爵的婚事—— 在这桩婚事中有点不自然和叫人担心的东西。<br>---<br>娜塔莎说，她对索尼娅的安慰一言不发，在床上躺下，吹灭蜡烛后，仍然长久地睁着眼睛，一动不动地躺在床上，望着寒冷的月光照进结冰的窗户。……「安德烈躺着？他病了？」娜塔莎吃惊地、目不转睛地瞪着女友问。<br>---<br>安德烈公爵回来结婚的日期就要到了，他为此事托她在父亲跟前说情不仅没有办成，而且相反，事情看来完全无望了：一提起罗斯托娃伯爵小姐，老公爵就发脾气。<br>---<br>关于罗斯托夫家的事，您听到什么吗？……我听说他们不久就要来这儿了。我也天天盼安德烈回来。我希望他们在这儿见面。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://baike.baidu.com/item/%E5%AE%89%E5%BE%B7%E7%83%88%C2%B7%E5%8D%9A%E5%B0%94%E5%AD%94%E6%96%AF%E5%9F%BA/55647709" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%AE%89%E5%BE%B7%E7%83%88%C2%B7%E5%8D%9A%E5%B0%94%E5%AD%94%E6%96%AF%E5%9F%BA/55647709</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/安德烈·博尔孔斯基/55647709" target="_blank" rel="noopener">https://baike.baidu.com/item/安德烈·博尔孔斯基/55647709</a>
+<a class="source-url-item" href="https://wapbaike.baidu.com/item/%e5%ae%89%e5%be%b7%e7%83%88%c2%b7%e5%8d%9a%e5%b0%94%e5%ad%94%e6%96%af%e5%9f%ba/55647709" target="_blank" rel="noopener">https://wapbaike.baidu.com/item/%e5%ae%89%e5%be%b7%e7%83%88%c2%b7%e5%8d%9a%e5%b0%94%e5%ad%94%e6%96%af%e5%9f%ba/55647709</a>
+<a class="source-url-item" href="https://www.vrrw.net/hstj/9010.html" target="_blank" rel="noopener">https://www.vrrw.net/hstj/9010.html</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

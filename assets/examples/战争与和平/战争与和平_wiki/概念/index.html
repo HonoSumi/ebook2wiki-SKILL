@@ -1,0 +1,3031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概念 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">概念 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+概念
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">710 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="NN.html">
+  <div class="noun">NN</div>
+  <div class="snippet">海伦在给皮埃尔的信中用来指代她的新追求者的隐名写法，托尔斯泰未明确写出此人的具体身份，可能是基于真实历史人物的避讳或小说叙事的需要。</div>
+</a>
+<a class="entry-item" href="NN指代.html">
+  <div class="noun">NN指代</div>
+  <div class="snippet">托尔斯泰在小说中使用的写作手法，用NN代替海伦打算嫁的那个人物的名字。这种省略手法在19世纪俄国文学中常见，有避讳或暗示的作用。</div>
+</a>
+<a class="entry-item" href="Symbols.html">
+  <div class="noun">Symbols</div>
+  <div class="snippet">共济会用符号阐明教义的传统。训导师解释符号是不受感情影响的事物名称，具有类似象征的性质。共济会通过骷髅、棺材、福音书、圆规、围裙、铲子等多种符号传递道德教诲。</div>
+</a>
+<a class="entry-item" href="《民约论》.html">
+  <div class="noun">《民约论》</div>
+  <div class="snippet">《民约论》即《社会契约论》，全称《社会契约论或政治权利原理》，是法国启蒙思想家让-雅克·卢梭1762年出版的政治哲学著作。该书提出&quot;主权在民&quot;和&quot;公意&quot;思想，认为国家的主权属于人民，政府只是主权者的执行人。被誉为现代民主制度的基石，深刻影响</div>
+</a>
+<a class="entry-item" href="一七八九年思想.html">
+  <div class="noun">一七八九年思想</div>
+  <div class="snippet">指法国大革命所代表的启蒙理性、天赋人权、人民主权、自由平等博爱等理念体系，源自伏尔泰、卢梭、孟德斯鸠等启蒙思想家，深刻影响19世纪欧洲政治思想与运动。</div>
+</a>
+<a class="entry-item" href="一八一二年彗星.html">
+  <div class="noun">一八一二年彗星</div>
+  <div class="snippet">即C/1811 F1大彗星，1811年春季发现，1811至1812年期间肉眼清晰可见，是历史上最明亮的彗星之一。因恰逢拿破仑集结大军入侵俄国前夕，被当时欧洲民众普遍视为战争与灾难的预兆。托尔斯泰在《战争与和平》中将其作为核心象征：皮埃尔向娜</div>
+</a>
+<a class="entry-item" href="一八零七年春天.html">
+  <div class="noun">一八零七年春天</div>
+  <div class="snippet">皮埃尔决定返回彼得堡的季节，途中他计划巡视各田庄检查改革落实情况。</div>
+</a>
+<a class="entry-item" href="一去不复返的青春时代.html">
+  <div class="noun">一去不复返的青春时代</div>
+  <div class="snippet">库拉金公爵夫人在被女儿驳倒后的感慨，她开始认同海伦的观点并感叹自己年轻时不懂这些道理，反映了旧一代贵族道德观念在新一代实用主义面前的崩溃。</div>
+</a>
+<a class="entry-item" href="一夫一妻制.html">
+  <div class="noun">一夫一妻制</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声中论述的重要婚姻制度观点。他用胃的容量比喻家庭的容量——正如吃饭不能超过胃的负荷，家庭中的夫妻也不能超过需要，只能是一夫一妻。这一观点是托尔斯泰对当时关于婚姻自由等议论的回应，他认为婚姻不应当追求多方面的满足，而</div>
+</a>
+<a class="entry-item" href="七级浪.html">
+  <div class="noun">七级浪</div>
+  <div class="snippet">托尔斯泰在描写群众暴力时的比喻，指第三波也是最猛烈的一波人群冲击，象征群体暴力不可阻挡的力量。</div>
+</a>
+<a class="entry-item" href="七美德.html">
+  <div class="noun">七美德</div>
+  <div class="snippet">共济会要求会员培养的七项美德，与所罗门神殿的七级台阶数目对应，包括谦虚、服从、品行端正、爱人类、勇敢、慷慨、爱死亡。</div>
+</a>
+<a class="entry-item" href="万有引力法则.html">
+  <div class="noun">万有引力法则</div>
+  <div class="snippet">万有引力法则是牛顿于1687年在《自然哲学的数学原理》中提出的物理定律：任意两个质点间引力与质量乘积成正比、与距离平方成反比。托尔斯泰以此为例说明对必然性法则的认识过程。</div>
+</a>
+<a class="entry-item" href="三位一体(物质).html">
+  <div class="noun">三位一体(物质)</div>
+  <div class="snippet">炼金术中的&quot;神圣三元素&quot;（Tria Prima）理论，由文艺复兴时期著名炼金术士帕拉塞尔苏斯（Paracelsus）正式确立。该理论认为世间万物皆由三种基本元素——硫磺（代表灵魂、活性、可燃性）、水银（代表精神、流动性、挥发性）和盐（代表肉</div>
+</a>
+<a class="entry-item" href="三俄里.html">
+  <div class="noun">三俄里</div>
+  <div class="snippet">俄罗斯传统长度单位（俄语верста），1俄里约等于1.0668公里。三俄里约为3.2公里。俄制长度单位体系还包括俄尺（аршин，约0.71米）、俄寸（вершок，约4.445厘米）等。在《战争与和平》中广泛用于描述行军距离。</div>
+</a>
+<a class="entry-item" href="三月.html">
+  <div class="noun">三月</div>
+  <div class="snippet">春季的第一个月份，本章故事发生的时间背景，冬春交替的时节。</div>
+</a>
+<a class="entry-item" href="三类根据.html">
+  <div class="noun">三类根据</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中提出的影响自由与必然性观念增减的三个维度：(一)人与外部世界的关系（空间维度），(二)人与时间的关系（时间维度），(三)人与引起行动的原因的关系（因果维度）。自由与必然性观念的增减取决于此三类根据。</div>
+</a>
+<a class="entry-item" href="三级会议.html">
+  <div class="noun">三级会议</div>
+  <div class="snippet">法国旧制度时期的全国性等级代表会议，由国王不定期召集，分为教士（第一等级）、贵族（第二等级）和平民（第三等级）三个等级。1302年由腓力四世首次召开，1789年路易十六为应对财政危机召开的末次会议中，第三等级自行组成国民议会，直接引发了法国</div>
+</a>
+<a class="entry-item" href="上帝.html">
+  <div class="noun">上帝</div>
+  <div class="snippet">东正教信仰中的至高神，本章中多次被人物呼唤，反映了俄国贵族阶层的宗教情感。</div>
+</a>
+<a class="entry-item" href="上帝派来的救命恩人.html">
+  <div class="noun">上帝派来的救命恩人</div>
+  <div class="snippet">玛丽亚公爵小姐家中的女仆们在看见罗斯托夫走进前厅时发出的感激之词。她们认为罗斯托夫是上帝派来解救玛丽亚的使者，反映了俄国平民虔诚的宗教信仰和对贵族救星的朴素期待。</div>
+</a>
+<a class="entry-item" href="上帝的旨意与苦难的意义.html">
+  <div class="noun">上帝的旨意与苦难的意义</div>
+  <div class="snippet">托尔斯泰通过玛丽亚公爵小姐的信仰所传达的神学观念：一切苦难都是上帝的旨意，而上帝的旨意依据的是对人的无限仁爱，因此&quot;不论发生什么事，都是为了我们的幸福&quot;。玛丽亚引用《福音书》中的话&quot;若是上帝不许，连一根头发也不会从我们头上掉下&quot;，这一观念使</div>
+</a>
+<a class="entry-item" href="上帝的爱.html">
+  <div class="noun">上帝的爱</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中通过安德烈公爵临终感悟提出的宗教哲学概念，指一种超越人类情感的不变的、永恒的神圣之爱。与&quot;人类的爱&quot;相对，人类的爱可能转化为恨，但上帝的爱永不改变，连死亡也不能破坏它，被视为灵魂的本质。</div>
+</a>
+<a class="entry-item" href="上流社会.html">
+  <div class="noun">上流社会</div>
+  <div class="snippet">19世纪初俄国贵族社会的核心社交圈层，以彼得堡和莫斯科为中心。安娜·帕夫洛夫娜的沙龙是其典型代表。表面上谈论文化艺术和政治，实质是权力和利益的交易所。托尔斯泰通过对其虚伪、自私和浅薄的描写，深刻批判了这个阶层的道德空虚。</div>
+</a>
+<a class="entry-item" href="上流社会舞会.html">
+  <div class="noun">上流社会舞会</div>
+  <div class="snippet">18-20世纪初圣彼得堡上流社会最主要的社交娱乐活动。有固定舞序（波兰舞开场，继以华尔兹、玛祖卡等），是贵族展示身份、联姻交际的核心场合。 --- 19世纪初俄国贵族社交生活的核心活动，通常包括波兰舞、华尔兹、科季利翁等多种舞蹈。贵族们穿盛</div>
+</a>
+<a class="entry-item" href="不分胜负的战斗.html">
+  <div class="noun">不分胜负的战斗</div>
+  <div class="snippet">官方史学对波罗金诺战役的描述用语，托尔斯泰认为在俄军兵力只有法军一半、阵地几无防御的情况下能坚持十小时不分胜负已是奇迹。</div>
+</a>
+<a class="entry-item" href="不可争辩的论据.html">
+  <div class="noun">不可争辩的论据</div>
+  <div class="snippet">库拉金公爵夫人自以为找到的反对女儿改嫁的宗教论据，即神父引用的《福音书》中否定丈夫活着时再婚可能性的经文。</div>
+</a>
+<a class="entry-item" href="不可挽回的不幸.html">
+  <div class="noun">不可挽回的不幸</div>
+  <div class="snippet">无法补救的巨大灾难，玛丽亚公爵小姐从父亲脸色中预感到最大的不幸——亲人死亡。</div>
+</a>
+<a class="entry-item" href="不可遏止的最后一个浪头.html">
+  <div class="noun">不可遏止的最后一个浪头</div>
+  <div class="snippet">托尔斯泰描写群众暴力的比喻，指人群情绪爆发后的最终冲击波，象征着暴力一旦开始就无法停止。</div>
+</a>
+<a class="entry-item" href="不干活的瘦手.html">
+  <div class="noun">不干活的瘦手</div>
+  <div class="snippet">韦列夏金双手的外貌特征——因长期监禁而非体力劳动者所以细瘦。</div>
+</a>
+<a class="entry-item" href="不成文的从属关系.html">
+  <div class="noun">不成文的从属关系</div>
+  <div class="snippet">《战争与和平》中鲍里斯·德鲁别茨科伊领悟到的军队潜规则，指除操典明文规定的等级服从制度之外，依靠私人交情、家族背景和社交手腕获得晋升和机会的实际规则。托尔斯泰通过这一概念深刻讽刺了沙俄军队和上流社会的官僚体制与裙带关系。</div>
+</a>
+<a class="entry-item" href="世界通史家.html">
+  <div class="noun">世界通史家</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声中批判的对象之一。他批评&quot;世界通史家&quot;虽然表面上放弃用&quot;权力&quot;概念解释历史，但每迈一步仍得求助于权力概念；他们在回答&quot;权力是什么&quot;这个历史主要问题时矛盾百出。托尔斯泰认为，不回答人类主要问题的世界通史家，不过是供</div>
+</a>
+<a class="entry-item" href="世袭领地管理局.html">
+  <div class="noun">世袭领地管理局</div>
+  <div class="snippet">俄国管理贵族世袭领地和财产的政府机构，负责处理贵族庄园相关事务。</div>
+</a>
+<a class="entry-item" href="东正教.html">
+  <div class="noun">东正教</div>
+  <div class="snippet">基督教三大分支之一，俄罗斯帝国的国教。本章中祈祷、神龛、圣像等元素反映了东正教文化。</div>
+</a>
+<a class="entry-item" href="两袖清风慷慨大方腰缠万贯吝啬小鬼.html">
+  <div class="noun">两袖清风慷慨大方腰缠万贯吝啬小鬼</div>
+  <div class="snippet">卡拉塔耶夫在把布头还给法国兵后所引用的俄国谚语，意为贫穷的人往往慷慨，富有的人反而吝啬。法国兵虽然自身穷困仍归还布头，印证了这一道理。</div>
+</a>
+<a class="entry-item" href="中尉.html">
+  <div class="noun">中尉</div>
+  <div class="snippet">俄军中的初级军官军衔（俄语поручик/лейтенант），在沙俄时期尉官体系中排第二位，介于少尉和上尉之间。在《战争与和平》中，捷利亚宁即担任中尉职务。</div>
+</a>
+<a class="entry-item" href="中性动物.html">
+  <div class="noun">中性动物</div>
+  <div class="snippet">莫斯科上流社会对皮埃尔的评价，意为他虽可爱友善但不追求任何女性，对每个人都同样客气，缺乏性别的敏锐区分。体现皮埃尔不追逐女色、对所有人都友善温和的性格特点。</div>
+</a>
+<a class="entry-item" href="中路.html">
+  <div class="noun">中路</div>
+  <div class="snippet">作战部署的中央部分。在奥斯特里茨战役中俄军的中央位置是普拉茨高地，库图佐夫率第四纵队驻守该处。</div>
+</a>
+<a class="entry-item" href="主祷文.html">
+  <div class="noun">主祷文</div>
+  <div class="snippet">基督教最核心的祈祷经文，记载于《圣经·新约·马太福音》第六章第九至十三节，由耶稣亲授门徒。东正教、天主教和新教均有使用，文本略有差异。</div>
+</a>
+<a class="entry-item" href="九月一日.html">
+  <div class="noun">九月一日</div>
+  <div class="snippet">1812年9月1日，莫斯科撤退的关键日期。当日俄军通过莫斯科，居民大规模疏散。</div>
+</a>
+<a class="entry-item" href="九月二日.html">
+  <div class="noun">九月二日</div>
+  <div class="snippet">1812年9月2日，莫斯科撤退的最后一天。此后拿破仑军队进入莫斯科。</div>
+</a>
+<a class="entry-item" href="五等文官.html">
+  <div class="noun">五等文官</div>
+  <div class="snippet">俄罗斯帝国官秩表（1722年由彼得大帝颁布）中的第五级文官，属于高级官员阶层（1-5级）。1-5级为统治阶层，五等文官可出任中央政府副部长、重要部门长官或地方副省长级别职位，晋升需沙皇本人裁夺并拥有世袭贵族地位。</div>
+</a>
+<a class="entry-item" href="亚玛力.html">
+  <div class="noun">亚玛力</div>
+  <div class="snippet">圣经中记载的游牧民族，以色列人出埃及后在利非订与他们交战，在摩西举手祈祷时以色列人得胜。在小说中作为敌人终将失败的圣经隐喻出现。</div>
+</a>
+<a class="entry-item" href="亲法派.html">
+  <div class="noun">亲法派</div>
+  <div class="snippet">1812年前后俄国宫廷中主张与法国保持友好关系的政治派别。在小说中该派与鲁缅采夫派、玛丽亚·费奥多罗夫娜派、皇太子派等同时存在，共同构成彼得堡上层社会复杂的政治斗争格局。</div>
+</a>
+<a class="entry-item" href="亵渎婚姻圣礼.html">
+  <div class="noun">亵渎婚姻圣礼</div>
+  <div class="snippet">一些思想保守的人对海伦在丈夫尚在世时就计划改嫁的行为的定性，认为这严重冒犯了基督教婚姻圣礼的神圣性。</div>
+</a>
+<a class="entry-item" href="亵渎神圣罪.html">
+  <div class="noun">亵渎神圣罪</div>
+  <div class="snippet">良心指导者指责海伦犯下的宗教罪行，指她在一个不相信婚姻宗教意义的情况下结婚并发誓忠诚，然后违背誓言的行为。</div>
+</a>
+<a class="entry-item" href="人权章节.html">
+  <div class="noun">人权章节</div>
+  <div class="snippet">人权章节指《拿破仑法典》第一编&quot;人法&quot;中关于民事权利的规定。第8条明确规定&quot;所有法国人都享有民事权利&quot;，确立了法律面前人人平等的原则。在小说中，斯佩兰斯基要求安德烈公爵起草俄国民法中对应的人权章节，体现了19世纪初俄国改革派试图将法国启蒙思</div>
+</a>
+<a class="entry-item" href="人民战争.html">
+  <div class="noun">人民战争</div>
+  <div class="snippet">人民战争是托尔斯泰在《战争与和平》中提出的核心历史哲学概念。托尔斯泰认为，1812年俄法战争的真正决定性力量并非将军们的战略计划，而是千百万俄国人民自发的抵抗意志。他提出著名的&quot;人民战争的巨棒&quot;意象，形容这种力量&quot;不考虑任何人的兴趣和规则&quot;</div>
+</a>
+<a class="entry-item" href="人民战争的棍子.html">
+  <div class="noun">人民战争的棍子</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中提出的核心意象，比喻人民自发的、原始的反抗力量。托尔斯泰用击剑与棍棒的比喻来说明：法国人恪守欧洲传统战争的&quot;击剑规则&quot;，而俄国人则扔掉剑、抄起棍子，以最朴素直接的方式打击侵略者。这种力量不遵循兵法规则，不被任何趣味</div>
+</a>
+<a class="entry-item" href="人民的运动.html">
+  <div class="noun">人民的运动</div>
+  <div class="snippet">托尔斯泰认为民族的运动不是由权力或智力活动引起的，而是由所有参加事件的人的活动引起的。直接参与者最多的人责任最少。</div>
+</a>
+<a class="entry-item" href="人的行动法则.html">
+  <div class="noun">人的行动法则</div>
+  <div class="snippet">托尔斯泰探讨的核心悖论：如果存在支配人类行动的法则，则自由意志不存在。但人的意识体验到的自由又否认这一法则的绝对性。</div>
+</a>
+<a class="entry-item" href="人类感情的闸门.html">
+  <div class="noun">人类感情的闸门</div>
+  <div class="snippet">托尔斯泰在描写群众暴力时的比喻，指控制人类暴虐本能的理性与道德的防线。</div>
+</a>
+<a class="entry-item" href="人类生活的全部.html">
+  <div class="noun">人类生活的全部</div>
+  <div class="snippet">托尔斯泰认为必须把人类生活作为整体来考察，人从整体上看服从决定生活的法则，但个体的人又似乎是自由的。</div>
+</a>
+<a class="entry-item" href="仁慈.html">
+  <div class="noun">仁慈</div>
+  <div class="snippet">仁爱和慈善的品德，基督教核心美德之一。在托尔斯泰的哲学中，仁慈是超越暴力和仇恨的人性光辉，安德烈公爵在临终时领悟到爱的真谛包含对所有人的仁慈。</div>
+</a>
+<a class="entry-item" href="从善.html">
+  <div class="noun">从善</div>
+  <div class="snippet">皮埃尔加入共济会后的人生转向，从过去的放荡生活转向行善的道德追求。他想象自己向有罪和不幸的人说教，从压迫者手中拯救受难者。</div>
+</a>
+<a class="entry-item" href="代役租制.html">
+  <div class="noun">代役租制</div>
+  <div class="snippet">俄语称оброк（quitrent），是俄国农奴制下封建主剥削农民的两种主要形式之一。农奴以缴纳货币或实物代替为地主直接劳动。在俄国非黑土区（中部工业区、西北地区）占优势，因土地贫瘠但工商业发达。1861年农奴制改革后，所有租赋形式统一转变</div>
+</a>
+<a class="entry-item" href="代役租金.html">
+  <div class="noun">代役租金</div>
+  <div class="snippet">俄语称оброк，俄国农奴制下农奴用实物或货币代替劳役向地主缴纳的封建地租形式。起源于13世纪，18世纪后半期至19世纪中叶广泛实行。非黑土区工商业发达地区代役租占优势，农民人身依附关系相对松动。小说中瓦西里公爵扣下了从梁赞庄园寄来的几千卢</div>
+</a>
+<a class="entry-item" href="休假.html">
+  <div class="noun">休假</div>
+  <div class="snippet">军人从军队获得的短期离队假期。在拿破仑战争时期的俄罗斯帝国，士兵服役期长达25年，绝大多数士兵从未获得过正式休假，军官的休假相对容易获得。</div>
+</a>
+<a class="entry-item" href="会战.html">
+  <div class="noun">会战</div>
+  <div class="snippet">战争双方主力或战区主力之间的决战，通常指大规模、决定性的交战。拿破仑时代会战大多持续一天，如奥斯特利茨会战、莱比锡会战等。</div>
+</a>
+<a class="entry-item" href="伟大.html">
+  <div class="noun">伟大</div>
+  <div class="snippet">超越平凡的卓越和宏大。在托尔斯泰的哲学中，真正的伟大不在于军事胜利或政治权力，而在于对生命本质的理解和对爱的领悟。</div>
+</a>
+<a class="entry-item" href="传令兵.html">
+  <div class="noun">传令兵</div>
+  <div class="snippet">传令兵是军队中负责传递命令和情报的通信兵，在拿破仑战争时期主要以骑兵形式编入各级作战单位。由于当时缺乏无线电通信，传令兵是战场上最主要的通信手段，其效率和可靠性直接影响战役成败。近代参谋制度建立后逐步取代单纯传令兵模式。</div>
+</a>
+<a class="entry-item" href="传令官.html">
+  <div class="noun">传令官</div>
+  <div class="snippet">军队中负责传达指挥官命令的军官，相当于低级副官或侍从武官（officier d&#x27;ordonnance）。在拿破仑军中传令官是皇帝的眼睛和耳朵，负责传达命令、进行视察和收集情报。 --- 古代军队中负责传达上级命令的军吏或士兵。在缺乏现代通信</div>
+</a>
+<a class="entry-item" href="传统.html">
+  <div class="noun">传统</div>
+  <div class="snippet">代代相传的习惯和做法，俄国贵族家庭中在重大时刻的仪式性做法。</div>
+</a>
+<a class="entry-item" href="伦理学.html">
+  <div class="noun">伦理学</div>
+  <div class="snippet">托尔斯泰以伦理学作为探讨自由意志问题的视角，涉及良心是什么以及善恶认识的来源。</div>
+</a>
+<a class="entry-item" href="伯爵小姐.html">
+  <div class="noun">伯爵小姐</div>
+  <div class="snippet">俄国贵族头衔，指伯爵的女儿（未婚女性）。娜塔莎·罗斯托娃作为罗斯托夫伯爵的女儿，被尊称为伯爵小姐。在社交场合中，人们用此头衔称呼她，如杰尼索夫说&quot;娜塔莎伯爵小姐&quot;。婚后她嫁给皮埃尔·别祖霍夫，头衔变为伯爵夫人。</div>
+</a>
+<a class="entry-item" href="作息表.html">
+  <div class="noun">作息表</div>
+  <div class="snippet">博尔孔斯基公爵在童山庄园严格执行的每日时间安排，体现了老公爵崇尚秩序、纪律严明的性格，规定十二时至下午二时公爵休息、公爵小姐弹钢琴等。</div>
+</a>
+<a class="entry-item" href="侦察.html">
+  <div class="noun">侦察</div>
+  <div class="snippet">军事行动中为获取敌军兵力部署、地形和动向而进行的探查活动。在拿破仑战争中轻骑兵（如骠骑兵）广泛承担侦察任务，通常以小分队前出接触敌军以摸清虚实。</div>
+</a>
+<a class="entry-item" href="侧翼.html">
+  <div class="noun">侧翼</div>
+  <div class="snippet">军事术语，指作战队形或战线的左翼或右翼，是队形中最易受攻击的部位。在拿破仑战术中保护己方侧翼同时攻击敌军侧翼是核心原则。</div>
+</a>
+<a class="entry-item" href="侧翼迂回.html">
+  <div class="noun">侧翼迂回</div>
+  <div class="snippet">军事战术的一种，指军队避开敌军正面，从侧面或后方发动攻击，以实现分割包围或出其不意的打击效果。拿破仑战争中的经典战术，在奥斯特利茨战役中被成功运用。</div>
+</a>
+<a class="entry-item" href="俄亩.html">
+  <div class="noun">俄亩</div>
+  <div class="snippet">俄语称&quot;десятина&quot;（杰夏季纳），是俄罗斯帝国时期的传统土地面积单位。1官定俄亩等于2400平方萨珍，约合1.09公顷（16.35中国市亩）。另有地主俄亩等于3200平方萨珍。词源意为&quot;十分之一&quot;，与土地赋税制度相关。</div>
+</a>
+<a class="entry-item" href="俄军.html">
+  <div class="noun">俄军</div>
+  <div class="snippet">俄罗斯帝国陆军，由彼得大帝于1721年创立，至1917年俄国革命解散。在拿破仑战争时期经历了奥斯特利茨战败到1812年击败拿破仑大军的历程。主要名将包括苏沃洛夫、库图佐夫、巴格拉季翁等。实行征兵制，以坚韧顽强的步兵著称。</div>
+</a>
+<a class="entry-item" href="俄军右翼.html">
+  <div class="noun">俄军右翼</div>
+  <div class="snippet">波罗金诺战役中俄军防线的右侧，最初位于诺沃耶村附近，后因左翼失守不得不从右翼调兵支援左翼。</div>
+</a>
+<a class="entry-item" href="俄军后卫.html">
+  <div class="noun">俄军后卫</div>
+  <div class="snippet">俄罗斯军队的后卫部队，负责掩护主力撤退、迟滞敌军追击。1812年战争期间，俄军采用战略退却战术，后卫部队与法军先锋频繁接触。</div>
+</a>
+<a class="entry-item" href="俄军左翼.html">
+  <div class="noun">俄军左翼</div>
+  <div class="snippet">波罗金诺战役中俄军防线的左侧，最初设在舍瓦尔金诺多面堡，但在该堡失守后被迫后撤至乌季察附近。</div>
+</a>
+<a class="entry-item" href="俄军总司令部.html">
+  <div class="noun">俄军总司令部</div>
+  <div class="snippet">1812年俄法战争期间俄国军队的最高指挥机构。总司令部设在第一军团所在的德里萨附近。由于沙皇亚历山大一世随军驻扎但未以总司令名义统军，军队指挥体系复杂，多条指挥链并存，各派系将领争执不断，造成指挥混乱。</div>
+</a>
+<a class="entry-item" href="俄军没有阵地.html">
+  <div class="noun">俄军没有阵地</div>
+  <div class="snippet">托尔斯泰的核心论点之一：在波罗金诺战役前俄军实际上并没有一个预设的、构筑了工事的完备阵地，而是在仓促中选择了几乎没有防御工事的地点应战。</div>
+</a>
+<a class="entry-item" href="俄国军队.html">
+  <div class="noun">俄国军队</div>
+  <div class="snippet">俄罗斯帝国军队，在拿破仑战争时期是反法同盟的主要力量之一。1805年俄军在库图佐夫指挥下与奥军协同作战，经历了奥斯特里茨的惨败后最终在1812年击败拿破仑入侵。</div>
+</a>
+<a class="entry-item" href="俄国农民.html">
+  <div class="noun">俄国农民</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中塑造的俄国农民形象，是承载&quot;人民的思想&quot;的核心载体。尼古拉·罗斯托夫虽然嘴上抱怨&quot;咱们俄国农民真没办法&quot;，却用整个心灵热爱农民及其风俗习惯，并认为农业经营的核心在于农民而非工具或技术。托尔斯泰通过农民的视角衡量一切</div>
+</a>
+<a class="entry-item" href="俄国夏天扯不到一起.html">
+  <div class="noun">俄国夏天扯不到一起</div>
+  <div class="snippet">卡拉塔耶夫的朴素箴言，皮埃尔反复默念以慰藉自己。意为抽象概念（国家、战争、政治）与具体生活感受不可混为一谈，表达了一种顺应天命的朴素哲学。</div>
+</a>
+<a class="entry-item" href="俄国嫌疑犯.html">
+  <div class="noun">俄国嫌疑犯</div>
+  <div class="snippet">指1812年法军占领莫斯科期间被巡逻队逮捕的俄国平民，被怀疑为纵火犯或抵抗者。小说中巡逻队抓了五名俄国嫌疑犯，包括小店主、中学生、农民、家奴以及抢劫犯，其中皮埃尔被认为最可疑。</div>
+</a>
+<a class="entry-item" href="俄国贵族打猎.html">
+  <div class="noun">俄国贵族打猎</div>
+  <div class="snippet">19世纪俄国贵族的重要社交和娱乐活动，分为大型围猎和个人潜伏狩猎两种形式。不仅是消遣，更是身份和财富的体现，连接了贵族与农奴、城市与乡村，成为俄国民族精神探索的重要载体。</div>
+</a>
+<a class="entry-item" href="俄国贵族狩猎.html">
+  <div class="noun">俄国贵族狩猎</div>
+  <div class="snippet">俄国贵族狩猎是19世纪俄罗斯贵族社会中极具代表性的传统活动，尤其在1861年农奴制改革前达到鼎盛。大规模狩猎常使用超过100只猎犬和20匹马，耗费巨大，是贵族身份和财富的象征。托尔斯泰在《战争与和平》中以罗斯托夫家族的狩猎场景集中展现了这一</div>
+</a>
+<a class="entry-item" href="俄罗斯之心.html">
+  <div class="noun">俄罗斯之心</div>
+  <div class="snippet">托尔斯泰对莫斯科的比喻，指莫斯科是俄罗斯民族情感和精神的核心。拉斯托普钦自以为扮演着左右民情——俄罗斯之心的角色。</div>
+</a>
+<a class="entry-item" href="俄罗斯游击队.html">
+  <div class="noun">俄罗斯游击队</div>
+  <div class="snippet">1812年俄法战争（俄国卫国战争）期间，俄罗斯帝国在后方和敌后开展的非正规军事行动。其特点是贵族军官主导——许多游击队长本身就是贵族军官，如杰尼斯·达维多夫被誉为游击运动的发起者和组织者之一。达维多夫换上农民服装、蓄大胡子、挂圣尼古拉小圣像</div>
+</a>
+<a class="entry-item" href="俄罗斯精神.html">
+  <div class="noun">俄罗斯精神</div>
+  <div class="snippet">托尔斯泰通过娜塔莎的舞蹈所表达的核心概念——它不是通过正规教育习得的，而是从俄罗斯的土壤、空气和生活中自然吸收的民族灵魂。这种精神超越阶级界限，使贵族小姐与农家妇女在心灵深处相通，是全书最核心的思想主题之一。</div>
+</a>
+<a class="entry-item" href="俄里.html">
+  <div class="noun">俄里</div>
+  <div class="snippet">俄罗斯旧制长度单位，1俄里约合1.067公里（500沙绳），苏联政府于1924年废除旧俄制改用公制。俄语中有时用作公里的同义词。</div>
+</a>
+<a class="entry-item" href="俘虏.html">
+  <div class="noun">俘虏</div>
+  <div class="snippet">战俘（Prisoner of War），在战争中被敌方活捉的军人。19世纪战争中，俘虏常被作为交换条件。拿破仑战争时期对战俘的待遇尚无国际公约规范。</div>
+</a>
+<a class="entry-item" href="保罗格勒团.html">
+  <div class="noun">保罗格勒团</div>
+  <div class="snippet">保罗格勒骠骑兵团，小说中尼古拉·罗斯托夫服役的骑兵部队， 基尔斯坚、杰尼索夫等军官均隶属该团，以其团队荣誉为核心凝聚力。 --- 保罗格勒骠骑兵团，1784年组建的俄国骠骑兵团。在托尔斯泰《战争与和平》中是尼古拉·罗斯托夫和瓦西卡·杰尼索夫</div>
+</a>
+<a class="entry-item" href="保罗格勒骠骑兵团.html">
+  <div class="noun">保罗格勒骠骑兵团</div>
+  <div class="snippet">保罗格勒骠骑兵团（Pavlograd Hussar Regiment）是俄国陆军的一支骠骑兵团，以乌克兰的保罗格勒（现第聂伯罗彼得罗夫斯克州）命名。在《战争与和平》中，该团是主角尼古拉·罗斯托夫服役的部队。小说围绕该团描写了申格拉本战役和奥</div>
+</a>
+<a class="entry-item" href="信仰.html">
+  <div class="noun">信仰</div>
+  <div class="snippet">对超自然力量或终极价值的坚信。在19世纪俄罗斯，东正教是国家宗教，信仰在贵族和平民生活中都有重要地位。安德烈公爵的妹妹玛丽亚公爵小姐是虔诚的东正教徒。</div>
+</a>
+<a class="entry-item" href="信使.html">
+  <div class="noun">信使</div>
+  <div class="snippet">在19世纪战争中传递军事情报和命令的军官。由于没有无线电通讯，紧急军情必须由信使骑马传递。小说中的博尔霍维季诺夫就是典型例子，他在深夜冒着泥泞道路骑行三十俄里传送重要情报。</div>
+</a>
+<a class="entry-item" href="信神.html">
+  <div class="noun">信神</div>
+  <div class="snippet">相信上帝存在的信仰态度，玛丽亚公爵小姐思考哥哥安德烈对信仰的态度。</div>
+</a>
+<a class="entry-item" href="值勤将军.html">
+  <div class="noun">值勤将军</div>
+  <div class="snippet">俄军总司令部中的高级职务，负责处理日常军务和紧急情报。小说中由彼得·科诺夫尼岑担任此职。他恪尽职守，总是敞着门睡觉以便任何信使都能叫醒他，在战斗时亲临前线冒着炮火指挥。</div>
+</a>
+<a class="entry-item" href="停战.html">
+  <div class="noun">停战</div>
+  <div class="snippet">交战团体之间为暂时停止敌对行为而缔结的协定。1907年《海牙公约》为其主要国际法依据。停战协定不等同于和约——停战期间战争状态仍继续存在。</div>
+</a>
+<a class="entry-item" href="偶然与天才.html">
+  <div class="noun">偶然与天才</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中批判的两个历史哲学概念。他认为&quot;偶然&quot;和&quot;天才&quot;并不表示实际存在的东西，只是人们对无法理解的历史现象的托词。托尔斯泰主张所谓历史伟人不过是时代必然性的产物，放弃对最终目的的探求后，就不再需要偶然与天才这些概念。 -</div>
+</a>
+<a class="entry-item" href="光明教.html">
+  <div class="noun">光明教</div>
+  <div class="snippet">光明教即光明会（Illuminati），1776年由亚当·魏斯豪普特在德国巴伐利亚创立的启蒙运动秘密社团，主张以理性取代迷信，反对集权政府。1785年被巴伐利亚政府镇压后消亡。光明会与共济会成员部分交叉，两者的关系在阴谋论中被混淆和夸大。在</div>
+</a>
+<a class="entry-item" href="光荣与伟大.html">
+  <div class="noun">光荣与伟大</div>
+  <div class="snippet">托尔斯泰在书中用以描述拿破仑及其追随者的理想。这一理想的核心是：完全不认为自己的行为恶劣，反而为自己犯下的罪行自豪，并赋之以莫名其妙的超自然意义。托尔斯泰通过这一概念批判了将战争、暴行和征服美化为&quot;光荣&quot;的做法，认为没有纯朴、善良和真实，就</div>
+</a>
+<a class="entry-item" href="克罗地亚人卫队.html">
+  <div class="noun">克罗地亚人卫队</div>
+  <div class="snippet">哈布斯堡帝国军事边境区的边防步兵（Grenzers），主要来自克罗地亚地区，在拿破仑战争时期作为轻步兵服役于奥地利军队，以其骁勇善战著称。</div>
+</a>
+<a class="entry-item" href="全知全能全善的上帝.html">
+  <div class="noun">全知全能全善的上帝</div>
+  <div class="snippet">托尔斯泰以基督教神学的上帝概念为出发点引出神学问题：既然上帝全知全能全善，为什么会有罪恶？这只能从自由意识来解释。</div>
+</a>
+<a class="entry-item" href="八月二十六日.html">
+  <div class="noun">八月二十六日</div>
+  <div class="snippet">1812年8月26日（俄历），即波罗金诺战役爆发之日。该战役后俄军决定放弃莫斯科。</div>
+</a>
+<a class="entry-item" href="公共福利.html">
+  <div class="noun">公共福利</div>
+  <div class="snippet">指社会整体的利益与福祉。在小说中，莫斯科总督拉斯托普钦伯爵在将韦列夏金交给愤怒的民众处死后，用公共福利这一理由来为自己的残酷行为辩护和寻求心理安慰。</div>
+</a>
+<a class="entry-item" href="公羊的比喻.html">
+  <div class="noun">公羊的比喻</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中用以解构&quot;偶然&quot;和&quot;天才&quot;概念的著名比喻。牧羊人每晚将一只公羊单独喂养使其变肥，羊群视其为&quot;天才&quot;；但公羊被养肥的最终结局是被屠宰。托尔斯泰借此讽刺历史学家将拿破仑等人物视为&quot;天才&quot;的做法，指出所谓天才不过是历史必</div>
+</a>
+<a class="entry-item" href="共济会.html">
+  <div class="noun">共济会</div>
+  <div class="snippet">共济会（Freemasonry）起源于中世纪末期欧洲石匠行会，是世界上最大的秘密结社组织之一。现代共济会于1717年在伦敦正式成立，以角尺和圆规为标志，倡导博爱、自由与慈善，成员包括众多历史名人如华盛顿、伏尔泰、莫扎特等。共济会在18至19</div>
+</a>
+<a class="entry-item" href="共济会七德.html">
+  <div class="noun">共济会七德</div>
+  <div class="snippet">共济会教义中的七种美德，与七学、七恶、圣灵七惠并列。皮埃尔承认自己在品行端正和爱死亡两德上完全欠缺。</div>
+</a>
+<a class="entry-item" href="共济会会章.html">
+  <div class="noun">共济会会章</div>
+  <div class="snippet">共济会会章是共济会组织的规章与教义总集，规定了会员的行为准则和道德义务。在《战争与和平》中，会长宣读的会章强调平等、友爱、互助、宽恕敌人、追求道德完善等理念，要求会员扶持迷途者、不记恨仇视会友、与邻人分享幸福等。</div>
+</a>
+<a class="entry-item" href="共济会员.html">
+  <div class="noun">共济会员</div>
+  <div class="snippet">共济会（Freemasonry）是18-19世纪在俄国贵族中盛行的秘密结社，强调兄弟情谊、互助与道德修养。皮埃尔·别祖霍夫是共济会员。托尔斯泰在小说中通过皮埃尔加入共济会并最终幻灭的经历，探讨了宗教信仰与精神追求的主题。</div>
+</a>
+<a class="entry-item" href="兵力仅对方一半.html">
+  <div class="noun">兵力仅对方一半</div>
+  <div class="snippet">托尔斯泰指出，由于左翼失守和战线的拉长，俄军在波罗金诺战役实际交战中能以对抗法军的兵力只有对方的一半。</div>
+</a>
+<a class="entry-item" href="兵力对比.html">
+  <div class="noun">兵力对比</div>
+  <div class="snippet">托尔斯泰在分析波罗金诺战役时指出的俄法两军兵力悬殊。战役前俄国十万对法国十二万（五比六），战役后俄国五万对法国十万（一比二）。</div>
+</a>
+<a class="entry-item" href="典狱长.html">
+  <div class="noun">典狱长</div>
+  <div class="snippet">监狱的管理长官，负责囚犯的监管和监狱日常运作。在莫斯科撤退期间负责处理囚犯问题。</div>
+</a>
+<a class="entry-item" href="兽的数目.html">
+  <div class="noun">兽的数目</div>
+  <div class="snippet">出自圣经新约《启示录》第十三章，指从海中上来的兽的名字的数字值，即六百六十六（666）。小说中皮埃尔的朋友据此预言拿破仑就是启示录中的敌基督，以字母数值推算法寻找证据。</div>
+</a>
+<a class="entry-item" href="内心的和谐.html">
+  <div class="noun">内心的和谐</div>
+  <div class="snippet">皮埃尔一生所追求的精神状态，曾通过慈善、共济会、爱情和理性思索均未获得，最终在被俘期间通过卡拉塔耶夫的朴素智慧领悟——真正的和谐不来自外在追求，而来自接纳生命本真。</div>
+</a>
+<a class="entry-item" href="军事将领错误.html">
+  <div class="noun">军事将领错误</div>
+  <div class="snippet">托尔斯泰指出波罗金诺战役的官方记述试图掩饰俄军将领在阵地选择、兵力部署等方面的失误。</div>
+</a>
+<a class="entry-item" href="军事法庭.html">
+  <div class="noun">军事法庭</div>
+  <div class="snippet">军队内部设立的专门审判军人违法违纪行为的司法机构，在战争时期对抢劫、违抗命令等行为严惩不贷。</div>
+</a>
+<a class="entry-item" href="军事法规改革.html">
+  <div class="noun">军事法规改革</div>
+  <div class="snippet">安德烈公爵提出的军事改革主张，意图编写新的军事法规以取代旧的陆军条例。 安德烈认为俄军现行条例需要改革，但阿拉克切耶夫持否定态度，认为 &quot;新法规多得很，连旧的都没人执行&quot;，批评其草案&quot;毫无根据抄袭法国军事法典&quot;。 19世纪俄国军事改革最终在</div>
+</a>
+<a class="entry-item" href="军事理论家.html">
+  <div class="noun">军事理论家</div>
+  <div class="snippet">指信奉军事科学具有不变法则的理论派军官，以普弗尔为代表。他们在1812年俄法战争中主张严格按预定方案作战，反对根据战场实况灵活应变。托尔斯泰在书中借安德烈公爵的思考对这一派的理论进行了批判，认为战争中深思熟虑的计划没有任何意义。</div>
+</a>
+<a class="entry-item" href="军事计谋.html">
+  <div class="noun">军事计谋</div>
+  <div class="snippet">战争中使用的欺骗和计策，如间谍、叛变、佯攻、伏击等战术手段。安德烈公爵在这一段落中激烈批判了军事领域的虚伪道德，认为军事计谋本质上是欺骗和说谎。</div>
+</a>
+<a class="entry-item" href="军人阶层的悠闲.html">
+  <div class="noun">军人阶层的悠闲</div>
+  <div class="snippet">托尔斯泰提出的重要哲学概念。他认为人类普遍渴望既悠闲又觉得自己在履行义务的境界，军人阶层恰好享有这种特权——和平时期无所事事不会受到道德谴责，反而被视为履行职责。以此说明尼古拉·罗斯托夫沉溺于军旅生活的深层心理动机。</div>
+</a>
+<a class="entry-item" href="军使.html">
+  <div class="noun">军使</div>
+  <div class="snippet">奉交战一方命令，赴敌方接洽事务的使者，相当于休战使者或军事特使。其人身安全受交战惯例保护，即两国交兵不斩来使。</div>
+</a>
+<a class="entry-item" href="军团.html">
+  <div class="noun">军团</div>
+  <div class="snippet">军队中规模较大的作战单位编制。在拿破仑战争中法军建立了军（corps）制，每个军由步兵、骑兵、炮兵组成独立作战体系，极大提升了战役机动性和指挥效率。</div>
+</a>
+<a class="entry-item" href="军队士气.html">
+  <div class="noun">军队士气</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中提出的军事哲学概念。他将军队力量类比为力学公式：力量 = 质量 × 速度，对应军事上即为：军队力量 = 军队数量 × 未知因子X。这个X就是军队的士气——全体军队所具备的斗志和甘冒危险的决心。士气与统帅的天才、排兵</div>
+</a>
+<a class="entry-item" href="军需处.html">
+  <div class="noun">军需处</div>
+  <div class="snippet">军队中负责后勤补给、物资调配和食品供应的部门，在俄法战争期间因物资匮乏而矛盾重重。</div>
+</a>
+<a class="entry-item" href="农业经营.html">
+  <div class="noun">农业经营</div>
+  <div class="snippet">尼古拉·罗斯托夫在婚后（1814年后）迁居童山，专心投入庄园管理而形成的经营理念。他反对流行的英国式新方法，不办工厂、不种贵重作物，认为农业的核心不是氮氧粪肥或犁，而是农业劳动者。他先向农民学习，了解其需要和价值观，再以公平严格的方式管理，</div>
+</a>
+<a class="entry-item" href="农奴.html">
+  <div class="noun">农奴</div>
+  <div class="snippet">农奴是俄国封建制度下被束缚在地主土地上的农民阶层，没有人身自由，可被地主买卖、惩罚。俄国农奴制在1649年《法律大全》中最终确立，1861年由亚历山大二世废除。小说中皮埃尔和安德烈公爵围绕农奴解放问题展开了激烈的思想辩论。</div>
+</a>
+<a class="entry-item" href="农奴解放.html">
+  <div class="noun">农奴解放</div>
+  <div class="snippet">皮埃尔计划将其农奴从人身依附地位中解放，但遭总管以先还清地方当局债务为由拖延，始终未能实现。 --- 19世纪初俄国社会的重要议题。亚历山大一世时期虽有1803年《自由农民法令》 （准许地主自愿给农奴自由，须缴纳高额赎金），但效果十分有限。</div>
+</a>
+<a class="entry-item" href="冬天.html">
+  <div class="noun">冬天</div>
+  <div class="snippet">一年中最寒冷的季节，本章描写三月的夜晚冬天还在逞威。</div>
+</a>
+<a class="entry-item" href="冬季营房.html">
+  <div class="noun">冬季营房</div>
+  <div class="snippet">军队在冬季休战期间驻扎的营地和住所。18至19世纪欧洲战争有冬季休战的传统，拿破仑在命令中承诺奥斯特里茨胜利后大军可回冬季营房休整，等待新兵在法国组成后前来会合。</div>
+</a>
+<a class="entry-item" href="减罪情形.html">
+  <div class="noun">减罪情形</div>
+  <div class="snippet">刑法中减轻或免除刑事责任的各种法定情形。托尔斯泰在《战争与和平》哲学论述中以此为例说明对行为原因的了解越深入，必然性成分越大，自由意志成分越小。法典中的责任能力认定，取决于环境认识多少、时间距离长短、原因了解程度。</div>
+</a>
+<a class="entry-item" href="出发命令.html">
+  <div class="noun">出发命令</div>
+  <div class="snippet">马车队出发前由车夫发出的正式启程号令，通常为&quot;上帝保佑，走了！&quot;以表示祈求平安。</div>
+</a>
+<a class="entry-item" href="刀出鞘.html">
+  <div class="noun">刀出鞘</div>
+  <div class="snippet">军事命令用语，指令士兵拔出刀剑准备战斗或执行死刑。在小说中是处决韦列夏金的命令。</div>
+</a>
+<a class="entry-item" href="分别善恶树.html">
+  <div class="noun">分别善恶树</div>
+  <div class="snippet">分别善恶树（Tree of the Knowledge of Good and Evil）是《圣经·创世记》中记载的伊甸园中的一棵树，与生命树并立于园子中央。耶和华神吩咐亚当不可吃这树上的果子，说&quot;你吃的日子必定死&quot;。在蛇（撒但）的引诱下，</div>
+</a>
+<a class="entry-item" href="分娩之痛.html">
+  <div class="noun">分娩之痛</div>
+  <div class="snippet">产妇在生产过程中经历的肉体痛苦，小公爵夫人丽莎表现出对疼痛的孩子般的恐惧。</div>
+</a>
+<a class="entry-item" href="创世记.html">
+  <div class="noun">创世记</div>
+  <div class="snippet">《创世记》是《圣经·旧约》的第一卷书，记载了世界的创造、人类的起源、始祖亚当和夏娃在伊甸园中的生活、人类堕落（偷食分别善恶树的果子）、大洪水与挪亚方舟，以及以色列人祖先亚伯拉罕、以撒、雅各的故事。书名意为&quot;起源&quot;或&quot;开端&quot;。其中第二章记载了</div>
+</a>
+<a class="entry-item" href="别祖霍夫伯爵收支.html">
+  <div class="noun">别祖霍夫伯爵收支</div>
+  <div class="snippet">皮埃尔继承别祖霍夫伯爵巨额财产后年收入约五十万卢布，但各项支出庞大，反而比从前只拿一万卢布时更觉拮据，每年还需举债。</div>
+</a>
+<a class="entry-item" href="剃光的半边头皮.html">
+  <div class="noun">剃光的半边头皮</div>
+  <div class="snippet">俄国囚犯的标记性发型，半边头皮被剃光以防止逃跑时混入人群。韦列夏金有此特征。</div>
+</a>
+<a class="entry-item" href="前卫.html">
+  <div class="noun">前卫</div>
+  <div class="snippet">军事术语，指在主力部队前方行进、担任警戒和侦察任务的先头部队。职责包括确保本队前进不受阻碍、防止本队遭敌方奇袭、排除障碍、掩护主力展开。源自法语avant-garde。</div>
+</a>
+<a class="entry-item" href="副官.html">
+  <div class="noun">副官</div>
+  <div class="snippet">军队中各级指挥官身边协助处理日常军务、传达命令、管理内务和文书的助手职务。在俄国军队中，副官（адъютант）最早出现在17世纪下半叶，1716年《陆军条令》正式确立此职位。分为高级副官、团级副官、营级副官等，是高级军官的直属助理，相当于</div>
+</a>
+<a class="entry-item" href="副手.html">
+  <div class="noun">副手</div>
+  <div class="snippet">决斗中协助当事人安排事宜、保障公平的见证人。职责包括传递挑战书、协商武器与距离、确保双方遵守规则。小说中皮埃尔的副手是涅斯维茨基，多洛霍夫的副手是罗斯托夫，杰尼索夫担任指挥。</div>
+</a>
+<a class="entry-item" href="劈木头难免木片飞.html">
+  <div class="noun">劈木头难免木片飞</div>
+  <div class="snippet">俄国谚语，对应俄语&quot;Лес рубят — щепки летят&quot;（砍伐森林，木片四溅），意为做大事难免有附带损失或负面影响。英文同义谚语为&quot;You can&#x27;t make an omelette without breaking eggs</div>
+</a>
+<a class="entry-item" href="力量造成民族的运动.html">
+  <div class="noun">力量造成民族的运动</div>
+  <div class="snippet">托尔斯泰提出的两个核心历史问题之一：什么是推动民族运动的力量？他的回答是全体参与者的活动，而非权力或智力。</div>
+</a>
+<a class="entry-item" href="动荡不安的莫斯科.html">
+  <div class="noun">动荡不安的莫斯科</div>
+  <div class="snippet">1812年法军兵临城下时莫斯科城的恐慌和混乱景象，贵族和居民争相撤离。</div>
+</a>
+<a class="entry-item" href="勇敢.html">
+  <div class="noun">勇敢</div>
+  <div class="snippet">共济会七美德之五，要求会员在面对考验和困难时无所畏惧，有勇气坚持真理、维护正义，在精神修行道路上坚定不移。</div>
+</a>
+<a class="entry-item" href="勇气.html">
+  <div class="noun">勇气</div>
+  <div class="snippet">面对困难、痛苦或危险时的无畏精神。安德烈公爵手擎军旗冲锋体现了军人的勇气。</div>
+</a>
+<a class="entry-item" href="勤务兵.html">
+  <div class="noun">勤务兵</div>
+  <div class="snippet">俄罗斯帝国军队中的特殊军职（俄语денщик），指被指派给军官作为个人侍从的士兵，由军队官方支付工资。负责军官的制服、武器、个人物品及马匹等。1881年沙俄正式废除这一职位。</div>
+</a>
+<a class="entry-item" href="勿抗恶.html">
+  <div class="noun">勿抗恶</div>
+  <div class="snippet">托尔斯泰主义的核心主张之一，全称为&quot;勿以暴力抗恶&quot;（непротивление злу насилием），主张暴力只会催生更多暴力，应以理性和爱来消除罪恶。这一思想对甘地的非暴力不合作运动产生了深远影响。在小说中体现为普拉东·卡拉达耶夫的</div>
+</a>
+<a class="entry-item" href="十二种语言的欧洲人.html">
+  <div class="noun">十二种语言的欧洲人</div>
+  <div class="snippet">托尔斯泰对1812年入侵俄国的拿破仑大军的描述。这支&quot;大军&quot;（Grande Armee）约60万人，包含法国人、德意志各邦人、波兰人、意大利人、荷兰人、瑞士人、西班牙人等多个民族，操多种语言，因此被称为&quot;十二种语言的入侵&quot;。</div>
+</a>
+<a class="entry-item" href="十五俄里.html">
+  <div class="noun">十五俄里</div>
+  <div class="snippet">俄制长度单位，一俄里约合1.0668公里。十五俄里约为16公里，是扬科沃驻地到博古恰罗沃之间的距离。</div>
+</a>
+<a class="entry-item" href="单刀直入.html">
+  <div class="noun">单刀直入</div>
+  <div class="snippet">海伦向良心指导者坦率表达自己观点的直接方式，她声称因皈依真正宗教而不受旧宗教约束，这种直截了当的断言令习惯复杂神学论证的指导者大为意外。</div>
+</a>
+<a class="entry-item" href="单独监禁.html">
+  <div class="noun">单独监禁</div>
+  <div class="snippet">法军将皮埃尔与其他囚犯隔离关押的监禁方式。由于皮埃尔在所有嫌疑犯中最为可疑，他被单独关押在祖波夫土围子的拘留所中，受到严格看守。</div>
+</a>
+<a class="entry-item" href="博爱.html">
+  <div class="noun">博爱</div>
+  <div class="snippet">共济会三大核心理念之一，指超越血缘、国界和宗教的人类普遍之爱。在小说中，皮埃尔向安德烈公爵介绍共济会时将其列为基本教义。</div>
+</a>
+<a class="entry-item" href="卡拉塔耶夫的谚语.html">
+  <div class="noun">卡拉塔耶夫的谚语</div>
+  <div class="snippet">普拉东·卡拉塔耶夫的语言充满民间谚语，如&quot;受苦一时，活命一世&quot;&quot;运气就像拖网里的水&quot;&quot;没有工具连虱子都抓不住&quot;等。托尔斯泰借此表现俄国农民的朴素智慧。</div>
+</a>
+<a class="entry-item" href="历史事件的原因.html">
+  <div class="noun">历史事件的原因</div>
+  <div class="snippet">托尔斯泰认为历史事件的原因既不在权力也不在服从者，而在两者的结合上。原因概念本身不适用于历史现象。</div>
+</a>
+<a class="entry-item" href="历史人物.html">
+  <div class="noun">历史人物</div>
+  <div class="snippet">在历史进程中发挥重要作用、对历史事件产生显著影响的个人，如帝王将相、思想家等。托尔斯泰探讨的核心问题之一是历史人物的个人意志与历史运动之间的关系。</div>
+</a>
+<a class="entry-item" href="历史人物与群众.html">
+  <div class="noun">历史人物与群众</div>
+  <div class="snippet">托尔斯泰认为历史人物与群众不可分割。表面看命令决定事件，实则是事件决定命令。历史人物的意志以事件为转移。</div>
+</a>
+<a class="entry-item" href="历史作为科学.html">
+  <div class="noun">历史作为科学</div>
+  <div class="snippet">托尔斯泰认为历史在解决自由意志与必然性问题上比其他学科有优势，因为它不涉及自由意志的实质，只涉及意志在过去的实际表现。</div>
+</a>
+<a class="entry-item" href="历史决定论.html">
+  <div class="noun">历史决定论</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中阐述的历史哲学观点，认为历史进程不受伟人意志支配，而是由无数普通人行动的合力决定的必然过程。他反对&quot;伟人史观&quot;，认为拿破仑等所谓英雄只是历史力量的标签。</div>
+</a>
+<a class="entry-item" href="历史因果关系.html">
+  <div class="noun">历史因果关系</div>
+  <div class="snippet">托尔斯泰认为原因的概念不能用在历史现象上，追根溯源只会达到无限循环，应当像自然科学一样接受法则本身。</div>
+</a>
+<a class="entry-item" href="历史法则.html">
+  <div class="noun">历史法则</div>
+  <div class="snippet">托尔斯泰认为历史法则如同自然法则一样客观存在，战争或革命的发生是人的天性使然，是一种不可追问终极原因的法则。</div>
+</a>
+<a class="entry-item" href="历史的工具.html">
+  <div class="noun">历史的工具</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中提出的历史哲学观点，认为伟大人物（如拿破仑、库图佐夫）并非历史的创造者，而是历史规律的执行工具，他们的行动是不由自主的。</div>
+</a>
+<a class="entry-item" href="历史的微分.html">
+  <div class="noun">历史的微分</div>
+  <div class="snippet">托尔斯泰在《战争与和平》第三部中提出的历史哲学概念。借用微积分中&quot;微分&quot;的比喻，主张将历史分解为无限小的观察单位——即每一个人的共同倾向和细微行为——通过对这些无限小单位的综合（积分）来发现历史的真正规律，反对传统史学聚焦帝王将相的&quot;伟人史</div>
+</a>
+<a class="entry-item" href="历史的海洋.html">
+  <div class="noun">历史的海洋</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声开篇使用的宏大比喻，将历史进程比作海洋。海洋表面看似平静（战后和平时期），深处却仍在汹涌翻腾（社会深层力量仍在运动）。历史人物如海面上的船只或被浪潮卷来卷去，或在漩涡中打转，而真正的历史动力来自海洋本身的运动——</div>
+</a>
+<a class="entry-item" href="历史的目的.html">
+  <div class="noun">历史的目的</div>
+  <div class="snippet">托尔斯泰在《战争与和平》历史哲学中讨论的核心问题。他反对历史有预设的最终目的（如自由、平等、文明进步等），认为这些不过是历史学家事后建构的虚构。托尔斯泰提出&quot;帝王是历史的奴隶&quot;，历史人物自以为掌控方向，实际上只是被无数个体行动的合力所裹挟，</div>
+</a>
+<a class="entry-item" href="历史的规律.html">
+  <div class="noun">历史的规律</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中探讨的核心哲学命题。托尔斯泰认为历史并非由拿破仑、亚历山大一世等帝王将相的意志决定，而是由无数普通人的细微行为和共同倾向累积而成，主张通过研究&quot;历史的微分&quot;来发现历史运动的客观规律。</div>
+</a>
+<a class="entry-item" href="历史研究.html">
+  <div class="noun">历史研究</div>
+  <div class="snippet">托尔斯泰认为历史研究的对象不是人的意志本身，而是我们关于意志的观念。历史考察人对生活的观念中自由与必然的结合。</div>
+</a>
+<a class="entry-item" href="历史科学.html">
+  <div class="noun">历史科学</div>
+  <div class="snippet">以科学方法研究人类历史的学科，广义指历史学作为认识人类社会发展规律的科学。托尔斯泰在书中讨论的历史科学指19世纪试图摆脱神学解释、探索历史运动客观规律的史学传统。</div>
+</a>
+<a class="entry-item" href="历史规律.html">
+  <div class="noun">历史规律</div>
+  <div class="snippet">托尔斯泰认为战争或革命发生的原因不可知，我们只能承认人的天性决定了人们会结成集体进行行动，这就是一种历史规律。</div>
+</a>
+<a class="entry-item" href="历史运动.html">
+  <div class="noun">历史运动</div>
+  <div class="snippet">历史发展的动态过程和整体变迁，包括民族兴衰、社会变革、政权更迭等宏观历史现象。托尔斯泰寻求解释的核心问题是&quot;是什么力量推动各民族的运动的&quot;。</div>
+</a>
+<a class="entry-item" href="历史问题.html">
+  <div class="noun">历史问题</div>
+  <div class="snippet">托尔斯泰提出历史的根本问题：应当把各民族和人类的过去看作自由行动的产物还是不自由行动的产物，即历史是否为必然性所支配。</div>
+</a>
+<a class="entry-item" href="原因.html">
+  <div class="noun">原因</div>
+  <div class="snippet">原因是引起某一现象的现象，与结果构成因果关系。因果律是理性认识世界的基本法则之一。托尔斯泰指出历史的研究应从寻求原因转向寻求法则。</div>
+</a>
+<a class="entry-item" href="反政府派.html">
+  <div class="noun">反政府派</div>
+  <div class="snippet">1811年莫斯科贵族中形成的保守反对派势力，以老博尔孔斯基公爵等人为中心。他们反对亚历山大一世通过斯佩兰斯基推行的西方式自由主义改革，主张维护俄国专制传统。这一派别在拿破仑入侵前夕借反法爱国思潮迅速壮大。</div>
+</a>
+<a class="entry-item" href="反比例关系.html">
+  <div class="noun">反比例关系</div>
+  <div class="snippet">托尔斯泰提出的自由与必然性的关系法则：在任何行动中自由越多必然性就越少，必然性越多自由就越少，两者的关系总是成反比。自由与必然性孰多孰少取决于考察行动时所持的观点，但两者的反比例关系恒定不变。</div>
+</a>
+<a class="entry-item" href="发烧.html">
+  <div class="noun">发烧</div>
+  <div class="snippet">体温升高的病理状态，通常由感染引起。在战伤中，发烧是伤口感染的重要标志。19世纪外科医生已认识到发烧与感染之间的关系，但当时尚无抗生素治疗。</div>
+</a>
+<a class="entry-item" href="受伤.html">
+  <div class="noun">受伤</div>
+  <div class="snippet">身体遭受外力打击而损伤。在拿破仑战争中，主要战伤类型包括火器伤（枪弹、炮弹片）、刀剑伤和钝器伤。拉雷医生的分检制度彻底改变了战伤救治的秩序。</div>
+</a>
+<a class="entry-item" href="受伤的野兽比喻.html">
+  <div class="noun">受伤的野兽比喻</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中使用的核心意象，将拿破仑军队比喻为受伤的野兽——在莫斯科陷入绝境后盲目挣扎，最终加速覆灭，体现了作者的历史观：战争胜负不取决于统帅天才，而取决于历史必然性。</div>
+</a>
+<a class="entry-item" href="受难者.html">
+  <div class="noun">受难者</div>
+  <div class="snippet">共济会入会仪式中对候选人的称呼之一，象征经历考验与磨难的人，表示入会者正在经历精神上的试炼与牺牲。</div>
+</a>
+<a class="entry-item" href="古代英雄史诗.html">
+  <div class="noun">古代英雄史诗</div>
+  <div class="snippet">托尔斯泰引用古希腊罗马的英雄史诗传统，认为这种以伟人英雄为中心的历史叙事已不适用于理解19世纪的战争。</div>
+</a>
+<a class="entry-item" href="可以分辨善恶的果子.html">
+  <div class="noun">可以分辨善恶的果子</div>
+  <div class="snippet">典出《圣经·创世纪》中伊甸园内分别善恶树上的果子。亚当和夏娃受蛇引诱吃了此果后被逐出伊甸园。安德烈公爵引用此典故表达他因看透战争和世俗的真相而痛苦。</div>
+</a>
+<a class="entry-item" href="可爱才显得漂亮.html">
+  <div class="noun">可爱才显得漂亮</div>
+  <div class="snippet">尼古拉·罗斯托夫向妻子玛丽亚表达爱情时说出的经典名言。玛丽亚伯爵夫人因为自己容貌普通而怀疑丈夫是否爱她，尼古拉回应说一个人不是因为漂亮才可爱，而是因为可爱才显得漂亮。他举例说只有马尔维纳斯之流的女人才因为姿色被爱，而他爱自己的妻子就像爱自己</div>
+</a>
+<a class="entry-item" href="史学家捏造.html">
+  <div class="noun">史学家捏造</div>
+  <div class="snippet">托尔斯泰批评后世史学家为维护统帅形象而歪曲波罗金诺战役的事实，将一场混乱仓促的遭遇战描述为有计划的会战。</div>
+</a>
+<a class="entry-item" href="右翼.html">
+  <div class="noun">右翼</div>
+  <div class="snippet">作战队形的右侧部分。在奥斯特里茨战役中联军计划攻击法军右翼，拿破仑将计就计故意示弱诱敌分兵，为中央突破创造战机。</div>
+</a>
+<a class="entry-item" href="叶卡捷琳娜时代.html">
+  <div class="noun">叶卡捷琳娜时代</div>
+  <div class="snippet">叶卡捷琳娜二世（1762-1796年在位）统治俄国的时期，是俄国贵族的&quot;黄金时代&quot;和农奴制鼎盛时期，期间俄国大幅扩张领土、推行开明专制、文化繁荣。文本中库图佐夫在亚历山大一世面前遵循该时代老习惯，将缴获军旗投掷在皇帝脚下。</div>
+</a>
+<a class="entry-item" href="司令部.html">
+  <div class="noun">司令部</div>
+  <div class="snippet">军队的指挥机构，负责作战指挥、情报、后勤等事务。在《战争与和平》中，库图佐夫在1805年战役期间将总司令部设在布劳瑙，司令部内存在多个派系的权力斗争，是小说中军事政治斗争的重要场景。</div>
+</a>
+<a class="entry-item" href="司务长.html">
+  <div class="noun">司务长</div>
+  <div class="snippet">沙俄军队中的军士衔级（俄语фельдфебель，源自德语Feldwebel），相当于高级军士或军士长，主要负责连队的后勤、内务和行政事务，是军官与士兵之间的重要纽带。</div>
+</a>
+<a class="entry-item" href="合力.html">
+  <div class="noun">合力</div>
+  <div class="snippet">源自物理学概念，托尔斯泰借用来指历史事件是由无数相互交错的力量共同作用的结果。恩格斯后来提出&quot;历史合力论&quot;，认为历史是无数单个意志通过力的平行四边形产生的共同结果。</div>
+</a>
+<a class="entry-item" href="名誉.html">
+  <div class="noun">名誉</div>
+  <div class="snippet">19世纪俄国贵族社会核心价值观念，决斗文化的精神基础。贵族视名誉高于生命，当名誉受辱时以决斗作为终极解决手段。皮埃尔虽厌恶暴力，但在社会舆论和荣誉法则压力下仍向多洛霍夫提出决斗。</div>
+</a>
+<a class="entry-item" href="后卫.html">
+  <div class="noun">后卫</div>
+  <div class="snippet">军事术语，指行军时在主力部队后方负责掩护、警戒的部队，核心任务是在部队撤退时阻断敌军追击，保障主力安全转移。后卫部队通常依托关隘、桥梁等地形建立防线，通过小规模战斗迟滞敌军推进，为主力争取脱离时间。</div>
+</a>
+<a class="entry-item" href="后备.html">
+  <div class="noun">后备</div>
+  <div class="snippet">军事术语，指战役中保留在主力后方、暂不投入战斗的预备部队。在拿破仑战争中，后备力量的使用往往决定战役的胜负，拿破仑善于在关键时刻投入后备力量。</div>
+</a>
+<a class="entry-item" href="后备军.html">
+  <div class="noun">后备军</div>
+  <div class="snippet">俄国1812年战争期间组建的预备军事力量，由退役军官和临时征召人员组成，负责后勤支援、训练新兵等任务。小说中老公爵被任命为第三军区后备军总司令。</div>
+</a>
+<a class="entry-item" href="后备队.html">
+  <div class="noun">后备队</div>
+  <div class="snippet">军事术语，指作战部署中作为机动使用的兵力编组，由指挥员掌握以应对意外情况或在关键时刻投入战斗。在《战争与和平》中，尼古拉·罗斯托夫所在的杰尼索夫骑兵连被留下来作后备队，使他因未能参加战斗而感到遗憾和苦闷。</div>
+</a>
+<a class="entry-item" href="后援部队.html">
+  <div class="noun">后援部队</div>
+  <div class="snippet">军事术语，指在作战序列中处于后方、负责提供支援和接应的部队。后援部队的任务包括增援前线作战部队、补充兵力损耗、保障后勤补给以及在必要时接应撤退部队。在战场上，后援部队的及时到达往往能扭转战局。</div>
+</a>
+<a class="entry-item" href="向导.html">
+  <div class="noun">向导</div>
+  <div class="snippet">军队在陌生地域行军时雇用的本地引路人。在拿破仑战争中联军常有奥地利向导带领俄国军队穿越波希米亚山地，但由于语言不通和指挥混乱，向导反而引起了混乱。</div>
+</a>
+<a class="entry-item" href="君主政体的基础是荣誉.html">
+  <div class="noun">君主政体的基础是荣誉</div>
+  <div class="snippet">孟德斯鸠在《论法的精神》中提出的政体理论。孟德斯鸠将政体分为三类： 共和政体以品德为原则、君主政体以荣誉为原则、专制政体以恐惧为原则。 荣誉在君主国代替了政治品德，每个人和每个阶层的&quot;成见&quot;（追求出人头地、虚荣与自尊） 推动着君主政体的运转</div>
+</a>
+<a class="entry-item" href="命令与事件关系.html">
+  <div class="noun">命令与事件关系</div>
+  <div class="snippet">托尔斯泰在《战争与和平》历史哲学中对命令与事件关系的核心论断。通过恢复时间条件和发令者与执行者关系这两个被忽视的条件，托尔斯泰论证命令不可能是事件的原因，两者之间只存在一定的依赖关系：命令只有在与一系列相应事件相符合时才得到执行，而发令者恰</div>
+</a>
+<a class="entry-item" href="命令的连续性.html">
+  <div class="noun">命令的连续性</div>
+  <div class="snippet">托尔斯泰在《战争与和平》历史哲学中提出的概念。他认为不存在自发的、适用于一整串事件的单一命令，每道命令都来自另一道命令，只针对事件的某一时刻。所谓&quot;拿破仑命令出征俄国&quot;的说法是一种概括性的错觉，实际上存在的是成千上万互相关联的命令。命令只有</div>
+</a>
+<a class="entry-item" href="命运.html">
+  <div class="noun">命运</div>
+  <div class="snippet">人无法控制的、预先注定的生活轨迹，安德烈公爵的生死未卜牵动全家人的命运。 --- 安德烈求婚那一刻，娜塔莎感到&quot;就在此刻决定她的命运&quot;。罗斯托夫家人也将种种巧合（安德烈到访、两人相貌相似、早年冲突等）视为姻缘预兆。托尔斯泰既展现了命运般的巧</div>
+</a>
+<a class="entry-item" href="命运的力量.html">
+  <div class="noun">命运的力量</div>
+  <div class="snippet">在《战争与和平》中，命运的力量是贯穿始终的哲学主题之一。皮埃尔在行刑后和俘虏期间体会到一种不可抗拒的命运力量正在主宰他的生存，但同时也发现灵魂的内在力量可以与之抗衡。</div>
+</a>
+<a class="entry-item" href="和平.html">
+  <div class="noun">和平</div>
+  <div class="snippet">没有战争的安定状态，是《战争与和平》书名的后半部分。托尔斯泰通过宏大的战争描写反衬和平的可贵，表达了对人类和谐共处的向往。</div>
+</a>
+<a class="entry-item" href="和平的客栈气味.html">
+  <div class="noun">和平的客栈气味</div>
+  <div class="snippet">皮埃尔在战争创伤后感受到的日常生活的安宁气息，包括干草、马粪和焦油的气味，这些平凡的味道在此刻带给他欢愉感，与战场的血腥和火药味形成鲜明对比。</div>
+</a>
+<a class="entry-item" href="和撒纳.html">
+  <div class="noun">和撒纳</div>
+  <div class="snippet">源自希伯来语&quot;הוֹשִׁיעָה נָּא&quot;（hoshi&#x27;ana），原意为&quot;求你拯救&quot;，是《圣经·旧约》诗篇中的祈祷词。在《新约》中，耶稣荣耀进入耶路撒冷时，群众手持棕树枝欢呼&quot;和撒纳&quot;，使其演变为对弥赛亚的赞美与称颂之词，成为基督教棕枝</div>
+</a>
+<a class="entry-item" href="和谈.html">
+  <div class="noun">和谈</div>
+  <div class="snippet">1812年拿破仑占领莫斯科后，陷入缺乏补给和冬季将至的困境，三次试图与俄国进行和平谈判。拿破仑先后派洛里斯顿伯爵等使节向库图佐夫和沙皇亚历山大一世求和，但均遭拒绝。库图佐夫坚持&quot;和谈根本谈不上&quot;，继续执行消耗战略。</div>
+</a>
+<a class="entry-item" href="品行端正.html">
+  <div class="noun">品行端正</div>
+  <div class="snippet">共济会七美德之三，要求会员行为端正、品德高尚，在日常生活中践行道德规范，作为其他会员的榜样。</div>
+</a>
+<a class="entry-item" href="哈伦的船.html">
+  <div class="noun">哈伦的船</div>
+  <div class="snippet">出自《一千零一夜》的典故，指阿拔斯王朝哈里发哈伦·拉希德（Harun al-Rashid）微服私访时在底格里斯河遇船的故事。拉斯托普钦遣送外国人时用了双关俏皮话，借用这个典故告诫外国人&quot;当心别让船变成冥河渡船&quot;，暗示此去可能一去不返，背景是</div>
+</a>
+<a class="entry-item" href="哥伦布与鸡蛋典故.html">
+  <div class="noun">哥伦布与鸡蛋典故</div>
+  <div class="snippet">海伦向良心指导者直言自己信了真正的宗教就不再受旧宗教约束，指导者对此大为惊奇，认为其绕过难题的方法如同哥伦布竖鸡蛋的典故——看似困难的问题被巧妙简单地解决。</div>
+</a>
+<a class="entry-item" href="哥白尼体系.html">
+  <div class="noun">哥白尼体系</div>
+  <div class="snippet">哥白尼体系（日心说）由哥白尼在1543年《天体运行论》中提出：太阳位于宇宙中心静止不动，地球每日自转并绕太阳公转，行星逆行是相对运动产生的视觉错觉。</div>
+</a>
+<a class="entry-item" href="哥萨克.html">
+  <div class="noun">哥萨克</div>
+  <div class="snippet">在《战争与和平》中，玛丽亚·德米特里耶夫娜称娜塔莎·罗斯托娃为&quot;哥萨克&quot;，作为表达亲昵和喜爱的昵称。哥萨克（俄语Казак）本指东欧草原上的自由骑手群体，以勇猛善战、崇尚自由、不受拘束著称。用&quot;哥萨克&quot;来称呼娜塔莎，生动体现她活泼好动、精力</div>
+</a>
+<a class="entry-item" href="哥萨克骑兵.html">
+  <div class="noun">哥萨克骑兵</div>
+  <div class="snippet">俄国的非正规轻骑兵部队，在1812年俄法战争中发挥了重要作用。哥萨克骑兵擅长袭击敌人补给线、侦察和追击，避免正面大规模会战。在《战争与和平》第四卷第三部中，哥萨克骑兵与杰尼索夫的游击队并肩作战，参与了袭击法军运输队和解放俄国俘虏的战斗。历史</div>
+</a>
+<a class="entry-item" href="唐璜.html">
+  <div class="noun">唐璜</div>
+  <div class="snippet">源自西班牙传说的文学人物，以英俊潇洒、风流成性著称，是花花公子的代名词。西方文学四大不朽人物之一。在书中被用来形容伊波利特·库拉金在女人中间的放荡行为。</div>
+</a>
+<a class="entry-item" href="善.html">
+  <div class="noun">善</div>
+  <div class="snippet">道德哲学的核心范畴，与&quot;真&quot;并列构成人生最高价值。在小说中，皮埃尔认为人生的最大幸福就在于追求善和真，而安德烈则说自己看不见人世间善和真的王国。</div>
+</a>
+<a class="entry-item" href="善与真.html">
+  <div class="noun">善与真</div>
+  <div class="snippet">皮埃尔内心向往的价值核心。他具有看出并相信善与真的可能性的能力，但同时对生活中的恶与伪看得过于清楚，陷入无法认真生活的困境。善与真代表了托尔斯泰笔下人物追求的精神理想，与社会的虚伪和罪恶形成尖锐对立。</div>
+</a>
+<a class="entry-item" href="善行.html">
+  <div class="noun">善行</div>
+  <div class="snippet">善行指美好的品行或慈善的举动。在小说中皮埃尔认为行善的乐趣是生活中唯一可靠的幸福，他兴办学校、医院、养老院等慈善事业，并坚信为他人做好事是人生的意义所在。</div>
+</a>
+<a class="entry-item" href="囚犯问题.html">
+  <div class="noun">囚犯问题</div>
+  <div class="snippet">莫斯科撤退期间关于如何处理监狱囚犯的决策难题。拉斯托普钦最终下令释放所有囚犯。</div>
+</a>
+<a class="entry-item" href="四万三千卢布.html">
+  <div class="noun">四万三千卢布</div>
+  <div class="snippet">尼古拉·罗斯托夫在多洛霍夫设局的赌局中输掉的巨额赌债数目。多洛霍夫故意将此定为最终目标，因其数字43恰好是他自己的年龄与索尼娅年龄之和。在19世纪初的俄国，这笔钱相当于中等贵族家庭4-14年的全部收入，足以摧毁一个贵族家庭。罗斯托夫家因此加</div>
+</a>
+<a class="entry-item" href="因果概念.html">
+  <div class="noun">因果概念</div>
+  <div class="snippet">托尔斯泰认为原因概念不适用于历史现象，因为追根溯源只会达到无限循环。应当像自然科学一样放弃原因概念，寻找规律本身。</div>
+</a>
+<a class="entry-item" href="团旗.html">
+  <div class="noun">团旗</div>
+  <div class="snippet">俄国军队中代表团队荣誉与身份的军旗，被视为军人的荣誉和光荣的象征， 丢失军旗被视为极大的耻辱，保卫团旗是军人的神圣职责。</div>
+</a>
+<a class="entry-item" href="国务会议.html">
+  <div class="noun">国务会议</div>
+  <div class="snippet">俄罗斯帝国国务会议，由沙皇亚历山大一世于1810年创立，是19世纪初至20世纪初俄国重要的国家机构。最初为沙皇的法律咨议机关，讨论立法、外交、内政及宗教等重大问题。1905-1906年改革后改组为议会上院，与国家杜马享有同等立法权。1917</div>
+</a>
+<a class="entry-item" href="圆锥体权力说.html">
+  <div class="noun">圆锥体权力说</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声第二部中提出的历史哲学概念。他将军事组织比作圆锥体：底部是人数最多的列兵，直接参与战斗但从不发号施令；向上依次是军士、军官、将军，人数渐少而指挥权渐大；顶端是总司令，几乎不直接参与战斗但拥有最大权力。托尔斯泰借此</div>
+</a>
+<a class="entry-item" href="圣徒.html">
+  <div class="noun">圣徒</div>
+  <div class="snippet">东正教中因虔诚信仰和圣洁生活而被尊崇的人物，乳娘将蜡烛供在圣徒面前祈祷。</div>
+</a>
+<a class="entry-item" href="圣母.html">
+  <div class="noun">圣母</div>
+  <div class="snippet">基督教对耶稣基督之母玛利亚的尊称，东正教和天主教尊其为&quot;天主之母&quot;。在《战争与和平》中体现玛丽亚公爵小姐东正教信仰中对圣母的虔诚祈祷。</div>
+</a>
+<a class="entry-item" href="圣经.html">
+  <div class="noun">圣经</div>
+  <div class="snippet">基督宗教（包括天主教、东正教、新教）的核心经典，由《旧约》和《新约》两部分组成。旧约39卷（新教计数），新约27卷。圣经是西方文明和文学的基石。</div>
+</a>
+<a class="entry-item" href="圣经会.html">
+  <div class="noun">圣经会</div>
+  <div class="snippet">俄罗斯圣经会（Russian Bible Society），1812年12月6日由沙皇亚历山大一世批准成立，以推广圣经翻译和发行为宗旨的组织。首任主席为亚历山大·尼古拉耶维奇·戈利岑公爵。该会致力于将圣经从希伯来文和希腊文译为俄语，1826</div>
+</a>
+<a class="entry-item" href="地理学.html">
+  <div class="noun">地理学</div>
+  <div class="snippet">地理学是研究地球表层自然要素与人文要素相互作用及其形成演化特征的学科体系，具有综合性与区域性特点。托尔斯泰将其列为推翻旧历史观的新兴科学之一。</div>
+</a>
+<a class="entry-item" href="地质学.html">
+  <div class="noun">地质学</div>
+  <div class="snippet">地质学是研究地球的物质组成、内部构造、各圈层相互作用及演变历史的自然科学，主要分支包括矿物学、岩石学、构造地质学、地史学等。</div>
+</a>
+<a class="entry-item" href="坏疽病.html">
+  <div class="noun">坏疽病</div>
+  <div class="snippet">坏疽病（Gangrene）是因血液供应中断导致身体组织坏死，并继发腐败菌感染的严重疾病。在《战争与和平》所描绘的拿破仑战争时代（19世纪初），战场创伤感染是士兵死亡的主要原因之一。当时医学尚未认识到细菌致病理论，消毒技术尚未诞生，伤口感染后</div>
+</a>
+<a class="entry-item" href="坚持三小时不崩溃.html">
+  <div class="noun">坚持三小时不崩溃</div>
+  <div class="snippet">托尔斯泰认为俄军在兵力对比悬殊、阵地不设防的条件下能坚持三小时而不崩溃已是不可思议的成就。</div>
+</a>
+<a class="entry-item" href="基督.html">
+  <div class="noun">基督</div>
+  <div class="snippet">基督教的核心人物，上帝之子，在小说中被皮埃尔引用为共济会教义的基础。共济会被描述为不受国家和宗教束缚的基督教教义。</div>
+</a>
+<a class="entry-item" href="基督的敌人.html">
+  <div class="noun">基督的敌人</div>
+  <div class="snippet">即&quot;敌基督&quot;（Антихрист / Antichrist），基督教末世论中与基督为敌的终极恶势力，在世界末日来临前出现并统治世界，最终被基督击败。小说中博古恰罗沃的农民将关于拿破仑入侵的传闻与基督的敌人、世界末日和绝对自由等宗教末世论观念</div>
+</a>
+<a class="entry-item" href="基辅掷弹兵.html">
+  <div class="noun">基辅掷弹兵</div>
+  <div class="snippet">基辅掷弹兵团（Kiev Grenadier Regiment），俄军最悠久正规团之一，前身可追溯至1700年彼得大帝创建的步兵团。在拿破仑战争中隶属第2掷弹兵师，因申格拉本战役英勇表现成为首个获颁圣乔治军旗的俄军部队。</div>
+</a>
+<a class="entry-item" href="士官生.html">
+  <div class="noun">士官生</div>
+  <div class="snippet">俄语кадет，源自法语cadet，指俄国贵族军事学校学生，毕业后成为军官。沙俄时期士官生制度旨在培养忠诚于沙皇的贵族军事精英，招收13至18岁世袭贵族子弟，1732年建立第一所武备学校。 --- 俄军中的军衔/身份，指在部队中接受军事训练</div>
+</a>
+<a class="entry-item" href="士气.html">
+  <div class="noun">士气</div>
+  <div class="snippet">士兵的战斗意志和集体精神状态。托尔斯泰通过安德烈公爵之口提出，战争的胜负不取决于阵地、武装或数量，而取决于每个士兵的士气——即谁下定决心去争取胜利，谁就能胜利。这一观念是托尔斯泰战争哲学的核心之一，强调精神因素而非理性部署的决定性作用。</div>
+</a>
+<a class="entry-item" href="士气动摇.html">
+  <div class="noun">士气动摇</div>
+  <div class="snippet">军事术语，指军队在作战过程中因遭受重大打击或面临危险而产生恐惧、犹豫、混乱等心理状态，导致战斗意志下降和组织纪律松弛的现象。士气是决定战争胜负的关键因素之一，动摇的士气可能引发溃败，而坚定的士气可以帮助部队克服不利局面。</div>
+</a>
+<a class="entry-item" href="外交使团.html">
+  <div class="noun">外交使团</div>
+  <div class="snippet">一国派往另一国或国际组织执行外交任务的官方代表团。在小说中指俄罗斯帝国对外交涉的外交机构或驻外使馆体系。瓦西里公爵通过大臣举荐，为皮埃尔在外交使团中谋求职位，意味着皮埃尔将步入外交官生涯。</div>
+</a>
+<a class="entry-item" href="外传战报的虚构.html">
+  <div class="noun">外传战报的虚构</div>
+  <div class="snippet">官方战报和后世历史著作中对波罗金诺战役的虚假描述，包括俄军预先设防、兵力相近等不实之词。</div>
+</a>
+<a class="entry-item" href="夜.html">
+  <div class="noun">夜</div>
+  <div class="snippet">一天中从日落到日出的时段，丽莎的分娩持续了整个夜晚。</div>
+</a>
+<a class="entry-item" href="大俄罗斯田产.html">
+  <div class="noun">大俄罗斯田产</div>
+  <div class="snippet">指位于俄罗斯欧洲部分核心地带（非边疆或新征服地区）的贵族领地，是别祖霍夫家族财富的主体。皮埃尔与海伦分居时将占家产大半的大俄罗斯田产管理权交给海伦，象征他彻底放弃物质纠葛。</div>
+</a>
+<a class="entry-item" href="大本营.html">
+  <div class="noun">大本营</div>
+  <div class="snippet">战时军队的最高统帅部或最高指挥部，即战争期间皇帝和高级将领所在的指挥部所在地，负责统筹全局、发布作战指令。</div>
+</a>
+<a class="entry-item" href="大陆体系.html">
+  <div class="noun">大陆体系</div>
+  <div class="snippet">拿破仑一世于1806年颁布柏林敕令后启动的针对英国的大规模经济封锁政策，又称大陆封锁体系。其目的是通过切断欧洲大陆与英国的贸易往来，以经济战手段迫使英国屈服，同时保护法国本土工业。这一政策持续至1814年拿破仑第一次退位，是拿破仑战争中的重</div>
+</a>
+<a class="entry-item" href="天主教.html">
+  <div class="noun">天主教</div>
+  <div class="snippet">基督教三大派别之一，以罗马教皇为最高领袖，又称罗马公教。在小说中，海伦为了摆脱与皮埃尔的婚姻约束而改信天主教，希望通过教皇权威宣告婚姻无效。</div>
+</a>
+<a class="entry-item" href="天动说.html">
+  <div class="noun">天动说</div>
+  <div class="snippet">天动说（地心说，Geocentric theory）是古人认为地球是宇宙中心、所有天体环绕地球运行的宇宙模型。由古希腊学者托勒密在《至大论》中系统化，建立了本轮-均轮体系，统治西方天文学长达1400余年，直到16世纪哥白尼日心说出现才被推翻</div>
+</a>
+<a class="entry-item" href="天文学.html">
+  <div class="noun">天文学</div>
+  <div class="snippet">天文学是研究宇宙空间天体、宇宙结构和发展的自然科学，六大基础学科之一。托尔斯泰以天文学史上的哥白尼体系与托勒密体系范式转换为类比，说明历史学同样需要新观点。</div>
+</a>
+<a class="entry-item" href="天真娇憨策略.html">
+  <div class="noun">天真娇憨策略</div>
+  <div class="snippet">海伦在上流社会中刻意表现的天真无邪的姿态，用来掩盖她有计划的离婚改嫁图谋。作者指出她毫无害羞或掩饰的痕迹，借此影响他人的判断。</div>
+</a>
+<a class="entry-item" href="天空.html">
+  <div class="noun">天空</div>
+  <div class="snippet">在《战争与和平》中，&quot;高高的天空&quot;是核心象征意象，代表永恒、宁静和超越世俗功利的终极存在。安德烈公爵在奥斯特里茨战场上仰望天空，领悟到个人英雄主义的渺小。</div>
+</a>
+<a class="entry-item" href="夫妻关系哲学.html">
+  <div class="noun">夫妻关系哲学</div>
+  <div class="snippet">托尔斯泰在尾声中通过娜塔莎与皮埃尔的婚姻关系阐述的夫妻相处哲学。娜塔莎认为维系夫妻关系的不是诗意的感情，而是像灵与肉一样牢固的东西。她不讲究打扮和言谈举止，认为在丈夫面前摆姿态会显得可笑。她将整个身心毫无保留地奉献给丈夫。皮埃尔从妻子身上看</div>
+</a>
+<a class="entry-item" href="失魂落魄.html">
+  <div class="noun">失魂落魄</div>
+  <div class="snippet">皮埃尔在波罗金诺战役后的精神状态描述，他因战争创伤而精神恍惚，甚至忘记了自己客栈的位置和步行回城的路径，处于半无意识的状态。</div>
+</a>
+<a class="entry-item" href="头蒙起来.html">
+  <div class="noun">头蒙起来</div>
+  <div class="snippet">皮埃尔在客栈马车中睡觉时将头蒙在大衣下的动作，反映了他试图用物理方式隔绝战争记忆和世界喧嚣的心理需求。</div>
+</a>
+<a class="entry-item" href="奏鸣曲.html">
+  <div class="noun">奏鸣曲</div>
+  <div class="snippet">西方古典音乐中一种器乐体裁，源自意大利文sonare意为发出声响，通常由3-4个乐章构成，古典时期由海顿、莫扎特确立规范，贝多芬将其推向成熟。</div>
+</a>
+<a class="entry-item" href="奥军.html">
+  <div class="noun">奥军</div>
+  <div class="snippet">奥地利帝国军队，在拿破仑战争期间是第三次反法同盟的核心成员。1805年乌尔姆战役中被拿破仑击败，随后与俄军联合在奥斯特里茨与法军会战。奥皇弗朗茨二世亲征。</div>
+</a>
+<a class="entry-item" href="奥斯特利茨的天空.html">
+  <div class="noun">奥斯特利茨的天空</div>
+  <div class="snippet">《战争与和平》中最重要的象征意象之一。安德烈公爵在奥斯特利茨战役中身负重伤，倒地仰望天空，第一次真正看见&quot;崇高而永恒的天空&quot;，顿悟到荣耀功名在永恒面前的虚无。此后&quot;奥斯特利茨的天空&quot;成为安德烈精神觉醒的标志性意象，在他生命的关键时刻反复出现</div>
+</a>
+<a class="entry-item" href="好逸恶劳的习性.html">
+  <div class="noun">好逸恶劳的习性</div>
+  <div class="snippet">托尔斯泰在本章开头提出的哲学观点，源自《圣经》传说。他认为安闲自在是人类始祖堕落前的幸福状态，堕落后人仍保留该习性，但道德观念谴责无所事事为犯罪。由此引出军人阶层享有&quot;既悠闲自得又能觉得自己有益&quot;的特殊地位的论述，为尼古拉·罗斯托夫留恋军队</div>
+</a>
+<a class="entry-item" href="妇女权利议论.html">
+  <div class="noun">妇女权利议论</div>
+  <div class="snippet">尾声中对19世纪初俄国社会关于妇女权利、夫妻关系自由等社会议题的指涉。托尔斯泰通过娜塔莎的态度表达了他的立场——对这些议论不感兴趣也不理解，认为这些问题只存在于那些把婚姻关系视为获得满足的人中，而不存在于那些把组织家庭视为婚姻目的的人中。这</div>
+</a>
+<a class="entry-item" href="姻缘天定.html">
+  <div class="noun">姻缘天定</div>
+  <div class="snippet">中国传统文化中婚姻由上天注定的观念，在《战争与和平》中老伯爵夫人对娜塔莎说&quot;姻缘是天定的&quot;来安慰她。这反映了俄罗斯东正教文化中也存在类似的宿命论婚姻观，即认为人的婚姻是由上帝安排的命运。</div>
+</a>
+<a class="entry-item" href="威斯特法利亚人.html">
+  <div class="noun">威斯特法利亚人</div>
+  <div class="snippet">指威斯特法利亚王国（1807-1813年拿破仑建立的附庸国）的士兵。拿破仑远征俄国时，其大军团包括大量来自德意志各附庸国的部队，威斯特法利亚部队是其中一部分。</div>
+</a>
+<a class="entry-item" href="娜塔莎婚后转变.html">
+  <div class="noun">娜塔莎婚后转变</div>
+  <div class="snippet">托尔斯泰在尾声第一部第十章中详细描写了娜塔莎婚后的巨大变化——从苗条活泼、充满青春魅力的少女，变成了健壮、不修边幅、全心投入家庭和育儿的多产母亲。她放弃了歌唱、社交、精心打扮，将所有热情转移到丈夫和孩子们身上，被老伯爵夫人称为&quot;把全部的爱都</div>
+</a>
+<a class="entry-item" href="娜塔莎的家庭观.html">
+  <div class="noun">娜塔莎的家庭观</div>
+  <div class="snippet">娜塔莎婚后的人生哲学——全心全意服务丈夫和家庭。她认为维系夫妻关系的不是诗意的感情，而是某种与自身融为一体的牢固东西。她对妇女权利、夫妻关系自由等问题不感兴趣也不理解，认为婚姻的目的是组织家庭，丈夫给予她家庭，她则献身于丈夫、孩子和家务。皮</div>
+</a>
+<a class="entry-item" href="娱悦晚年.html">
+  <div class="noun">娱悦晚年</div>
+  <div class="snippet">比利宾分析中提到的嫁给老伯爵的好处之一，即陪伴老伯爵度过晚年，待其去世后可以显贵遗孀身份再嫁年轻亲王，实现利益最大化。</div>
+</a>
+<a class="entry-item" href="婚姻.html">
+  <div class="noun">婚姻</div>
+  <div class="snippet">男女结合的法定关系，安德烈公爵与丽莎的婚姻，以及皮埃尔与海伦的婚姻危机。 --- 19世纪俄国贵族社会中联结家族、财产和社会地位的重要制度。子女婚姻须遵循父母之命，门当户对是基本原则。安德烈与娜塔莎的婚姻介于传统与开明之间：既有父亲的条件限</div>
+</a>
+<a class="entry-item" href="婚姻的目的.html">
+  <div class="noun">婚姻的目的</div>
+  <div class="snippet">托尔斯泰在尾声中借叙事者之口阐述的婚姻观——婚姻的目的是组织家庭，正如吃饭的目的是营养身体。他认为那些主张多夫多妻制的人虽然可能得到乐趣，但绝不可能组织家庭。解决问题的唯一办法是一夫一妻，夫妻不超过需要限度。娜塔莎需要一个丈夫，丈夫给予她一</div>
+</a>
+<a class="entry-item" href="孔德.html">
+  <div class="noun">孔德</div>
+  <div class="snippet">孔德即孔代亲王（Prince de Condé），是法国波旁王朝的重要旁系分支，法国历史上最显赫的贵族世家之一，名称来源于香槟地区的孔代领地。第一代孔代亲王路易一世于1557年受封。该家族出过多位著名人物，包括被誉为&quot;大孔代&quot;的军事天才路易</div>
+</a>
+<a class="entry-item" href="孤女.html">
+  <div class="noun">孤女</div>
+  <div class="snippet">指失去父母的女性孤儿。在19世纪俄国贵族社会中，孤女处于极其不利的地位，因为没有家族财产和嫁妆。索尼娅作为罗斯托夫家收养的孤女，寄人篱下，只能通过自我牺牲来体现尊严。她拒绝多洛霍夫求婚时被尼古拉认为是不明智的选择。</div>
+</a>
+<a class="entry-item" href="宇宙.html">
+  <div class="noun">宇宙</div>
+  <div class="snippet">包含一切存在物的整体。在托尔斯泰笔下，宇宙是一个巨大而和谐的有机整体，存在一个真理的王国，人类只是其中的一部分。皮埃尔用宇宙观来论证灵魂不朽。</div>
+</a>
+<a class="entry-item" href="宇宙大四方形.html">
+  <div class="noun">宇宙大四方形</div>
+  <div class="snippet">共济会象征体系中的重要概念，指代方矩（Square/直角尺）在宇宙层面的象征意义。共济会将&quot;宇宙的伟大建筑者&quot;视为宇宙的创造者，而方矩代表着宇宙的理性秩序与道德法则。它与圆规相对——圆规象征天（精神/灵性），方矩象征地（物质/道德），两者结</div>
+</a>
+<a class="entry-item" href="完全必然性.html">
+  <div class="noun">完全必然性</div>
+  <div class="snippet">托尔斯泰认为完全必然性同样不可想象：空间条件无穷无尽永无法穷尽，时间期限有限而时间无限，因果锁链无穷无尽。要得出完全必然性必须知道无限的空间条件、无限长的时间和全部原因，这是不可能的。完全的必然性同样否定了人的概念。</div>
+</a>
+<a class="entry-item" href="完全自由.html">
+  <div class="noun">完全自由</div>
+  <div class="snippet">托尔斯泰认为完全自由不可想象。要设想完全自由，必须把人想象成不受外部世界影响、超出时间以外、与任何原因无关的存在。完全自由需要三个不可能条件：超越空间、超越时间、无原因。满足这些条件的存在已经不是人了。</div>
+</a>
+<a class="entry-item" href="宗教法庭.html">
+  <div class="noun">宗教法庭</div>
+  <div class="snippet">东正教教会内部的司法机构，负责处理宗教事务和教会纪律问题。在俄国政教体系中具有重要地位。</div>
+</a>
+<a class="entry-item" href="宗教的安慰作用.html">
+  <div class="noun">宗教的安慰作用</div>
+  <div class="snippet">在《战争与和平》中，宗教（东正教信仰）被描绘为人们面对苦难和死亡时最重要的精神安慰。玛丽亚公爵小姐在信中写道：&quot;宗教，惟有宗教，不但能安慰我们，而且能把我们从失望中拯救出来；惟有宗教能给我们解释那人类不依靠它就无法理解的问题。&quot;托尔斯泰通过</div>
+</a>
+<a class="entry-item" href="实际战斗.html">
+  <div class="noun">实际战斗</div>
+  <div class="snippet">托尔斯泰强调的波罗金诺战役的真实面貌，与官方史书的记载形成对比——战斗发生在没有预先设防的地带，俄军在被动不利的情况下应战。</div>
+</a>
+<a class="entry-item" href="实验和论证.html">
+  <div class="noun">实验和论证</div>
+  <div class="snippet">托尔斯泰认为实验和论证可以证明人服从必然性法则，但人类从不服从这些结论，因为自由意识不可被理性反驳。</div>
+</a>
+<a class="entry-item" href="宫内侍从.html">
+  <div class="noun">宫内侍从</div>
+  <div class="snippet">俄罗斯帝国宫廷官制中的头衔，源于彼得大帝1722年颁布的《官秩表》。俄语称камергер（Kamerger）或камер-юнкер，相当于西欧宫廷的Chamberlain。负责宫廷礼仪、接待等事务。在小说中瓦西里公爵为皮埃尔谋得此职位，</div>
+</a>
+<a class="entry-item" href="宫廷侍臣派.html">
+  <div class="noun">宫廷侍臣派</div>
+  <div class="snippet">1812年俄法战争期间沙皇亚历山大一世身边以阿拉克切耶夫为代表的调和派。他们没有坚定的军事信念，主张折中普弗尔的理论派与巴格拉季翁的民族主义进攻派，既承认普弗尔计划的科学性又同意听取实战派意见，实则以确保自身地位为首要目标。</div>
+</a>
+<a class="entry-item" href="宫廷党派斗争.html">
+  <div class="noun">宫廷党派斗争</div>
+  <div class="snippet">1812年拿破仑入侵前后俄国彼得堡宫廷内部各政治派系之间的权力和路线斗争。涉及鲁缅采夫派、亲法派、玛丽亚·费奥多罗夫娜派、皇太子派等多个派系，斗争空前激烈复杂，但宫廷日常生活表面仍平静如常。</div>
+</a>
+<a class="entry-item" href="家庭.html">
+  <div class="noun">家庭</div>
+  <div class="snippet">由血缘和婚姻关系联结的群体。博尔康斯基家族在危机时刻展现出家庭的凝聚力。</div>
+</a>
+<a class="entry-item" href="家庭幸福.html">
+  <div class="noun">家庭幸福</div>
+  <div class="snippet">家庭生活中的和谐美满状态。在《战争与和平》中，安德烈公爵在受伤后幻觉中向往童山的宁静生活和家庭幸福，托尔斯泰通过这种对比表达了对和平生活的珍视。</div>
+</a>
+<a class="entry-item" href="容光焕发.html">
+  <div class="noun">容光焕发</div>
+  <div class="snippet">海伦听到比利宾的分析后的反应描写，表明她对这一建议极为满意，也体现她的肤浅和虚荣。</div>
+</a>
+<a class="entry-item" href="宿命论.html">
+  <div class="noun">宿命论</div>
+  <div class="snippet">认为事物的变化发展和人的命运由天命或命运预先决定、人对此无能为力的思想理论。在《战争与和平》中，托尔斯泰让皮埃尔接受了普拉东·卡拉达耶夫的宿命论思想影响，相信顺从天命、净化道德和爱一切人是改革社会的良策。</div>
+</a>
+<a class="entry-item" href="寂静.html">
+  <div class="noun">寂静</div>
+  <div class="snippet">没有声音的安静状态。在小说中，皮埃尔说完关于来世和信仰的长篇论述后，四周一片寂静，只有波浪轻轻拍打着船底，仿佛在附和皮埃尔的话。</div>
+</a>
+<a class="entry-item" href="对法国人仇恨.html">
+  <div class="noun">对法国人仇恨</div>
+  <div class="snippet">1812年俄法战争期间俄国人民的爱国情绪和民族仇恨。拉斯托普钦的政策就是要唤起民众的这种情绪。</div>
+</a>
+<a class="entry-item" href="尊严.html">
+  <div class="noun">尊严</div>
+  <div class="snippet">值得尊敬的高贵品格和体面，老公爵面对丧子之痛努力保持日常习惯的尊严。</div>
+</a>
+<a class="entry-item" href="尘世幸福的虚幻性.html">
+  <div class="noun">尘世幸福的虚幻性</div>
+  <div class="snippet">玛丽亚公爵小姐对人生和幸福的核心看法：她认为那些在尘世中寻求享乐和幸福的人们眼光短浅，为追求&quot;过眼云烟的虚幻的、罪恶的幸福&quot;而操劳、奋斗、互相伤害。她意识到人生是&quot;过眼云烟&quot;和&quot;考验&quot;，真正的幸福不在尘世的享乐中，而在对上帝的信仰和精神的解</div>
+</a>
+<a class="entry-item" href="尾声（战争与和平）.html">
+  <div class="noun">尾声（战争与和平）</div>
+  <div class="snippet">托尔斯泰《战争与和平》的尾声部分，分为两大部分：第一部分（第1—16章）交代皮埃尔、娜塔莎、尼古拉、玛丽亚等主要人物战后命运，第二部分为关于历史规律与自由意志的长篇哲学论述。</div>
+</a>
+<a class="entry-item" href="屯垦.html">
+  <div class="noun">屯垦</div>
+  <div class="snippet">指沙皇亚历山大一世在位后期推行的军事屯田制度（阿拉克切耶夫军事屯田），由陆军大臣阿拉克切耶夫全面负责。该制度将农民变为终身军人，穿军服、受军训，以自给自足方式维持军队，旨在削减军费并建立常备后备军。军屯民过着苦役般的生活，被称为&quot;农奴制最恶</div>
+</a>
+<a class="entry-item" href="巡礼_朝圣(东正教苦行传统).html">
+  <div class="noun">巡礼/朝圣(东正教苦行传统)</div>
+  <div class="snippet">东正教巡礼（朝圣）传统，指信徒离家远行前往圣地朝拜的宗教实践。在《战争与和平》中表现为巡礼者（俄语称&quot;神亲&quot;）的生活方式：穿着粗布衬衫、树皮鞋，手持法杖，背背囊，从一个圣地走到另一个圣地，不伤害任何人，为所有人祈祷。托尔斯泰通过费多秀什卡等</div>
+</a>
+<a class="entry-item" href="左翼.html">
+  <div class="noun">左翼</div>
+  <div class="snippet">作战队形的左侧部分。奥斯特里茨战役中俄奥联军左翼在雾中向法军进攻，遭遇法军达武部的顽强抵抗。</div>
+</a>
+<a class="entry-item" href="巴伐利亚人.html">
+  <div class="noun">巴伐利亚人</div>
+  <div class="snippet">德意志民族的重要分支之一，源自古老的日耳曼部族，1806年拿破仑将其升格为巴伐利亚王国，在1812年侵俄战争中巴伐利亚作为拿破仑的莱茵邦联成员出兵参加了对俄远征。</div>
+</a>
+<a class="entry-item" href="巴克斯.html">
+  <div class="noun">巴克斯</div>
+  <div class="snippet">罗马神话中的酒神和植物神，对应希腊神话中的狄俄尼索斯。掌管葡萄种植、酿酒、陶醉与狂欢。书中库图佐夫称季莫欣为&quot;巴克斯的信徒&quot;，调侃其好酒。</div>
+</a>
+<a class="entry-item" href="巴克莱派.html">
+  <div class="noun">巴克莱派</div>
+  <div class="snippet">1812年俄法战争期间支持巴克雷·德·托利的军事派系。他们推崇巴克雷在战前加强军队组织、秩序和作战能力的功绩，认为他使俄军未受重大损失就撤退到德里萨，坚持必须维持统一的指挥权，反对以贝尼格森取代巴克雷。</div>
+</a>
+<a class="entry-item" href="希伯来文.html">
+  <div class="noun">希伯来文</div>
+  <div class="snippet">闪米特语族的一种古老语言，是犹太人的民族语言和圣经旧约的原始语言。小说中提到用法文字母按照希伯来文的字母数值排列方法来推算拿破仑即启示录中的兽。</div>
+</a>
+<a class="entry-item" href="希望.html">
+  <div class="noun">希望</div>
+  <div class="snippet">对未来的美好期待和信念，玛丽亚公爵小姐始终抱着哥哥还活着的希望。</div>
+</a>
+<a class="entry-item" href="希腊式发型.html">
+  <div class="noun">希腊式发型</div>
+  <div class="snippet">19世纪初俄国贵族女性中流行的发型风格（à la grecque），受新古典主义影响，模仿古希腊女神雕像。特点是头发高高盘起，前额留有松散卷发或波浪。本节中为出席新年舞会，小姐们的发型要梳成希腊式的。</div>
+</a>
+<a class="entry-item" href="希腊神话.html">
+  <div class="noun">希腊神话</div>
+  <div class="snippet">古希腊人创造的关于神祇和英雄的故事体系，是西方文明的源头之一。书中脚注解释了勒达与天鹅（宙斯化身）的神话，用以说明海伦之名的典故。</div>
+</a>
+<a class="entry-item" href="常设医院(战争与和平).html">
+  <div class="noun">常设医院(战争与和平)</div>
+  <div class="snippet">法军沿补给线设立的固定后方医院，主要设在斯摩棱斯克、维尔纳等大型据点。实际条件极差，传染病（斑疹伤寒、痢疾）大规模流行，病患死亡率极高，是法军俄征溃败的重要因素之一。</div>
+</a>
+<a class="entry-item" href="干草马粪和焦油的气味.html">
+  <div class="noun">干草马粪和焦油的气味</div>
+  <div class="snippet">客栈院子中散发的混合气味，皮埃尔在经历战场的血腥之后，对这些平凡的农场气息感到格外欢愉和安慰。</div>
+</a>
+<a class="entry-item" href="平等.html">
+  <div class="noun">平等</div>
+  <div class="snippet">共济会核心理念之一，指人在上帝面前和道德意义上的平等。皮埃尔认为共济会是以行善为宗旨的博爱和平等的组织。</div>
+</a>
+<a class="entry-item" href="平行四边形的对角线.html">
+  <div class="noun">平行四边形的对角线</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中借用力学平行四边形法则来比喻历史运动的本质。他认为历史事件不是由拿破仑等个别&quot;伟人&quot;的意志决定的，而是无数个体各自不同、甚至相互矛盾的意志相互作用后产生的&quot;合力&quot;——即平行四边形的对角线。这一比喻是托尔斯泰历史哲学</div>
+</a>
+<a class="entry-item" href="幸福.html">
+  <div class="noun">幸福</div>
+  <div class="snippet">人生的终极满足状态。在小说中，皮埃尔认为人生的最大幸福在于追求善和真，即道德完善和追求真理。这一观点体现了托尔斯泰的幸福观。 --- 娜塔莎与安德烈订婚时的核心感受。娜塔莎说&quot;我太幸福了&quot;，但幸福中混杂眼泪、不安和恐惧——害怕失去、害怕等待</div>
+</a>
+<a class="entry-item" href="幸福在于相信幸福可能.html">
+  <div class="noun">幸福在于相信幸福可能</div>
+  <div class="snippet">安德烈公爵在罗斯托夫家听到娜塔莎歌唱后内心焕发新生，由此领悟到的人生哲学。他回忆起皮埃尔的话并深表赞同——&quot;要想幸福，就应当相信幸福是可能的&quot;。标志着他从奥斯特里茨后的消沉、对斯佩兰斯基幻灭后的空虚，转向对生活本身的热爱和对幸福的肯定。</div>
+</a>
+<a class="entry-item" href="幻觉.html">
+  <div class="noun">幻觉</div>
+  <div class="snippet">在没有外界刺激的情况下感知到不存在的物体或事件，通常由高烧、精神疾病或药物引起。安德烈公爵在受伤后高烧中产生了关于天空、拿破仑和家人的幻觉。</div>
+</a>
+<a class="entry-item" href="库图佐夫的失误.html">
+  <div class="noun">库图佐夫的失误</div>
+  <div class="snippet">托尔斯泰指出从理性上讲库图佐夫不应在不利条件下应战，但他和拿破仑一样都是受历史必然性驱使的不由自主的活动家。</div>
+</a>
+<a class="entry-item" href="库图佐夫的战略.html">
+  <div class="noun">库图佐夫的战略</div>
+  <div class="snippet">俄国元帅库图佐夫在1812年战争中坚持的核心军事思想，即&quot;忍耐和时间是无敌勇士&quot;。他反对冒险进攻，主张保存实力、拖延时间，让法军在俄国腹地自行消耗。这一战略最终导致拿破仑大军在冬季撤退中覆灭。</div>
+</a>
+<a class="entry-item" href="库拉金.html">
+  <div class="noun">库拉金</div>
+  <div class="snippet">小说四大家族之一，以瓦西里公爵为家长的贵族家族，是远离人民的宫廷贵族的典型代表。家族成员包括瓦西里公爵、儿子阿纳托利（花花公子）、伊波利特（低能外交官）和女儿海伦（绝色美人）。整体以贪婪虚伪、道德败坏为特征。</div>
+</a>
+<a class="entry-item" href="度支部.html">
+  <div class="noun">度支部</div>
+  <div class="snippet">沙俄时期负责国家财政收支的中央政府部门，相当于财政部。1812年拿破仑兵临莫斯科时，在该部门建筑旁的土墙前等待俄国贵族代表团前来献城。</div>
+</a>
+<a class="entry-item" href="形式主义.html">
+  <div class="noun">形式主义</div>
+  <div class="snippet">形式主义在哲学上指脱离实际内容、盲目追求外在形式的思维方法。在共济会语境中，形式主义表现为只注重表面仪式和社交活动，而忽视真正的道德修养和精神追求。皮埃尔将只关注形式和仪式的会员归入第三类和第四类，认为这些人进共济会只是为了结交达官贵人。这</div>
+</a>
+<a class="entry-item" href="形而上学.html">
+  <div class="noun">形而上学</div>
+  <div class="snippet">形而上学是哲学核心分支，研究超越经验的终极实在与根本原理。亚里士多德称之为第一哲学。托尔斯泰认为自由意志本身是形而上学研究的对象。</div>
+</a>
+<a class="entry-item" href="彼得堡上流社会.html">
+  <div class="noun">彼得堡上流社会</div>
+  <div class="snippet">彼得堡上流社会指19世纪初俄国首都圣彼得堡的贵族社交圈，以宫廷女官举办的沙龙为核心活动场所。《战争与和平》中，安娜·帕夫洛夫娜的沙龙是上流社会的典型缩影，聚会者多为名流显贵，社交氛围表面优雅而内里虚伪，托尔斯泰通过安德烈的视角批评其&quot;处处自</div>
+</a>
+<a class="entry-item" href="徘徊歧路.html">
+  <div class="noun">徘徊歧路</div>
+  <div class="snippet">彼得堡上流社会传播的关于海伦处境的说法，称她正在两条道路之间犹豫不决，不知应嫁给两位追求者中的哪一位。这一舆论刻意掩盖了她在丈夫尚在时计划改嫁的事实。</div>
+</a>
+<a class="entry-item" href="御前总指挥参谋部.html">
+  <div class="noun">御前总指挥参谋部</div>
+  <div class="snippet">1812年俄法战争期间未曾正式设立的机构。尽管沙皇亚历山大一世驻于第一军并实际号令全军，但他并未以总司令名义统军，也未设立正式的御前总指挥参谋部，只有皇帝行辕参谋部。这种模糊的指挥架构造成了各派系争斗、指挥混乱的局面。</div>
+</a>
+<a class="entry-item" href="御医.html">
+  <div class="noun">御医</div>
+  <div class="snippet">专门为皇帝及其皇室成员治病的宫廷医师。在拿破仑的宫廷中，拉雷医生担任大军团外科总长，实际上承担了皇帝御医的职责。</div>
+</a>
+<a class="entry-item" href="徭役制.html">
+  <div class="noun">徭役制</div>
+  <div class="snippet">俄语称барщина（corvée/劳役租制），是俄国农奴制下封建主剥削农民的两种主要形式之一。农民在地主土地上无偿劳动，法律上1797年规定每周不超过3天，但实际常增至5-6天。主要分布在中部黑土区（土地肥沃地区），在图拉省和库尔斯克省占</div>
+</a>
+<a class="entry-item" href="德语.html">
+  <div class="noun">德语</div>
+  <div class="snippet">德意志民族的语言，属于印欧语系日耳曼语族。19世纪俄罗斯军队中有大量德裔军官，军事术语中德语影响显著。魏罗特尔制定的奥斯特里茨作战计划即以德语写成。</div>
+</a>
+<a class="entry-item" href="德里萨营地.html">
+  <div class="noun">德里萨营地</div>
+  <div class="snippet">1812年俄法战争前夕在西德维纳河畔德里萨修筑的筑垒兵营，按普弗尔方案设计，模仿英国在伊比利亚半岛的托里什韦德拉什防线，旨在作为俄军第一军团的防御阵地牵制法军主力。因选址不当、工事未完工、容易被敌分割包围，俄军抵达后不久即放弃。</div>
+</a>
+<a class="entry-item" href="必然与自由.html">
+  <div class="noun">必然与自由</div>
+  <div class="snippet">托尔斯泰《战争与和平》尾声的核心哲学命题。自由是内容，必然是形式，两者结合才能得出关于人类生活的明确概念。自由是生命的本质，必然是理性的法则。历史研究的任务是把已知的称为必然性法则，把未知的称为自由意志。这一思想构成托尔斯泰反英雄史观的理论</div>
+</a>
+<a class="entry-item" href="必然性.html">
+  <div class="noun">必然性</div>
+  <div class="snippet">托尔斯泰认为从外部观察，人的行为服从普遍的必然法则，如同自然规律一样不可抗拒。必然性与自由意志构成人类思想史的根本矛盾。</div>
+</a>
+<a class="entry-item" href="必然性法则.html">
+  <div class="noun">必然性法则</div>
+  <div class="snippet">托尔斯泰认为假如有支配人类行动的法则，自由意志就不能存在。但自由意识使人不承认这一法则的绝对性，形成根本矛盾。</div>
+</a>
+<a class="entry-item" href="必然的法则.html">
+  <div class="noun">必然的法则</div>
+  <div class="snippet">托尔斯泰认为支配人类行动的法则与自由意志不可并存。如果承认必然性法则，则自由意志不可能存在，但人的意识又拒绝接受。</div>
+</a>
+<a class="entry-item" href="忍耐.html">
+  <div class="noun">忍耐</div>
+  <div class="snippet">承受痛苦和困难而不抱怨的品质，玛丽亚公爵小姐在悲伤中坚强地支撑家庭。</div>
+</a>
+<a class="entry-item" href="忍耐和时间.html">
+  <div class="noun">忍耐和时间</div>
+  <div class="snippet">库图佐夫的核心军事哲学。他认为战争中最重要的不是突击和冲锋，而是忍耐（терпение）和时间（время），强调等待时机、以静制动的战略思想。在与安德烈公爵的谈话中，他将忍耐和时间称为&quot;两个最强大的战士&quot;，这一理念贯穿他在1812年卫国战</div>
+</a>
+<a class="entry-item" href="忘记带东西.html">
+  <div class="noun">忘记带东西</div>
+  <div class="snippet">出门前常见的忙乱情景，总有些物品被遗漏或放错地方，需要反复检查整理。</div>
+</a>
+<a class="entry-item" href="忠诚.html">
+  <div class="noun">忠诚</div>
+  <div class="snippet">安德烈公爵信任娜塔莎的忠诚，但又深知年轻与寂寞可能带来的变数。他告诉娜塔莎&quot;您是自由的&quot;，并请她&quot;只找皮埃尔讨主意和帮助&quot;。这种对忠诚的信任与不安，为小说后续娜塔莎被阿纳托利诱惑的转折埋下伏笔。</div>
+</a>
+<a class="entry-item" href="总司令官.html">
+  <div class="noun">总司令官</div>
+  <div class="snippet">军队或战区的最高指挥官，负责统率全部作战部队。在拿破仑战争时期，俄军总司令为库图佐夫元帅，法军总司令为拿破仑皇帝本人。</div>
+</a>
+<a class="entry-item" href="总司令错误的辩护.html">
+  <div class="noun">总司令错误的辩护</div>
+  <div class="snippet">托尔斯泰指出官方史书为不会犯错误的总司令辩护，将舍瓦尔金诺多面堡重新解释为前哨而非左翼阵地，以掩盖俄军指挥的失误。</div>
+</a>
+<a class="entry-item" href="恐惧.html">
+  <div class="noun">恐惧</div>
+  <div class="snippet">面对危险或痛苦时的害怕心理，小公爵夫人对分娩之痛流露出孩子般的恐惧。</div>
+</a>
+<a class="entry-item" href="悲哀.html">
+  <div class="noun">悲哀</div>
+  <div class="snippet">深切的悲伤和哀痛，本章中童山一家人因安德烈疑似阵亡而沉浸在悲哀之中。</div>
+</a>
+<a class="entry-item" href="情夫.html">
+  <div class="noun">情夫</div>
+  <div class="snippet">指与有夫之妇保持不正当性关系的男性。在本卷中指多洛霍夫与皮埃尔的妻子海伦之间的通奸关系，是导致皮埃尔与多洛霍夫决斗的直接原因。</div>
+</a>
+<a class="entry-item" href="意义.html">
+  <div class="noun">意义</div>
+  <div class="snippet">事物存在的价值和目的，本章中生死交织引发了关于生命意义的深层思考。</div>
+</a>
+<a class="entry-item" href="意志与理性.html">
+  <div class="noun">意志与理性</div>
+  <div class="snippet">托尔斯泰区分意志与理性：理性只能从外部观察人，而意志通过内在意识被认识。人通过理性观察自己，但只有通过意识才认识自己。</div>
+</a>
+<a class="entry-item" href="意志自由.html">
+  <div class="noun">意志自由</div>
+  <div class="snippet">托尔斯泰探讨的人是否能凭意志随意行动的问题。他认为假如每个人的意志都是自由的，全部历史就会成为互不连贯的偶然事件。</div>
+</a>
+<a class="entry-item" href="意志自由问题.html">
+  <div class="noun">意志自由问题</div>
+  <div class="snippet">托尔斯泰认为意志自由问题自古以来就占据最卓越的人类头脑，历史的所有矛盾和含糊都源于这个问题没有得到解决。</div>
+</a>
+<a class="entry-item" href="意志表现.html">
+  <div class="noun">意志表现</div>
+  <div class="snippet">托尔斯泰认为史学家只考察历史人物的意志表现（以命令方式与事件相关联），便误以为事件以命令为转移，实则相反。</div>
+</a>
+<a class="entry-item" href="意识.html">
+  <div class="noun">意识</div>
+  <div class="snippet">意识是人对自己心灵中所发生之事的知觉，是哲学核心概念。在《战争与和平》中，托尔斯泰将意识视为意志自由的基础，意识说&#x27;只有我一个，一切存在都不过是我&#x27;。</div>
+</a>
+<a class="entry-item" href="意识的自由.html">
+  <div class="noun">意识的自由</div>
+  <div class="snippet">托尔斯泰认为人通过意识直接感受到自己是自由的，这种意识完全独立于理性，不依赖自我认识的任何来源。</div>
+</a>
+<a class="entry-item" href="慈善机关和教育机关.html">
+  <div class="noun">慈善机关和教育机关</div>
+  <div class="snippet">指玛丽亚·费奥多罗夫娜皇后所管辖的俄国皇室慈善与教育机构体系。皇后在战争期间下令将这些机构疏散到喀山，体现了俄国皇室在1812年战争中的应对措施。</div>
+</a>
+<a class="entry-item" href="慈悲.html">
+  <div class="noun">慈悲</div>
+  <div class="snippet">对他人苦难的同情和愿意帮助的善心。在基督教传统中，慈悲是上帝的主要属性之一，也是信徒应当践行的美德。</div>
+</a>
+<a class="entry-item" href="慷慨.html">
+  <div class="noun">慷慨</div>
+  <div class="snippet">共济会七美德之六，要求会员慷慨大方，为入会仪式需交出所有贵重物品（表、钱、戒指等），象征对世俗财物的超脱。 --- 皮埃尔认为自己具备的品德之一，是践行共济会爱邻人德行的具体表现。</div>
+</a>
+<a class="entry-item" href="战争.html">
+  <div class="noun">战争</div>
+  <div class="snippet">国家或政治集团之间的武装冲突。托尔斯泰在小说中解构了战争的神圣光环，揭示其本质是&quot;欺骗、背叛、盗窃、杀人放火&quot;等罪行的总和，是人性兽性的爆发。</div>
+</a>
+<a class="entry-item" href="战利品.html">
+  <div class="noun">战利品</div>
+  <div class="snippet">作战时从敌方缴获的武器、装备、旗帜等物品。在军事传统中，战利品既是个人战功的证明，也是军队战果的实物证据。在《战争与和平》中，多洛霍夫将从法军缴获的军刀和子弹盒作为战利品向团长展示，以证明自己的战功。</div>
+</a>
+<a class="entry-item" href="战后创伤记忆.html">
+  <div class="noun">战后创伤记忆</div>
+  <div class="snippet">皮埃尔在波罗金诺战役后出现的创伤后应激反应，包括幻觉般重现战场的枪声、炮声、呻吟和血腥味，伴随对死亡的强烈恐惧，体现战争对士兵心灵的深度伤害。</div>
+</a>
+<a class="entry-item" href="战场.html">
+  <div class="noun">战场</div>
+  <div class="snippet">两军交战的场所。按作战空间可分为陆上、海上、空中等战场。奥斯特里茨战场位于今捷克境内，是拿破仑战争中最著名的战场之一。</div>
+</a>
+<a class="entry-item" href="战役.html">
+  <div class="noun">战役</div>
+  <div class="snippet">军团为达成战争的局部或全局目的，在统一指挥下于一定时间和空间内进行的一系列战斗组成的作战行动。介于战争与战斗之间，如奥斯特里茨战役。</div>
+</a>
+<a class="entry-item" href="战斗部署.html">
+  <div class="noun">战斗部署</div>
+  <div class="snippet">军事上指战役或会战前的部队布置、兵力分配和作战计划。本章中拿破仑为波罗金诺战役口授了详细的战斗部署，由史学家记录和叙述。</div>
+</a>
+<a class="entry-item" href="战败.html">
+  <div class="noun">战败</div>
+  <div class="snippet">在战争中失败，老公爵从官方消息中知道俄国军队在奥斯特利茨战败。</div>
+</a>
+<a class="entry-item" href="所罗门圣殿.html">
+  <div class="noun">所罗门圣殿</div>
+  <div class="snippet">古代以色列国王所罗门在耶路撒冷建造的第一圣殿，是共济会最核心的象征来源，代表人类精神修行的终极隐喻。小说中拉斯托普钦伯爵用此词讽刺共济会员，指责他们假借建设所罗门圣殿之名而行破坏俄国之实。</div>
+</a>
+<a class="entry-item" href="所罗门神殿.html">
+  <div class="noun">所罗门神殿</div>
+  <div class="snippet">共济会象征体系的核心建筑意象。共济会以所罗门神殿的石匠为源头传说，七美德对应神殿的七级台阶，会员建造内在神殿象征精神完善。</div>
+</a>
+<a class="entry-item" href="托勒美天动说.html">
+  <div class="noun">托勒美天动说</div>
+  <div class="snippet">托勒密地心体系（天动说）是公元2世纪托勒密在《天文学大成》中提出的宇宙模型，主张地球静止于宇宙中心，日月行星绕地球运行，引入本轮-均轮理论解释行星逆行。</div>
+</a>
+<a class="entry-item" href="托尔斯泰对波罗金诺的考证.html">
+  <div class="noun">托尔斯泰对波罗金诺的考证</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中对波罗金诺战役进行的详细军事历史考证，一方面基于史料，另一方面基于他对战场地理的第一手调查，揭示了官方记述与实际情况的差距。</div>
+</a>
+<a class="entry-item" href="托斯卡纳人.html">
+  <div class="noun">托斯卡纳人</div>
+  <div class="snippet">意大利托斯卡纳地区的居民，托斯卡纳首府为文艺复兴重镇佛罗伦萨，1807年被拿破仑控制并入法兰西帝国，其士兵被编入法军参加了1812年对俄远征。</div>
+</a>
+<a class="entry-item" href="批判现实主义.html">
+  <div class="noun">批判现实主义</div>
+  <div class="snippet">19世纪在欧洲形成的文艺思潮和创作方法，以真实揭露社会现实、批判资本主义制度矛盾为特征。高尔基正式提出这一术语。代表作家包括巴尔扎克、司汤达、狄更斯、托尔斯泰等。托尔斯泰被公认为俄国批判现实主义文学最杰出的代表。</div>
+</a>
+<a class="entry-item" href="承诺.html">
+  <div class="noun">承诺</div>
+  <div class="snippet">安德烈公爵坚守对父亲的承诺（婚期推迟一年之内）和对自己诺言的遵守。当娜塔莎问&quot;非这样不可吗？&quot;，他的表情说明&quot;这个决定不能改变&quot;。他也请娜塔莎承诺有事找皮埃尔帮忙，体现了贵族对信义的重视。</div>
+</a>
+<a class="entry-item" href="抓住衣兜.html">
+  <div class="noun">抓住衣兜</div>
+  <div class="snippet">皮埃尔在与士兵分别后本能地想掏钱酬谢士兵，但内心有个声音阻止了他。这一细节体现皮埃尔在战争经历的触动下，开始反思贵族与平民之间的金钱关系。</div>
+</a>
+<a class="entry-item" href="披巾舞.html">
+  <div class="noun">披巾舞</div>
+  <div class="snippet">法语称pas de châle，是19世纪俄国贵族沙龙中的一种欧式舞蹈，舞者手持披巾或纱巾起舞。在小说中，杰尼索夫在娜塔莎邀请下去约格尔舞会时开玩笑说准备跳披巾舞。这一舞蹈象征了俄国贵族的法国化教育传统，与娜塔莎后来在小屋中跳的俄罗斯民间舞</div>
+</a>
+<a class="entry-item" href="担架队.html">
+  <div class="noun">担架队</div>
+  <div class="snippet">由民兵组成的战场伤员运输队伍，使用简易担架将伤员从火线抬往后方救护站，是19世纪战场医疗救护体系的重要组成部分。</div>
+</a>
+<a class="entry-item" href="拉奥孔.html">
+  <div class="noun">拉奥孔</div>
+  <div class="snippet">希腊神话中的特洛伊城祭司，因识破希腊人的木马计并警告特洛伊人而触怒雅典娜，最终与两个儿子被巨蟒缠死。西方文化中拉奥孔象征说出真相却不被相信的悲剧先知，其雕像是古希腊雕塑的杰作。文中尼古拉的戒指上刻有拉奥孔头像，作为他承诺不再动武的提醒物。</div>
+</a>
+<a class="entry-item" href="拉长战线.html">
+  <div class="noun">拉长战线</div>
+  <div class="snippet">拿破仑战争中法军因不断深入俄国腹地而导致补给线过长、兵力分散的战略困境。托尔斯泰指出这是拿破仑在波罗金诺战役前已意识到的危险。</div>
+</a>
+<a class="entry-item" href="拖木头比喻.html">
+  <div class="noun">拖木头比喻</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声第二部第七章中用来解释权力起源的著名比喻。许多人一起拖一根木头，每人都发表意见，木头拖走后发现恰好符合其中某人的意见，于是此人被视为&quot;发号施令者&quot;。托尔斯泰借此说明：权力是一种事后的归因而非真正的原因，动手越多的</div>
+</a>
+<a class="entry-item" href="拿破仑本人.html">
+  <div class="noun">拿破仑本人</div>
+  <div class="snippet">伊林在与博古恰罗沃农民开玩笑时，指着拉夫鲁什卡说这就是拿破仑本人，用戏谑的方式吓唬农民，反映了当时俄国乡村对拿破仑既恐惧又好奇的复杂心态。</div>
+</a>
+<a class="entry-item" href="拿破仑的失误.html">
+  <div class="noun">拿破仑的失误</div>
+  <div class="snippet">托尔斯泰对拿破仑在波罗金诺战役中决策的分析，指出拿破仑发动这场战役从战略上看是不明智的，导致法军损失四分之一兵力且拉长了战线。</div>
+</a>
+<a class="entry-item" href="挑逗醋意.html">
+  <div class="noun">挑逗醋意</div>
+  <div class="snippet">海伦为上流社会筹备改嫁舆论而使用的社交策略之一，通过挑逗那位年老的大官的醋意，促使他产生占有欲，从而推动求婚进程。</div>
+</a>
+<a class="entry-item" href="排射.html">
+  <div class="noun">排射</div>
+  <div class="snippet">排射（Fire by Rank），拿破仑战争时期步兵射击战术之一，以排为单位轮流射击以形成连续火力。线列步兵通常排成二至三排横队，各排交替射击、装填，维持不间断的弹幕。与全队齐射相比，排射能提供更持久的压制火力。</div>
+</a>
+<a class="entry-item" href="掩藏激动的心情.html">
+  <div class="noun">掩藏激动的心情</div>
+  <div class="snippet">瓦西里公爵在向女儿海伦表示支持时的神态描写。他努力掩饰内心的激动，简短地表达了对女儿的支持后便匆匆走开，体现了父女之间微妙的关系。</div>
+</a>
+<a class="entry-item" href="撒母耳记.html">
+  <div class="noun">撒母耳记</div>
+  <div class="snippet">《撒母耳记》是《圣经·旧约》中的两卷书，分为撒母耳记上（31章）和撒母耳记下（24章），原为一卷。该书主要记载了以色列从士师时期向王国时期过渡的历史，以三位核心人物为主线：撒母耳（以色列最后一位士师、先知）、扫罗（以色列第一位国王）和大卫（</div>
+</a>
+<a class="entry-item" href="改良.html">
+  <div class="noun">改良</div>
+  <div class="snippet">指对农业生产和管理方式的改进。小说中安德烈公爵在退隐乡间期间致力于庄园管理改革，向皮埃尔介绍他在园田管理方面的改良措施。</div>
+</a>
+<a class="entry-item" href="政治均势.html">
+  <div class="noun">政治均势</div>
+  <div class="snippet">政治均势又称势力均衡，是国际政治理论的核心概念，指国际体系中各主要国家之间的力量大致相等，从而防止任何一国取得霸权地位的状态。在欧洲历史上，均势原则是国际秩序的基本逻辑，从1648年《威斯特伐利亚和约》到1815年维也纳会议建立的欧洲协调体</div>
+</a>
+<a class="entry-item" href="政治犯.html">
+  <div class="noun">政治犯</div>
+  <div class="snippet">因政治见解或行为触犯统治者利益而被监禁的犯人。在《战争与和平》中，指梅什科夫和韦列夏金等被拉斯托普钦关押的人。</div>
+</a>
+<a class="entry-item" href="政治经济学.html">
+  <div class="noun">政治经济学</div>
+  <div class="snippet">政治经济学是研究社会财富生产、分配、交换和消费过程中社会生产关系及其运动规律的科学。古典政治经济学以斯密、李嘉图为代表，马克思在此基础上创立剩余价值论。</div>
+</a>
+<a class="entry-item" href="政治联姻.html">
+  <div class="noun">政治联姻</div>
+  <div class="snippet">19世纪俄国贵族社会中以财富、地位和家族利益为驱动的婚姻模式。小说中最典型的例子是皮埃尔被迫娶海伦（库拉金公爵觊觎其遗产）、鲍里斯追求朱莉（觊觎其陪嫁），以及阿纳托利追求玛丽亚公爵小姐未遂。托尔斯泰深刻批判了这种将婚姻当作交易的功利主义。</div>
+</a>
+<a class="entry-item" href="敌基督.html">
+  <div class="noun">敌基督</div>
+  <div class="snippet">基督教末世论中的重要概念，意为反对基督者，特指以假冒基督的方式来反对基督的势力。该词出现在《约翰一书》中。在《战争与和平》的开篇，安娜·帕夫洛夫娜用此词指称拿破仑，将他视为基督教的敌人和一切惨祸的制造者。</div>
+</a>
+<a class="entry-item" href="救主.html">
+  <div class="noun">救主</div>
+  <div class="snippet">基督教对耶稣基督的核心称呼，源于耶稣之名意为&quot;天主拯救&quot;，基督徒认为耶稣是上帝的儿子，降世为要拯救世人脱离罪恶，获得永生。</div>
+</a>
+<a class="entry-item" href="救赎.html">
+  <div class="noun">救赎</div>
+  <div class="snippet">基督教神学概念，指通过信仰获得灵魂的拯救。玛丽亚公爵小姐在悲伤中思考安息与幸福的来世。</div>
+</a>
+<a class="entry-item" href="散兵游勇.html">
+  <div class="noun">散兵游勇</div>
+  <div class="snippet">因后勤断绝而脱离建制四处抢劫的俄军士兵，占全军一半，在村庄中烧杀抢掠无所不为。</div>
+</a>
+<a class="entry-item" href="散兵线.html">
+  <div class="noun">散兵线</div>
+  <div class="snippet">军事术语，士兵在战斗中分散成横线状排列的战斗队形。间距通常5至8米，可灵活利用地形掩护。19世纪下半叶随着后装线膛枪普及成为主流战术，核心目的是降低敌方火力杀伤效果。</div>
+</a>
+<a class="entry-item" href="文化史.html">
+  <div class="noun">文化史</div>
+  <div class="snippet">以人类文化现象为研究对象的历史学分支，关注精神活动、观念、思想等。19世纪文化史学家认为精神活动是历史运动的原因，将智力活动作为历史事件的终极解释。</div>
+</a>
+<a class="entry-item" href="文化史家.html">
+  <div class="noun">文化史家</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声中批判的对象之一。他批评&quot;文化史家&quot;回避&quot;权力是什么&quot;这个历史的主要问题，说了一些文不对题的话。托尔斯泰将历史科学比作流通的货币，认为传记和各民族史专著如纸币，而世界通史家和文化史家如以轻金属铸成的硬币——只能叮</div>
+</a>
+<a class="entry-item" href="斯拉夫教士.html">
+  <div class="noun">斯拉夫教士</div>
+  <div class="snippet">指在东正教礼仪中使用教会斯拉夫语诵读经文的东正教神职人员。教会斯拉夫语的朗读传统具有独特的庄重语调，元音不弱化、词尾辅音不清化，托尔斯泰在小说中特别描写了这种声调不可抗拒地感动俄国人的心灵。</div>
+</a>
+<a class="entry-item" href="新生.html">
+  <div class="noun">新生</div>
+  <div class="snippet">新生命的诞生，丽莎的分娩带来新生命的希望，与安德烈疑似死亡的悲痛形成对比。</div>
+</a>
+<a class="entry-item" href="新约.html">
+  <div class="noun">新约</div>
+  <div class="snippet">圣经的第二部分，共27卷，记载耶稣基督的生平、教训、受死与复活，以及早期教会的建立与发展。通用希腊文写成，成书于公元1世纪。</div>
+</a>
+<a class="entry-item" href="方阵.html">
+  <div class="noun">方阵</div>
+  <div class="snippet">方阵（Infantry Square）是拿破仑战争时期步兵用于对抗骑兵冲锋的防御阵形。士兵四面朝外排列成密集方形，消除侧翼和后方弱点。主要分为空心方阵（经典形式，中间留空保护旗手和伤员）和实心方阵。缺点是火力覆盖面积小、机动性差。</div>
+</a>
+<a class="entry-item" href="无人放牧的牲口比喻.html">
+  <div class="noun">无人放牧的牲口比喻</div>
+  <div class="snippet">托尔斯泰将进入莫斯科后的法军比作无人看管的牲口，踩踏脚下可赖以生存的饲料而无意义地消耗，最终走向灭亡，以此批判拿破仑军事决策的荒谬和历史必然性。</div>
+</a>
+<a class="entry-item" href="无可争辩的论据.html">
+  <div class="noun">无可争辩的论据</div>
+  <div class="snippet">库拉金公爵夫人从神父处获得的《福音书》证据，她自以为这些论据无可辩驳，但海伦轻松地用神父有宽恕权的理由将其驳回。</div>
+</a>
+<a class="entry-item" href="无形的手.html">
+  <div class="noun">无形的手</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中使用的历史哲学隐喻，指支配历史进程的超越个人意志的必然性力量。拿破仑被流放后仍试图为自己的行为辩护，但托尔斯泰指出人们当作权势的东西不过是一只引导着他的无形的手——即历史必然性。</div>
+</a>
+<a class="entry-item" href="无神论者.html">
+  <div class="noun">无神论者</div>
+  <div class="snippet">不相信神或超自然力量存在的人。在小说中，安德烈公爵在经历战争和丧妻之痛后一度持无神论观点，后来在与皮埃尔的哲学对话中开始动摇。</div>
+</a>
+<a class="entry-item" href="无私的朋友.html">
+  <div class="noun">无私的朋友</div>
+  <div class="snippet">文中对比利宾与海伦关系的定性，指比利宾不像海伦的其他追求者那样怀有浪漫意图，而是以纯粹朋友身份提供建议的海伦的亲密男性友人。</div>
+</a>
+<a class="entry-item" href="无穷因果关系.html">
+  <div class="noun">无穷因果关系</div>
+  <div class="snippet">托尔斯泰论述的因果观：因果锁链是无穷无尽的，人的每一行动既是以往现象的结果又是以后现象的原因。理性的第一要求是假设和探求原因。历史应放弃原因的概念转向寻求法则，如同天文学从托勒密体系发展到牛顿体系，历史学也应从追问原因转向发现规律。</div>
+</a>
+<a class="entry-item" href="无责任能力.html">
+  <div class="noun">无责任能力</div>
+  <div class="snippet">刑法学术语，指行为人因未达刑事责任年龄（不满14周岁）或精神障碍（不能辨认或控制自己行为）而不具有刑事责任能力。托尔斯泰在《战争与和平》中指出，一切法典所承认的无责任能力和减罪情形建立在三类根据之上：人与外部世界的关系、时间距离、对行为原因</div>
+</a>
+<a class="entry-item" href="无限循环.html">
+  <div class="noun">无限循环</div>
+  <div class="snippet">托尔斯泰指出人类智慧在一切思维领域最终都达到无限循环，如电生热、热生电、原子相吸、原子相拒，历史分析也是如此。</div>
+</a>
+<a class="entry-item" href="日内瓦人.html">
+  <div class="noun">日内瓦人</div>
+  <div class="snippet">瑞士日内瓦的居民，日内瓦原为独立的城市共和国，1798年被拿破仑法军吞并入法国，1815年维也纳会议后加入瑞士联邦，成为瑞士的第22个州。</div>
+</a>
+<a class="entry-item" href="日常生活的环境.html">
+  <div class="noun">日常生活的环境</div>
+  <div class="snippet">皮埃尔在经历战争恐怖后内心极度渴望回归的熟悉、安宁的日常生活状态。他认为只有在日常环境中才能理解自己所看到和经历的一切。</div>
+</a>
+<a class="entry-item" href="时间.html">
+  <div class="noun">时间</div>
+  <div class="snippet">时间是物质运动变化的持续性表现，哲学和物理学的基本范畴。托尔斯泰认为理性视时间为没有刹那间休息的无限运动。</div>
+</a>
+<a class="entry-item" href="时间上的自由.html">
+  <div class="noun">时间上的自由</div>
+  <div class="snippet">托尔斯泰论证的哲学命题：无论怎样缩短判断与行动之间的时间距离，也无法获得时间上自由的观念。因为时间一去不复返，在过去的那一时刻只能做一个动作。要想象行动是自由的，就必须把它想象成超出时间以外，这是不可能的。</div>
+</a>
+<a class="entry-item" href="昏迷.html">
+  <div class="noun">昏迷</div>
+  <div class="snippet">深度且持久的无意识状态，患者看似睡着但无法被唤醒。在战场上多由严重颅脑外伤或失血性休克引起。安德烈公爵在普拉茨山受伤后曾一度失去知觉。</div>
+</a>
+<a class="entry-item" href="春天.html">
+  <div class="noun">春天</div>
+  <div class="snippet">冬季过后万物复苏的季节，云雀飞来标志着春天的到来。</div>
+</a>
+<a class="entry-item" href="春天（战争与和平象征）.html">
+  <div class="noun">春天（战争与和平象征）</div>
+  <div class="snippet">《战争与和平》中象征生命复苏和精神重生的核心意象。春天通过老橡树从枯槁到繁茂的转变，与安德烈公爵从绝望到觉醒的精神历程相呼应。娜塔莎在月夜中对生命的热爱和向往成为安德烈&quot;复活&quot;的重要契机。托尔斯泰通过春天—老橡树—安德烈的三位一体象征，将自</div>
+</a>
+<a class="entry-item" href="显贵的遗孀.html">
+  <div class="noun">显贵的遗孀</div>
+  <div class="snippet">比利宾为海伦描绘的理想身份规划，即先嫁给老伯爵，待其去世后成为贵族遗孀，这样年轻亲王就可以体面地娶她而不影响身份地位。</div>
+</a>
+<a class="entry-item" href="普特.html">
+  <div class="noun">普特</div>
+  <div class="snippet">沙皇时期俄国及苏联时期使用的传统重量单位，1普特等于40俄磅，约合16.38千克，起源于古罗斯的格里夫纳，在俄语文学作品中常见。 --- 沙皇时期俄国重量单位，1普特等于40俄磅，约合16.38公斤。起源于古罗斯格里夫纳，苏联时期仍用于粮食</div>
+</a>
+<a class="entry-item" href="智慧树.html">
+  <div class="noun">智慧树</div>
+  <div class="snippet">出自《圣经·旧约·创世记》，又称知善恶树、分辨善恶树。上帝将亚当和夏娃安置在伊甸园中，吩咐他们不可吃智慧树上的果子。夏娃受蛇诱惑吃了禁果并给了亚当，两人因此被逐出伊甸园，在基督教教义中被视为人类原罪的起源。</div>
+</a>
+<a class="entry-item" href="暮色.html">
+  <div class="noun">暮色</div>
+  <div class="snippet">波罗金诺战役结束后的傍晚时分，天色渐暗，炮声平息，战场逐渐沉入宁静与黑暗，象征着战争惨烈的白昼结束和战后沉思的开始。</div>
+</a>
+<a class="entry-item" href="月光与阴影.html">
+  <div class="noun">月光与阴影</div>
+  <div class="snippet">托尔斯泰在描写玛丽亚公爵小姐独自静坐时的环境意象。日落后风停，夜宁静而空气新鲜，满月从菩提树后升起，乳白色含露的雾弥漫开来，月光与阴影的交替映照出玛丽亚内心的矛盾与孤独。</div>
+</a>
+<a class="entry-item" href="服从.html">
+  <div class="noun">服从</div>
+  <div class="snippet">共济会七美德之二，要求会员服从本会最高地位的人，将个人意志服从于组织的权威和不容置疑的真理。</div>
+</a>
+<a class="entry-item" href="服从权力.html">
+  <div class="noun">服从权力</div>
+  <div class="snippet">托尔斯泰认为从物质方面看，服从权力的那些人是事件的原因。权力不是事件的原因，而是事件的结果。</div>
+</a>
+<a class="entry-item" href="期票.html">
+  <div class="noun">期票</div>
+  <div class="snippet">期票（Promissory Note）是一种古老的债务凭证，由债务人向债权人出具，承诺在指定日期无条件支付一定金额。在19世纪俄国贵族社会是常见的借贷工具。本卷中伯爵夫人手持安娜·米哈伊洛夫娜出具的二千卢布期票不知如何处理，反映罗斯托夫家财</div>
+</a>
+<a class="entry-item" href="未完成的工事.html">
+  <div class="noun">未完成的工事</div>
+  <div class="snippet">指俄军在波罗金诺战场上匆忙构筑但未能完成的防御工事。八月二十五日开始挖掘，到二十六日战役打响时仍未竣工。</div>
+</a>
+<a class="entry-item" href="权力.html">
+  <div class="noun">权力</div>
+  <div class="snippet">政治哲学核心概念，指影响他人行为、实现自身意志的能力。托尔斯泰在书中探讨的&quot;权力&quot;特指历史人物支配事件进程的力量，以及这种权力与历史运动之间的因果关系。</div>
+</a>
+<a class="entry-item" href="权力定义.html">
+  <div class="noun">权力定义</div>
+  <div class="snippet">托尔斯泰定义权力为某个人与别人的关系——对正在进行的集体行动越多发表意见、预言和辩解的人，越少参加行动。</div>
+</a>
+<a class="entry-item" href="村公社.html">
+  <div class="noun">村公社</div>
+  <div class="snippet">俄语称&quot;община&quot;或&quot;мир&quot;，是俄罗斯帝国时期农村的基层自治组织，以连环保方式集体占有土地、定期重新分配耕地、共同承担赋税和兵役。19世纪俄国思想家如赫尔岑和民粹派将其视为社会主义的萌芽。小说中博古恰罗沃农民通过村公社集会集体决定不提</div>
+</a>
+<a class="entry-item" href="来世.html">
+  <div class="noun">来世</div>
+  <div class="snippet">死后灵魂继续存在的世界，即彼岸世界。在小说中，皮埃尔与安德烈公爵围绕来世是否存在展开深刻哲学辩论，安德烈从丧妻之痛中感悟到来世的必然性。</div>
+</a>
+<a class="entry-item" href="枢密院.html">
+  <div class="noun">枢密院</div>
+  <div class="snippet">俄国最高国家行政和司法机构之一，由彼得大帝设立，负责处理国家重大事务。在1812年莫斯科撤退期间也参与撤离。</div>
+</a>
+<a class="entry-item" href="枪骑兵.html">
+  <div class="noun">枪骑兵</div>
+  <div class="snippet">以骑枪（长矛）为主要武器的骑兵兵种，起源于波兰。拿破仑战争时期广泛使用，法军近卫军波兰枪骑兵团尤为著名。骑枪长约3米，可先于刺刀攻击步兵方阵。 --- 枪骑兵（Lancer/Uhlan），18-19世纪欧洲骑兵类型，以长矛为主要武器，同时使</div>
+</a>
+<a class="entry-item" href="柏拉图式的爱情.html">
+  <div class="noun">柏拉图式的爱情</div>
+  <div class="snippet">源自古希腊哲学家柏拉图的精神恋爱观，指超越肉体欲望、追求心灵和精神层面契合的爱情。皮埃尔对娜塔莎的感情即被朗巴形容为&quot;柏拉图式的爱情&quot;，朗巴以法国人的浪漫态度对此表示不以为然，认为这种爱情虚无缥缈。</div>
+</a>
+<a class="entry-item" href="柏林内阁.html">
+  <div class="noun">柏林内阁</div>
+  <div class="snippet">指普鲁士国王腓特烈·威廉三世周围的非正式内阁顾问决策体系。拿破仑战争期间，普鲁士因内阁决策分散、国王优柔寡断，在参战与中立间摇摆不定，最终在1806年耶拿战役中惨败。</div>
+</a>
+<a class="entry-item" href="梅克伦堡人.html">
+  <div class="noun">梅克伦堡人</div>
+  <div class="snippet">来自德国东北部梅克伦堡地区的德意志人，该地区历史上分为梅克伦堡-什未林和梅克伦堡-施特雷利茨两个公国，拿破仑时期加入莱茵邦联，参与了1812年侵俄战争。</div>
+</a>
+<a class="entry-item" href="死亡.html">
+  <div class="noun">死亡</div>
+  <div class="snippet">生命的终结。在《战争与和平》中，死亡是贯穿全书的核心主题之一，安德烈公爵在濒死体验中领悟到生命的真谛和爱的价值。</div>
+</a>
+<a class="entry-item" href="死的恐怖.html">
+  <div class="noun">死的恐怖</div>
+  <div class="snippet">皮埃尔目睹法军行刑后经历的存在主义震撼，导致其对世界、信仰的全盘崩溃，但也正是通过直面死亡恐惧，他最终获得了精神的觉醒与内心的和谐。</div>
+</a>
+<a class="entry-item" href="死的畏惧.html">
+  <div class="noun">死的畏惧</div>
+  <div class="snippet">皮埃尔在波罗金诺战役后体验到的对死亡的强烈恐惧。尽管他之前一直渴望理解战争，但亲身经历后死亡的真实性给他带来了深刻的精神冲击。</div>
+</a>
+<a class="entry-item" href="死罪.html">
+  <div class="noun">死罪</div>
+  <div class="snippet">基督教教义中最严重的罪孽等级，指使人灵魂死亡、需要特殊忏悔和赦免的重大罪行。在讨论海伦的婚姻问题时作为与轻罪对比的极端情形被提及。</div>
+</a>
+<a class="entry-item" href="母子平安.html">
+  <div class="noun">母子平安</div>
+  <div class="snippet">祝福产妇和婴儿都安全的吉祥话，反映了分娩时家人的最大心愿。</div>
+</a>
+<a class="entry-item" href="毒舌.html">
+  <div class="noun">毒舌</div>
+  <div class="snippet">在《战争与和平》中特指申申（Shinshin）的社交绰号。俄语社交文化中盛行以绰号（прозвище）评价人物的特点，这种绰号往往一针见血、带有讽刺意味。&quot;毒舌&quot;意为说话尖酸刻薄、善于讽刺挖苦之人。申申在莫斯科交际场中以机智幽默的谈吐和善于</div>
+</a>
+<a class="entry-item" href="比较动物学.html">
+  <div class="noun">比较动物学</div>
+  <div class="snippet">托尔斯泰批评比较动物学用进化论解释自由意志问题，认为人从猴子变来与用土做成同样可理解，都无助于解决自由意志与必然性的矛盾。</div>
+</a>
+<a class="entry-item" href="比较生理学.html">
+  <div class="noun">比较生理学</div>
+  <div class="snippet">托尔斯泰批评用比较生理学解决自由意志与必然性问题的做法，认为从动物身上只能观察到筋肉和神经活动，无法观察到人的意识。</div>
+</a>
+<a class="entry-item" href="比较语言学.html">
+  <div class="noun">比较语言学</div>
+  <div class="snippet">比较语言学是历史语言学的分支，通过比较不同语言的语音、词汇、语法系统来确定语言间的历史亲缘关系并重构祖语。1786年威廉·琼斯指出梵语与拉丁语、希腊语的系统对应关系为其开端。</div>
+</a>
+<a class="entry-item" href="民军.html">
+  <div class="noun">民军</div>
+  <div class="snippet">即ополчение，指1812年俄法战争中由非正规军人（农民、市民等）组成的临时武装力量。在小说中，身穿民军服装的年轻人在朱莉的晚会上出现，是莫斯科上流社会青年踊跃参军的缩影。民军在俄军撤退和反攻中发挥了重要的兵员补充和辅助作战作用。</div>
+</a>
+<a class="entry-item" href="民族主义派.html">
+  <div class="noun">民族主义派</div>
+  <div class="snippet">1812年俄法战争期间以巴格拉季翁、叶尔莫洛夫为代表的俄国主战派。他们具有强烈的民族主义情绪，反对德裔军事理论家的撤退计划，主张立即攻入波兰、与拿破仑决战。此派被誉为&quot;大胆行动的代表&quot;，但也在辩论中变得偏激。</div>
+</a>
+<a class="entry-item" href="民族迁徙.html">
+  <div class="noun">民族迁徙</div>
+  <div class="snippet">指一个或多个民族的全部或大部由一个地区到另一个地区的大规模迁居。托尔斯泰在《战争与和平》的历史哲学中讨论国家形成和瓦解的原因时提到了民族迁徙，将其视为推动历史海洋深处运动的深层力量之一，与群众的黩武活动、政治格局变化相互交织。</div>
+</a>
+<a class="entry-item" href="民约论.html">
+  <div class="noun">民约论</div>
+  <div class="snippet">即卢梭著《社会契约论》，1762年出版的政治哲学著作，提出&quot;主权在民&quot;思想，认为国家主权属于人民，政府只是主权者的执行人，对法国大革命和美国独立宣言产生深远影响。</div>
+</a>
+<a class="entry-item" href="民间音乐的魅力.html">
+  <div class="noun">民间音乐的魅力</div>
+  <div class="snippet">托尔斯泰在本章中通过三弦琴和吉他两种乐器展现的俄罗斯民间音乐感染力。民间音乐在这里不是舞台表演而是生活的一部分，是情感的自然流露。娜塔莎认为三弦琴声&quot;不是好听，而是美极了&quot;，称其为&quot;音乐魅力的顶峰&quot;。</div>
+</a>
+<a class="entry-item" href="永恒.html">
+  <div class="noun">永恒</div>
+  <div class="snippet">超越时间的无限存在状态。小说中安德烈公爵在奥斯特利茨战役后第一次看见了那个崇高的永恒的天空，象征他对生命终极意义的感悟。 --- 无尽的时间概念。季姆勒说很难想象永恒是什么样子，娜塔莎则反驳认为永恒 并不难想象：现在有今天，将来有明天，永远</div>
+</a>
+<a class="entry-item" href="求道者.html">
+  <div class="noun">求道者</div>
+  <div class="snippet">共济会入会仪式中对候选人的称呼之一，象征寻求真理与启蒙的人。在仪式巡礼中此称号随槌子和宝剑声交替使用。</div>
+</a>
+<a class="entry-item" href="法军.html">
+  <div class="noun">法军</div>
+  <div class="snippet">法兰西第一帝国军队（大军团，Grande Armee），拿破仑创建和指挥的欧洲最强大军事力量。以军制改革、快速机动和灵活战术著称，在奥斯特里茨战役中击败俄奥联军达到鼎盛。 --- 法军即法国军队，在拿破仑战争时期（1803-1815）指法兰</div>
+</a>
+<a class="entry-item" href="法军先锋.html">
+  <div class="noun">法军先锋</div>
+  <div class="snippet">法国军队的先头部队，在1812年入侵俄国过程中担任前导侦察和开路任务。博古恰罗沃位于俄军后卫与法军先锋对峙的区域，双方均可能到达该地。</div>
+</a>
+<a class="entry-item" href="法军左翼.html">
+  <div class="noun">法军左翼</div>
+  <div class="snippet">波罗金诺战役中法军的左翼，在拿破仑将军队移动到科洛恰河对岸后集结于乌季察、谢苗诺夫斯科耶方向。</div>
+</a>
+<a class="entry-item" href="法国俘虏.html">
+  <div class="noun">法国俘虏</div>
+  <div class="snippet">《战争与和平》中描写了1812年战争中的两个层面的俘虏：一是法国人押送的俄国俘虏（包括皮埃尔·别祖霍夫），他们从莫斯科出发时三百三十人，经过艰苦行军后只剩不足一百人，掉队者被枪毙；二是游击队解救俄国俘虏后俘获的法国士兵和军官。小说的这一部分</div>
+</a>
+<a class="entry-item" href="法国医生.html">
+  <div class="noun">法国医生</div>
+  <div class="snippet">指梅蒂维埃这样的法国医生在1811年莫斯科上流社会的特殊地位——他们被当作平等身份的人接待，而不只是医生。反映了当时俄国贵族社会深受法国文化影响，另一方面老公爵对其为法国间谍的指控又折射出战争前夕反法情绪的蔓延。</div>
+</a>
+<a class="entry-item" href="法国崇拜.html">
+  <div class="noun">法国崇拜</div>
+  <div class="snippet">19世纪初俄国贵族阶层对法国文化、语言、时尚和思想的盲目崇拜现象。法语是贵族间的通用语，巴黎被视为文化天堂。拉斯托普钦伯爵在宴会上激烈批评这一现象，甚至说要取&quot;彼得大帝的手杖&quot;教训年轻一代。托尔斯泰以此批判上流社会的虚伪和&quot;俄罗斯灵魂&quot;的迷</div>
+</a>
+<a class="entry-item" href="法国政府元首.html">
+  <div class="noun">法国政府元首</div>
+  <div class="snippet">《战争与和平》中外交官比利宾为避认拿破仑皇帝称号而发明的折中外交措辞，法文原文为&quot;Au chef du gouvernement français&quot;（致法兰西政府首脑）。这个称号既避开了&quot;皇帝&quot;（Empereur）的合法性认可，又避开了&quot;将</div>
+</a>
+<a class="entry-item" href="法国步兵.html">
+  <div class="noun">法国步兵</div>
+  <div class="snippet">法兰西第一帝国陆军中的步兵兵种，是拿破仑大军团的核心力量。以线列步兵和轻步兵为主，作战时通常以纵队推进、横队射击，在奥斯特里茨战役中展现了高度的战斗力和纪律性。</div>
+</a>
+<a class="entry-item" href="法国话.html">
+  <div class="noun">法国话</div>
+  <div class="snippet">法语。19世纪俄国贵族阶层普遍使用法语作为社交语言。玛丽亚公爵小姐在向罗斯托夫表达感谢时用法语表达了感谢和歉意。</div>
+</a>
+<a class="entry-item" href="法学.html">
+  <div class="noun">法学</div>
+  <div class="snippet">托尔斯泰以法学作为探讨自由意志与必然性问题的视角之一，涉及社会责任概念与统计学法则的关系。</div>
+</a>
+<a class="entry-item" href="法语.html">
+  <div class="noun">法语</div>
+  <div class="snippet">法兰西民族的语言，属于印欧语系罗曼语族。19世纪俄罗斯贵族普遍使用法语作为社交语言，视其为高雅文化的标志。托尔斯泰在小说中大量使用法语对话表现贵族的欧化特征。</div>
+</a>
+<a class="entry-item" href="波兰枪骑兵.html">
+  <div class="noun">波兰枪骑兵</div>
+  <div class="snippet">波兰枪骑兵是拿破仑时期波兰军团的精英骑兵部队，以长矛（枪）为主要武器，兼具轻骑兵的机动性和重骑兵的冲击力。波兰枪骑兵在拿破仑战争中表现极为英勇，尤其是近卫波兰枪骑兵团以多次冲锋闻名。</div>
+</a>
+<a class="entry-item" href="波旁王朝.html">
+  <div class="noun">波旁王朝</div>
+  <div class="snippet">波旁王朝是欧洲历史上著名的跨国王朝，起源于法国中部的波旁地区，为卡佩王朝的旁系分支。自1589年亨利四世即位开始统治法国，历经路易十三、路易十四（太阳王）、路易十五、路易十六等君主。1792年在法国大革命中被推翻，1814年拿破仑倒台后复辟</div>
+</a>
+<a class="entry-item" href="波罗金诺战役史书记载.html">
+  <div class="noun">波罗金诺战役史书记载</div>
+  <div class="snippet">托尔斯泰在小说中批判的关于波罗金诺战役的传统史学描述，即认为俄军预先选择了有利阵地并构筑了防御工事，而实际上并非如此。</div>
+</a>
+<a class="entry-item" href="波罗金诺真相.html">
+  <div class="noun">波罗金诺真相</div>
+  <div class="snippet">托尔斯泰通过细致考证揭示的波罗金诺战役真实情况：俄军并未在预设阵地作战，兵力远不止稍弱于法军，而是以一半兵力在几乎没有防御工事的开阔地带迎战。</div>
+</a>
+<a class="entry-item" href="流血.html">
+  <div class="noun">流血</div>
+  <div class="snippet">血液从血管中流出，在战场上多由武器伤害引起。拿破仑战争时期，主要止血方法包括压迫止血、止血带和烧灼术，拉雷医生推广了动脉结扎术。</div>
+</a>
+<a class="entry-item" href="浪漫曲.html">
+  <div class="noun">浪漫曲</div>
+  <div class="snippet">一种抒情声乐作品体裁，以诗歌为歌词，以钢琴或乐器伴奏，旋律优美、情感细腻。19世纪在俄国贵族阶层中非常流行。小说中朱莉提到娜塔莎在阿尔哈罗夫家唱了一支浪漫曲，暗示娜塔莎经历安德烈出走后情绪已经恢复。</div>
+</a>
+<a class="entry-item" href="消防队.html">
+  <div class="noun">消防队</div>
+  <div class="snippet">负责火灾扑救的官方组织。在莫斯科撤退期间，拉斯托普钦下令将消防队的马匹转移，不留给法国人。</div>
+</a>
+<a class="entry-item" href="淡漠的面孔.html">
+  <div class="noun">淡漠的面孔</div>
+  <div class="snippet">皮埃尔在离开战场的路上看到的伤兵和平民的面部表情，这些面孔因过度痛苦而显得淡漠，反映了战争对人的精神状态的摧残。</div>
+</a>
+<a class="entry-item" href="深渊.html">
+  <div class="noun">深渊</div>
+  <div class="snippet">比喻死亡带来的终极虚无和不可知之境。安德烈公爵用深渊来形象地描述面对所爱之人突然消失时的那种震惊与困惑，由此推导出对来世的信仰。</div>
+</a>
+<a class="entry-item" href="深目眼光.html">
+  <div class="noun">深目眼光</div>
+  <div class="snippet">托尔斯泰对玛丽亚公爵小姐目光的描写——她用深沉、明亮的目光注视罗斯托夫。玛丽亚的眼睛是小说中反复强调的特征，虽不美貌但富有表现力，能传达内心的善良与高贵。</div>
+</a>
+<a class="entry-item" href="游击战.html">
+  <div class="noun">游击战</div>
+  <div class="snippet">托尔斯泰在《战争与和平》第四卷第三部（Book 14）中集中描写的1812年俄国人民抗击拿破仑入侵的游击战争形式。托尔斯泰称之为&quot;人民战争的大棒&quot;（the cudgel of the people&#x27;s war），强调其不遵循兵法规则、由民众</div>
+</a>
+<a class="entry-item" href="游击战争.html">
+  <div class="noun">游击战争</div>
+  <div class="snippet">一种以小型、机动、分散的作战单位在敌后或侧翼进行袭扰、破坏交通线、伏击等非对称作战的战争形式。在《战争与和平》中，杰尼索夫中校在察列沃-扎伊米希向安德烈公爵提出了游击战计划，主张以少量精锐部队攻击法军漫长而脆弱的交通线。这一思想后来成为18</div>
+</a>
+<a class="entry-item" href="游击队.html">
+  <div class="noun">游击队</div>
+  <div class="snippet">1812年俄法战争中俄国军民自发组织的游击武装，是托尔斯泰&quot;人民战争&quot;思想的核心体现。</div>
+</a>
+<a class="entry-item" href="渺小.html">
+  <div class="noun">渺小</div>
+  <div class="snippet">相对于宏大而言的微小。在《战争与和平》中，渺小与伟大构成辩证关系——安德烈在仰望无限天空时感到个人和拿破仑的渺小，领悟到真正重要的是永恒的真理和爱。</div>
+</a>
+<a class="entry-item" href="火的洗礼.html">
+  <div class="noun">火的洗礼</div>
+  <div class="snippet">军事术语，指士兵第一次参加实战的经历。原为基督教用语，后引申为军人初次上战场接受战火考验。</div>
+</a>
+<a class="entry-item" href="灰泥匠的比喻.html">
+  <div class="noun">灰泥匠的比喻</div>
+  <div class="snippet">托尔斯泰用灰泥匠比喻那些越界的博物学家——他们本应粉刷一面墙，却趁总监工不在乱刷了窗子、神像和脚手架，以为一切光滑整齐。</div>
+</a>
+<a class="entry-item" href="灵魂.html">
+  <div class="noun">灵魂</div>
+  <div class="snippet">人的精神本质，在托尔斯泰笔下被视为永恒存在、不会消灭的精神实体。皮埃尔认为灵魂是宇宙和谐整体的一部分，过去存在、现在存在、将来也永远存在。</div>
+</a>
+<a class="entry-item" href="灵魂不朽.html">
+  <div class="noun">灵魂不朽</div>
+  <div class="snippet">灵魂永恒不灭的哲学概念。娜塔莎在圣诞节夜晚的谈话中自信地宣称灵魂是不朽的、 自己是永生的，以前也活过，永恒地活着。这一观念贯穿托尔斯泰的创作思想， 他深受赫尔德和叔本华关于个体不朽和来世重生思想的影响。 托尔斯泰最终认为爱与对爱的回归是超越</div>
+</a>
+<a class="entry-item" href="灵魂与自由不存在.html">
+  <div class="noun">灵魂与自由不存在</div>
+  <div class="snippet">托尔斯泰引述并批判机械唯物主义观点——认为灵魂和自由不存在，人的生活只是筋肉运动的表现，受制于神经活动。</div>
+</a>
+<a class="entry-item" href="灵魂的不朽.html">
+  <div class="noun">灵魂的不朽</div>
+  <div class="snippet">皮埃尔在法军俘虏营中产生的重要哲学领悟。在被命运力量压迫的极端处境下，皮埃尔认识到外在力量可以囚禁他的身体，但无法触及他内在不朽的灵魂。这一思想体现了托尔斯泰对生命本质的思考。</div>
+</a>
+<a class="entry-item" href="炮兵.html">
+  <div class="noun">炮兵</div>
+  <div class="snippet">炮兵是拿破仑战争中最重要的兵种之一，以火炮为主要武器。俄军在1805年拥有约400-600门火炮。炮兵可在步兵和骑兵射程之外攻击敌人，是决定战役胜负的关键力量。在申格拉本战役中，图申上尉的炮兵连在中央阵地的炮击阻止了法军前进。</div>
+</a>
+<a class="entry-item" href="炮兵连.html">
+  <div class="noun">炮兵连</div>
+  <div class="snippet">炮兵的基本作战单位，拿破仑战争时期通常配备6-8门火炮及约120名炮手，由一名上尉指挥。在《战争与和平》中，图申上尉指挥的炮兵连在申格拉本战役中以四门孤立无援的大炮顽强抵抗法军，用霰弹击退法军多次进攻，成为战役中的关键力量。 --- 俄语称</div>
+</a>
+<a class="entry-item" href="炮垒.html">
+  <div class="noun">炮垒</div>
+  <div class="snippet">架设大炮供发射火炮的防御性军事工事，亦称炮台。通常构筑在江海口岸和其他要塞上的永备性火炮阵地。在《战争与和平》中图申上尉即担任炮垒指挥。</div>
+</a>
+<a class="entry-item" href="炮灰.html">
+  <div class="noun">炮灰</div>
+  <div class="snippet">比喻在战争中无谓牺牲的士兵，原指炮弹燃烧后的灰烬。该词是德语Kanonenfutter（1796年）的意译，其概念可追溯至莎士比亚《亨利四世》中的短语&#x27;food for powder&#x27;。中文&#x27;炮灰&#x27;在20世纪初经鲁迅等作家作品广泛使用而普及</div>
+</a>
+<a class="entry-item" href="爱.html">
+  <div class="noun">爱</div>
+  <div class="snippet">人与人之间深切的感情。本章中父女之爱、兄妹之爱、夫妻之爱交织。</div>
+</a>
+<a class="entry-item" href="爱与牺牲的法则.html">
+  <div class="noun">爱与牺牲的法则</div>
+  <div class="snippet">玛丽亚公爵小姐的人生哲学核心，认为人类所有复杂的法则可以归结为一个简单的法则——&quot;怀着仁爱为人类而受苦受难的上帝本身教导我们的爱和牺牲的法则&quot;。这一思想源自东正教教义，强调以仁爱之心承受苦难、为他人牺牲是人生的最高道德准则。托尔斯泰通过玛丽</div>
+</a>
+<a class="entry-item" href="爱人类.html">
+  <div class="noun">爱人类</div>
+  <div class="snippet">共济会七美德之四，要求会员热爱全人类，将博爱精神贯彻于行动之中，这是共济会改造全人类宗旨的道德基础。</div>
+</a>
+<a class="entry-item" href="爱和恕教义.html">
+  <div class="noun">爱和恕教义</div>
+  <div class="snippet">基督教核心教义，也是托尔斯泰《战争与和平》贯穿的哲学主题。书中通过神甫让士兵吻十字架的细节引出，安德烈公爵临终时领悟了超越世俗之爱的神圣之爱——爱敌人、宽恕一切。托尔斯泰认为基督信仰的真谛是爱周围的人，用和平与非暴力的方式面对世界。</div>
+</a>
+<a class="entry-item" href="爱情.html">
+  <div class="noun">爱情</div>
+  <div class="snippet">男女之间强烈的感情，安德烈与丽莎之间的夫妻之情，以及小说中的其他感情线索。 --- 《战争与和平》的核心主题之一。托尔斯泰展现了爱情的多种形态：娜塔莎对安德烈的一见钟情是诗意憧憬的；对皮埃尔的最终归宿是成熟平实的；安德烈的爱情从诗意神秘感转</div>
+</a>
+<a class="entry-item" href="爱情与财富的冲突.html">
+  <div class="noun">爱情与财富的冲突</div>
+  <div class="snippet">尼古拉面临的选择：为财富娶朱莉，还是为爱情娶穷索尼娅。在尼古拉的婚事上这一冲突表现得尤为直白——母亲要求他为家族利益娶富有的朱莉，而他深爱没有陪嫁的索尼娅。这一冲突在俄国19世纪贵族社会中具有普遍性，婚姻本质上是财产和地位的结合，个人情感往</div>
+</a>
+<a class="entry-item" href="爱死亡.html">
+  <div class="noun">爱死亡</div>
+  <div class="snippet">共济会七美德之七，要求会员时刻想着死亡，视死亡为朋友而非敌人，认为死亡能将疲倦的灵魂从现世生活解脱出来引入安宁的境界。</div>
+</a>
+<a class="entry-item" href="爱的幸福.html">
+  <div class="noun">爱的幸福</div>
+  <div class="snippet">安德烈公爵在波罗金诺战役受重伤后，在梅季希村的农舍中反思人生时领悟到的一种全新幸福观。他认为爱的幸福是一种超越物质力量的、纯粹精神的幸福，是与他人不可分割的幸福，体现了托尔斯泰笔下主人公对世俗欲望的超越和对神圣之爱的体悟。这是安德烈公爵在临</div>
+</a>
+<a class="entry-item" href="爱邻人.html">
+  <div class="noun">爱邻人</div>
+  <div class="snippet">共济会七德之一，皮埃尔认为自己实现了此德，体现在他的慷慨行为上。</div>
+</a>
+<a class="entry-item" href="父权冲突.html">
+  <div class="noun">父权冲突</div>
+  <div class="snippet">小说中博尔孔斯基家族父与子、父与女之间的权力与情感冲突。老博尔孔斯基公爵专制严厉，对儿女使用独裁式的管教方式。安德烈为逃避家庭束缚而参军，其与娜塔莎的婚事遭父亲反对。玛丽亚长期承受父亲的精神折磨。冲突背后是深沉的亲情，体现了旧式贵族家庭的复</div>
+</a>
+<a class="entry-item" href="牺牲.html">
+  <div class="noun">牺牲</div>
+  <div class="snippet">为他人或更高目标而放弃个人利益甚至生命。安德烈公爵在战场上为国牺牲。 --- 安德烈接受父亲的一年延期条件，对两人都是巨大的牺牲。娜塔莎哭道&quot;等一年要把我等死的&quot;，但最终接受。安德烈认为&quot;延期的责任在他&quot;，主动将自由留给娜塔莎。这种牺牲精神</div>
+</a>
+<a class="entry-item" href="牺牲的快乐感情.html">
+  <div class="noun">牺牲的快乐感情</div>
+  <div class="snippet">皮埃尔在决定参军后体验到的特殊心理状态，认为与某种更高的价值相比，财富、舒适甚至生命本身都是可以抛弃的虚妄之物，牺牲本身带给他一种新鲜的快乐。</div>
+</a>
+<a class="entry-item" href="狄俄尼索斯.html">
+  <div class="noun">狄俄尼索斯</div>
+  <div class="snippet">古希腊神话中的酒神，奥林匹斯十二主神之一，对应罗马神话中的巴克斯。宙斯与塞墨勒之子，掌管葡萄酒、农业、戏剧和宗教狂热。古希腊悲剧起源于对狄俄尼索斯的祭祀庆典。尼采在《悲剧的诞生》中提出&quot;酒神精神&quot;与&quot;日神精神&quot;的二元对立。</div>
+</a>
+<a class="entry-item" href="猎犬竞赛文化.html">
+  <div class="noun">猎犬竞赛文化</div>
+  <div class="snippet">俄国贵族间通过猎犬比赛比拼财富和荣誉的传统。一条优秀猎犬价值连城，甚至可以用农奴交换。三位主人各自打量别人的猎犬暗暗较劲，展现贵族阶层内部的虚荣心和竞争意识。</div>
+</a>
+<a class="entry-item" href="猎骑兵团.html">
+  <div class="noun">猎骑兵团</div>
+  <div class="snippet">18世纪末至19世纪初盛行的轻骑兵兵种，名称源自法语猎人（Chasseur），强调射击精度与高速机动能力，常执行侦察与尖兵任务。1779年法军首次出现猎骑兵建制，拿破仑时期成为法军轻骑兵主力。</div>
+</a>
+<a class="entry-item" href="玄学论证法.html">
+  <div class="noun">玄学论证法</div>
+  <div class="snippet">玄学论证法即形而上学论证方法，指通过纯思辨方式探讨超验本体问题的哲学方法。斯佩兰斯基在小说中善于将具体问题提升到玄学层面，给空间、时间、思想等抽象概念下定义，然后推出具体结论。这种论证方式反映了19世纪初欧洲理性主义哲学传统对俄国知识分子的</div>
+</a>
+<a class="entry-item" href="玛丽亚的孤独.html">
+  <div class="noun">玛丽亚的孤独</div>
+  <div class="snippet">玛丽亚公爵小姐在父亲去世后的精神处境。她独自一人待在房间，思绪如麻，感到与周围世界的隔膜——她不能理解农民，农民也不理解她。父丧之痛、无人倾诉的孤寂和对未来的茫然交织在一起。</div>
+</a>
+<a class="entry-item" href="玛丽亚的恐惧.html">
+  <div class="noun">玛丽亚的恐惧</div>
+  <div class="snippet">玛丽亚公爵小姐在父亲去世后的心理状态。她既思念父亲，又恐惧父亲的死亡形象——棺材中包着白手巾的死人面孔给她带来神秘的恐怖感，在寂静的月夜中这种恐惧尤为强烈。</div>
+</a>
+<a class="entry-item" href="玛祖尔卡舞.html">
+  <div class="noun">玛祖尔卡舞</div>
+  <div class="snippet">一种波兰民间舞蹈，3/4拍，节奏活泼，在19世纪俄国贵族社交舞会中非常流行。尼古拉·罗斯托夫在尾声第一部分第九章中抱着女儿小娜塔莎时，想起等她长大带她去参加舞会跳玛祖尔卡舞，就像他已故的父亲当初带女儿跳丹尼拉·库波尔舞那样。</div>
+</a>
+<a class="entry-item" href="现代历史意义.html">
+  <div class="noun">现代历史意义</div>
+  <div class="snippet">托尔斯泰对历史写作的反思，认为现代历史已不能再用英雄史诗的模式来理解，需要新的历史观。</div>
+</a>
+<a class="entry-item" href="理性.html">
+  <div class="noun">理性</div>
+  <div class="snippet">理性是人类通过逻辑推理、分析判断认识世界和指导行为的能力。康德区分理论理性与实践理性，认为理论理性有限；黑格尔则将理性提升为绝对的精神运动，认为其能通过辩证法自我实现。</div>
+</a>
+<a class="entry-item" href="理性主义信仰.html">
+  <div class="noun">理性主义信仰</div>
+  <div class="snippet">理性主义信仰是启蒙运动的核心精神，主张一切事物都应接受理性法庭的审判，相信人类理性能够认识和改造世界。在18-19世纪的欧洲，这种信念表现为对理性万能的崇拜。托尔斯泰在小说中刻画斯佩兰斯基时突出了他对&quot;智慧的力量和合理性&quot;的绝对信念，以及坚</div>
+</a>
+<a class="entry-item" href="理性的运用.html">
+  <div class="noun">理性的运用</div>
+  <div class="snippet">托尔斯泰认为理性运用以自我意识为前提。人必须先意识到自己是活着的，才能理解、观察和推理。</div>
+</a>
+<a class="entry-item" href="理论大厦.html">
+  <div class="noun">理论大厦</div>
+  <div class="snippet">良心指导者经过深思熟虑构建起来的复杂神学理论体系。海伦以简单直接的问题突破了这个复杂的理论架构，使指导者感到惊奇但又无法放弃自己的体系。</div>
+</a>
+<a class="entry-item" href="生与死的线.html">
+  <div class="noun">生与死的线</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中创造的哲学意象，指战场上将敌对双方分隔开的那条无形的心理界限。这条线既是物理空间上的战线，也是心理上已知与未知、生与死之间的分界线。越过这条线意味着面对不可知的死亡威胁，体现了托尔斯泰对战争心理的深刻洞察。</div>
+</a>
+<a class="entry-item" href="生命.html">
+  <div class="noun">生命</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中探讨的核心主题。安德烈公爵在濒死时重新理解生命的意义，认识到生命的美好在于爱、家庭和朴素的生活。托尔斯泰的结论是&quot;生命本身就是意义&quot;。</div>
+</a>
+<a class="entry-item" href="生死之交.html">
+  <div class="noun">生死之交</div>
+  <div class="snippet">指能够同生共死、患难与共的深厚友谊。朗巴上尉在受到皮埃尔相救后，用这个词来表达对皮埃尔的感激和友好之情，体现了法国军官热情直率的性格，以及战争中两个敌对国家的人之间出乎意料的友谊。</div>
+</a>
+<a class="entry-item" href="疑心病.html">
+  <div class="noun">疑心病</div>
+  <div class="snippet">指皮埃尔因妻子不忠和社交压力而产生的抑郁焦虑情绪。皮埃尔在得知海伦与亲王过从甚密后，感觉自己快要得疑心病了，对人生感到虚幻和灰暗，拼命通过共济会工作来与心理病魔作斗争。这体现了托尔斯泰对人物心理状态的细腻刻画。</div>
+</a>
+<a class="entry-item" href="痛苦.html">
+  <div class="noun">痛苦</div>
+  <div class="snippet">身体或精神上的极度不适和折磨。在《战争与和平》中，痛苦是贯穿全书的重要主题——既有战争带来的肉体痛苦，也有精神觉醒过程中的内心痛苦。</div>
+</a>
+<a class="entry-item" href="白夜.html">
+  <div class="noun">白夜</div>
+  <div class="snippet">白夜是指在高纬度地区（约北/南纬48°34&#x27;以上），太阳落到地平线以下但角度很小，由于大气对太阳光的折射和散射作用，整夜天空并不完全变黑的自然现象。黄昏尚未过去，黎明就已接踵而来。北半球出现在夏至前后，纬度越高白夜持续期越长，天空也越亮。白</div>
+</a>
+<a class="entry-item" href="皇太子.html">
+  <div class="noun">皇太子</div>
+  <div class="snippet">俄国对沙皇王位继承人的称谓。1721年彼得大帝改称皇帝后，原泛称所有皇子的&quot;察列维奇（Царевич）&quot;逐渐停用，1797年保罗一世通过继承法正式以&quot;沙皇太子（Цесаревич）&quot;作为继承人的专属头衔。在《战争与和平》所描写的拿破仑战争时</div>
+</a>
+<a class="entry-item" href="皇太子派.html">
+  <div class="noun">皇太子派</div>
+  <div class="snippet">1812年前后俄国宫廷中以皇太子康斯坦丁·帕夫洛维奇大公为首的政治派别。皇太子康斯坦丁是亚历山大一世的弟弟，该派在宫廷政治中与其他派系争夺影响力。小说中描写各派斗争激烈但日常生活如故。</div>
+</a>
+<a class="entry-item" href="皇家女子学校.html">
+  <div class="noun">皇家女子学校</div>
+  <div class="snippet">即斯莫尔尼贵族女子学院（Смольный институт），1764年由叶卡捷琳娜二世在圣彼得堡创办，是俄罗斯第一所女子中等寄宿学校，招收6–18岁的贵族女孩，教授外语、科学、艺术、舞蹈、礼仪等课程，旨在为社会培养受过教育的女性。</div>
+</a>
+<a class="entry-item" href="皇帝.html">
+  <div class="noun">皇帝</div>
+  <div class="snippet">欧洲帝国最高统治者的称号，源自拉丁语Imperator（军队最高统帅）。在欧洲历史上，皇帝称号通常与罗马帝国的法理继承权绑定。1804年拿破仑打破传统自封&quot;法兰西人的皇帝&quot;。</div>
+</a>
+<a class="entry-item" href="皇帝行辕参谋部.html">
+  <div class="noun">皇帝行辕参谋部</div>
+  <div class="snippet">1812年俄法战争初期随沙皇亚历山大一世驻扎于军队的随行参谋机构，与正式的御前总指挥参谋部不同。亚历山大一世虽未以总司令名义指挥军队，但通过行辕参谋部实际号令全军，包括多名将军、侍从武官、外交官和外国顾问。</div>
+</a>
+<a class="entry-item" href="皇族妇女敬礼.html">
+  <div class="noun">皇族妇女敬礼</div>
+  <div class="snippet">罗斯托夫向玛丽亚公爵小姐告别时的行礼方式。他以向皇族妇女致敬的礼仪向玛丽亚恭敬鞠躬，以此表明他虽然愿意结识她，但绝不愿趁她落难之机亲近她，体现了他的高尚品格。</div>
+</a>
+<a class="entry-item" href="皮埃尔怕老婆.html">
+  <div class="noun">皮埃尔怕老婆</div>
+  <div class="snippet">小说尾声中对皮埃尔与娜塔莎夫妻关系的生动描述。娜塔莎过门后就提出要求——皮埃尔生活中的每一刻都要属于她和家庭。皮埃尔言听计从，不敢向别的女人献殷勤或随意说笑，不敢随意花钱或长时间外出。全家人都按照娜塔莎揣摩的皮埃尔意图行事。周围的人常取笑皮</div>
+</a>
+<a class="entry-item" href="皮埃尔的光脚板.html">
+  <div class="noun">皮埃尔的光脚板</div>
+  <div class="snippet">皮埃尔被俘后赤足的意象，象征贵族身份的剥离和回归人的本真状态，体现托尔斯泰的哲学命题：痛苦有界限、自由有界限，当人失去外在一切时反而能触及内心最真实的自由。</div>
+</a>
+<a class="entry-item" href="皮德蒙特人.html">
+  <div class="noun">皮德蒙特人</div>
+  <div class="snippet">意大利皮埃蒙特地区的居民，皮埃蒙特位于意大利西北部，以都灵为中心，在拿破仑时期被法国吞并，其士兵被征入拿破仑的帝国军队参加了对俄远征。</div>
+</a>
+<a class="entry-item" href="监护委员会.html">
+  <div class="noun">监护委员会</div>
+  <div class="snippet">俄罗斯帝国时期的官方慈善监护机构，隶属于 Empress Maria 慈善教育机构管理局（Ведомство учреждений императрицы Марии），管理孤儿院、寡妇与孤儿财产托管、慈善救助等事务，被视为秩序井然、安全可</div>
+</a>
+<a class="entry-item" href="盟军.html">
+  <div class="noun">盟军</div>
+  <div class="snippet">在战争或军事行动中结盟的多国联合部队。在奥斯特里茨战役中指俄奥两国联军（第三次反法同盟），由俄国沙皇亚历山大一世和奥地利皇帝弗朗茨二世共同指挥。</div>
+</a>
+<a class="entry-item" href="真.html">
+  <div class="noun">真</div>
+  <div class="snippet">指客观真理和终极实在，与&quot;善&quot;并列构成人生最高价值。皮埃尔认为善和真的王国存在于宇宙之中，而非仅在人世间。</div>
+</a>
+<a class="entry-item" href="真宗教概念.html">
+  <div class="noun">真宗教概念</div>
+  <div class="snippet">海伦声称自己皈依了&quot;真正的宗教&quot;，借此认为不再受原有婚姻的宗教约束。这是她为自己离婚改嫁制造借口的策略性言论，反映了当时俄国上流社会中宗教被工具化的现象。</div>
+</a>
+<a class="entry-item" href="真实的波罗金诺战场.html">
+  <div class="noun">真实的波罗金诺战场</div>
+  <div class="snippet">托尔斯泰描绘的波罗金诺战场的实际面貌：一片开阔的几乎没有防御工事的平原，俄军以劣势兵力仓促应战，与官方史书中的描述截然不同。</div>
+</a>
+<a class="entry-item" href="真理.html">
+  <div class="noun">真理</div>
+  <div class="snippet">终极实在和绝对正确的道理。在小说中，皮埃尔认为在人世间只有虚伪和罪恶，但在整个宇宙中存在着一个真理的王国，人类是通向这个真理王国的一个环节。</div>
+</a>
+<a class="entry-item" href="砰砰的射击声.html">
+  <div class="noun">砰砰的射击声</div>
+  <div class="snippet">皮埃尔在创伤记忆中反复听到的战场声响，即使入睡后仍在脑海中不断回响，体现了战争造成的心理创伤。</div>
+</a>
+<a class="entry-item" href="硝烟.html">
+  <div class="noun">硝烟</div>
+  <div class="snippet">火药爆炸燃烧后产生的浓密烟雾，在战场上大量弥漫遮蔽视线，使指挥官无法准确观察战况，是19世纪火器战争的典型战场景象。</div>
+</a>
+<a class="entry-item" href="社交界.html">
+  <div class="noun">社交界</div>
+  <div class="snippet">19世纪俄国上流社会的社交圈，以贵族沙龙、舞会、俱乐部等场所为核心。沙龙由高社会地位的女性主持，参与者以讲法语为风尚，交换政治新闻和社交八卦。俄国文学中沙龙的典型代表是安娜·帕夫洛夫娜·舍列尔的沙龙，《战争与和平》通过它展现了19世纪初彼得</div>
+</a>
+<a class="entry-item" href="社会救济委员会.html">
+  <div class="noun">社会救济委员会</div>
+  <div class="snippet">法语&quot;comite du salut public&quot;的中文直译（标准史译为&quot;公共安全委员会&quot;或&quot;公安委员会&quot;）。在《战争与和平》中，亚历山大一世借用法国大革命的这一名称，戏称他早年的亲密改革顾问圈子——恰托里日斯基、诺沃西利采夫、科丘别伊和</div>
+</a>
+<a class="entry-item" href="祈祷.html">
+  <div class="noun">祈祷</div>
+  <div class="snippet">宗教信仰中向神灵表达敬拜、感恩或祈求的行为。东正教有丰富的祈祷传统，包括耶稣祷文、晨祷、晚祷等，祈祷在俄罗斯东正教信徒生活中占有核心地位。</div>
+</a>
+<a class="entry-item" href="神.html">
+  <div class="noun">神</div>
+  <div class="snippet">东正教信仰中的至高存在，三位一体的上帝（圣父、圣子、圣灵）。在俄罗斯东正教传统中，上帝被视为万物的创造者和主宰。</div>
+</a>
+<a class="entry-item" href="神学.html">
+  <div class="noun">神学</div>
+  <div class="snippet">托尔斯泰以神学作为探讨自由意志问题的一个视角：在上帝全知全能全善的前提下，解释罪恶概念的起源。</div>
+</a>
+<a class="entry-item" href="神学争辩.html">
+  <div class="noun">神学争辩</div>
+  <div class="snippet">良心指导者与海伦之间就婚姻圣礼、誓言约束力和改嫁合法性展开的宗教辩论。海伦以敏捷的思维和巧妙的言辞在辩论中占据上风，将复杂的神学问题简化为信仰转变问题。</div>
+</a>
+<a class="entry-item" href="神恩.html">
+  <div class="noun">神恩</div>
+  <div class="snippet">天主教神学概念，指上帝赐予人的超自然恩宠。在小说中，海伦在耶稣会教士引导下跪在祭坛前，教士将手放在她头上，她声称感到清凉的风吹进灵魂，别人告诉她这就是神恩。</div>
+</a>
+<a class="entry-item" href="神权.html">
+  <div class="noun">神权</div>
+  <div class="snippet">神权政治主张政治权力源于神、君主权力由神授予的理论，核心是&quot;君权神授&quot;。中世纪欧洲以基督教神学为基础，认为国王是上帝在人间的代表。</div>
+</a>
+<a class="entry-item" href="神父的宽恕权.html">
+  <div class="noun">神父的宽恕权</div>
+  <div class="snippet">海伦反驳母亲时引用的宗教论点，声称神父有权宽恕罪过，因此离婚和再嫁可以通过宗教渠道获得合法性，不必严格拘泥于《福音书》的字面规定。</div>
+</a>
+<a class="entry-item" href="神秘主义.html">
+  <div class="noun">神秘主义</div>
+  <div class="snippet">神秘主义是一种宗教哲学观念，主张人与神或超自然界之间直接交往，通过直觉、静观和心灵内省而非理性推理获得真理。在19世纪初的俄国，神秘主义在亚历山大一世统治后期盛行，表现为对启蒙理性主义的反动和对超验宗教体验的追求，深刻影响了当时的政治和宗教</div>
+</a>
+<a class="entry-item" href="福音书.html">
+  <div class="noun">福音书</div>
+  <div class="snippet">基督教《圣经·新约》中记载耶稣生平与教导的四卷书，即《马太福音》《马可福音》《路加福音》《约翰福音》。福音原意为&quot;好消息&quot;。在《战争与和平》中，安德烈公爵在临终前接受《福音书》的教导，体现了托尔斯泰寄希望于宗教救世的思想。</div>
+</a>
+<a class="entry-item" href="离别.html">
+  <div class="noun">离别</div>
+  <div class="snippet">与亲人分开的状态，安德烈公爵离家参战导致与家人离别，可能永别。</div>
+</a>
+<a class="entry-item" href="离婚必要手续.html">
+  <div class="noun">离婚必要手续</div>
+  <div class="snippet">19世纪初俄国贵族离婚所需的法律和宗教程序，包括获得教会批准、办理相关法律文件等。海伦在信中要求皮埃尔配合办理这些手续，皮埃尔此时正在波罗金诺战场上。</div>
+</a>
+<a class="entry-item" href="私生子.html">
+  <div class="noun">私生子</div>
+  <div class="snippet">指非婚生子女。在19世纪沙俄法律中，私生子的法律地位极为不利：无权继承父亲的财产和姓氏，被剥夺了大多数合法权利。根据1902年沙俄法律，私生子虽可证明生父身份并获得抚养费，但禁止生父认领，且无继承权。小说中皮埃尔正是私生子，这正是大公爵小姐</div>
+</a>
+<a class="entry-item" href="秋高气爽(战争与和平).html">
+  <div class="noun">秋高气爽(战争与和平)</div>
+  <div class="snippet">托尔斯泰笔下的莫斯科秋景，以麻雀山为视角展现莫斯科在秋日阳光下的壮丽全景。这种明净的秋光既是人物内心变化的背景，也是作品&quot;和平&quot;主题的重要意象。</div>
+</a>
+<a class="entry-item" href="科斯特罗马省森林出售.html">
+  <div class="noun">科斯特罗马省森林出售</div>
+  <div class="snippet">总管建议皮埃尔出售科斯特罗马省的森林以偿还债务，但手续复杂，包括解除禁令和申请批准等，令皮埃尔无从着手。</div>
+</a>
+<a class="entry-item" href="科洛恰成锐角.html">
+  <div class="noun">科洛恰成锐角</div>
+  <div class="snippet">科洛恰河与斯摩棱斯克大路并非成直角相交，而是呈锐角，这一地理细节影响了俄军阵地的选择和法军的迂回。</div>
+</a>
+<a class="entry-item" href="秘密.html">
+  <div class="noun">秘密</div>
+  <div class="snippet">共济会第一个主要宗旨所涉及的古老秘密，从远古传至后代，关系到人类命运。此秘密需经过长期自我净化才能领悟和运用。</div>
+</a>
+<a class="entry-item" href="穆什卡捷尔斯基团.html">
+  <div class="noun">穆什卡捷尔斯基团</div>
+  <div class="snippet">俄语“Мушкетерский полк”的音译，意为火枪兵团，是俄罗斯帝国陆军在彼得大帝军事改革后至19世纪中叶存在的一种正规步兵部队编制。拿破仑战争时期，俄军火枪兵团由3个营组成，是俄军野战部队的主力步兵单位。</div>
+</a>
+<a class="entry-item" href="空蜂房.html">
+  <div class="noun">空蜂房</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中创造的一个著名文学比喻，将1812年人去楼空的莫斯科比作失去蜂王的蜂巢。托尔斯泰用数百字细致描写了失去蜂王的蜂房如何从外表看似正常而内部实则腐朽死亡，以此象征莫斯科失去行政中枢后的混乱与荒凉。</div>
+</a>
+<a class="entry-item" href="空间.html">
+  <div class="noun">空间</div>
+  <div class="snippet">空间是物质存在的广延性，与时间一同构成人类感知和认识世界的基本形式。托尔斯泰将其作为理性认识世界的三要素之一。</div>
+</a>
+<a class="entry-item" href="空间上的自由.html">
+  <div class="noun">空间上的自由</div>
+  <div class="snippet">托尔斯泰论证的一个哲学命题：人永远无法获得空间上自由的观念。人的任何行动都受周围环境和自身身体的制约（如举臂只能向障碍最少的方向）。要想象一个人完全自由，就必须想象他超出空间以外，而这不可能。</div>
+</a>
+<a class="entry-item" href="立宪君主.html">
+  <div class="noun">立宪君主</div>
+  <div class="snippet">指以宪法限制君主权力的政体形式。在小说中，比茨基转述亚历山大一世在国务会议上的讲话时称，这是&quot;只有立宪君主才能发表的演说&quot;。沙皇声明治理国事不应独断专行而应根据坚实的原则，反映了斯佩兰斯基改革中的宪政理想。托尔斯泰借安德烈公爵的幻灭表达了对</div>
+</a>
+<a class="entry-item" href="童年记忆.html">
+  <div class="noun">童年记忆</div>
+  <div class="snippet">尼古拉和娜塔莎回忆黑人、滚鸡蛋等童年趣事，感叹时光流逝。这些回忆带有梦幻般的朦胧色彩，连人物自己也分不清那真的是一个黑人还是做梦。托尔斯泰通过这些温馨的童年片段勾勒出罗斯托夫家孩子们共享的情感纽带，与娜塔莎当前的忧郁形成对照。</div>
+</a>
+<a class="entry-item" href="符腾堡人.html">
+  <div class="noun">符腾堡人</div>
+  <div class="snippet">德意志民族中士瓦本（施瓦本）人的一支，来自德国西南部的符腾堡地区，1806年拿破仑将其升格为符腾堡王国，在1812年侵俄战争中作为拿破仑的盟友派兵参战。</div>
+</a>
+<a class="entry-item" href="符腾堡骠骑兵.html">
+  <div class="noun">符腾堡骠骑兵</div>
+  <div class="snippet">19世纪初符腾堡王国的轻骑兵部队。符腾堡作为拿破仑的莱茵邦联成员，曾派兵参与1812年对俄战争，其骑兵在缪拉部队进入莫斯科时走在最前方。</div>
+</a>
+<a class="entry-item" href="第一军.html">
+  <div class="noun">第一军</div>
+  <div class="snippet">1812年俄法战争初期俄国部署在西部边境的三支军团之一，又称第一西军团，由巴克雷·德·托利统率，兵力约10.4万人，是俄军主力。驻扎于德里萨附近，后沿斯摩棱斯克—莫斯科方向撤退。</div>
+</a>
+<a class="entry-item" href="第一派(普弗尔派).html">
+  <div class="noun">第一派(普弗尔派)</div>
+  <div class="snippet">1812年俄法战争期间以普鲁士军事理论家普弗尔为首的德裔军事理论家派别。他们信奉军事科学的不变法则（运动战、迂回战等），主张严格按预定计划撤退到腹地，指责任何偏离为野蛮或不学无术。代表人物包括沃尔佐根、温岑格罗德等。</div>
+</a>
+<a class="entry-item" href="第七派(皇帝崇拜派).html">
+  <div class="noun">第七派(皇帝崇拜派)</div>
+  <div class="snippet">1812年俄法战争期间一群狂热崇拜沙皇亚历山大一世的年轻将军和侍从武官。他们不仅视亚历山大为皇帝，更将其作为一个人来无私崇拜，认为皇帝具备人类所有优秀品质。他们希望亚历山大放弃谦虚态度，公开宣布担任全军统帅以鼓舞士气。</div>
+</a>
+<a class="entry-item" href="第三军.html">
+  <div class="noun">第三军</div>
+  <div class="snippet">1812年俄法战争中俄国第三西军团，由托尔马索夫骑兵上将统率，兵力约4.3万人，部署于俄国南部，负责掩护基辅方向并牵制法军南翼（奥地利军和萨克森军）。托尔马索夫率该军在科布林取得了俄军1812年首次重大胜利。</div>
+</a>
+<a class="entry-item" href="第三派(折中派).html">
+  <div class="noun">第三派(折中派)</div>
+  <div class="snippet">1812年俄法战争期间沙皇亚历山大一世最信任的宫廷朝臣派，以阿拉克切耶夫为代表。他们认可普弗尔的理论学识，但同时认为理论家有片面性，主张折中理论派和实战派意见。其典型主张是按普弗尔方案保住德里萨营地但调整其他军行动路线。</div>
+</a>
+<a class="entry-item" href="第二军.html">
+  <div class="noun">第二军</div>
+  <div class="snippet">1812年俄法战争中俄国第二西军团，由巴格拉季翁将军统率。初期部署于俄国西南部，任务是与第一军团会合。拿破仑企图将第一、第二军团分割歼灭，但巴格拉季翁成功率军撤至斯摩棱斯克与巴克雷会师。</div>
+</a>
+<a class="entry-item" href="第二派(民族主义派).html">
+  <div class="noun">第二派(民族主义派)</div>
+  <div class="snippet">1812年俄法战争期间以巴格拉季翁、叶尔莫洛夫为代表的俄国民族主义进攻派。他们主张不受计划约束，立即攻入波兰与法军决战，反对撤退。言辞激烈，带有强烈的民族主义情绪，缅怀苏沃洛夫传统，认为撤退只会挫伤士气。</div>
+</a>
+<a class="entry-item" href="第五派(巴克莱信徒派).html">
+  <div class="noun">第五派(巴克莱信徒派)</div>
+  <div class="snippet">1812年俄法战争期间全力支持巴克雷·德·托利担任总司令的派别。他们认为巴克雷正派、精明强干，是当前不可替代的统帅，主张将全权交给他统一指挥。他们赞扬巴克雷将俄军未受损失撤至德里萨的功绩，反对用贝尼格森替换他。</div>
+</a>
+<a class="entry-item" href="第八派(钻营派).html">
+  <div class="noun">第八派(钻营派)</div>
+  <div class="snippet">1812年俄法战争期间俄军总司令部中人数最多的派别，约占九十九分之一。此派不关心战略和战争胜负，一心谋求个人利益和享乐。他们利用错综复杂的政治环境捞取好处，包括投机取巧表态、向沙皇邀功、索取津贴、设法引起皇帝注意等。</div>
+</a>
+<a class="entry-item" href="第六兵团.html">
+  <div class="noun">第六兵团</div>
+  <div class="snippet">1812年俄法战争中俄国第六步兵军，由多赫图罗夫将军指挥，在波罗金诺战役中负责中央防线的防御，后接替受伤的巴格拉季翁指挥左翼部队。</div>
+</a>
+<a class="entry-item" href="第六派(贝尼格森派).html">
+  <div class="noun">第六派(贝尼格森派)</div>
+  <div class="snippet">1812年俄法战争期间支持贝尼格森伯爵取代巴克雷的派别。他们指责撤退到德里萨是可耻的失败，认为贝尼格森是唯一能在当时指挥俄军的将领，因为他在1807年艾劳会战中展现出对抗拿破仑的能力，且得到拿破仑本人的公允评价。</div>
+</a>
+<a class="entry-item" href="第十三轻骑兵团.html">
+  <div class="noun">第十三轻骑兵团</div>
+  <div class="snippet">法国拿破仑战争时期的轻骑兵部队（13e Regiment de Chasseurs a Cheval），属于法军轻骑兵兵种，主要承担侦察、警戒和追击等任务。朗巴上尉即属于该团。该团参与了奥斯特利茨战役等重大战役，在1815年百日王朝后被解散</div>
+</a>
+<a class="entry-item" href="第四派(皇太子派).html">
+  <div class="noun">第四派(皇太子派)</div>
+  <div class="snippet">1812年俄法战争期间以皇太子康斯坦丁·帕夫洛维奇大公为首的失败主义派别。此派因亲历奥斯特利茨战役的惨败而对拿破仑心存畏惧，主张尽快媾和以免被彻底击溃。他们认为继续战争只会带来耻辱和毁灭，应趁俄军尚未被赶出彼得堡时立即谈判。</div>
+</a>
+<a class="entry-item" href="第四纵队.html">
+  <div class="noun">第四纵队</div>
+  <div class="snippet">1805年奥斯特利茨战役中俄奥联军第四纵队，由科洛弗拉特中将指挥奥军、米洛拉多维奇中将指挥俄军，约1.4万步兵，是联军人数最多的纵队，负责进攻普拉茨高地一带。</div>
+</a>
+<a class="entry-item" href="等待的煎熬.html">
+  <div class="noun">等待的煎熬</div>
+  <div class="snippet">娜塔莎因安德烈公爵长期未归而感到的忧郁和焦躁。订婚后的第四个月娜塔莎开始被无法排遣的忧郁笼罩，感到自己在虚度年华，这正是她完全能够爱人和被人爱的大好年华。圣诞节期间焦躁达到顶峰，她对着母亲哭喊我要他。这种等待的煎熬是娜塔莎后来被阿纳托尔诱惑</div>
+</a>
+<a class="entry-item" href="米甸.html">
+  <div class="noun">米甸</div>
+  <div class="snippet">圣经中记载的阿拉伯西北部游牧民族，曾压迫以色列人七年，后被基甸击败。在小说祷告词中借喻入侵俄国的拿破仑军队。</div>
+</a>
+<a class="entry-item" href="粗声粗气.html">
+  <div class="noun">粗声粗气</div>
+  <div class="snippet">玛丽亚·德米特里耶夫娜·阿赫罗西莫娃在舞会上当众斥责海伦时的说话方式，体现她直率、粗犷、不畏权贵的性格特点。</div>
+</a>
+<a class="entry-item" href="粗鲁农奴.html">
+  <div class="noun">粗鲁农奴</div>
+  <div class="snippet">罗斯托夫对博古恰罗沃闹事农民的看法。他认为这些农奴粗鲁狂暴，将玛丽亚公爵小姐孤立无援地困在庄园里，任凭他们摆布。这反映了当时贵族阶层对农奴的典型态度。</div>
+</a>
+<a class="entry-item" href="精神方面看权力.html">
+  <div class="noun">精神方面看权力</div>
+  <div class="snippet">托尔斯泰认为从精神方面看权力被认作事件的原因，但精神活动离不开物质活动，事件原因在两者的结合上。</div>
+</a>
+<a class="entry-item" href="精神活动.html">
+  <div class="noun">精神活动</div>
+  <div class="snippet">人类的精神创造活动，包括哲学、宗教、文学、艺术、科学等智力文化领域。文化史学家认为精神活动是推动历史运动的根本力量。</div>
+</a>
+<a class="entry-item" href="精神的幸福.html">
+  <div class="noun">精神的幸福</div>
+  <div class="snippet">安德烈公爵在重伤濒危状态下领悟到的哲学概念，指一种不受外界物质条件影响的、纯粹内在的幸福。这是托尔斯泰借安德烈之口表达的重要哲学思想——幸福的源泉在于人自身，不在于外在的物质、功名或情欲满足。精神的幸福超越了世俗的得失，建立在对生命本质的理</div>
+</a>
+<a class="entry-item" href="繁星点点的晴空.html">
+  <div class="noun">繁星点点的晴空</div>
+  <div class="snippet">皮埃尔在黑暗的棚屋里被鸽子拍翅声惊醒后仰望天空所见到的景象，象征着历经战火后和平与宁静的回归。这一意象在托尔斯泰笔下常用来表达精神觉醒和宇宙永恒的主题。</div>
+</a>
+<a class="entry-item" href="纵火犯.html">
+  <div class="noun">纵火犯</div>
+  <div class="snippet">法军对莫斯科大火归咎于俄国人蓄意纵火而追捕的罪名。法国高级军官一致认为莫斯科大火是俄国人故意放火，派出多支巡逻队搜捕纵火嫌疑犯。皮埃尔因此被怀疑为纵火犯。历史学界对纵火责任至今无定论，一般认为多方因素共同导致。</div>
+</a>
+<a class="entry-item" href="纵队.html">
+  <div class="noun">纵队</div>
+  <div class="snippet">拿破仑战争时期步兵三种基本阵形之一，士兵以多路纵列行进，纵深远大于宽度。优点是机动速度快、地形适应性好、便于快速冲击；缺点是正面火力不足。</div>
+</a>
+<a class="entry-item" href="细长脖子.html">
+  <div class="noun">细长脖子</div>
+  <div class="snippet">韦列夏金的外貌特征——细长的脖颈，在书中多次提及以突出其脆弱和无力反抗的形象。</div>
+</a>
+<a class="entry-item" href="绝望.html">
+  <div class="noun">绝望</div>
+  <div class="snippet">完全失去希望的状态，老公爵断定儿子已死，不再抱任何希望。</div>
+</a>
+<a class="entry-item" href="统帅.html">
+  <div class="noun">统帅</div>
+  <div class="snippet">统率全国武装力量或战区部队的最高指挥官，英文对应commander-in-chief。在拿破仑战争中，拿破仑本人、库图佐夫等均为大军统帅。</div>
+</a>
+<a class="entry-item" href="统计学.html">
+  <div class="noun">统计学</div>
+  <div class="snippet">统计学是基于概率论建立数学模型，通过收集、整理、分析数据并进行推断的科学。托尔斯泰指出出生率、犯罪率等社会现象服从统计学法则。</div>
+</a>
+<a class="entry-item" href="统计学法则.html">
+  <div class="noun">统计学法则</div>
+  <div class="snippet">托尔斯泰指出人的行动属于统计学表示的普遍不变法则，这是法学问题的基础——社会责任概念建立在此之上。</div>
+</a>
+<a class="entry-item" href="续弦.html">
+  <div class="noun">续弦</div>
+  <div class="snippet">指男子丧妻后再娶。在《战争与和平》中，安德烈公爵的妻子丽莎在生下儿子尼古连卡后难产去世，他因此成为鳏夫。当安德烈向娜塔莎求婚时，娜塔莎问母亲&quot;续弦是不是怪丢人的？&quot;，反映出当时社会对续弦可能存在的负面看法——即认为续弦对女性而言不够体面。</div>
+</a>
+<a class="entry-item" href="网开三面.html">
+  <div class="noun">网开三面</div>
+  <div class="snippet">&quot;网开三面&quot;（原文直译为&quot;金桥&quot;，意为&quot;给败军留一条逃跑的路&quot;），是《战争与和平》中库图佐夫的核心战略思想之一。典出《史记·殷本纪》商汤&quot;网开三面&quot;的典故，在西方军事术语中称&quot;golden bridge&quot;（金桥），克劳塞维茨《战争论》中亦有</div>
+</a>
+<a class="entry-item" href="罗斯托夫的同情.html">
+  <div class="noun">罗斯托夫的同情</div>
+  <div class="snippet">尼古拉·罗斯托夫见到玛丽亚公爵小姐后的内心反应。他被玛丽亚的温顺、高尚和悲伤打动，眼中含泪，感受到强烈的同情和保护欲。这种情感既出于骑士精神，也包含着朦胧的爱慕。</div>
+</a>
+<a class="entry-item" href="罗曼蒂克情调.html">
+  <div class="noun">罗曼蒂克情调</div>
+  <div class="snippet">罗斯托夫对这次与玛丽亚公爵小姐相遇的内心感受——他认为命运将他引到此处、在关键时刻救助一位落难的贵族少女，这件事本身就充满了浪漫的戏剧性。</div>
+</a>
+<a class="entry-item" href="罪恶的概念.html">
+  <div class="noun">罪恶的概念</div>
+  <div class="snippet">托尔斯泰指出罪恶的概念是从人类自由意识中产生的。既然人是全知全能全善的上帝所造，罪恶从何而来成为神学根本问题。</div>
+</a>
+<a class="entry-item" href="群众意志.html">
+  <div class="noun">群众意志</div>
+  <div class="snippet">托尔斯泰在《战争与和平》历史哲学部分提出的核心概念。他认为权力并非来自英雄人物个人，而是&quot;群众意志的总和&quot;，群众以明示或默许的方式将权力移交给统治者。这一观点构成了托尔斯泰&quot;人民的思想&quot;的基石，直接否定了英雄创造历史的传统史观，强调历史由无</div>
+</a>
+<a class="entry-item" href="群众意志移交论.html">
+  <div class="noun">群众意志移交论</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中批判的一种历史理论。该理论认为，群众将自己的意志以明显或默然的方式移交给某些历史人物（如帝王、统帅），从而赋予他们权力来领导历史事件。托尔斯泰认为这只是一个未经历史经验证实的假设，不过是把问题换了一个说法：用&quot;权力</div>
+</a>
+<a class="entry-item" href="群众暴力.html">
+  <div class="noun">群众暴力</div>
+  <div class="snippet">由群体情绪失控而引发的暴力行为，常伴随盲从和失控特征。小说描写的韦列夏金之死是群众暴力的经典场景。</div>
+</a>
+<a class="entry-item" href="群众运动.html">
+  <div class="noun">群众运动</div>
+  <div class="snippet">托尔斯泰历史哲学的核心概念之一，指历史是由千百万普通人的集体行动（而非少数伟人的意志）推动的。在《战争与和平》的哲学论述中，托尔斯泰认为军队和政府只是群众意志的组织形式，真正的历史动力来自人民的总体活动，拿破仑等所谓&quot;伟人&quot;不过是时代浪潮的</div>
+</a>
+<a class="entry-item" href="老近卫军.html">
+  <div class="noun">老近卫军</div>
+  <div class="snippet">拿破仑近卫军中最精锐的组成部分，由身经百战的老兵组成，是拿破仑最信赖的预备队。在战场上通常不轻易投入，只在最关键的时刻使用。老近卫军以绝对的忠诚和顽强的战斗力著称。</div>
+</a>
+<a class="entry-item" href="考试制度.html">
+  <div class="noun">考试制度</div>
+  <div class="snippet">亚历山大一世时期斯佩兰斯基改革中提出的官员考试晋升制度。 规定高级官员晋升须通过考试或具备大学资格，旨在提高官僚机构效率。 在《战争与和平》中，一位老官员质疑六十岁的下属是否也需要参加考试。 这一制度在俄国贵族中引发争议。</div>
+</a>
+<a class="entry-item" href="耶和华.html">
+  <div class="noun">耶和华</div>
+  <div class="snippet">耶和华（Jehovah）是基督教《圣经》中对独一上帝的称呼，源自希伯来语四字神名YHWH（יהוה）。该名在《出埃及记》3:14中解释为&quot;我是自有永有的&quot;，表明上帝是自有永有、昔在、今在、永在的神。犹太教因遵守&quot;不可妄称耶和华你神的名&quot;的诫</div>
+</a>
+<a class="entry-item" href="耶稣·基督.html">
+  <div class="noun">耶稣·基督</div>
+  <div class="snippet">基督教的核心人物，又称耶稣基督或拿撒勒人耶稣。基督徒相信他是上帝的儿子、弥赛亚（基督），为人类的罪被钉死在十字架上，第三日复活。他是基督教信仰的基石，在西方文明和文化中具有深远影响。在俄罗斯东正教传统中，耶稣基督的祷词是信徒日常祷告的核心内</div>
+</a>
+<a class="entry-item" href="耶稣会.html">
+  <div class="noun">耶稣会</div>
+  <div class="snippet">天主教修会之一，全称&quot;耶稣 Society of Jesus&quot;，1540年由圣依纳爵·罗耀拉创立，注重教育和传教。在小说中，耶稣会教士德若贝尔受命引导海伦改信天主教，并暗示她为教会捐款。</div>
+</a>
+<a class="entry-item" href="聪明绝顶的人.html">
+  <div class="noun">聪明绝顶的人</div>
+  <div class="snippet">作者对比利宾的形容，说明他在上流社会中以智慧和机智著称。比利宾是海伦的密友，以其冷静理性的分析和俏皮话闻名，被描述为永远不会坠入情网的旁观者。</div>
+</a>
+<a class="entry-item" href="胆囊病.html">
+  <div class="noun">胆囊病</div>
+  <div class="snippet">梅蒂维埃医生对老博尔孔斯基公爵身体状况的诊断之一，当时法国医生认为公爵身体欠佳、有胆囊和脑充血问题。反映了19世纪初期医学对老年疾病的认知。</div>
+</a>
+<a class="entry-item" href="背叛.html">
+  <div class="noun">背叛</div>
+  <div class="snippet">对信任和忠诚的背弃，皮埃尔与海伦的婚姻破裂暗示了背叛。</div>
+</a>
+<a class="entry-item" href="胜利.html">
+  <div class="noun">胜利</div>
+  <div class="snippet">在军事冲突中取得优势的结果，老公爵从报纸上读到俄军在打了几个辉煌战役后撤退的消息。</div>
+</a>
+<a class="entry-item" href="脑充血.html">
+  <div class="noun">脑充血</div>
+  <div class="snippet">梅蒂维埃医生对老博尔孔斯基公爵身体状况的诊断之一。在19世纪医学中常用来描述高血压或脑部血液循环问题引起的症状，当时被认为是老年常见病。</div>
+</a>
+<a class="entry-item" href="脑筋的分泌物.html">
+  <div class="noun">脑筋的分泌物</div>
+  <div class="snippet">托尔斯泰引用并批判当时唯物主义观点——理性和意志不过是大脑分泌的产物。他认为这只能解释问题的一个方面，无法解决自由意识问题。</div>
+</a>
+<a class="entry-item" href="自我净化.html">
+  <div class="noun">自我净化</div>
+  <div class="snippet">共济会的第二个主要宗旨，通过修炼会员的内心，净化和启发理智，使其具备领悟秘密的能力，是达到精神完善的必要过程。</div>
+</a>
+<a class="entry-item" href="自我完善.html">
+  <div class="noun">自我完善</div>
+  <div class="snippet">共济会的核心教义之一，指会员通过自觉的精神修养、道德实践和自我超越，不断趋向理想人格的过程。在《战争与和平》中，皮埃尔的恩师约瑟夫·阿列克谢耶维奇向其强调，&quot;一个真正的共济会员的主要责任乃在于自我完善&quot;，并将其列为共济会三大目的之首——先于</div>
+</a>
+<a class="entry-item" href="自我意识.html">
+  <div class="noun">自我意识</div>
+  <div class="snippet">托尔斯泰认为自我意识是独立于理性的认识来源，人通过理性观察自己，但只有通过意识才认识自己。没有自我意识则任何理性运用都不可思议。</div>
+</a>
+<a class="entry-item" href="自我牺牲.html">
+  <div class="noun">自我牺牲</div>
+  <div class="snippet">自我牺牲指个体为他人或集体利益主动放弃自身权益的行为。在《战争与和平》中，皮埃尔在与安德烈公爵的辩论中提出&quot;爱邻人&quot;和&quot;自我牺牲&quot;是生活的意义所在，认为只有为别人活着才能找到幸福。 --- 索尼娅珍爱的道德信条。为了报答罗斯托夫家的养育之恩</div>
+</a>
+<a class="entry-item" href="自然法则与历史法则.html">
+  <div class="noun">自然法则与历史法则</div>
+  <div class="snippet">托尔斯泰将历史法则与自然法则类比。如同不能追问电为何生热、原子为何相吸一样，历史事件的原因也不可追问，只能承认是法则。</div>
+</a>
+<a class="entry-item" href="自由.html">
+  <div class="noun">自由</div>
+  <div class="snippet">政治哲学核心概念，法国大革命三大口号之一。在本书历史哲学语境中，自由与必然的关系是核心问题之一——探讨人类意志自由与历史必然性之间的张力。</div>
+</a>
+<a class="entry-item" href="自由与约束.html">
+  <div class="noun">自由与约束</div>
+  <div class="snippet">托尔斯泰在《战争与和平》中探讨的核心哲学命题之一。皮埃尔在被俘期间领悟到：外在环境的约束越强，内在灵魂的自由反而越发强大。这一辩证关系的思考体现了托尔斯泰的宿命论与自由意志并存的哲学观。</div>
+</a>
+<a class="entry-item" href="自由意志.html">
+  <div class="noun">自由意志</div>
+  <div class="snippet">托尔斯泰认为自由意志是人通过内在意识体验到的自我决定能力，理性无法完全解释。人只能意识到意志是自由的，但服从必然性法则。</div>
+</a>
+<a class="entry-item" href="自由意识.html">
+  <div class="noun">自由意识</div>
+  <div class="snippet">托尔斯泰认为自由意识是不可动摇、不可否认、不受实验或论证所支配的独立来源，没有它就不能有任何关于人的观念。</div>
+</a>
+<a class="entry-item" href="自由的概念.html">
+  <div class="noun">自由的概念</div>
+  <div class="snippet">托尔斯泰认为自由的概念在理性看来是没有意义的矛盾，但意识不属于理性。自由的概念只能在意识中被体验，无法被理性论证。</div>
+</a>
+<a class="entry-item" href="船与波浪的比喻.html">
+  <div class="noun">船与波浪的比喻</div>
+  <div class="snippet">托尔斯泰用船与波浪比喻历史人物与历史运动的关系。船上的人以为波浪自己移动并指导船，实则是船的运动引起波浪。</div>
+</a>
+<a class="entry-item" href="船歌.html">
+  <div class="noun">船歌</div>
+  <div class="snippet">船歌（Barcarolle，源自意大利语&quot;barca&quot;意为船），起源于意大利威尼斯的一种音乐体裁，最初为贡多拉船工所唱的歌曲，后发展为声乐曲和器乐曲。通常采用6/8或12/8拍，营造均匀晃动的节奏感，模仿船桨划水的律动。著名作品包括奥芬巴赫</div>
+</a>
+<a class="entry-item" href="良心.html">
+  <div class="noun">良心</div>
+  <div class="snippet">人的内在道德判断力和自我约束力。在小说中，安德烈公爵认为比起身体的痛苦，人的尊严、良心的宁静和纯洁才是更值得珍惜的东西。</div>
+</a>
+<a class="entry-item" href="良心责备.html">
+  <div class="noun">良心责备</div>
+  <div class="snippet">良心责备指因做了违背道德或良知的事情而内心感到不安、愧疚和自责。在小说中，安德烈公爵提出他的人生哲学：生活中只有两种实在的不幸——受良心责备和疾病，除此之外皆为幸福。</div>
+</a>
+<a class="entry-item" href="苏格兰教律.html">
+  <div class="noun">苏格兰教律</div>
+  <div class="snippet">共济会苏格兰礼（Scottish Rite）的教律文献，共济会高级仪式体系中的经典文本。皮埃尔在巴兹杰耶夫的书房中找到了附有恩师注释的《苏格兰教律》真本，将其视为珍贵的共济会圣物，并沉浸在对教义的沉思中。</div>
+</a>
+<a class="entry-item" href="苏格兰舞曲.html">
+  <div class="noun">苏格兰舞曲</div>
+  <div class="snippet">原文指Écossaise（法语&quot;苏格兰的&quot;之意），一种18世纪末至19世纪初风行于法国和英国、后传入俄国的社交舞曲，节奏为2/4拍，活泼轻快。在《战争与和平》中，皮埃尔只会弹这一支舞曲，却声称用之可以伴奏任何舞蹈，这一细节生动刻画了他笨拙而</div>
+</a>
+<a class="entry-item" href="英国习惯.html">
+  <div class="noun">英国习惯</div>
+  <div class="snippet">指英国上层社会饭后男人们留在餐桌旁饮红葡萄酒交谈的社交习俗。女士们则退到客厅进行社交。在斯佩兰斯基家晚宴上这一习惯被遵循，男人们坐在餐桌旁谈论拿破仑在欧洲的战事，斯佩兰斯基的女儿和女教师则在饭后先行离开。</div>
+</a>
+<a class="entry-item" href="英雄.html">
+  <div class="noun">英雄</div>
+  <div class="snippet">本指神与凡人所生的半神半人，后指战功卓著或品德高尚之人。托尔斯泰在《战争与和平》中解构了传统英雄观，让安德烈公爵在重伤后意识到拿破仑这个&quot;英雄&quot;的渺小。</div>
+</a>
+<a class="entry-item" href="英雄史诗.html">
+  <div class="noun">英雄史诗</div>
+  <div class="snippet">以英雄人物为中心的传统叙事体裁，托尔斯泰认为这种历史观已不适用于理解现代战争和历史进程。</div>
+</a>
+<a class="entry-item" href="英雄救美.html">
+  <div class="noun">英雄救美</div>
+  <div class="snippet">罗斯托夫本人对这次相遇的内心感受——一个孤立无援、悲伤万分的贵族少女落入粗鲁农奴的包围中，而他恰好骑马经过解围，使他觉得这具有罗曼蒂克情调，是命运的安排。</div>
+</a>
+<a class="entry-item" href="荡妇.html">
+  <div class="noun">荡妇</div>
+  <div class="snippet">皮埃尔在内心独白中对妻子海伦的道德评判，认为她缺乏任何高尚的爱好和愿望、生活放荡。该词反映了当时俄国贵族社会对女性出轨行为的严厉道德审判。</div>
+</a>
+<a class="entry-item" href="荣耀.html">
+  <div class="noun">荣耀</div>
+  <div class="snippet">指军队和国家的荣誉与光荣，老公爵认为奥斯特利茨战役毁掉了俄罗斯的光荣。</div>
+</a>
+<a class="entry-item" href="荣誉与特权.html">
+  <div class="noun">荣誉与特权</div>
+  <div class="snippet">安德烈公爵与斯佩兰斯基辩论的核心议题。安德烈引用孟德斯鸠&quot;君主政体的基础是荣誉&quot;理论， 认为贵族的权利和特权是支持荣誉感的手段。斯佩兰斯基则认为荣誉是不做违反道德行为的消极概念， 或者是为获得荣誉奖赏而进行竞赛的原动力，而非某个阶层或宫廷的</div>
+</a>
+<a class="entry-item" href="荣誉团骑士.html">
+  <div class="noun">荣誉团骑士</div>
+  <div class="snippet">法国荣誉军团勋章（Legion d&#x27;honneur）的最低级别（骑士级/Chevalier），由拿破仑·波拿巴于1802年5月19日创立，是法国最高荣誉勋章。授予在军事或民事领域有杰出贡献者。格言为&quot;荣誉与祖国&quot;（Honneur et Pa</div>
+</a>
+<a class="entry-item" href="莫斯科不能留.html">
+  <div class="noun">莫斯科不能留</div>
+  <div class="snippet">皮埃尔目击法国厨子受刑后产生的强烈心理决定，认为莫斯科已不可停留，必须立即去前线参战。</div>
+</a>
+<a class="entry-item" href="莫斯科是众城之母.html">
+  <div class="noun">莫斯科是众城之母</div>
+  <div class="snippet">俄国人对莫斯科的传统尊称，源于古罗斯传统中对首都的赞誉。在历史上，&quot;众城之母&quot;（Mother of Cities）的称号最早出自12世纪编年史《往年纪事》，原指基辅（&quot;让基辅成为罗斯众城之母&quot;），但后世俄罗斯人常以此称呼莫斯科，视其为俄罗斯</div>
+</a>
+<a class="entry-item" href="莫斯科退休侍从.html">
+  <div class="noun">莫斯科退休侍从</div>
+  <div class="snippet">俄国上流社会中一种特定的生活状态——有一定地位的贵族退居莫斯科后，不追求功名，忠厚老实地度过余生，爱吃吃喝喝、偶尔骂骂政府。皮埃尔曾鄙视此身份，最终自己却成为其中一员。体现了托尔斯泰对贵族阶层庸碌生活的讽刺。</div>
+</a>
+<a class="entry-item" href="营地.html">
+  <div class="noun">营地</div>
+  <div class="snippet">军队野外驻扎的临时场所，包括帐篷、篝火、防御工事等设施。奥斯特里茨战役前夜法军全线营地燃起篝火并高呼皇帝万岁，显示出高昂的士气。</div>
+</a>
+<a class="entry-item" href="蓝胡子.html">
+  <div class="noun">蓝胡子</div>
+  <div class="snippet">法国民间传说故事，由夏尔·佩罗于1697年收录在《鹅妈妈的故事》中并流传于世。故事讲述一位长着蓝色胡须的贵族连续杀害多名妻子，最后一位妻子在哥哥们的帮助下将其杀死，获得巨额遗产。小说中安德烈公爵给年幼的儿子尼古卢什卡讲蓝胡子的故事，试图借此</div>
+</a>
+<a class="entry-item" href="虚伪.html">
+  <div class="noun">虚伪</div>
+  <div class="snippet">小说核心批判主题之一。皮埃尔厌恶上流社会的虚伪，认为罪恶和虚伪与一切工作领域分不开，使他失去认真生活的勇气。然而他发现人人都像士兵一样在逃避生活，对各种虚伪视而不见。托尔斯泰通过皮埃尔的视角深刻批判了贵族社会的虚假和伪善。</div>
+</a>
+<a class="entry-item" href="虚荣.html">
+  <div class="noun">虚荣</div>
+  <div class="snippet">对虚名和表面荣誉的过分追求。托尔斯泰在小说中揭示虚荣是战争的驱动力之一，安德烈公爵最初参战就出于建功立业的虚荣心，后在战场上觉醒。</div>
+</a>
+<a class="entry-item" href="蜜蜂的目的论.html">
+  <div class="noun">蜜蜂的目的论</div>
+  <div class="snippet">托尔斯泰在《战争与和平》尾声中使用的重要比喻。他用不同人（孩子、诗人、养蜂人、植物学家）对蜜蜂目的的各自理解，说明人类为现象赋予单一目的的做法是有限的——历史的终极目的无法被人的有限理性所把握。</div>
+</a>
+<a class="entry-item" href="血统关系影响婚姻.html">
+  <div class="noun">血统关系影响婚姻</div>
+  <div class="snippet">比利宾在分析海伦的婚姻选择时提到宫廷涉及血统关系，暗示海伦如果嫁给年轻亲王会影响库拉金家族与宫廷的现有血缘和政治纽带。</div>
+</a>
+<a class="entry-item" href="血腥和火药味.html">
+  <div class="noun">血腥和火药味</div>
+  <div class="snippet">皮埃尔在战后创伤记忆中反复体验到的战场嗅觉记忆，与客栈中和平的干草和马粪味形成强烈对比，象征战争暴力和日常生活之间的对立。</div>
+</a>
+<a class="entry-item" href="表亲联姻.html">
+  <div class="noun">表亲联姻</div>
+  <div class="snippet">俄国贵族社会中表兄妹之间通婚的习俗。在《战争与和平》中，薇拉说&quot;表亲表亲，天然联亲&quot;，以此影射娜塔莎和鲍里斯（表兄妹）之间的童年爱情。在19世纪俄国乃至欧洲贵族阶层，表亲联姻是常见且被社会接受的现象，有助于维护家族财产和血统。</div>
+</a>
+<a class="entry-item" href="被免职的司祭.html">
+  <div class="noun">被免职的司祭</div>
+  <div class="snippet">指被东正教会正式剥夺神职身份的司祭，即被革除教籍或罢黜神职的神职人员。在《战争与和平》中，阿纳托利·库拉金找来的是一名被免职的司祭为他和娜塔莎的秘密婚礼主持仪式，反映出其计划的非法性和隐秘性。</div>
+</a>
+<a class="entry-item" href="西徐亚人.html">
+  <div class="noun">西徐亚人</div>
+  <div class="snippet">即斯基泰人（Scythians），公元前8世纪至公元3世纪活跃于东欧大草原至中亚的古代游牧民族，属印欧语系东伊朗语支，以骑射著称，是最早建立游牧帝国的民族之一。在本书中指代&quot;野蛮人的战争&quot;——即1812年卫国战争被视为野蛮人之间的战争。</div>
+</a>
+<a class="entry-item" href="西徐亚战争计划.html">
+  <div class="noun">西徐亚战争计划</div>
+  <div class="snippet">又称斯基泰战略，源于古希腊史学家希罗多德所载西徐亚（斯基泰）人对抗波斯王大流士一世的战术——诱敌深入、坚壁清野、避免决战，待敌军补给线拉长后予以歼灭。1812年俄法战争中，俄军被指采取类似战略，不断后撤并坚壁清野，最终将拿破仑大军团引入俄国</div>
+</a>
+<a class="entry-item" href="觉醒.html">
+  <div class="noun">觉醒</div>
+  <div class="snippet">精神上的苏醒和新生。在小说中指安德烈公爵在与皮埃尔的渡船对话后，内心久已沉睡的美好感情重新苏醒，标志着他在精神上进入了一个新纪元。</div>
+</a>
+<a class="entry-item" href="誓言.html">
+  <div class="noun">誓言</div>
+  <div class="snippet">庄严的承诺和保证，本章中人物间的情感承诺和责任的表达。</div>
+</a>
+<a class="entry-item" href="训导师.html">
+  <div class="noun">训导师</div>
+  <div class="snippet">共济会中负责指导新入会者（求道者）的导师角色，负责传授教义、主持考验、解释符号象征，引导新会员完成入会启蒙仪式。</div>
+</a>
+<a class="entry-item" href="设防的前哨.html">
+  <div class="noun">设防的前哨</div>
+  <div class="snippet">在主力阵地前方设立的具有防御工事的观察哨，托尔斯泰指出史学家不正确地将军舍瓦尔金诺多面堡描述为前哨，而实际上它本是俄军阵地的左翼。</div>
+</a>
+<a class="entry-item" href="设防的阵地的虚构.html">
+  <div class="noun">设防的阵地的虚构</div>
+  <div class="snippet">托尔斯泰揭露的官方史学对波罗金诺战役的歪曲，即声称俄军在预先选定的筑有工事的阵地上进行了有准备的会战。</div>
+</a>
+<a class="entry-item" href="诗意回忆.html">
+  <div class="noun">诗意回忆</div>
+  <div class="snippet">少年时代梦幻与现实融合在一起的遥远印象，带着莫名的喜悦轻轻笑着的回忆方式。 与忧郁的老年人的回忆相对，属于充满生命力和美感的青春记忆。 娜塔莎和尼古拉在圣诞节夜晚回忆童年往事时怀有这种诗意的情感。</div>
+</a>
+<a class="entry-item" href="说胡话.html">
+  <div class="noun">说胡话</div>
+  <div class="snippet">医学术语为谵妄（delirium），指高烧或疾病状态下出现的意识障碍、胡言乱语和幻觉。安德烈公爵在受伤后高烧中产生了关于家人和拿破仑的幻觉。</div>
+</a>
+<a class="entry-item" href="请愿者.html">
+  <div class="noun">请愿者</div>
+  <div class="snippet">共济会入会仪式中对候选人的称呼之一，象征恳求加入与接纳的人，表达入会者渴望获得组织接纳的心情。</div>
+</a>
+<a class="entry-item" href="诺言是事业的亲兄弟.html">
+  <div class="noun">诺言是事业的亲兄弟</div>
+  <div class="snippet">卡拉塔耶夫的谚语，意为答应别人的事就要像对待亲兄弟一样认真完成。他说星期五做好衬衫就如期完成，体现了俄国农民的诚实守信品性。</div>
+</a>
+<a class="entry-item" href="谎花.html">
+  <div class="noun">谎花</div>
+  <div class="snippet">植物学术语，指只开花不结果的花(如南瓜、黄瓜等的雄花)，亦称徒花。在文学中用作比喻，形容徒有外表而无实际结果的人或事物。娜塔莎用谎花比喻索尼娅——美丽善良但如不结果的花一样，在爱情和人生中无所归属。</div>
+</a>
+<a class="entry-item" href="谦虚.html">
+  <div class="noun">谦虚</div>
+  <div class="snippet">共济会七美德之首，要求会员保守本会的秘密，不炫耀知识，以谦逊的态度对待真理与教义的学习。</div>
+</a>
+<a class="entry-item" href="贝尼格森派.html">
+  <div class="noun">贝尼格森派</div>
+  <div class="snippet">1812年俄法战争期间以列昂季·贝尼格森伯爵为首的俄国军方派系。贝尼格森曾在1807年艾劳会战中与拿破仑大战，拥有丰富经验。此派反对巴克雷·德·托利的撤退战略，主张与法军正面交战，认为只有贝尼格森有能力指挥全军。</div>
+</a>
+<a class="entry-item" href="财政改革.html">
+  <div class="noun">财政改革</div>
+  <div class="snippet">斯佩兰斯基改革的重要组成部分，旨在改变俄国现有的财政制度。亚历山大一世在国务会议上宣布财政应当改革、财政报告要公布。在斯佩兰斯基的整套改革方案中，财政改革与司法、行政改革并列，是其国家宪法蓝图的关键一环。</div>
+</a>
+<a class="entry-item" href="责任.html">
+  <div class="noun">责任</div>
+  <div class="snippet">应尽的义务和本分，玛丽亚公爵小姐感到有责任保护嫂子不受打击。 --- 安德烈公爵向娜塔莎求婚后，心中原有的诗意憧憬消失，取而代之的是对她无限忠诚和信任的畏惧，以及因将要永远结合而产生的&quot;又沉重又欢快的责任感&quot;。他坚持不公开订婚、给予娜塔莎自</div>
+</a>
+<a class="entry-item" href="贬低人民光荣.html">
+  <div class="noun">贬低人民光荣</div>
+  <div class="snippet">托尔斯泰批评官方史学为了掩饰将领错误而歪曲事实，反而贬低了俄国军队和人民在波罗金诺战役中表现出的英勇和牺牲。</div>
+</a>
+<a class="entry-item" href="贵族.html">
+  <div class="noun">贵族</div>
+  <div class="snippet">俄国社会中拥有特权和封地的上层阶级，博尔康斯基家族是俄国世袭贵族。</div>
+</a>
+<a class="entry-item" href="贵族生活的维持.html">
+  <div class="noun">贵族生活的维持</div>
+  <div class="snippet">托尔斯泰描写的俄国贵族即使经济拮据也难以改变传统生活方式的社会现象。罗斯托夫家虽辞去公职节省开销，但宅院仍住满寄居的乐师、家庭教师等各类人物，只因伯爵和伯爵夫人难以想象怎样活下去如果改变这种生活方式。</div>
+</a>
+<a class="entry-item" href="贵族破产.html">
+  <div class="noun">贵族破产</div>
+  <div class="snippet">伊利亚·安德烈伊奇伯爵经营不善、家产日渐耗尽的社会现象。19世纪初许多旧式俄国贵族家庭因不善经营和无法适应新的经济形势而走向衰落。罗斯托夫伯爵辞去首席贵族职位后仍维持奢华生活方式。托尔斯泰用捕兽网比喻描绘伯爵的困境，与小说的新贵崛起形成对照</div>
+</a>
+<a class="entry-item" href="贵族长.html">
+  <div class="noun">贵族长</div>
+  <div class="snippet">俄国帝政时期各省或县贵族阶层选举产生的代表，负责管理贵族事务、主持贵族会议、代表贵族与沙皇政府沟通。小说中安德烈公爵曾拒绝担任此职。 --- 帝俄时代省或县贵族会议选出的首席贵族（Предводитель дворянства）。根据叶卡捷</div>
+</a>
+<a class="entry-item" href="赋役户.html">
+  <div class="noun">赋役户</div>
+  <div class="snippet">俄语称&quot;тяглые дворы&quot;，是俄罗斯农奴制时期的基本课税单位，指承担国家赋税和劳役的农民家庭。每个赋役户须按&quot;тягло&quot;（赋役额）缴纳固定税款并承担徭役。小说中博古恰罗沃有二百三十个赋役户，表明其为殷实的村庄。</div>
+</a>
+<a class="entry-item" href="赋格曲.html">
+  <div class="noun">赋格曲</div>
+  <div class="snippet">赋格曲（Fugue，源自拉丁语&quot;Fuga&quot;，意为遁走/追逐）是复调音乐的重要体裁，核心特征为各声部在不同音高上相继进入、相互模仿追逐。在巴洛克时期由J.S.巴赫推向巅峰（如《平均律钢琴曲集》）。典型结构包括呈示部（主题与答题）、发展部（间插</div>
+</a>
+<a class="entry-item" href="踏着泥浆.html">
+  <div class="noun">踏着泥浆</div>
+  <div class="snippet">客栈勤务兵在大门口活动的细节描写，反映了俄罗斯秋季雨后泥泞的环境特点，与战场上血腥泥泞的土地形成呼应。</div>
+</a>
+<a class="entry-item" href="轮回论.html">
+  <div class="noun">轮回论</div>
+  <div class="snippet">灵魂转世的哲学学说（metempsychosis）。索尼娅在谈话中提及埃及人相信灵魂从前 附在牲畜身上，将来又回到牲畜身上。娜塔莎则提出灵魂不朽和天使转世的个人理解。 托尔斯泰在创作《战争与和平》期间深受赫尔德和叔本华关于再生（paling</div>
+</a>
+<a class="entry-item" href="软木炭画胡子.html">
+  <div class="noun">软木炭画胡子</div>
+  <div class="snippet">软木炭画胡子是俄国圣诞化装传统中的一种简易化妆手法。人们用烧焦的软木塞（burnt cork）作为炭笔，在脸上涂抹画假胡子和眉毛以掩盖真实面目。这比戴面具更轻便自然，且带有独特的焦炭气味。在小说中娜塔莎、索尼娅等姑娘都用软木炭画了小胡子，连</div>
+</a>
+<a class="entry-item" href="轻罪.html">
+  <div class="noun">轻罪</div>
+  <div class="snippet">基督教教义中的罪孽等级分类之一，指并非出于恶意所犯的、可以通过忏悔或善行弥补的较轻罪过。良心指导者认为海伦违背婚姻誓言的行为属于轻罪。</div>
+</a>
+<a class="entry-item" href="轻罪与死罪.html">
+  <div class="noun">轻罪与死罪</div>
+  <div class="snippet">良心指导者在讨论海伦的罪过时提出的两种罪孽分类，轻罪指无恶意的行为，死罪指严重的不可饶恕的罪行。他认为海伦的行为属于轻罪。</div>
+</a>
+<a class="entry-item" href="辎重.html">
+  <div class="noun">辎重</div>
+  <div class="snippet">军事术语，指军队行军时由运输部队携带的军械、粮草、被服等后勤物资及人员车辆。英文对应baggage train。在1805年战役中俄军携带全副辎重撤退，极大地限制了行军速度。</div>
+</a>
+<a class="entry-item" href="辎重兵.html">
+  <div class="noun">辎重兵</div>
+  <div class="snippet">军队中负责运输和后勤保障的兵种，管理弹药、粮食、装备等物资的车辆和驮畜。拿破仑战争时期法军设有正规的辎重列车部队，英军则有皇家辎重列车（Royal Waggon Train）。</div>
+</a>
+<a class="entry-item" href="迂回.html">
+  <div class="noun">迂回</div>
+  <div class="snippet">军事战术中从敌军侧翼或后方实施包围的机动方式，旨在避开正面强攻，攻击薄弱环节。拿破仑善于诱使敌军迂回其右翼而后实施中央突破。</div>
+</a>
+<a class="entry-item" href="迂回战.html">
+  <div class="noun">迂回战</div>
+  <div class="snippet">军事战术概念，指军队通过绕行敌军侧翼或后方，切断其补给线和退路，以迫使敌军放弃防御阵地或在不利条件下进行决战。19世纪普鲁士军事学派的核心理论之一。</div>
+</a>
+<a class="entry-item" href="迂回运动论.html">
+  <div class="noun">迂回运动论</div>
+  <div class="snippet">普鲁士军事理论家普弗尔从腓特烈大帝战争史中总结出的一套军事理论，强调通过侧翼迂回运动来击败敌军。普弗尔认为这一理论是绝对正确的军事科学，任何实际战争中的失败都是因为没有严格按照该理论执行。托尔斯泰通过这一概念讽刺了脱离实际的教条主义军事思想</div>
+</a>
+<a class="entry-item" href="运动战.html">
+  <div class="noun">运动战</div>
+  <div class="snippet">军事战术概念，指军队在广阔战场上通过高度机动性的行军和转移来寻求有利战机，而非固守阵地或正面决战。19世纪初普鲁士军事学派（如普弗尔、比洛等）的理论核心之一。在《战争与和平》中，运动战与迂回战被并列为普弗尔军事理论的基本法则。</div>
+</a>
+<a class="entry-item" href="近卫军.html">
+  <div class="noun">近卫军</div>
+  <div class="snippet">近卫军是沙皇俄国精锐部队的荣誉称号和编制。俄国近卫军起源于彼得大帝时期的普列奥布拉任斯基团和谢苗诺夫团，最初从贵族子弟中选拔，专责保卫沙皇。近卫军官兵军衔比普通军人高一级，薪俸优厚。在拿破仑战争时期，俄国近卫军参与了多次重大战役。19世纪的</div>
+</a>
+<a class="entry-item" href="近卫重骑兵.html">
+  <div class="noun">近卫重骑兵</div>
+  <div class="snippet">俄罗斯帝国近卫重骑兵，是沙皇精锐骑兵部队，包括近卫骑兵团（Kavalergarde）和骑马禁军团等。装备白色制服、胸甲和骑枪，只招收贵族子弟。在1805年奥斯特利茨战役中对法军发起过英勇但伤亡惨重的冲锋。</div>
+</a>
+<a class="entry-item" href="进攻.html">
+  <div class="noun">进攻</div>
+  <div class="snippet">军队向敌方主动发起攻击的战斗行动，与防御相对。进攻方通常需要兵力优势和良好的组织，但在大雾和混乱中贸然进攻可能导致失败。</div>
+</a>
+<a class="entry-item" href="连长.html">
+  <div class="noun">连长</div>
+  <div class="snippet">军队中连一级编制的最高指挥员，负责组织连队的日常训练、管理、作战指挥，是连接上级指挥部与基层士兵的桥梁。连通常由3至6个排组成，人数约80至150人。在19世纪俄国军队中，连长通常由上尉或中尉担任，是军队基层的核心指挥官。</div>
+</a>
+<a class="entry-item" href="退却.html">
+  <div class="noun">退却</div>
+  <div class="snippet">军队为保存实力主动脱离接触向后转移的行动。在奥斯特里茨战役前夜俄军将领多尔戈鲁科夫认为敌军点火鼓噪是退却时的欺骗手段，但实际是拿破仑诱敌之计。</div>
+</a>
+<a class="entry-item" href="逃避生活.html">
+  <div class="noun">逃避生活</div>
+  <div class="snippet">小说重要主题，通过皮埃尔的视角展开。皮埃尔发现所有人都在像士兵一样设法逃避生活的可怕面目：有人追求功名、有人留恋赌场、有人沉迷女色、有人嗜酒成癖。他认为没有所谓的大人物小人物，大家都在千方百计逃避生活的烦恼。反映了19世纪俄国贵族的精神空虚</div>
+</a>
+<a class="entry-item" href="道德生活的模范.html">
+  <div class="noun">道德生活的模范</div>
+  <div class="snippet">共济会三条宗旨之一，要求会员在道德上成为表率，皮埃尔承认自己没有履行此规定。</div>
+</a>
+<a class="entry-item" href="道德联盟.html">
+  <div class="noun">道德联盟</div>
+  <div class="snippet">又称美德联盟（Tugendbund），1808年6月由普鲁士爱国者在柯尼斯堡创立的秘密爱国社团。正式名称为&quot;道德科学实践协会&quot;，旨在通过道德和教育改革重振普鲁士民族精神，抵抗拿破仑占领。在拿破仑压力下被普鲁士国王于1809年下令解散，但其成</div>
+</a>
+<a class="entry-item" href="道德责任.html">
+  <div class="noun">道德责任</div>
+  <div class="snippet">托尔斯泰指出为历史事件所作的种种辩解（如为了国家荣誉、自由平等）的功能是消除制造事件者的道德责任。</div>
+</a>
+<a class="entry-item" href="遗产.html">
+  <div class="noun">遗产</div>
+  <div class="snippet">去世者留下的财产。老公爵在莫斯科给儿子订做纪念碑，反映家族传承的思考。</div>
+</a>
+<a class="entry-item" href="遗嘱.html">
+  <div class="noun">遗嘱</div>
+  <div class="snippet">指财产所有人生前对其遗产进行处分的法律文件。在19世纪俄国贵族社会中，遗嘱继承优先于法定继承，但私生子无权继承父亲财产，除非得到沙皇特别恩准。小说中老别祖霍夫伯爵已立下遗嘱将全部财产留给私生子皮埃尔，并写信请求沙皇承认皮埃尔为嫡子。大公爵小</div>
+</a>
+<a class="entry-item" href="重逢.html">
+  <div class="noun">重逢</div>
+  <div class="snippet">分离后再次相见，本章结尾暗示归来的可能就是安德烈公爵，预示着重逢。</div>
+</a>
+<a class="entry-item" href="镜卜.html">
+  <div class="noun">镜卜</div>
+  <div class="snippet">镜卜是俄国最著名的少女圣诞占卜方式。做法是在深夜将两面镜子相对摆放形成无限反射的镜像隧道，点燃蜡烛，散开头发，凝视镜中念咒请未婚夫现身。这一仪式被认为非常危险——若看到影像后不及时念咒驱散，鬼魂可能从镜中出来伤人。镜卜是古斯拉夫多神教占卜传</div>
+</a>
+<a class="entry-item" href="镟工.html">
+  <div class="noun">镟工</div>
+  <div class="snippet">用车床加工木制品的工艺，是老公爵的消遣活动。他在车床上做镟工活儿以分散注意力。</div>
+</a>
+<a class="entry-item" href="门第观念.html">
+  <div class="noun">门第观念</div>
+  <div class="snippet">19世纪俄国贵族社会严格的门第等级观念。老博尔孔斯基公爵认为娜塔莎虽然出身贵族（罗斯托夫家族），但门第不够高、家产不够厚，与博尔孔斯基家族不相匹配。这种视婚姻为家族联盟、讲究门当户对的观念是当时俄国贵族社会的普遍现象，也是安德烈与娜塔莎婚事</div>
+</a>
+<a class="entry-item" href="阵亡.html">
+  <div class="noun">阵亡</div>
+  <div class="snippet">指在战斗中牺牲。老公爵从库图佐夫来信中推断安德烈公爵在奥斯特利茨战役中阵亡。</div>
+</a>
+<a class="entry-item" href="阵地.html">
+  <div class="noun">阵地</div>
+  <div class="snippet">军队为进行战斗而占领并组织防御或进攻的地域。在奥斯特里茨战役中法军占据的阵地被拿破仑描述为坚不可摧，是战役部署的核心要素。</div>
+</a>
+<a class="entry-item" href="阵地左翼右翼中心.html">
+  <div class="noun">阵地左翼右翼中心</div>
+  <div class="snippet">俄军最初在波罗金诺的阵地布局：左翼在舍瓦尔金诺，右翼在诺沃耶村，中心在波罗金诺。</div>
+</a>
+<a class="entry-item" href="阶梯.html">
+  <div class="noun">阶梯</div>
+  <div class="snippet">指从低级生命到高级生命层层递进的宇宙等级秩序，源于西方哲学中的&quot;存在之链&quot;概念。皮埃尔借此论证人类之上还有更高级的存在，灵魂不会消灭。</div>
+</a>
+<a class="entry-item" href="阿奇里斯悖论.html">
+  <div class="noun">阿奇里斯悖论</div>
+  <div class="snippet">又称芝诺悖论，古希腊哲学家芝诺（约公元前490—前430年）提出的关于运动的哲学悖论。论证阿奇里斯（希腊跑得最快的人）永远追不上乌龟：每当阿奇里斯到达乌龟所在位置时，乌龟都已向前移动了一段距离，如此无限细分。该悖论揭示了连续与离散的矛盾，推</div>
+</a>
+<a class="entry-item" href="阿尔帕特奇滑行步.html">
+  <div class="noun">阿尔帕特奇滑行步</div>
+  <div class="snippet">托尔斯泰对管家阿尔帕特奇走路姿态的生动描写——他尽力不跑，但用滑行的步子紧赶，以追上大步向前的罗斯托夫，体现了老管家的急切和恭谨。</div>
+</a>
+<a class="entry-item" href="阿尔瑙.html">
+  <div class="noun">阿尔瑙</div>
+  <div class="snippet">土耳其人对阿尔巴尼亚人的称呼（Arnaut/Arnavut），源自拜占庭希腊语。奥斯曼帝国时期阿尔巴尼亚人以勇猛善战著称，大量在奥斯曼军队中服役。</div>
+</a>
+<a class="entry-item" href="陆军.html">
+  <div class="noun">陆军</div>
+  <div class="snippet">俄国陆军常规部队，与近卫军相对，阿纳托利从骑兵近卫军调到陆军服役，反映了19世纪初俄国军事体制中不同兵种和部队类型的区分。</div>
+</a>
+<a class="entry-item" href="降低社会地位.html">
+  <div class="noun">降低社会地位</div>
+  <div class="snippet">皮埃尔为融入士兵群体而刻意隐瞒贵族身份的举动。他自称民兵军官而非伯爵，认为只有这样才能被普通士兵接受和理解。</div>
+</a>
+<a class="entry-item" href="降低身份.html">
+  <div class="noun">降低身份</div>
+  <div class="snippet">比利宾分析中提到的社交后果，指如果海伦先嫁给了年轻亲王，那位老伯爵娶她就会降低身份；反过来如果她先嫁给老伯爵再做遗孀，亲王娶她就不算降低身份。</div>
+</a>
+<a class="entry-item" href="降职军官.html">
+  <div class="noun">降职军官</div>
+  <div class="snippet">指因过失被从军官降为普通士兵的军人。书中多洛霍夫因决斗、恶作剧等行为被由军官降为士兵，但仍保留立功赎罪、恢复军衔的机会。</div>
+</a>
+<a class="entry-item" href="陛下.html">
+  <div class="noun">陛下</div>
+  <div class="snippet">对帝王的尊称，源自&quot;陛&quot;指帝王宫殿的台阶。臣子不敢直呼天子，先呼台阶下侍者转告，故称&quot;陛下&quot;表&quot;因卑达尊&quot;之意。在欧洲用于翻译Your Majesty/Your Imperial Majesty。</div>
+</a>
+<a class="entry-item" href="陪嫁.html">
+  <div class="noun">陪嫁</div>
+  <div class="snippet">俄国贵族女性出嫁时带往夫家的财产，包括现金、田庄和农奴。嫁妆的多少直接决定贵族婚姻的经济基础，归丈夫支配管理。索尼娅因为没有陪嫁而被罗斯托夫伯爵夫人反对婚事，尼古拉的母亲认为儿子娶她会&quot;导致罗斯托夫伯爵家的灭亡&quot;。 --- 俄国贵族女性出嫁</div>
+</a>
+<a class="entry-item" href="陪嫁(嫁妆).html">
+  <div class="noun">陪嫁(嫁妆)</div>
+  <div class="snippet">陪嫁（Приданое / Dowry），指女子出嫁时娘家随嫁的财产，包括现金、田庄、农奴、珠宝等。在19世纪俄国贵族社会中，陪嫁是婚姻中极为重要的经济安排，直接影响女儿能否嫁入好人家。在《战争与和平》中，罗斯托夫家为每个女儿预备了带有三百</div>
+</a>
+<a class="entry-item" href="雅各宾党人.html">
+  <div class="noun">雅各宾党人</div>
+  <div class="snippet">雅各宾派是法国大革命时期最激进的革命政治团体，因在巴黎圣奥诺雷街的雅各宾修道院集会而得名。主要领导人物包括罗伯斯庇尔、丹东、马拉等。1793年推翻吉伦特派后建立雅各宾专政，实行恐怖统治，通过总动员令保卫革命成果。1794年7月热月政变后倒台</div>
+</a>
+<a class="entry-item" href="雅歌.html">
+  <div class="noun">雅歌</div>
+  <div class="snippet">雅歌（Song of Songs / Song of Solomon），《圣经·旧约》中的一卷诗歌书，传统上认为由所罗门王所作。全书以男女对唱的情诗形式表达爱情的坚贞与美好，是圣经中最短的卷之一，也是极独特的一卷——书中几乎不涉及宗教术语。</div>
+</a>
+<a class="entry-item" href="集体游戏.html">
+  <div class="noun">集体游戏</div>
+  <div class="snippet">集体游戏是俄国圣诞聚会中常见的传统娱乐活动，主仆共同参与。戒指游戏（传递戒指猜在谁手）、绳子游戏（翻花绳或拉绳比赛）和卢布游戏（传递钱币）等都是简单而热闹的室内游戏。这些游戏打破了主仆界限，所有人围成大圆圈一起玩，体现了圣诞节的全民同乐精神</div>
+</a>
+<a class="entry-item" href="集体行动.html">
+  <div class="noun">集体行动</div>
+  <div class="snippet">托尔斯泰认为历史是由所有参加事件的人的集体活动共同推动的。任何集体行动都能在国家统一、爱国主义等名义下找到辩解。</div>
+</a>
+<a class="entry-item" href="雾.html">
+  <div class="noun">雾</div>
+  <div class="snippet">奥斯特里茨战役当天清晨弥漫的大雾，对战役进程产生了决定性影响。浓雾中法军得以隐蔽调动攻占普拉茨高地，而联军因雾中迷失无法协同作战。雾散后法军已完成包围。</div>
+</a>
+<a class="entry-item" href="雾月.html">
+  <div class="noun">雾月</div>
+  <div class="snippet">法兰西共和历中秋季的第二个月，约对应公历10月22日至11月20日。名称源自法语brume（薄雾）。1799年11月9日（共和历8年雾月18日）拿破仑发动雾月政变推翻督政府，标志着法国大革命的终结。1806年恢复格里高利历后停用。</div>
+</a>
+<a class="entry-item" href="霰弹.html">
+  <div class="noun">霰弹</div>
+  <div class="snippet">拿破仑战争时期野战火炮使用的近距离杀伤弹药。弹体外观呈圆筒状，外壳为薄铁皮，内部装填若干枚铁质或铅质小弹丸，不含火药。发射时铁皮桶在出炮口瞬间裂开，小弹丸飞出形成圆锥状弹幕，对密集目标造成大面积杀伤。有效射程约300-400米，是陆军野战炮</div>
+</a>
+<a class="entry-item" href="青年近卫军.html">
+  <div class="noun">青年近卫军</div>
+  <div class="snippet">拿破仑帝国近卫军的重要组成部分，1809年1月16日由拿破仑正式创建。士兵从最强壮、受教育程度最高的新兵中选拔，军官和士官骨干来自老近卫军。在战场上作为主力作战部队使用，区别于作为最后预备队的老近卫军。1814年随帝国覆灭而解散，百日王朝期</div>
+</a>
+<a class="entry-item" href="青苹果的比喻.html">
+  <div class="noun">青苹果的比喻</div>
+  <div class="snippet">库图佐夫在深夜沉思时使用的著名比喻，表达其战略哲学。他认为不宜过早与法军进行决战，就像不应采摘未成熟的苹果一样——青苹果被摘下既毁了果实又毁了树。应等待时机成熟，让法军在内部消耗中自行崩溃。</div>
+</a>
+<a class="entry-item" href="非利士人.html">
+  <div class="noun">非利士人</div>
+  <div class="snippet">非利士人是《圣经》中记载的一个古老民族，是古代以色列人的主要敌人之一。据圣经记载，他们起源于爱琴海地区（迦斐托，即克里特岛），于公元前12世纪左右迁徙至迦南地的地中海东南沿岸，建立五大城邦：迦萨、亚实基伦、亚实突、以革伦和迦特。圣经中著名的</div>
+</a>
+<a class="entry-item" href="鞑靼人.html">
+  <div class="noun">鞑靼人</div>
+  <div class="snippet">俄罗斯联邦人口最多的少数民族，主要分布在伏尔加河流域的鞑靼斯坦共和国，属突厥语族，多信仰伊斯兰教逊尼派，在19世纪的沙俄军队中常见鞑靼人参军。</div>
+</a>
+<a class="entry-item" href="顺从地交叠.html">
+  <div class="noun">顺从地交叠</div>
+  <div class="snippet">韦列夏金在被处决前将双手顺从地交叠在肚子上的姿势，表现其无力反抗的悲惨处境。</div>
+</a>
+<a class="entry-item" href="预定阵地.html">
+  <div class="noun">预定阵地</div>
+  <div class="snippet">俄军指挥层预先设想的在波罗金诺附近构筑的防御阵地，托尔斯泰指出这一预定阵地实际上并不存在。</div>
+</a>
+<a class="entry-item" href="领圣体.html">
+  <div class="noun">领圣体</div>
+  <div class="snippet">东正教七件圣事之一，又称圣餐礼、事奉圣礼（Divine Liturgy）。东正教信奉经过祝圣的饼和酒真实地转变为基督的身体和宝血（变体说），使用发酵面饼，以同一圣勺将体血混合后送至信徒口中。领圣体前需严格守斋，是东正教信徒与神合一、获得恩典</div>
+</a>
+<a class="entry-item" href="风暴.html">
+  <div class="noun">风暴</div>
+  <div class="snippet">猛烈的风雪天气，象征性的自然力量，与屋内分娩的紧张气氛相呼应。</div>
+</a>
+<a class="entry-item" href="风雪.html">
+  <div class="noun">风雪</div>
+  <div class="snippet">暴风雪天气，三月夜晚的最后一场暴风雪，为医生到来的场景营造了氛围。</div>
+</a>
+<a class="entry-item" href="首席贵族.html">
+  <div class="noun">首席贵族</div>
+  <div class="snippet">俄语称&quot;Предводитель дворянства&quot;（Marshal of the Nobility），俄罗斯帝国时期县级和省级的贵族自治机构负责人，由当地贵族会议选举产生，负责主持贵族会议、维护贵族特权、审核贵族资格等事务。小说中县首</div>
+</a>
+<a class="entry-item" href="马丁主义.html">
+  <div class="noun">马丁主义</div>
+  <div class="snippet">十八世纪俄国共济会中的一个神秘主义派别，以其主要人物马丁（Louis-Claude de Saint-Martin）得名。马丁原为法国军官，写过几部神秘主义作品。该派别强调内在宗教性和与神合一的体验，19世纪初在俄国上层知识分子中颇具影响，</div>
+</a>
+<a class="entry-item" href="马丁主义者.html">
+  <div class="noun">马丁主义者</div>
+  <div class="snippet">马丁主义（Martinism）的追随者，18世纪起源于法国的基督教神秘主义教派，融合卡巴拉与赫密斯主义元素，强调通过内心冥想回归神性。18世纪俄国共济会圈子中多有马丁主义者，诺维科夫、巴兹杰耶夫均属此列。</div>
+</a>
+<a class="entry-item" href="马克遗风.html">
+  <div class="noun">马克遗风</div>
+  <div class="snippet">出自《战争与和平》，指奥地利将军马克在乌尔姆战役（1805年10月）中率全军向拿破仑投降的耻辱教训。比利宾用此俏皮话讽刺奥军重蹈覆辙、接连失败的悲剧，后成为比喻军事决策失误招致惨败的典故。</div>
+</a>
+<a class="entry-item" href="马太福音.html">
+  <div class="noun">马太福音</div>
+  <div class="snippet">《圣经·新约》第一卷书，四福音书之首。传统认为由使徒马太（又名利未）所写，面向犹太人读者，大量引用旧约经文证明耶稣就是弥赛亚。主祷文记载于第六章。</div>
+</a>
+<a class="entry-item" href="马木留克.html">
+  <div class="noun">马木留克</div>
+  <div class="snippet">又译马穆鲁克，阿拉伯语意为&quot;被拥有的人&quot;，指中世纪伊斯兰世界的奴隶骑兵阶层。他们多来自中亚和高加索的非穆斯林青少年，被贩卖至埃及后经严酷军事训练成为精锐骑兵。1250年在埃及建立马木留克王朝，统治近300年。1260年在艾因·贾鲁战役击败蒙</div>
+</a>
+<a class="entry-item" href="骑兵上尉.html">
+  <div class="noun">骑兵上尉</div>
+  <div class="snippet">俄国骑兵部队中的军官军衔（ротмистр），相当于步兵中的大尉，是骑兵连的指挥官。在《战争与和平》中，基尔斯坚即担任骑兵上尉一职，是连队中的高级军官。</div>
+</a>
+<a class="entry-item" href="骑兵近卫军.html">
+  <div class="noun">骑兵近卫军</div>
+  <div class="snippet">俄国精锐的近卫骑兵部队，属于近卫军编制，军官多出身贵族、待遇优厚，阿纳托利最初服役于此兵种，后调至陆军常规部队。</div>
+</a>
+<a class="entry-item" href="骑兵连.html">
+  <div class="noun">骑兵连</div>
+  <div class="snippet">骑兵部队的基本战术单位，由若干骑兵排构成。拿破仑战争时期，俄国骠骑兵团下辖若干骑兵连（中队），每连约120-150人。在《战争与和平》中，杰尼索夫担任保罗格勒骠骑兵团一个骑兵连的连长，率领其连队在恩斯河桥头执行阻击和后撤任务。</div>
+</a>
+<a class="entry-item" href="高地.html">
+  <div class="noun">高地</div>
+  <div class="snippet">军事上具有战术优势的高耸地形，占领高地可获得良好的视野和射击位置。奥斯特里茨战役中的普拉茨高地是最关键的制高点，控制它即掌握战场主动权。</div>
+</a>
+<a class="entry-item" href="高尚温顺.html">
+  <div class="noun">高尚温顺</div>
+  <div class="snippet">罗斯托夫对玛丽亚公爵小姐的印象。他认为玛丽亚的面貌和神情温顺而高尚，尽管她并不算漂亮，但内在的高贵气质令人肃然起敬。</div>
+</a>
+<a class="entry-item" href="高弹簧吱吱地作响.html">
+  <div class="noun">高弹簧吱吱地作响</div>
+  <div class="snippet">马车启动时高弹簧因受力而发出的声响，描写罗斯托夫家马车出发时的现场细节。</div>
+</a>
+<a class="entry-item" href="鲁缅采夫派.html">
+  <div class="noun">鲁缅采夫派</div>
+  <div class="snippet">1812年前后俄国宫廷中的政治派别，以外交大臣尼古拉·彼得罗维奇·鲁缅采夫为首。主张俄国在欧洲冲突中保持中立，扩大与各国的商业关系，属于亲法外交路线。在小说中该派与亲法派、玛丽亚·费奥多罗夫娜派、皇太子派等进行激烈斗争。</div>
+</a>
+<a class="entry-item" href="鸡叫了.html">
+  <div class="noun">鸡叫了</div>
+  <div class="snippet">黎明时分的标志性声音，暗示皮埃尔和士兵们在黑暗中行走了一整夜，直到黎明才抵达莫扎伊斯克城。</div>
+</a>
+<a class="entry-item" href="鸡蛋教训起母鸡.html">
+  <div class="noun">鸡蛋教训起母鸡</div>
+  <div class="snippet">俄国民间谚语，意为晚辈教训长辈，讽刺不懂事的人反过来指教有经验的人。伯爵用此话来表达对娜塔莎敢作敢为的惊讶和赞赏。</div>
+</a>
+<a class="entry-item" href="鸽子拍打翅膀.html">
+  <div class="noun">鸽子拍打翅膀</div>
+  <div class="snippet">皮埃尔在马车中坐起来时惊动棚屋顶上的鸽子，鸽子拍翅的声音打破了夜的寂静，也打破了皮埃尔噩梦般的幻觉。</div>
+</a>
+<a class="entry-item" href="黑暗与光明.html">
+  <div class="noun">黑暗与光明</div>
+  <div class="snippet">共济会入会仪式中象征从蒙昧到启蒙的核心主题。蒙眼代表黑暗（无知），揭眼代表光明（真理），过程象征人从无信仰的黑暗走向上帝之光的觉醒。</div>
+</a>
+<a class="entry-item" href="黑森人.html">
+  <div class="noun">黑森人</div>
+  <div class="snippet">指德意志地区黑森各邦国的士兵。拿破仑时期黑森-达姆施塔特等邦加入了莱茵同盟，成为拿破仑的附庸，为法军提供了大量兵员参与1812年对俄战争。</div>
+</a>
+<a class="entry-item" href="龙骑兵.html">
+  <div class="noun">龙骑兵</div>
+  <div class="snippet">世界军事史上的一种&quot;骑马机动步兵&quot;兵种，骑乘马匹快速机动、下马步战。16世纪中叶起源于意大利战争期间的法国军队，名称来源于队旗上的火龙图案或其所用的短身管燧发枪&quot;火龙&quot;之称。拿破仑时代法国维持了30个龙骑兵团的庞大规模，常与胸甲骑兵协同作战</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

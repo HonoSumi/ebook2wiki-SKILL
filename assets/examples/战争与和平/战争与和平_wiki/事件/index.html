@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>事件 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">事件 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+事件
+</nav>
+<main class="container">
+<p style="color:var(--text-secondary);margin-bottom:1rem">331 个条目</p>
+<div class="entry-list">
+<a class="entry-item" href="1810年新年舞会.html">
+  <div class="noun">1810年新年舞会</div>
+  <div class="snippet">1810年新年前夕（除夕），一位叶卡捷琳娜时代的大臣在英吉利滨海街的府第举行的盛大舞会。外交使团和皇帝都将出席。这是娜塔莎·罗斯托娃有生以来第一次参加大型舞会，她为此整日处于忙乱的狂热状态中。罗斯托夫一家由佩龙斯卡娅陪同赴会。</div>
+</a>
+<a class="entry-item" href="1812年俄法战争.html">
+  <div class="noun">1812年俄法战争</div>
+  <div class="snippet">又称拿破仑征俄战争、俄国卫国战争，拿破仑于1812年6月率大军团入侵俄国，俄军采取坚壁清野战略撤退，法军占领莫斯科后被迫撤退，最终几乎全军覆没，成为拿破仑帝国由盛转衰的转折点。</div>
+</a>
+<a class="entry-item" href="1812年战争.html">
+  <div class="noun">1812年战争</div>
+  <div class="snippet">又称俄法战争或1812年卫国战争，拿破仑率六十万大军入侵俄罗斯。俄军采取战略退却战术，最终在波罗底诺会战后放弃莫斯科，利用寒冬和焦土战略击败法军。本章情节即发生在法军逼近博古恰罗沃之时。</div>
+</a>
+<a class="entry-item" href="1813年.html">
+  <div class="noun">1813年</div>
+  <div class="snippet">娜塔莎与皮埃尔·别祖霍夫结婚的年份，也是《战争与和平》尾声部分开始的年份。在经历了1812年卫国战争、莫斯科大火、皮埃尔被俘等一系列重大事件后，娜塔莎与皮埃尔于1813年初春结婚，标志着小说主要人物命运的重大转折和战后新生活的开始。</div>
+</a>
+<a class="entry-item" href="1820年.html">
+  <div class="noun">1820年</div>
+  <div class="snippet">《战争与和平》尾声第一部设定的年份，即1812年卫国战争后约第八年。小说在这个时间点上描绘了两对夫妇——尼古拉与玛丽亚、皮埃尔与娜塔莎的婚后家庭生活。这是全书情节的时间终点，娜塔莎已成为三个女儿和一个儿子的母亲，尼古拉成功经营农庄并买回祖宅</div>
+</a>
+<a class="entry-item" href="Battle of Krems.html">
+  <div class="noun">Battle of Krems</div>
+  <div class="snippet">克雷姆斯战役（即迪恩施泰因战役），1805年11月11日发生在奥地利瓦豪河谷的战役。库图佐夫率俄奥联军约24000人伏击莫蒂埃元帅的法军第8军约14000人，双方各损失约5000人，奥地利将军施密特阵亡。此役是俄军撤退途中的首次胜利，但随后</div>
+</a>
+<a class="entry-item" href="Treaty of Campo Formio.html">
+  <div class="noun">Treaty of Campo Formio</div>
+  <div class="snippet">坎波福米奥和约，1797年10月17日法兰西第一共和国与奥地利公国在意大利坎波福米奥签订的条约，标志着第一次反法同盟的瓦解。拿破仑在意大利战场大获全胜后迫使奥地利割让奥属尼德兰等地。小说中比利宾以此作为重新划分欧洲边界的历史参照。</div>
+</a>
+<a class="entry-item" href="一八〇九年彼得堡改革运动.html">
+  <div class="noun">一八〇九年彼得堡改革运动</div>
+  <div class="snippet">1809年在彼得堡酝酿的大规模政治改革运动，由斯佩兰斯基主导。 涉及军事法规改革、官阶制度改革、考试制度建立、宪法草案制定等多方面变革。 斯佩兰斯基于1809年完成了《国家法典草案》，设计了四级杜马制度和国务会议。 同年还颁布了关于宫廷贵族</div>
+</a>
+<a class="entry-item" href="一八〇五年出征.html">
+  <div class="noun">一八〇五年出征</div>
+  <div class="snippet">指1805年俄国军队参加第三次反法同盟对拿破仑法国的军事行动。这次出征以奥斯特利茨战役中俄奥联军的惨败告终，是《战争与和平》开篇的历史背景。小说中的安德烈公爵、尼古拉·罗斯托夫等主要人物均参与了此役。</div>
+</a>
+<a class="entry-item" href="一八〇五年安德烈与尼古拉冲突.html">
+  <div class="noun">一八〇五年安德烈与尼古拉冲突</div>
+  <div class="snippet">小说早期（1805年）安德烈公爵与尼古拉·罗斯托夫之间发生过一次冲突。罗斯托夫家人在本章谈起这桩婚事时，将此事与安德烈到访奥特拉德诺耶、两人相貌相似等一起，视为姻缘的预兆。</div>
+</a>
+<a class="entry-item" href="一八〇八年俄瑞战争.html">
+  <div class="noun">一八〇八年俄瑞战争</div>
+  <div class="snippet">1808—1809年俄瑞战争是俄国与瑞典争夺芬兰的战争。瑞典战败后将芬兰割让给俄国，芬兰成为俄罗斯帝国内自治大公国。这场战争是拿破仑战争体系的一部分。阿拉克切耶夫率兵跨过冰冻的芬兰湾进攻奥兰群岛，迫使瑞典求和。</div>
+</a>
+<a class="entry-item" href="一八〇六年冬季.html">
+  <div class="noun">一八〇六年冬季</div>
+  <div class="snippet">《战争与和平》第二卷叙事的重要时间背景。此时俄法关系处于暂时休战状态（奥斯特利茨战役后），贵族们回到莫斯科过和平生活。尼古拉·罗斯托夫在莫斯科度过这段最幸福快乐的时光，罗斯托夫家中洋溢着青春恋爱气氛，多洛霍夫频繁来访追求索尼娅。</div>
+</a>
+<a class="entry-item" href="一八〇六年普法战争.html">
+  <div class="noun">一八〇六年普法战争</div>
+  <div class="snippet">1806年10月拿破仑法国与普鲁士王国之间的战争，以耶拿-奥尔施泰特双重会战为决定性战役。拿破仑在耶拿击败霍恩洛厄亲王部，达武元帅在奥尔施泰特以少胜多击败普军主力。普鲁士在六周内被征服，被迫签订《提尔西特和约》，割让一半领土。此战暴露了普鲁</div>
+</a>
+<a class="entry-item" href="一八一一年.html">
+  <div class="noun">一八一一年</div>
+  <div class="snippet">拿破仑战争期间法俄关系彻底破裂、战争一触即发的关键年份。法俄同盟因大陆封锁体系、波兰问题、奥尔登堡公国被吞并等矛盾而瓦解。俄国国内开始备战，莫斯科贵族社会出现反法爱国思潮和保守反对派。</div>
+</a>
+<a class="entry-item" href="一八一二年战争.html">
+  <div class="noun">一八一二年战争</div>
+  <div class="snippet">即1812年拿破仑入侵俄国之战（俄称&quot;卫国战争&quot;），拿破仑率领约60万大军进攻俄罗斯帝国，最终因俄国坚壁清野、严冬和补给线过长而惨败，仅约三万人生还。这场战争是托尔斯泰《战争与和平》后半部的核心历史背景，深刻改变了俄国社会各阶层的命运。</div>
+</a>
+<a class="entry-item" href="一八一二年远征.html">
+  <div class="noun">一八一二年远征</div>
+  <div class="snippet">拿破仑于1812年6月率约60万大军入侵俄国，俄军采取&quot;诱敌深入、坚壁清野&quot;策略，法军攻占莫斯科后遭遇大火和严冬，撤退时几乎全军覆没，仅数万人生还，成为拿破仑帝国由盛转衰的转折点。</div>
+</a>
+<a class="entry-item" href="一年婚期延迟.html">
+  <div class="noun">一年婚期延迟</div>
+  <div class="snippet">老博尔孔斯基公爵同意儿子婚事但附带不容置辩的条件——婚期不得早于一年之内。安德烈接受条件，认为延期的责任在他，应负起重担，同时给予娜塔莎完全自由。娜塔莎得知后极度痛苦，哭道：&quot;等一年要把我等死的：这不可能，这太可怕了。&quot;但最终还是接受。</div>
+</a>
+<a class="entry-item" href="一长溜伤员马车.html">
+  <div class="noun">一长溜伤员马车</div>
+  <div class="snippet">罗斯托夫家马车队离开莫斯科时，随行的由装载伤员马车组成的长长的车队。</div>
+</a>
+<a class="entry-item" href="一队马车.html">
+  <div class="noun">一队马车</div>
+  <div class="snippet">罗斯托夫家从莫斯科驶出的一整队马车，包括轿式马车和大、小四轮马车。</div>
+</a>
+<a class="entry-item" href="三皇会战.html">
+  <div class="noun">三皇会战</div>
+  <div class="snippet">即奥斯特利茨战役（Battle of Austerlitz），1805年12月2日发生于摩拉维亚奥斯特利茨村附近。法兰西帝国皇帝拿破仑·波拿巴、俄罗斯帝国沙皇亚历山大一世和神圣罗马帝国皇帝弗朗茨二世三位君主亲临战场，故得名。拿破仑以约7.3</div>
+</a>
+<a class="entry-item" href="三皇大战.html">
+  <div class="noun">三皇大战</div>
+  <div class="snippet">即奥斯特利茨战役，1805年12月2日发生在摩拉维亚奥斯特利茨，法兰西帝国皇帝拿破仑对阵俄罗斯沙皇亚历山大一世和神圣罗马帝国皇帝弗朗茨二世，拿破仑以少胜多取得辉煌胜利，第三次反法同盟瓦解。</div>
+</a>
+<a class="entry-item" href="上流社会改嫁舆论.html">
+  <div class="noun">上流社会改嫁舆论</div>
+  <div class="snippet">海伦刻意在彼得堡上流社会制造的舆论导向，使人们讨论她应该嫁给哪个追求者，而非质疑她有夫之妇改嫁的合法性。这一策略反映了19世纪初俄国贵族圈的虚伪道德标准。</div>
+</a>
+<a class="entry-item" href="不让公爵小姐离开.html">
+  <div class="noun">不让公爵小姐离开</div>
+  <div class="snippet">博古恰罗沃农民暴动的核心诉求——阻止玛丽亚公爵小姐在法军到来前撤离庄园。农民们声称有命令不准运走东西，但实际上是对贵族权威的反抗和对自身处境的茫然。</div>
+</a>
+<a class="entry-item" href="与拿破仑的战争.html">
+  <div class="noun">与拿破仑的战争</div>
+  <div class="snippet">自1806年秋天开始，俄国社会再次热烈谈论与拿破仑的战争。俄国政府规定每千人征调十名新兵和九名民兵，各地诅咒波拿巴。历史上对应第四次反法同盟战争（1806-1807），俄军在耶拿战役惨败后面临拿破仑东进的威胁。小说中此背景推动了罗斯托夫家的</div>
+</a>
+<a class="entry-item" href="两个总司令决斗.html">
+  <div class="noun">两个总司令决斗</div>
+  <div class="snippet">布克斯格夫登与贝尼格森因指挥权之争双双暴跳如雷，几乎酿成一场正式决斗，反映俄军高级指挥层严重内讧。</div>
+</a>
+<a class="entry-item" href="中风.html">
+  <div class="noun">中风</div>
+  <div class="snippet">医学上指脑血管意外（apoplexy/stroke），中医病名&quot;中风&quot;，西医称&quot;apoplexy&quot;，指因脑部血管破裂或堵塞引起的突发性神经系统疾病。小说中老别祖霍夫伯爵已是第六次发作中风，德国医生评论&quot;从来没有犯了三次中风还能活过来的&quot;，暗</div>
+</a>
+<a class="entry-item" href="丽莎公爵夫人早逝.html">
+  <div class="noun">丽莎公爵夫人早逝</div>
+  <div class="snippet">小公爵夫人丽莎因难产去世的事件，发生在安德烈公爵从战场返回童山之时。她产下儿子尼古卢什卡后大出血而死，临终前说&quot;我没做过坏事，为何如此对待我？&quot;这一事件对安德烈公爵造成巨大的精神打击，使其一度意志消沉。玛丽亚公爵小姐在给朱莉的信中以宗教的角</div>
+</a>
+<a class="entry-item" href="乌尔姆战役.html">
+  <div class="noun">乌尔姆战役</div>
+  <div class="snippet">1805年9月25日至10月20日拿破仑率法军在乌尔姆围歼奥军的战役。拿破仑以大规模迂回战略包围奥军，迫使马克将军率约2.3万人投降，奥军总计被俘约6万人。为拿破仑战争中的经典战略范例。</div>
+</a>
+<a class="entry-item" href="九月七日战役.html">
+  <div class="noun">九月七日战役</div>
+  <div class="snippet">指1812年9月7日（俄历8月26日）的波罗金诺战役（Battle of Borodino），是拿破仑入侵俄国期间规模最大的会战。法军与俄军在莫斯科以西约124公里的波罗金诺村附近激战，双方伤亡超过7万人。法军虽战术性获胜并占领了莫斯科，但</div>
+</a>
+<a class="entry-item" href="九月十五日出猎.html">
+  <div class="noun">九月十五日出猎</div>
+  <div class="snippet">罗斯托夫家在初冬组织的猎狼远征，从橡树林出发，是本章的核心事件。</div>
+</a>
+<a class="entry-item" href="二十五日才挖战壕.html">
+  <div class="noun">二十五日才挖战壕</div>
+  <div class="snippet">俄军到8月25日，即波罗金诺战役前一天，才开始在阵地上挖掘战壕，说明该阵地并非预先选定的设防阵地。</div>
+</a>
+<a class="entry-item" href="二十四日战斗.html">
+  <div class="noun">二十四日战斗</div>
+  <div class="snippet">指1812年8月24日（俄历）发生的舍瓦尔金诺多面堡战斗，托尔斯泰认为这一战实际决定了26日波罗金诺战役的走向。</div>
+</a>
+<a class="entry-item" href="从右方调向左方.html">
+  <div class="noun">从右方调向左方</div>
+  <div class="snippet">波罗金诺战役开始后，俄军因左翼被法军猛攻，不得不从兵力本就薄弱的右翼抽调部队增援左翼。</div>
+</a>
+<a class="entry-item" href="仓促选择新阵地.html">
+  <div class="noun">仓促选择新阵地</div>
+  <div class="snippet">俄军在舍瓦尔金诺多面堡失守后，被迫在乌季察至波罗金诺之间匆忙选择了一个几乎没有工事的新阵地。</div>
+</a>
+<a class="entry-item" href="仓库听音占卜.html">
+  <div class="noun">仓库听音占卜</div>
+  <div class="snippet">仓库听音占卜是俄国少女圣诞占卜的一种方式，通过听觉来预测吉凶。少女在深夜独自前往仓库（粮仓）外静听内部传出的声音：听到装粮的沙沙声或「走、出发」这类话语预示近期结婚（吉兆），听到敲打声或「坐下、别急」等话语则预示不顺。在小说中索尼娅勇敢前往</div>
+</a>
+<a class="entry-item" href="仓库空虚.html">
+  <div class="noun">仓库空虚</div>
+  <div class="snippet">1806年俄军后勤彻底断绝、仓库无粮的困境，直接导致士兵开始大规模抢劫和军队纪律瓦解。</div>
+</a>
+<a class="entry-item" href="伊兹梅尔战役.html">
+  <div class="noun">伊兹梅尔战役</div>
+  <div class="snippet">1790年12月22日俄土战争中的关键战役，苏沃洛夫指挥俄军攻占奥斯曼帝国在多瑙河上的伊兹梅尔要塞。俄军以伤亡万人的代价歼灭土军26000人，是俄军军事史上的经典战役。</div>
+</a>
+<a class="entry-item" href="伊拉金猎场争执.html">
+  <div class="noun">伊拉金猎场争执</div>
+  <div class="snippet">伊拉金的猎手在属于罗斯托夫家的地段打猎并抢狐狸，尼古拉怒不可遏地骑马前去质问，见面后发现伊拉金彬彬有礼，两人和解。</div>
+</a>
+<a class="entry-item" href="伊林粉红衣裳.html">
+  <div class="noun">伊林粉红衣裳</div>
+  <div class="snippet">伊林看到穿着粉红色衣裳的杜尼亚莎后，开玩笑说要占有她，不要和别人抢。但当他看到罗斯托夫的严肃表情后立刻收敛。这体现了年轻骠骑兵军官的轻浮性格和对长官的敬畏。</div>
+</a>
+<a class="entry-item" href="伤兵乘的车.html">
+  <div class="noun">伤兵乘的车</div>
+  <div class="snippet">装载受伤士兵的马车，从罗斯托夫家的院子里一辆接一辆驶出。</div>
+</a>
+<a class="entry-item" href="伯爵夫人与鲍里斯的谈话.html">
+  <div class="noun">伯爵夫人与鲍里斯的谈话</div>
+  <div class="snippet">在娜塔莎与母亲夜谈鲍里斯之事后，伯爵夫人第二天把鲍里斯请到家里谈话。谈话的结果是鲍里斯从此再也不来罗斯托夫家了。这次谈话终结了鲍里斯与娜塔莎的童年关系，也体现了伯爵夫人对女儿前途的务实考量。</div>
+</a>
+<a class="entry-item" href="俄军中计失左翼.html">
+  <div class="noun">俄军中计失左翼</div>
+  <div class="snippet">拿破仑意外将法军主力转移到科洛恰河对岸，直接攻击舍瓦尔金诺多面堡，导致俄军左翼阵地失守。</div>
+</a>
+<a class="entry-item" href="俄军后卫撤退.html">
+  <div class="noun">俄军后卫撤退</div>
+  <div class="snippet">1812年8月俄军从斯摩棱斯克向莫斯科方向撤退途中，后卫部队在格里德涅瓦等地与追击的法军发生交火，随后撤向舍瓦尔金诺。</div>
+</a>
+<a class="entry-item" href="俄国正教兵抢劫.html">
+  <div class="noun">俄国正教兵抢劫</div>
+  <div class="snippet">1806年俄军因后勤彻底崩溃导致的严重纪律涣散，士兵四处烧杀抢掠百姓村庄，甚至两次攻打自己的司令部。</div>
+</a>
+<a class="entry-item" href="俄国递交反对拿破仑的照会.html">
+  <div class="noun">俄国递交反对拿破仑的照会</div>
+  <div class="snippet">1811年左右俄国就拿破仑侵占奥尔登堡公国向欧洲各国递交的外交照会。小说中拉斯托普钦伯爵批评这份照会&quot;文辞之坏令人吃惊&quot;，皮埃尔则天真地认为内容有力比文辞更重要。反映了俄法战争前夕的外交交锋。</div>
+</a>
+<a class="entry-item" href="俄土战争.html">
+  <div class="noun">俄土战争</div>
+  <div class="snippet">17世纪至20世纪间俄罗斯帝国与奥斯曼土耳其帝国为争夺高加索、巴尔干半岛、克里米亚和黑海沿岸而进行的一系列战争，断断续续长达241年，是欧洲历史上最长的战争系列之一。小说中提及的伊兹梅尔战役即1787-1792年第六次俄土战争中的重要战役。</div>
+</a>
+<a class="entry-item" href="俄法战争.html">
+  <div class="noun">俄法战争</div>
+  <div class="snippet">即1812年俄法战争，又称俄国卫国战争，1812年6月拿破仑率领约60万大军入侵俄国。俄军采取诱敌深入、坚壁清野的策略，经博罗季诺战役后放弃莫斯科并纵火烧城。法军在严冬中撤退，几乎全军覆没。此战打破了拿破仑不可战胜的神话。</div>
+</a>
+<a class="entry-item" href="信使报捷.html">
+  <div class="noun">信使报捷</div>
+  <div class="snippet">普图斯克战役后俄军虽实际退却，但贝尼格森仍派信使到彼得堡报告胜利，以期获得总司令的正式任命。</div>
+</a>
+<a class="entry-item" href="克拉斯诺耶战役.html">
+  <div class="noun">克拉斯诺耶战役</div>
+  <div class="snippet">克拉斯诺耶战役是1812年俄法战争中法军从莫斯科大撤退期间的一场关键战役，发生于1812年11月15—18日。俄军总司令库图佐夫率主力平行追击撤退的法军，试图在克拉斯诺耶附近截断并分段击溃法军。战役中俄军重创法军达武、欧仁等军团，俘虏大量法</div>
+</a>
+<a class="entry-item" href="克里米亚战争.html">
+  <div class="noun">克里米亚战争</div>
+  <div class="snippet">1853至1856年间在欧洲爆发的大规模国际战争，主战场在黑海沿岸的克里米亚半岛。俄国对抗奥斯曼帝国、英国、法国和撒丁王国联军。俄军战败后签订《巴黎和约》，黑海中立化。此战被视为第一次现代化战争，南丁格尔在此期间奠定了现代护理制度。</div>
+</a>
+<a class="entry-item" href="克雷姆斯战役.html">
+  <div class="noun">克雷姆斯战役</div>
+  <div class="snippet">克雷姆斯战役（Battle of Krems），又称迪恩施泰因之战（1805年11月11日），是库图佐夫率俄奥联军在多瑙河北岸伏击法军莫蒂埃师团的战役。俄军首次缴获法军旗帜和大炮。施米特将军在此战中阵亡。小说中安德烈公爵在此战中手臂擦伤，后</div>
+</a>
+<a class="entry-item" href="八月三十一日告示.html">
+  <div class="noun">八月三十一日告示</div>
+  <div class="snippet">1812年8月31日（儒略历）莫斯科总督拉斯托普钦伯爵发布的告示（传单），旨在号召莫斯科居民协助军队维持治安、消灭匪徒。告示以民间口语风格写成，包含&quot;我要回来吃中饭，然后我们就干起来&quot;等通俗措辞，在莫斯科即将沦陷前的紧张气氛中被当众宣读，但</div>
+</a>
+<a class="entry-item" href="八月二十六日大战.html">
+  <div class="noun">八月二十六日大战</div>
+  <div class="snippet">指1812年8月26日（俄历）的波罗金诺战役，俄法两军之间的决战，贝格向罗斯托夫伯爵报告此战情况。</div>
+</a>
+<a class="entry-item" href="八月十七日.html">
+  <div class="noun">八月十七日</div>
+  <div class="snippet">1812年俄法战争期间的一个日期，罗斯托夫与伊林在这一天骑马从扬科沃驻地出发前往博古恰罗沃寻找干草，意外遇到玛丽亚公爵小姐被农民围困的事件。</div>
+</a>
+<a class="entry-item" href="八月十五日.html">
+  <div class="noun">八月十五日</div>
+  <div class="snippet">1812年8月15日，尼古拉·安德烈耶维奇·博尔孔斯基老公爵在这一天病逝。此后玛丽亚公爵小姐成为博古恰罗沃庄园的继承人，也陷入了农民暴动的困境。</div>
+</a>
+<a class="entry-item" href="公然违反公论.html">
+  <div class="noun">公然违反公论</div>
+  <div class="snippet">玛丽亚·德米特里耶夫娜·阿赫罗西莫娃公开挑战上流社会关于海伦改嫁的普遍舆论。她是彼得堡唯一敢于在公开场合直言不讳批评海伦行为的贵族妇女。</div>
+</a>
+<a class="entry-item" href="六千士兵守多面堡.html">
+  <div class="noun">六千士兵守多面堡</div>
+  <div class="snippet">俄军在舍瓦尔金诺多面堡投入约六千兵力防守，牺牲巨大，托尔斯泰认为这种投入与多面堡的战术价值不成比例。</div>
+</a>
+<a class="entry-item" href="共济会募捐.html">
+  <div class="noun">共济会募捐</div>
+  <div class="snippet">共济会募捐是共济会分会为维持运作和慈善事业向会员征收款项的活动。在《战争与和平》中，皮埃尔入会后的第一次会议上，募集人绕会友一圈募捐，皮埃尔想把全部财产捐出，却因担心显得高傲而只写了与他人相同的数目。他曾誓言为他人献出全部财产，却发现大多数</div>
+</a>
+<a class="entry-item" href="关于西班牙问题的争论.html">
+  <div class="noun">关于西班牙问题的争论</div>
+  <div class="snippet">在罗斯托夫家的晚会上，将军与上校之间就拿破仑战争中的西班牙局势展开争论。贝格认为这种&quot;高谈阔论&quot;是成功晚会的标志，特意拉皮埃尔参加。西班牙问题即拿破仑入侵西班牙引发的半岛战争（1808—1814），当时俄法关系复杂，西班牙问题是俄国贵族关注</div>
+</a>
+<a class="entry-item" href="军事会议.html">
+  <div class="noun">军事会议</div>
+  <div class="snippet">1805年奥斯特利茨战役前在奥尔米茨（奥洛穆茨）举行的联军军事会议，两位皇帝（沙皇亚历山大一世和神圣罗马帝国皇帝弗朗茨二世）及全体军事参议院人员出席。会上少壮派主战派的主张压倒了库图佐夫和施瓦岑贝格等老将的谨慎意见，决定立即进攻拿破仑，最终</div>
+</a>
+<a class="entry-item" href="军事条例委员会.html">
+  <div class="noun">军事条例委员会</div>
+  <div class="snippet">军事条例委员会是斯佩兰斯基改革时期设立的军事法制机构，由马格尼茨基担任主席，负责俄国军事条例的修订和编纂工作。在小说中，安德烈公爵被斯佩兰斯基任命为该委员会委员，同时兼任法典编纂委员会科长。这体现了斯佩兰斯基笼络和任用有才能的贵族青年参与改</div>
+</a>
+<a class="entry-item" href="军需官失窃案.html">
+  <div class="noun">军需官失窃案</div>
+  <div class="snippet">军需官失窃案是《战争与和平》中杰尼索夫少校在1807年战役期间卷入的司法事件。因部队补给短缺，杰尼索夫冲动之下用暴力手段夺取了军需官运送的粮食，被军需官告上军事法庭。杰尼索夫拒绝认罪求饶，坚称自己&quot;为皇上、为祖国服务，没有盗窃&quot;，是自己揭发</div>
+</a>
+<a class="entry-item" href="农奴制改革.html">
+  <div class="noun">农奴制改革</div>
+  <div class="snippet">俄国1861年农奴制改革，1861年3月3日沙皇亚历山大二世批准废除农奴制度的法令。农奴获得人身自由和公民权，但需支付高额赎金购买份地。改革为俄国资本主义发展提供了劳动力和资金，是俄国历史上的重大转折点，但保留了大量封建残余。</div>
+</a>
+<a class="entry-item" href="农民拒绝离开.html">
+  <div class="noun">农民拒绝离开</div>
+  <div class="snippet">博古恰罗沃农民在公社会议上决定不撤离村庄，也不让玛丽亚公爵小姐离开。他们声称有命令不准运走东西，卸掉马匹，阻拦车队出发，实际上是对贵族权威的反抗和对战争局势的观望。</div>
+</a>
+<a class="entry-item" href="农民集会.html">
+  <div class="noun">农民集会</div>
+  <div class="snippet">博古恰罗沃农民在谷仓前自发聚集，讨论是否让玛丽亚公爵小姐离开村庄。集会中农民表现出强烈的愤怒和不信任，拒绝接受公爵小姐的粮食援助，也禁止她离开。</div>
+</a>
+<a class="entry-item" href="冲锋.html">
+  <div class="noun">冲锋</div>
+  <div class="snippet">军事战术术语，指战斗人员以最快速度向敌人推进，试图进行决定性近距离战斗的进攻机动。在拿破仑战争时期，骑兵冲锋是典型的战术手段，骑兵排成密集队形以马刀或长矛向敌军发起冲击，利用马匹的动能和速度突破敌阵。冲锋是历史上许多战斗的关键时刻。</div>
+</a>
+<a class="entry-item" href="分娩.html">
+  <div class="noun">分娩</div>
+  <div class="snippet">指小公爵夫人丽莎生产的过程，是本章的核心事件之一。小说细致描写了分娩前的气氛和众人的反应。</div>
+</a>
+<a class="entry-item" href="别列济纳战役.html">
+  <div class="noun">别列济纳战役</div>
+  <div class="snippet">1812年11月26-29日拿破仑法军从莫斯科撤退时强渡别列济纳河的战役。法军遭受俄军三路夹攻，损失约2.5-4万人，虽然主力勉强脱困，但骑兵和炮兵几乎完全丧失，标志着拿破仑征俄的彻底失败。库图佐夫在战后因此役向沙皇告发了贝尼格森。</div>
+</a>
+<a class="entry-item" href="别列济纳河战役.html">
+  <div class="noun">别列济纳河战役</div>
+  <div class="snippet">1812年11月26-29日拿破仑从俄国撤退途中在别列济纳河（今白俄罗斯境内）渡河时与俄军发生的战役。托尔斯泰在书中指出该战役并非决定性一战，法军在此的损失比克拉斯诺耶战役小得多，但桥上惨状成为拿破仑大撤退的象征性悲剧。</div>
+</a>
+<a class="entry-item" href="别家伤员也来.html">
+  <div class="noun">别家伤员也来</div>
+  <div class="snippet">罗斯托夫家腾车运载伤员的消息传开后，附近其他伤员也赶来要求搭车撤离。</div>
+</a>
+<a class="entry-item" href="割青燕麦.html">
+  <div class="noun">割青燕麦</div>
+  <div class="snippet">1812年俄军进驻察列沃-扎伊米希营地期间，士兵割取农民尚未成熟的青燕麦喂马，引发地主索赔事件。值勤将军将索赔文件呈报库图佐夫签署。库图佐夫拒绝赔偿，引用&quot;劈木头难免木片飞&quot;的谚语表示战争时期无法避免此类损失。这个细节反映了战争对平民日常生</div>
+</a>
+<a class="entry-item" href="匪兵攻打司令部.html">
+  <div class="noun">匪兵攻打司令部</div>
+  <div class="snippet">俄军中因饥饿沦为匪兵的散兵游勇两次攻打自己的总司令部，总司令被迫调兵驱赶，匪兵甚至抢走私人衣物。</div>
+</a>
+<a class="entry-item" href="十二月党人.html">
+  <div class="noun">十二月党人</div>
+  <div class="snippet">1825年12月14日在俄国彼得堡发动武装起义的贵族革命家，反对沙皇专制制度和农奴制度。起义在枢密院广场被尼古拉一世血腥镇压，五位领袖被绞死，121名军官被流放西伯利亚。列宁将其起义视为俄国革命运动的开端。</div>
+</a>
+<a class="entry-item" href="十字军.html">
+  <div class="noun">十字军</div>
+  <div class="snippet">11至13世纪西欧天主教国家对地中海东岸发起的系列宗教战争。托尔斯泰以其为例论证历史哲学：对于遥远的历史事件，人们不再认为是个别人意志的产物，而是看到必然性法则。十字军在欧洲编年史家笔下曾被视为某些人意志的产物，但后代观察者已认识到其历史必</div>
+</a>
+<a class="entry-item" href="博古恰罗沃农民暴动.html">
+  <div class="noun">博古恰罗沃农民暴动</div>
+  <div class="snippet">1812年法军逼近时，博古恰罗沃的农民在村长德龙的默许下发起骚乱，拒绝让玛丽亚公爵小姐离开庄园。农民们卸掉马匹、包围宅院、不准运走任何财物，直到罗斯托夫率骠骑兵赶到才平息。</div>
+</a>
+<a class="entry-item" href="卡尔普说话.html">
+  <div class="noun">卡尔普说话</div>
+  <div class="snippet">卡尔普是博古恰罗沃农民暴动中的主要发言人之一。在德龙没有露面的情况下，卡尔普代表农民向阿尔帕特奇声明立场：公爵小姐不能离开，他们不服从命令，但愿意照旧服侍她。</div>
+</a>
+<a class="entry-item" href="卡拉塔耶夫缝衬衫.html">
+  <div class="noun">卡拉塔耶夫缝衬衫</div>
+  <div class="snippet">皮埃尔被俘期间，农民士兵普拉东·卡拉塔耶夫用法国人发给俘虏的麻布，在简陋条件下为一名法国士兵缝制衬衫，展现了超越敌我的善良淳朴，是托尔斯泰笔下&quot;人民智慧&quot;的象征。</div>
+</a>
+<a class="entry-item" href="卸车工作.html">
+  <div class="noun">卸车工作</div>
+  <div class="snippet">罗斯托夫家决定将车辆让给伤员后，仆人们将装箱的家具和物品从马车上卸下来。</div>
+</a>
+<a class="entry-item" href="卸马.html">
+  <div class="noun">卸马</div>
+  <div class="snippet">博古恰罗沃农民阻止玛丽亚公爵小姐离开的行动方式——他们把已经套好马车的马匹从车上卸下来，使车队无法出发。这是农民反抗贵族的直接行动手段。</div>
+</a>
+<a class="entry-item" href="叶菲姆画十字.html">
+  <div class="noun">叶菲姆画十字</div>
+  <div class="snippet">车夫叶菲姆在出发前按照东正教传统在胸前画十字祈祷，祈求旅途平安。</div>
+</a>
+<a class="entry-item" href="吉洪与老公爵对话.html">
+  <div class="noun">吉洪与老公爵对话</div>
+  <div class="snippet">老公爵发病前夜在花房与贴身仆人吉洪的谈话。老公爵当时精神痛苦，与吉洪谈到已故的小公爵夫人丽莎，吉洪提醒他丽莎已死，老公爵因此恼火训斥吉洪。玛丽亚隔着房门听到了这一切。</div>
+</a>
+<a class="entry-item" href="向温暖的河流迁移.html">
+  <div class="noun">向温暖的河流迁移</div>
+  <div class="snippet">指18世纪末至19世纪初俄罗斯农民自发性地向南方温暖河流流域的大规模迁移运动。成千上万的农民变卖家产，带着家眷向东南方向的顿河、伏尔加河、库班河等流域迁移，许多人途中冻饿而死或被流放，这场运动突如其来又自然平息。小说中德龙本人曾参加过这种迁</div>
+</a>
+<a class="entry-item" href="告民众书.html">
+  <div class="noun">告民众书</div>
+  <div class="snippet">1812年拿破仑入侵俄国后，沙皇亚历山大一世于1812年7月6日（俄历）向全国颁布的告民众宣言。宣言通知民众法军入侵的消息，号召贵族、商人及全体人民团结起来，组建地方民团保卫祖国。该宣言随即被送往莫斯科，在斯洛博达宫召开的贵族和商人联席会议</div>
+</a>
+<a class="entry-item" href="唱夜曲.html">
+  <div class="noun">唱夜曲</div>
+  <div class="snippet">娜塔莎在母亲伯爵夫人的请求下站到大厅中央唱歌。她这天晚上唱得格外好， 季姆勒闭目欣赏赞叹为欧洲水平的才能，说她的嗓音柔和、圆润、有力。 尼古拉目不转睛地望着妹妹和她共同呼吸。老伯爵夫人含着又幸福又忧郁的泪水聆听。 伯爵在书房中听见歌声也停下</div>
+</a>
+<a class="entry-item" href="喀山疏散.html">
+  <div class="noun">喀山疏散</div>
+  <div class="snippet">1812年拿破仑入侵俄国期间，俄国皇室将部分机构东撤至伏尔加河流域城市喀山的行动。玛丽亚·费奥多罗夫娜皇后命令她管辖的慈善机关和教育机关疏散到喀山，机构物品已包装停当。</div>
+</a>
+<a class="entry-item" href="四辆满载的车.html">
+  <div class="noun">四辆满载的车</div>
+  <div class="snippet">罗斯托夫家最终装载好准备出发的四辆马车，全部载满伤员和必要物品。</div>
+</a>
+<a class="entry-item" href="土伦.html">
+  <div class="noun">土伦</div>
+  <div class="snippet">土伦围城战（1793年），拿破仑的成名之战。24岁的拿破仑时任炮兵少校，在土伦战役中提出关键战略并身先士卒，攻占英军据守的港口要塞，战后破格提升为炮兵准将，自此崭露头角。</div>
+</a>
+<a class="entry-item" href="土伦战役.html">
+  <div class="noun">土伦战役</div>
+  <div class="snippet">1793年9月至12月法国南部土伦港发生的战役，是拿破仑·波拿巴的成名之战。时年24岁的拿破仑以炮兵少校身份被任命为攻城炮兵指挥官，提出攻占&quot;小直布罗陀&quot;控制港口的作战计划并成功收复土伦。战后拿破仑被破格提升为炮兵准将，从此登上历史舞台。</div>
+</a>
+<a class="entry-item" href="圣尼古拉节.html">
+  <div class="noun">圣尼古拉节</div>
+  <div class="snippet">东正教重要节日，纪念圣尼古拉（水手、商人、儿童的守护圣人），日期为12月6日。在小说中是老博尔孔斯基公爵的命名日，全莫斯科都来向他致敬。老公爵当日心情极坏，不接待所有人，只宴请少数精选的客人，并在此期间怒斥法国医生梅蒂维埃。</div>
+</a>
+<a class="entry-item" href="圣诞化装舞会.html">
+  <div class="noun">圣诞化装舞会</div>
+  <div class="snippet">圣诞化装舞会是俄国圣诞节期间贵族家庭非常流行的庆祝活动，源自异教时期的假面传统（ряженые / mummers）。人们装扮成骠骑兵、巫婆、小丑、狗熊等角色，戴上面具或用软木炭画胡子眉毛以掩盖身份，走家串户、跳舞游戏。人们相信圣诞后八天魔</div>
+</a>
+<a class="entry-item" href="圣诞节化装舞会.html">
+  <div class="noun">圣诞节化装舞会</div>
+  <div class="snippet">罗斯托夫家在圣诞节期间举办的假面化装舞会。家奴们化装成狗熊、土耳其人、 店主、太太等角色，有的可怕有的可笑。他们先是在前厅胆怯地挤在一起， 然后涌进大厅唱歌、跳舞、跳环舞、做圣诞游戏。之后年轻人又前往梅柳科娃家 继续狂欢。这是小说中最具喜庆</div>
+</a>
+<a class="entry-item" href="坎波福米奥和约.html">
+  <div class="noun">坎波福米奥和约</div>
+  <div class="snippet">1797年10月17日法国与奥地利在意大利坎波福米奥签订的条约，由拿破仑·波拿巴代表法国签署。条约结束了第一次反法同盟战争，奥地利割让奥属尼德兰和莱茵河左岸给法国，威尼斯共和国被法奥瓜分。该条约标志着拿破仑意大利战场的最终胜利。</div>
+</a>
+<a class="entry-item" href="埃尔富特会晤.html">
+  <div class="noun">埃尔富特会晤</div>
+  <div class="snippet">1808年9月27日至10月14日，法国皇帝拿破仑一世与俄罗斯皇帝亚历山大一世在德意志中部城市埃尔富特举行的会晤。此次会晤旨在确认1807年《蒂尔西特和约》所建立的法俄同盟关系，确保俄国在拿破仑即将发动的对奥战争中保持中立或支持。会晤期间，</div>
+</a>
+<a class="entry-item" href="埃尔富特会议.html">
+  <div class="noun">埃尔富特会议</div>
+  <div class="snippet">1808年9—10月，拿破仑与亚历山大一世在德国埃尔福特举行的高峰会晤，旨在确认《蒂尔西特和约》的法俄联盟。会议重申了法俄同盟，但法国外长塔列朗暗中背叛拿破仑，劝亚历山大抵制其扩张野心。这是两位皇帝最后一次会晤，此后法俄关系迅速恶化。</div>
+</a>
+<a class="entry-item" href="塔鲁丁诺战役.html">
+  <div class="noun">塔鲁丁诺战役</div>
+  <div class="snippet">1812年10月18日俄法战争中的一场重要战役，发生在卡卢加附近的塔鲁丁诺村。俄军在库图佐夫指挥下、由本尼格森和奥尔洛夫-杰尼索夫率领的哥萨克突袭缪拉元帅的法军前卫，缴获38门大炮、俘虏1500人。此役标志着俄军由战略防御转为战略反攻，迫使</div>
+</a>
+<a class="entry-item" href="塞瓦斯托波尔保卫战.html">
+  <div class="noun">塞瓦斯托波尔保卫战</div>
+  <div class="snippet">克里米亚战争期间最重要战役，1854年9月至1855年9月英法联军围攻俄国黑海舰队基地塞瓦斯托波尔，历时349天。俄军最终被迫撤出并自沉战舰。此战是19世纪规模最大的要塞攻防战之一，首次大规模运用堑壕战等近代战争形式。</div>
+</a>
+<a class="entry-item" href="墨西哥远征.html">
+  <div class="noun">墨西哥远征</div>
+  <div class="snippet">即法国武装干涉墨西哥（1861—1867），又称法墨战争。拿破仑三世趁美国南北战争之机，以墨西哥暂停偿付外债为借口，联合英、西出兵墨西哥，企图建立傀儡政权。法军占领墨西哥城后扶植奥地利大公马西米连诺为墨西哥皇帝。美国内战后向法施压，法军被迫</div>
+</a>
+<a class="entry-item" href="士兵与皮埃尔分享食物.html">
+  <div class="noun">士兵与皮埃尔分享食物</div>
+  <div class="snippet">半夜时分，三名士兵在路边点燃篝火煮面糊糊，邀请皮埃尔一起吃。皮埃尔尝到了从未吃过的最好吃的东西。士兵们询问他的身份，他自称是民兵军官，与部队失散。</div>
+</a>
+<a class="entry-item" href="多洛霍夫决斗.html">
+  <div class="noun">多洛霍夫决斗</div>
+  <div class="snippet">多洛霍夫决斗是《战争与和平》中皮埃尔·别祖霍夫与军官多洛霍夫之间的决斗事件。多洛霍夫勾引皮埃尔的妻子海伦，在宴会上公开挑衅皮埃尔，导致决斗。从未开过枪的皮埃尔意外击中多洛霍夫，多洛霍夫却未命中。决斗后皮埃尔与妻子决裂，并开始思考人生意义。</div>
+</a>
+<a class="entry-item" href="大叔家宴请.html">
+  <div class="noun">大叔家宴请</div>
+  <div class="snippet">大叔热情招待打猎归来的尼古拉、娜塔莎和彼佳。阿尼西娅端上丰盛的俄罗斯传统食物，之后还有音乐和舞蹈助兴，是全书最温馨的场景之一，展现了纯粹的俄罗斯乡村贵族待客之道。</div>
+</a>
+<a class="entry-item" href="大叔弹吉他唱歌.html">
+  <div class="noun">大叔弹吉他唱歌</div>
+  <div class="snippet">大叔拿起吉他先后弹奏《在大街上》和圆舞曲，随后唱起心爱的狩猎之歌《昨夜小雪纷纷下》。他的弹奏从容不迫、平平静静然而相当有力，唱法质朴自然如同鸟唱歌一样，深深感染了在场每一个人并为娜塔莎的舞蹈提供了灵感。</div>
+</a>
+<a class="entry-item" href="大叔送别.html">
+  <div class="noun">大叔送别</div>
+  <div class="snippet">大叔徒步送尼古拉兄妹到桥头，吩咐猎手骑马举灯笼在前面引路。他怀着完全新的情意与娜塔莎告别，体现了与年轻一代罗斯托夫家族成员之间深厚的亲情。</div>
+</a>
+<a class="entry-item" href="套车.html">
+  <div class="noun">套车</div>
+  <div class="snippet">将马匹套上马车准备出行的动作。玛丽亚公爵小姐不顾劝阻，吩咐套车准备动身离开博古恰罗沃，但因农民阻拦和误认法军到来而未能成行。</div>
+</a>
+<a class="entry-item" href="奥尔施泰特战役.html">
+  <div class="noun">奥尔施泰特战役</div>
+  <div class="snippet">奥尔施泰特战役是1806年10月14日拿破仑法军与普鲁士主力部队之间的会战，与耶拿战役同日进行。达武元帅率约2.7万法军以少胜多，击败不伦瑞克公爵率领约5.5万普军主力。普军总司令不伦瑞克公爵阵亡，指挥系统崩溃，此战标志着旧式封建军事体制被</div>
+</a>
+<a class="entry-item" href="奥尔米茨阅兵.html">
+  <div class="noun">奥尔米茨阅兵</div>
+  <div class="snippet">1805年11月俄奥联军在奥尔米茨（今捷克奥洛穆茨）举行的军事检阅，俄皇亚历山大一世和奥皇弗朗茨一世共同出席。小说中尼古拉·罗斯托夫在此与鲍里斯重逢，安德烈·博尔孔斯基与罗斯托夫发生冲突。阅兵后联军决定主动进攻拿破仑，直接导致了奥斯特利茨战</div>
+</a>
+<a class="entry-item" href="奥斯特利茨战役.html">
+  <div class="noun">奥斯特利茨战役</div>
+  <div class="snippet">又称三皇会战，1805年12月2日发生于波西米亚奥斯特利茨村（今捷克斯拉夫科夫）。拿破仑率法军击败俄奥联军，是拿破仑军事生涯中最辉煌的胜利。此战后奥地利退出反法同盟，神圣罗马帝国解体。 --- 又称三皇会战，1805年12月2日拿破仑在波西</div>
+</a>
+<a class="entry-item" href="奥斯特罗夫纳战役.html">
+  <div class="noun">奥斯特罗夫纳战役</div>
+  <div class="snippet">1812年俄法战争中的一场后卫战/遭遇战，发生于1812年7月25-26日，地点在白俄罗斯维捷布斯克以西的奥斯特罗夫纳。俄方由奥斯特曼-托尔斯泰伯爵指挥，法方由缪拉元帅率领前卫部队发起进攻。俄军以重大伤亡为代价成功迟滞法军两天，为巴克雷·德</div>
+</a>
+<a class="entry-item" href="奥斯特里茨战役.html">
+  <div class="noun">奥斯特里茨战役</div>
+  <div class="snippet">又称三皇会战，1805年12月2日拿破仑率领法军在奥斯特里茨村（今捷克境内）击败俄奥联军的关键战役。法军以少胜多瓦解了第三次反法同盟，直接导致神圣罗马帝国解体，拿破仑成为欧洲霸主。</div>
+</a>
+<a class="entry-item" href="奥普战争.html">
+  <div class="noun">奥普战争</div>
+  <div class="snippet">1866年普鲁士与奥地利之间的战争，又称普奥战争。托尔斯泰在《战争与和平》尾声中以此为例说明自由意志与必然性的关系，指出时人认为是俾斯麦的狡狯所致，但随着时间推移必然性法则愈加明显。托尔斯泰于奥普战争同年（1866年）撰写此书。</div>
+</a>
+<a class="entry-item" href="女人哭声.html">
+  <div class="noun">女人哭声</div>
+  <div class="snippet">玛丽亚公爵小姐的家中女仆们误认为法军骑兵到来时发出的惊恐哭喊声。这一混乱场面反映了战争时期平民对法军的普遍恐惧心理。</div>
+</a>
+<a class="entry-item" href="娜塔莎三周的等待.html">
+  <div class="noun">娜塔莎三周的等待</div>
+  <div class="snippet">安德烈公爵在罗斯托夫家最后一晚离开后过了三个星期没有露面（他去父亲那里请求婚事了）。娜塔莎不知道安德烈去做什么，陷入焦虑和绝望，整天百无聊赖、无精打采，晚上背着人哭泣，觉得所有人都知道她被抛弃了。最后她跑到母亲那里哭诉，像受罚的小孩子一样流</div>
+</a>
+<a class="entry-item" href="娜塔莎与安德烈订婚.html">
+  <div class="noun">娜塔莎与安德烈订婚</div>
+  <div class="snippet">安德烈公爵坚持不举行正式订婚礼，不对外宣布，给予娜塔莎完全自由。他说延期的责任在他，不愿约束娜塔莎——&quot;假如半年后她觉得她不爱他，她有拒绝他的权利&quot;。自从求婚那天起两人建立了不同以往的亲近纯朴关系，&quot;当时是装腔作势，现在是纯朴而诚恳&quot;。安德</div>
+</a>
+<a class="entry-item" href="娜塔莎与母亲争执.html">
+  <div class="noun">娜塔莎与母亲争执</div>
+  <div class="snippet">娜塔莎为将马车让给伤员而与母亲激烈争执，最终说服母亲同意卸下家具运载伤员。</div>
+</a>
+<a class="entry-item" href="娜塔莎亲自哺乳.html">
+  <div class="noun">娜塔莎亲自哺乳</div>
+  <div class="snippet">娜塔莎在生下第一个孩子后因孩子瘦弱、换了三个乳母而焦急致病。皮埃尔向她讲述了卢梭关于母乳喂养的思想，认为请乳母违反自然且有害。于是娜塔莎在生第二个孩子后不顾母亲、医生和丈夫的反对，坚持自己哺乳，并在之后所有孩子都亲自喂养，这在当时的俄国贵族</div>
+</a>
+<a class="entry-item" href="娜塔莎回忆往事.html">
+  <div class="noun">娜塔莎回忆往事</div>
+  <div class="snippet">娜塔莎弹吉他时陷入对安德烈公爵和童年往事的回忆。她弹起与安德烈公爵一起听过的歌剧乐句，注意到索尼娅拿杯子走过餐室的场景和从前一模一样，产生既视感。随后她与尼古拉、索尼娅回忆起童年关于黑人的奇妙记忆和滚鸡蛋的游戏。展现了娜塔莎敏感细腻的内心世</div>
+</a>
+<a class="entry-item" href="娜塔莎回程思考.html">
+  <div class="noun">娜塔莎回程思考</div>
+  <div class="snippet">回家的路上娜塔莎与尼古拉交谈各自思绪。娜塔莎捕捉到《昨夜小雪纷纷下》的曲调唱起来，对尼古拉说&quot;我永远不会像现在这么幸福，这么宁静了&quot;。这段对话展现了兄妹之间深厚的情感和娜塔莎此刻纯粹的幸福感。</div>
+</a>
+<a class="entry-item" href="娜塔莎的首次舞会.html">
+  <div class="noun">娜塔莎的首次舞会</div>
+  <div class="snippet">小说经典场景之一，1810年除夕彼得堡盛大宫廷舞会。娜塔莎从激动准备到舞会上紧张等待舞伴，最终与安德烈公爵相识共舞，成为两人爱情故事的起点。</div>
+</a>
+<a class="entry-item" href="娜塔莎跳俄罗斯舞.html">
+  <div class="noun">娜塔莎跳俄罗斯舞</div>
+  <div class="snippet">娜塔莎在大叔弹奏的乐曲激发下即兴跳起俄罗斯民间舞蹈。她双手叉腰、动了动肩膀摆出标准俄罗斯舞姿，舞姿庄严、高傲、狡黠、欢乐，令在场所有人惊叹赞赏。文化史名著《娜塔莎之舞》即以这一场景命名。</div>
+</a>
+<a class="entry-item" href="娜塔莎镜卜.html">
+  <div class="noun">娜塔莎镜卜</div>
+  <div class="snippet">镜卜（гадание на зеркалах）是俄国圣诞占卜中最著名也最恐怖的方式。少女深夜在黑暗房间中将两面镜子相对而立形成无尽镜像隧道，点燃蜡烛凝视镜中，念咒请未婚夫出现共进晚餐。据说能从镜中看到未来丈夫的面容或棺材等预兆。娜塔莎和索尼</div>
+</a>
+<a class="entry-item" href="婚期推迟一年.html">
+  <div class="noun">婚期推迟一年</div>
+  <div class="snippet">老博尔孔斯基公爵要求安德烈公爵将婚期推迟一年，作为同意婚事的条件。他要求安德烈出国走一趟、养养身体，并给妹妹找一位德国家庭教师。安德烈清楚父亲希望这段感情经不住时间考验、或者父亲自己在此期间去世。他最终决定服从父亲的意志：订婚但推迟一年结婚</div>
+</a>
+<a class="entry-item" href="安内特家的晚会.html">
+  <div class="noun">安内特家的晚会</div>
+  <div class="snippet">全书开篇场景（1805年7月），在安娜·帕夫洛夫娜·舍列尔家中举办的彼得堡上流社会沙龙晚会，托尔斯泰以此场景引出大部分核心人物，被比喻为&quot;纺纱厂&quot;，女主人像老板一样巡视以维持谈话机器正常运转。</div>
+</a>
+<a class="entry-item" href="安德烈与娜塔莎订婚.html">
+  <div class="noun">安德烈与娜塔莎订婚</div>
+  <div class="snippet">安德烈公爵与娜塔莎·罗斯托娃的订婚事件。1810年除夕舞会上两人相识相恋，安德烈重新燃起对生活的希望。安德烈公爵的父亲老尼古拉公爵要求等待一年才能结婚，安德烈同意并出国疗养。在此期间娜塔莎受阿纳托利·库拉金诱惑而解除婚约。在本文本块中，安德</div>
+</a>
+<a class="entry-item" href="安德烈公爵儿子生病.html">
+  <div class="noun">安德烈公爵儿子生病</div>
+  <div class="snippet">安德烈公爵读比利宾来信时听到育婴室异响，以为儿子已死，后发现孩子出汗退烧、度过危险期，妹妹玛丽亚公爵小姐一直在旁照料。</div>
+</a>
+<a class="entry-item" href="安德烈公爵同行.html">
+  <div class="noun">安德烈公爵同行</div>
+  <div class="snippet">受伤的安德烈·博尔孔斯基公爵恰好在罗斯托夫家养伤，随后被安置在马车上随罗斯托夫家一同撤离莫斯科。</div>
+</a>
+<a class="entry-item" href="安德烈公爵的婚事.html">
+  <div class="noun">安德烈公爵的婚事</div>
+  <div class="snippet">安德烈公爵与娜塔莎·罗斯托娃的婚事是小说重要情节线。安德烈向娜塔莎求婚后，其父老博尔孔斯基公爵因嫌娜塔莎&quot;年龄小、不富有&quot;而强烈反对，要求推迟一年。安德烈被迫接受为期一年的缓冲期出国，期间娜塔莎受阿纳托利诱惑而悔婚，婚事告吹。</div>
+</a>
+<a class="entry-item" href="安德烈公爵造访罗斯托夫家.html">
+  <div class="noun">安德烈公爵造访罗斯托夫家</div>
+  <div class="snippet">安德烈公爵在舞会后的第二天造访罗斯托夫家。娜塔莎穿蓝色家常连衣裙迎接他，饭后应安德烈之请唱歌，歌声深深打动了安德烈，使他感动得流泪。他感到内心焕然一新，决定为幸福而生活。这是安德烈与娜塔莎关系发展的重要节点。</div>
+</a>
+<a class="entry-item" href="安德烈向娜塔莎求婚.html">
+  <div class="noun">安德烈向娜塔莎求婚</div>
+  <div class="snippet">安德烈公爵因父亲反对婚事而返回处理，回来后立即到罗斯托夫家正式向娜塔莎求婚。他先与伯爵夫人单独谈话，获得同意。随后娜塔莎被叫进客厅，安德烈说：&quot;我从第一次看见您的头一分钟，就爱上您了。我能抱有希望吗？&quot;娜塔莎回答&quot;爱，爱&quot;，大哭起来，欣然接</div>
+</a>
+<a class="entry-item" href="安德烈向父亲请求婚事.html">
+  <div class="noun">安德烈向父亲请求婚事</div>
+  <div class="snippet">安德烈公爵在向皮埃尔表白的第二天，前往父亲居住的庄园，向老博尔孔斯基公爵请求同意他与娜塔莎的婚事。老公爵以门第不匹配、年龄差距大、把儿子配给&quot;黄毛丫头&quot;于心不忍等理由反对，最终以&quot;推迟一年&quot;作为条件。安德烈理解父亲的意图——要么感情经不住考</div>
+</a>
+<a class="entry-item" href="安德烈向皮埃尔表白爱情.html">
+  <div class="noun">安德烈向皮埃尔表白爱情</div>
+  <div class="snippet">安德烈公爵深夜到皮埃尔家，向他倾诉对娜塔莎的爱情。安德烈说他把世界分成两部分——有娜塔莎的地方全是幸福和光明，没有她的地方全是苦闷和黑暗。他决心无论如何要和娜塔莎结婚，包括争取父亲同意。这是小说中安德烈公爵感情最外露的时刻之一，展现了他从消</div>
+</a>
+<a class="entry-item" href="安德烈婚约.html">
+  <div class="noun">安德烈婚约</div>
+  <div class="snippet">安德烈·博尔孔斯基公爵与娜塔莎·罗斯托娃之间的婚约。由于老公爵反对，婚期被推迟一年，条件是安德烈必须出国疗养。在本章中罗斯托夫虽不知道博古恰罗沃是博尔孔斯基家的庄园，但他后来救助的玛丽亚正是安德烈的妹妹。</div>
+</a>
+<a class="entry-item" href="安德烈解放农奴.html">
+  <div class="noun">安德烈解放农奴</div>
+  <div class="snippet">安德烈公爵解放了自己领地上的农奴，这在19世纪初的俄国是具有进步意义的行为。 亚历山大一世时期虽然颁布了1803年《自由农民法令》，但效果有限。 安德烈的行为使他获得开明人士的名声，受到革新派的欢迎和尊重。 斯佩兰斯基特别提到此事，称其为&quot;</div>
+</a>
+<a class="entry-item" href="安德烈谒见阿拉克切耶夫.html">
+  <div class="noun">安德烈谒见阿拉克切耶夫</div>
+  <div class="snippet">安德烈公爵奉旨拜见陆军大臣阿拉克切耶夫伯爵，呈递其编写的军事法规草案。 阿拉克切耶夫态度轻蔑，称草案&quot;毫无根据抄袭法国军事法典&quot;，在草案上批注否定意见后 送交陆军条例委员会，并推荐安德烈担任委员（无薪俸）。这次会面展现了 阿拉克切耶夫的冷酷</div>
+</a>
+<a class="entry-item" href="安德烈遇见斯佩兰斯基.html">
+  <div class="noun">安德烈遇见斯佩兰斯基</div>
+  <div class="snippet">在科丘别伊伯爵家的晚会上，科丘别伊将安德烈公爵引见给斯佩兰斯基。 斯佩兰斯基对安德烈早有耳闻（因其解放农奴和接受宫中官阶新法令）， 二人进行了关于荣誉、贵族特权与君主政体基础的深入讨论。 安德烈引用孟德斯鸠理论，认为荣誉是君主政体的基础， </div>
+</a>
+<a class="entry-item" href="宗教改革.html">
+  <div class="noun">宗教改革</div>
+  <div class="snippet">16世纪由马丁·路德在德意志发起的基督教改革运动，旨在反对罗马天主教会的腐败和赎罪券买卖。路德提出&quot;因信称义&quot;&quot;唯独圣经&quot;&quot;人人皆祭司&quot;等核心主张，打破了天主教会在西欧的宗教垄断。改革运动迅速波及欧洲，形成了路德宗、加尔文宗、英国国教等新教</div>
+</a>
+<a class="entry-item" href="客栈过夜.html">
+  <div class="noun">客栈过夜</div>
+  <div class="snippet">皮埃尔回到莫扎伊斯克的客栈后发现已无空房，只得在院中的马车里蒙头睡觉。但刚一入睡就被战场记忆中的枪声、呻吟、血腥和火药味惊醒，内心充满死的恐惧。</div>
+</a>
+<a class="entry-item" href="宫中官阶新法令.html">
+  <div class="noun">宫中官阶新法令</div>
+  <div class="snippet">亚历山大一世时期颁布的关于宫中官阶的新法令，要求贵族从低级官衔开始服务， 而非依靠出身直接获得高位。这在俄国贵族中引起争议，许多人感到受了委屈。 安德烈公爵因服从该法令、从低级官衔开始服务而受到斯佩兰斯基的赞赏。 该法令是彼得大帝《官秩表》</div>
+</a>
+<a class="entry-item" href="对奥地利作战.html">
+  <div class="noun">对奥地利作战</div>
+  <div class="snippet">指拿破仑战争期间法国与奥地利之间的军事冲突。贝格在晚会上打断妻子的话，提起对奥地利作战的问题作为&quot;男人们的事&quot;来谈，后又不自觉跳到关于建议他参加出征奥地利以及他所以不接受建议的个人话题。</div>
+</a>
+<a class="entry-item" href="小雅罗斯拉维茨战役.html">
+  <div class="noun">小雅罗斯拉维茨战役</div>
+  <div class="snippet">1812年10月24日发生在莫斯科西南120公里处的关键战役。俄军在多赫图罗夫和拉耶夫斯基指挥下，与法军欧仁·博阿尔内所部激战，小镇八次易手。虽然法军最终占领小镇，但俄军成功迫使拿破仑放弃向卡卢加撤退，转而沿已被破坏的斯摩棱斯克大道退却，导</div>
+</a>
+<a class="entry-item" href="尼古拉与索尼娅定情.html">
+  <div class="noun">尼古拉与索尼娅定情</div>
+  <div class="snippet">这是尼古拉与索尼娅情感发展的高潮场景。在圣诞化装舞会的月光之夜，尼古拉在索尼娅前往仓库占卜的路上等候她，在覆盖白雪的小路上与她相会。他看到化了装的索尼娅「完全换了一个人，可仍然是原来的样子」，在月光下吻了她，决心永不分离。这是小说中最浪漫优</div>
+</a>
+<a class="entry-item" href="尼古拉向母亲表明婚意事件.html">
+  <div class="noun">尼古拉向母亲表明婚意事件</div>
+  <div class="snippet">圣诞节后尼古拉向母亲说明要与索尼娅结婚的决心。伯爵夫人冷酷责备索尼娅&quot;忘恩负义&quot;和&quot;女阴谋家&quot;。娜塔莎从中调解，结果母亲答应不叫索尼娅受委屈，尼古拉保证不背着父母做任何事情。尼古拉随后回团队，家庭气氛更加沉闷，伯爵夫人病倒。</div>
+</a>
+<a class="entry-item" href="尼古拉婚事安排.html">
+  <div class="noun">尼古拉婚事安排</div>
+  <div class="snippet">伯爵夫人为改善家境试图促成尼古拉与朱莉·卡拉金娜的婚姻。伯爵夫人直接写信向卡拉金娜提亲，对方表示同意但需看女儿意愿。然而尼古拉深爱穷表妹索尼娅，拒绝为财产牺牲爱情。母子冲突以尼古拉的坚持和伯爵夫人的哭泣告终。反映了贵族婚姻中爱情与财产的典型</div>
+</a>
+<a class="entry-item" href="巴托洛缪之夜.html">
+  <div class="noun">巴托洛缪之夜</div>
+  <div class="snippet">亦称圣巴托洛缪大屠杀，1572年8月24日（圣巴托洛缪节前夜）发生在法国的大规模宗教屠杀事件。由王太后凯瑟琳·德·美第奇和吉斯家族策划，以巴黎教堂钟声为信号，天主教徒对胡格诺派新教徒进行 systematic 屠杀，随后蔓延至全国，死亡人数</div>
+</a>
+<a class="entry-item" href="布克斯格夫登几乎被俘.html">
+  <div class="noun">布克斯格夫登几乎被俘</div>
+  <div class="snippet">俄军为回避布克斯格夫登的指挥权而不断渡河撤退，导致布克斯格夫登差一点被优势法军攻击而当了俘虏。</div>
+</a>
+<a class="entry-item" href="帝国会议.html">
+  <div class="noun">帝国会议</div>
+  <div class="snippet">指1810年俄国国务会议（State Council）的正式成立及其首次会议，是斯佩兰斯基改革中唯一实际落实的重大成果。由亚历山大一世主持开幕，沙皇发表演说称国务会议和参政院均为国家组织，治理国事应根据坚实的原则而非独断专行，财政应当改革并</div>
+</a>
+<a class="entry-item" href="并排向前行进.html">
+  <div class="noun">并排向前行进</div>
+  <div class="snippet">多支撤离车队在花园街上并列前进的景象，描写莫斯科大撤退时的壮观场面。</div>
+</a>
+<a class="entry-item" href="库图佐夫应战.html">
+  <div class="noun">库图佐夫应战</div>
+  <div class="snippet">库图佐夫明知在不利条件下应战可能导致莫斯科失守，但仍然决定在波罗金诺迎战拿破仑军队的决策。</div>
+</a>
+<a class="entry-item" href="库图佐夫战略退却.html">
+  <div class="noun">库图佐夫战略退却</div>
+  <div class="snippet">1805年10月，库图佐夫在得知奥地利马克将军在乌尔姆投降后， 为避免被拿破仑优势兵力围歼，率俄军从布劳瑙向维也纳方向实施战略性退却， 沿途破坏桥梁以阻滞法军追击。</div>
+</a>
+<a class="entry-item" href="库拉金公爵夫人反对.html">
+  <div class="noun">库拉金公爵夫人反对</div>
+  <div class="snippet">海伦的母亲库拉金公爵夫人因嫉妒女儿且对婚姻圣礼的坚守，向神父请教《福音书》中关于离婚和再嫁的经文，以此为依据反对女儿的改嫁计划，但最终被海伦轻松驳倒。</div>
+</a>
+<a class="entry-item" href="弗里德兰战役.html">
+  <div class="noun">弗里德兰战役</div>
+  <div class="snippet">1807年6月14日拿破仑击败俄军的决定性战役，导致第四次反法同盟瓦解和《提尔西特和约》的签订。</div>
+</a>
+<a class="entry-item" href="彼加之死.html">
+  <div class="noun">彼加之死</div>
+  <div class="snippet">《战争与和平》中罗斯托夫家小儿子彼佳·罗斯托夫（Petya Rostov）在1812年游击战中牺牲的情节。彼佳年仅15-16岁，怀着少年意气参加杰尼索夫的游击队，在攻打法军据点的战斗中不顾劝阻奋勇冲锋，被子弹射穿头部当场阵亡。他的死是小说描</div>
+</a>
+<a class="entry-item" href="彼得堡检阅.html">
+  <div class="noun">彼得堡检阅</div>
+  <div class="snippet">小说中提及的彼得堡军事检阅事件。新任法国公使在检阅时对俄军掷弹兵师和分列式表现出不屑态度，称&quot;在法国没有人注意这类小事&quot;，沙皇当时一言不发，此后在下次检阅时不再理睬公使。这一事件生动展现了1811年俄法外交关系的紧张。</div>
+</a>
+<a class="entry-item" href="彼得堡舞会.html">
+  <div class="noun">彼得堡舞会</div>
+  <div class="snippet">1810年间在彼得堡一位叶卡捷琳娜时代富豪重臣府邸举办的盛大新年舞会，沙皇亚历山大一世、外交使团及众多达官显贵均出席。是娜塔莎·罗斯托娃生平第一次参加如此盛大的舞会，她在舞会上与安德烈公爵相识并跳华尔兹舞，成为两人命运交织的关键转折点。皮埃</div>
+</a>
+<a class="entry-item" href="德国大学生刺杀拿破仑.html">
+  <div class="noun">德国大学生刺杀拿破仑</div>
+  <div class="snippet">1809年10月，18岁的德国青年弗里德里希·斯塔普斯在维也纳美泉宫外企图用餐刀刺杀拿破仑的历史事件。斯塔普斯被逮捕后坦然承认刺杀意图，被行刑队枪决，成为早期德意志民族主义的殉道者。</div>
+</a>
+<a class="entry-item" href="德龙交出钥匙.html">
+  <div class="noun">德龙交出钥匙</div>
+  <div class="snippet">德龙是博古恰罗沃的村长（管家），在玛丽亚公爵小姐与农民发生冲突后，他最终交出仓库钥匙，脱离了对庄园主的服从，站到农民一边。这是农民暴动的关键转折点。</div>
+</a>
+<a class="entry-item" href="战壕未完成.html">
+  <div class="noun">战壕未完成</div>
+  <div class="snippet">俄军在波罗金诺战役前仅用一天时间（8月25日）匆忙挖掘战壕，但到26日战役开始时这些工事远未完成。</div>
+</a>
+<a class="entry-item" href="手绢的故事.html">
+  <div class="noun">手绢的故事</div>
+  <div class="snippet">《战争与和平》中由多尔戈鲁科夫讲述的外交轶事。拿破仑为试探和羞辱俄国公使马尔科夫伯爵，故意在他面前丢下一块手绢并期待马尔科夫为其拾起。马尔科夫机智地也丢下自己的手绢，弯腰只拾起自己的，对拿破仑的手绢视而不见，以此不卑不亢地维护了俄国的外交尊</div>
+</a>
+<a class="entry-item" href="把车让给伤员.html">
+  <div class="noun">把车让给伤员</div>
+  <div class="snippet">1812年俄军撤离莫斯科时，罗斯托夫家在娜塔莎的坚持下，将原本装载家产的车腾出来运送伤员的人道主义行为。</div>
+</a>
+<a class="entry-item" href="拿破仑侵占奥尔登堡公国.html">
+  <div class="noun">拿破仑侵占奥尔登堡公国</div>
+  <div class="snippet">1810年拿破仑吞并了奥尔登堡公国，因奥尔登堡大公是俄国沙皇亚历山大一世的亲戚（其妹夫），此事件直接冒犯了沙皇，成为俄法关系破裂的重要导火索。小说中拉斯托普钦伯爵和鲍里斯等人在博尔孔斯基家宴会上就此事件展开热烈讨论。</div>
+</a>
+<a class="entry-item" href="拿破仑停止前进.html">
+  <div class="noun">拿破仑停止前进</div>
+  <div class="snippet">托尔斯泰指出，拿破仑在占领斯摩棱斯克后曾有意停止进军，因为他意识到拉长战线的危险，但最终历史的进程迫使他继续前进并发动了波罗金诺战役。</div>
+</a>
+<a class="entry-item" href="拿破仑入侵俄国.html">
+  <div class="noun">拿破仑入侵俄国</div>
+  <div class="snippet">1812年6月，拿破仑率领约61万大军渡过涅曼河对俄国发动的入侵战争。俄国称其为&quot;1812年卫国战争&quot;。由于俄军实施焦土政策和坚壁清野的战略，法军虽然在博罗季诺战役后进入莫斯科，但最终因补给断绝和严冬被迫撤退，六十万大军几乎全军覆没。这场战</div>
+</a>
+<a class="entry-item" href="拿破仑命令.html">
+  <div class="noun">拿破仑命令</div>
+  <div class="snippet">1805年奥斯特里茨战役前夜拿破仑向大军团宣读的命令（proclamation），激励士兵为法国步兵荣誉而战，承诺亲自指挥并宣称胜利将结束出征。书中完整收录了该命令的全文。</div>
+</a>
+<a class="entry-item" href="拿破仑战争.html">
+  <div class="noun">拿破仑战争</div>
+  <div class="snippet">1803年至1815年间法兰西第一帝国与七次反法同盟之间的一系列战争，深刻改变了欧洲政治格局。</div>
+</a>
+<a class="entry-item" href="拿破仑的和谈建议.html">
+  <div class="noun">拿破仑的和谈建议</div>
+  <div class="snippet">1812年10月，拿破仑占领莫斯科后陷入困境，派军使向库图佐夫送去和谈信件。此前拿破仑已派洛里斯顿伯爵前去求和，但均被库图佐夫拒绝。库图佐夫认为和谈根本谈不上，坚持继续战争。</div>
+</a>
+<a class="entry-item" href="拿破仑转移过河.html">
+  <div class="noun">拿破仑转移过河</div>
+  <div class="snippet">1812年8月24日，拿破仑出乎俄军意料，将法军主力转移到科洛恰河对岸，从而使波罗金诺战役的主战场从俄军预想的右翼转移到了左翼。</div>
+</a>
+<a class="entry-item" href="拿破仑骑马到瓦卢耶瓦.html">
+  <div class="noun">拿破仑骑马到瓦卢耶瓦</div>
+  <div class="snippet">1812年8月24日，拿破仑亲自骑马到瓦卢耶瓦高地视察俄军阵地，但托尔斯泰指出他实际上并未看到所谓的俄国阵地。</div>
+</a>
+<a class="entry-item" href="握拳迈步.html">
+  <div class="noun">握拳迈步</div>
+  <div class="snippet">罗斯托夫在愤怒中停下脚步，握紧拳头，严厉地向管家阿尔帕特奇迈了一步，询问他如何处理此事。这一姿态表现了罗斯托夫的军人气概和果断性格。</div>
+</a>
+<a class="entry-item" href="摸黑进城莫扎伊斯克.html">
+  <div class="noun">摸黑进城莫扎伊斯克</div>
+  <div class="snippet">皮埃尔与三名士兵一起在黑暗中步行向莫扎伊斯克城进发，爬陡峭山路，直到鸡叫时才接近城门。途中皮埃尔几乎失魂落魄，忘记了客栈的位置。</div>
+</a>
+<a class="entry-item" href="撤退.html">
+  <div class="noun">撤退</div>
+  <div class="snippet">军事术语，指军队放弃所占领的阵地或地区，有组织地向后转移的作战行动。撤退是防御的继续，也是一种兵力机动方式，核心目的在于保存力量、争取主动、待机破敌。在《战争与和平》的申格拉本战役中，俄军完成阻击任务后组织撤退，炮兵连奉命尽速撤离战场。</div>
+</a>
+<a class="entry-item" href="收拾强盗.html">
+  <div class="noun">收拾强盗</div>
+  <div class="snippet">罗斯托夫在得知农民暴行的详情后决定采取强硬手段惩罚闹事者。他称这些农民为强盗，表现出作为军官的果断和威严。</div>
+</a>
+<a class="entry-item" href="放弃莫斯科.html">
+  <div class="noun">放弃莫斯科</div>
+  <div class="snippet">1812年9月13日俄军总司令库图佐夫在菲利军事会议上做出的重大战略决策。当时俄军在波罗金诺战役后损失惨重，无力保卫莫斯科。库图佐夫决定不战而放弃莫斯科，以保存俄军主力，争取休整和补充预备队的时间。这一决定在当时引起极大争议，但最终被证明是</div>
+</a>
+<a class="entry-item" href="教堂兴建.html">
+  <div class="noun">教堂兴建</div>
+  <div class="snippet">皮埃尔继承遗产后每年花费约一万卢布用于修建教堂，是其宗教慈善支出的重要部分。</div>
+</a>
+<a class="entry-item" href="斯佩兰斯基家晚宴.html">
+  <div class="noun">斯佩兰斯基家晚宴</div>
+  <div class="snippet">安德烈公爵在舞会后参加斯佩兰斯基家的私人午餐。宾客包括热尔韦、马格尼茨基、斯托雷平等斯佩兰斯基的亲密圈子成员。斯佩兰斯基的言谈举止显得矫揉造作，笑声尖细做作，使安德烈公爵彻底幻灭，意识到自己对其寄予厚望是多么可笑。</div>
+</a>
+<a class="entry-item" href="斯佩兰斯基接见安德烈公爵.html">
+  <div class="noun">斯佩兰斯基接见安德烈公爵</div>
+  <div class="snippet">本事件发生在1808-1809年间的彼得堡，斯佩兰斯基在自己家中单独接见安德烈公爵并长谈。此前安德烈公爵已在科丘别伊家中与他初次见面。长谈中斯佩兰斯基向安德烈展示了他理性主义的治国理念和对法律改革的宏大构想。随后安德烈被任命为军事条例委员会</div>
+</a>
+<a class="entry-item" href="斯佩兰斯基改革.html">
+  <div class="noun">斯佩兰斯基改革</div>
+  <div class="snippet">米哈伊尔·斯佩兰斯基于1809年向亚历山大一世提交的全面宪政改革方案，核心包括：社会阶级划分（贵族、中等阶级、劳动者）、四级行政区划（乡-县-省-国家）与三权分立架构、设立国务会议及国家杜马、推行文官考试制度、废除宫廷闲职等。仅国务会议于1</div>
+</a>
+<a class="entry-item" href="斯佩兰斯基被逐.html">
+  <div class="noun">斯佩兰斯基被逐</div>
+  <div class="snippet">1812年斯佩兰斯基在反动贵族压力下被亚历山大一世解职流放，是俄国自由主义改革的重要转折点。保守贵族污蔑斯佩兰斯基与法国私通，亚历山大一世屈服于压力将其流放至彼尔姆。此后沙皇转向保守统治，阿拉克切耶夫取而代之。</div>
+</a>
+<a class="entry-item" href="斯摩棱斯克保卫战.html">
+  <div class="noun">斯摩棱斯克保卫战</div>
+  <div class="snippet">1812年8月16日至18日，拿破仑率约17.5万法军进攻斯摩棱斯克，巴克莱·德·托利率约13万俄军防守。俄军在多赫图罗夫等人指挥下顽强抵抗两天后有序撤退，保存了有生力量。虽然城市被法军占领，但俄军主力未被歼灭。</div>
+</a>
+<a class="entry-item" href="斯摩棱斯克战役.html">
+  <div class="noun">斯摩棱斯克战役</div>
+  <div class="snippet">1812年8月16日至18日拿破仑入侵俄国期间在斯摩棱斯克进行的首次大规模会战。法军约17.5万人由拿破仑亲自指挥，对阵俄军约13万人。俄军在巴克莱·德·托利指挥下坚守两天，最终放火烧城并有序撤退。法军虽占领城市但未能歼灭俄军主力。此战中斯</div>
+</a>
+<a class="entry-item" href="普图斯克战役.html">
+  <div class="noun">普图斯克战役</div>
+  <div class="snippet">1806年12月26日发生在波兰普图斯克的战役，俄军贝尼格森部对抗法军拉纳元帅，结果不分胜负，俄军实际退却但向彼得堡报捷。</div>
+</a>
+<a class="entry-item" href="普鲁士-艾劳战役.html">
+  <div class="noun">普鲁士-艾劳战役</div>
+  <div class="snippet">普鲁士-艾劳战役（Battle of Eylau，又称埃劳战役）发生于1807年2月7日至8日，是拿破仑战争中的一场关键战役。拿破仑率法军在东普鲁士艾劳与贝尼格森指挥的俄普联军激战，双方在暴风雪中损失惨重（各约1.5万-2.5万人），未分胜</div>
+</a>
+<a class="entry-item" href="母狼搬家.html">
+  <div class="noun">母狼搬家</div>
+  <div class="snippet">母狼带狼仔从原窝迁至奥特拉德诺耶禁伐区，成为狩猎的直接目标。</div>
+</a>
+<a class="entry-item" href="比利宾来信.html">
+  <div class="noun">比利宾来信</div>
+  <div class="snippet">外交官比利宾写给安德烈公爵的长信，以讽刺口吻描绘1806年俄军指挥混乱、两位将军争权、后勤崩溃的荒诞局面。</div>
+</a>
+<a class="entry-item" href="比利宾的分析.html">
+  <div class="noun">比利宾的分析</div>
+  <div class="snippet">外交官比利宾以冷静理性的口吻分析海伦两个追求者的利弊：嫁给年轻亲王会失去与老伯爵联姻的机会并得罪宫廷，嫁给老伯爵则可以待其去世后以显贵遗孀身份再嫁亲王。</div>
+</a>
+<a class="entry-item" href="民兵征调.html">
+  <div class="noun">民兵征调</div>
+  <div class="snippet">1806年秋季俄国政府因拿破仑战争而实施的军事动员政策。规定每千人需征调十名新兵加入正规军，另征九人编入民兵（地方自卫武装）。这一征调令反映了第四次反法同盟战争期间沙皇亚历山大一世在普鲁士被拿破仑击溃后的紧急备战状态，也是小说中战争逼近氛围</div>
+</a>
+<a class="entry-item" href="民军未赶到.html">
+  <div class="noun">民军未赶到</div>
+  <div class="snippet">米洛拉多维奇将军所辖民军部队未能及时在波罗金诺战役前与主力会合，影响了俄军的阵地选择和兵力部署。</div>
+</a>
+<a class="entry-item" href="民团.html">
+  <div class="noun">民团</div>
+  <div class="snippet">1812年俄法战争期间，俄国根据亚历山大一世皇帝于1812年7月6日颁布的诏令组建的临时民兵武装（俄语：Народное ополчение）。征募范围涵盖16个中部省份，人数超过30万。贵族捐献钱粮装备，农奴和市民志愿服役。民团参加了斯摩</div>
+</a>
+<a class="entry-item" href="求婚.html">
+  <div class="noun">求婚</div>
+  <div class="snippet">瓦西里公爵携子阿纳托利前往童山博尔孔斯基庄园，向玛丽亚公爵小姐提亲，是小说中的重要情节线索之一，反映了贵族婚姻中的利益与情感纠葛。 --- 19世纪俄国贵族正式婚嫁的第一步。标准流程为：说媒、相亲、订婚、教堂婚礼、婚宴。贵族求婚的正式做法是</div>
+</a>
+<a class="entry-item" href="法典编纂委员会.html">
+  <div class="noun">法典编纂委员会</div>
+  <div class="snippet">俄国法典编纂委员会是亚历山大一世时期设立的重要立法机构（1804-1826），最初由罗森坎普夫负责，以欧洲大陆法典为蓝本对俄国法律进行系统化整理。斯佩兰斯基后来介入并主导改革，1810年推动设立国务会议。在小说中，斯佩兰斯基对该委员会的工作</div>
+</a>
+<a class="entry-item" href="法军占领莫斯科.html">
+  <div class="noun">法军占领莫斯科</div>
+  <div class="snippet">1812年9月14日，拿破仑率法国军队进入莫斯科，此时莫斯科已是一座空城，大部分居民随俄军撤离。法军占领莫斯科后仅停留了五个星期，期间莫斯科发生大火，法军补给严重不足，最终于10月19日开始撤退，标志着拿破仑侵俄战争由盛转衰的转折点。</div>
+</a>
+<a class="entry-item" href="法军发给俘虏布料.html">
+  <div class="noun">法军发给俘虏布料</div>
+  <div class="snippet">法军占领莫斯科期间，曾获得一批皮料和麻布，分发给被俘的俄国士兵，让他们自己缝制靴子和衬衫。卡拉塔耶夫借此为一名法国士兵缝制了衬衫。</div>
+</a>
+<a class="entry-item" href="法军溃退.html">
+  <div class="noun">法军溃退</div>
+  <div class="snippet">1812年拿破仑大军从莫斯科撤退过程中发生的全面溃败。托尔斯泰在《战争与和平》中详细描写了法军撤退时的混乱景象：军队从原来三个纵队乱成一团，士兵掉队、死亡无数；从莫斯科出发时三百三十名俘虏到后期只剩不足一百人；沿途死马遍地，物资被劫掠。托尔</div>
+</a>
+<a class="entry-item" href="法军进入莫斯科.html">
+  <div class="noun">法军进入莫斯科</div>
+  <div class="snippet">1812年9月14日拿破仑大军在波罗金诺战役后进占莫斯科。莫斯科已是空城，大部分居民随俄军撤离。法军进城后纪律迅速涣散，士兵四散掠夺民宅，随后莫斯科爆发大火烧毁全城约四分之三建筑，拿破仑被迫于10月撤退，这一事件成为拿破仑侵俄战争由胜转衰的</div>
+</a>
+<a class="entry-item" href="法军骑兵误认.html">
+  <div class="noun">法军骑兵误认</div>
+  <div class="snippet">罗斯托夫和伊林骑马疾驰而来时，博古恰罗沃庄园的人误以为他们是法国骑兵，导致车夫逃散和一片恐慌。这一情节侧面反映了1812年战争期间法军逼近带来的普遍恐惧。</div>
+</a>
+<a class="entry-item" href="法国入侵.html">
+  <div class="noun">法国入侵</div>
+  <div class="snippet">指1812年拿破仑一世率领法兰西第一帝国军队对俄罗斯发动的军事入侵。小说中这一历史事件在博古恰罗沃农民中引发了各种谣言与不安，农民们流传法军秋毫无犯、照价付款等说法，导致了撤离时的混乱与抵抗。</div>
+</a>
+<a class="entry-item" href="法国兵抢劫亚美尼亚人.html">
+  <div class="noun">法国兵抢劫亚美尼亚人</div>
+  <div class="snippet">《战争与和平》中莫斯科大火期间，两名法国士兵抢劫一户亚美尼亚人家的场景。矮个法国兵抢走老人的靴子，高个穿女外衣的法国兵则侵害亚美尼亚年轻女子，扯下她的项链。皮埃尔见状冲上去将法国兵打倒。</div>
+</a>
+<a class="entry-item" href="法国大革命.html">
+  <div class="noun">法国大革命</div>
+  <div class="snippet">1789-1799年法国深刻的社会政治革命，推翻绝对君主制和封建制度，以&quot;自由、平等、博爱&quot;为口号，颁布《人权宣言》，历经君主立宪、共和、雅各宾恐怖统治、督政府等阶段，最终以拿破仑雾月政变结束。</div>
+</a>
+<a class="entry-item" href="法国革命.html">
+  <div class="noun">法国革命</div>
+  <div class="snippet">即法国大革命（1789—1799），法国近代史上规模最大的社会革命，以1789年7月14日巴黎人民攻占巴士底狱为标志。革命推翻了波旁王朝的封建专制统治，建立了法兰西第一共和国，颁布了《人权宣言》，从根本上动摇了欧洲封建制度的基础。托尔斯泰在</div>
+</a>
+<a class="entry-item" href="波尔塔瓦战役.html">
+  <div class="noun">波尔塔瓦战役</div>
+  <div class="snippet">1709年6月27日发生在乌克兰波尔塔瓦的决定性战役，是大北方战争中俄国彼得大帝与瑞典查理十二世之间的决战。俄军取得决定性胜利，瑞典军队几乎全军覆没，标志着瑞典帝国的衰落和俄罗斯帝国的崛起。小说中巴拉舍夫以此暗示拿破仑将像查理十二一样在俄国</div>
+</a>
+<a class="entry-item" href="波旁王朝复辟.html">
+  <div class="noun">波旁王朝复辟</div>
+  <div class="snippet">1814年拿破仑退位后波旁王朝重返法国统治的时期（1814-1830），分第一次复辟和第二次复辟两个阶段，由路易十八和查理十世统治，最终在1830年七月革命中被推翻。</div>
+</a>
+<a class="entry-item" href="波罗底诺会战.html">
+  <div class="noun">波罗底诺会战</div>
+  <div class="snippet">1812年9月7日拿破仑侵俄战争中规模最大的会战，发生在莫斯科以西约124公里的博罗季诺村附近。法俄双方共投入约25万军队，总伤亡达7万人。法军虽攻占阵地但未能歼灭俄军主力，成为拿破仑侵俄战争的转折点。旧译&quot;波罗底诺会战&quot;，今多称&quot;博罗季诺</div>
+</a>
+<a class="entry-item" href="波罗金诺战后场景.html">
+  <div class="noun">波罗金诺战后场景</div>
+  <div class="snippet">波罗金诺战役结束后，皮埃尔离开拉耶夫斯基炮垒，沿着山谷随伤兵队伍前行，目睹遍地鲜血、呻吟和死亡，内心受到巨大冲击，一心想逃离战争恐怖的印象。</div>
+</a>
+<a class="entry-item" href="波罗金诺战场上的皮埃尔.html">
+  <div class="noun">波罗金诺战场上的皮埃尔</div>
+  <div class="snippet">皮埃尔在波罗金诺战役中的经历全貌，包括他在拉耶夫斯基炮垒观战、目睹惨烈伤亡、徒步离开战场、与士兵分享食物、夜晚在客栈受创伤记忆困扰等系列情节。</div>
+</a>
+<a class="entry-item" href="波罗金诺战役.html">
+  <div class="noun">波罗金诺战役</div>
+  <div class="snippet">1812年9月7日（俄历8月26日）发生于莫斯科以西波罗金诺村附近的大规模会战，是拿破仑入侵俄国期间最重要的战役。俄军由库图佐夫指挥，法军由拿破仑亲自指挥。双方伤亡惨重（约7-10万人），俄军被迫撤退，但法军也元气大伤。此战是托尔斯泰《战争</div>
+</a>
+<a class="entry-item" href="波罗金诺战役前的祈祷.html">
+  <div class="noun">波罗金诺战役前的祈祷</div>
+  <div class="snippet">1812年8月25日（俄历）波罗金诺战役前夕，俄军在东正教神甫主持下举行的隆重祈祷仪式。库图佐夫亲率全体高级将领向斯摩棱斯克显灵圣像跪拜祈祷，祈祷后库图佐夫吻圣像、鞠躬触地，全体官兵随之效仿。这一场景展现了俄军在决战前的宗教热情与民族精神。</div>
+</a>
+<a class="entry-item" href="波罗金诺战役后.html">
+  <div class="noun">波罗金诺战役后</div>
+  <div class="snippet">波罗金诺战役结束后至莫斯科撤退之间的时期，俄军高层在此阶段做出放弃莫斯科的决定。</div>
+</a>
+<a class="entry-item" href="洛迪战役.html">
+  <div class="noun">洛迪战役</div>
+  <div class="snippet">1796年5月10日拿破仑在意大利洛迪镇击败奥地利军队的战役。拿破仑亲率掷弹兵强攻阿达河上的狭长木桥，以惨烈代价取胜。此役被拿破仑本人视为其功名心的起点，之后他相信自己是非凡人物，将干一番伟大事业。</div>
+</a>
+<a class="entry-item" href="海伦写给皮埃尔的信.html">
+  <div class="noun">海伦写给皮埃尔的信</div>
+  <div class="snippet">1812年八月初，海伦在确信皮埃尔深爱自己的前提下写信给在前线的丈夫，通知他打算嫁给某人（以NN代称），声称自己皈依了唯一真正的宗教，并请他办理离婚手续。</div>
+</a>
+<a class="entry-item" href="海伦改信天主教.html">
+  <div class="noun">海伦改信天主教</div>
+  <div class="snippet">第四卷第一部的关键情节：海伦·别祖霍娃为了与丈夫皮埃尔离婚以便再嫁，在耶稣会教士的引导下从东正教改宗天主教。她与一位年轻亲王和一位大官同时保持关系，利用宗教作为工具来实现自己的目的，最终获得了教皇批准入教的证书。</div>
+</a>
+<a class="entry-item" href="海伦改嫁事件.html">
+  <div class="noun">海伦改嫁事件</div>
+  <div class="snippet">《战争与和平》中的一条重要情节线。海伦·库拉金娜在丈夫皮埃尔尚在战场前线时，利用宗教辩论、社交舆论和家族关系策划改嫁，写信要求皮埃尔办理离婚手续，展现了上流社会的道德虚伪。</div>
+</a>
+<a class="entry-item" href="海伦的盛大招待会.html">
+  <div class="noun">海伦的盛大招待会</div>
+  <div class="snippet">海伦·瓦西里耶夫娜伯爵夫人（皮埃尔的妻子）在莫斯科举办的隆重社交招待会，出席者包括法国大使、一位与她过从甚密的亲王以及众多名媛绅士。这场招待会与安德烈向皮埃尔表白的场景同时发生，皮埃尔心情沉重地穿过大厅抄写共济会记录，以此逃避现实。</div>
+</a>
+<a class="entry-item" href="海伦的离婚信.html">
+  <div class="noun">海伦的离婚信</div>
+  <div class="snippet">1812年八月初海伦写给丈夫皮埃尔的正式信件，通知皮埃尔她打算嫁别人、已改信真正宗教、要求皮埃尔办理离婚手续。这封信送到时皮埃尔正在波罗金诺战场上。</div>
+</a>
+<a class="entry-item" href="混进士兵群里.html">
+  <div class="noun">混进士兵群里</div>
+  <div class="snippet">皮埃尔在波罗金诺战役后急于逃离血腥场景的行为，他混入普通士兵的行列中行走，试图在匿名和集体中获得安全感。</div>
+</a>
+<a class="entry-item" href="滴蜡烛油占卜.html">
+  <div class="noun">滴蜡烛油占卜</div>
+  <div class="snippet">俄罗斯圣诞节传统占卜方式（гадания）。将熔化的蜡烛蜡滴入冷水中， 蜡在水中凝固成各种形状，然后根据蜡的形状解读命运。 常见形状有房子（预示成家）、戒指（预示婚姻）、人爬山（预示事业突破）等。 在圣诞节至主显节之间的冬夜进行，尤其受未婚</div>
+</a>
+<a class="entry-item" href="澡堂算卦.html">
+  <div class="noun">澡堂算卦</div>
+  <div class="snippet">澡堂算卦是俄国少女圣诞占卜中最恐怖的一种方式。少女深夜独入澡堂，散开头发不戴首饰，摆放两份餐具和一只公鸡，邀请「未婚夫」共餐。据说会有鬼魂（未来丈夫的形象）出现共食。若少女害怕捂脸，鬼魂会将她抱起。需撑到鸡叫时鬼魂才会消失。这个故事在小说中</div>
+</a>
+<a class="entry-item" href="烧桥.html">
+  <div class="noun">烧桥</div>
+  <div class="snippet">烧桥是拿破仑战争中一种防御性战术，撤退方为阻止敌军追击而主动焚毁桥梁。小说中尼古拉·罗斯托夫所在的第二骑兵连被命令烧毁多瑙河上的桥梁以阻断法军追击，罗斯托夫因未参与烧桥行动而内心忐忑，这是他第一次在战场上面对生死考验。</div>
+</a>
+<a class="entry-item" href="烧毁货船.html">
+  <div class="noun">烧毁货船</div>
+  <div class="snippet">1812年9月莫斯科撤退前夕，莫斯科总督拉斯托普钦伯爵下令烧毁停泊在莫斯科河上的货船，以免落入法军之手。警察局长被派往执行这一任务，他趁机捞取私利。这一行动是焦土政策的一部分，旨在断绝法军占领莫斯科后的物资补给。</div>
+</a>
+<a class="entry-item" href="父亲临终遗言.html">
+  <div class="noun">父亲临终遗言</div>
+  <div class="snippet">尼古拉·安德烈耶维奇·博尔孔斯基老公爵在临终时对女儿玛丽亚说出的亲切字眼「亲爱的」。玛丽亚反复回味这个词，感到极大的心灵触动，认为父亲终于说出了深藏的情感。</div>
+</a>
+<a class="entry-item" href="父葬次日.html">
+  <div class="noun">父葬次日</div>
+  <div class="snippet">玛丽亚公爵小姐向罗斯托夫讲述这些事件发生在父亲下葬后的第二天，暗示她尚在丧期就遭此变故，处境格外令人同情。</div>
+</a>
+<a class="entry-item" href="特洛伊战争.html">
+  <div class="noun">特洛伊战争</div>
+  <div class="snippet">古希腊传说中因特洛伊王子帕里斯诱拐斯巴达王后海伦而引发的十年战争。荷马史诗《伊利亚特》和《奥德赛》记述了这场战争，是现代考古证实可能真实存在的历史事件。</div>
+</a>
+<a class="entry-item" href="犬猎.html">
+  <div class="noun">犬猎</div>
+  <div class="snippet">罗斯托夫家组织的规模宏大的狩猎活动，出动约一百三十只狗和二十名骑手。</div>
+</a>
+<a class="entry-item" href="猎兔比赛.html">
+  <div class="noun">猎兔比赛</div>
+  <div class="snippet">尼古拉、伊拉金和大叔三人间的猎兔竞赛。野兔出现后叶尔扎、米尔卡和鲁加伊展开激烈追逐，最终大叔的鲁加伊获胜。</div>
+</a>
+<a class="entry-item" href="猎手斗殴.html">
+  <div class="noun">猎手斗殴</div>
+  <div class="snippet">猎手斗殴是《战争与和平》狩猎场景中发生的冲突事件。在猎狐过程中，罗斯托夫家的猎手与邻家地主伊拉金的猎手因争夺猎获的狐狸发生肢体冲突。尼古拉的马夫报告说&quot;伊拉金的猎手和咱们的人干起来了&quot;，号角被吹响发出斗殴的信号。这场冲突最终因尼古拉与伊拉金</div>
+</a>
+<a class="entry-item" href="猎狐.html">
+  <div class="noun">猎狐</div>
+  <div class="snippet">猎狐是《战争与和平》狩猎场景中的另一项狩猎活动，在猎狼之后进行。中午时分，猎犬被撒入幼林丛生的山谷，沃尔托恩最先发现狐狸踪迹并发出嗥叫，整队猎犬合在一起向麦田方向追逐。狐狸在麦田中被猎犬围困，但因伊拉金的猎手介入引发冲突，狐狸的归属成为争议</div>
+</a>
+<a class="entry-item" href="玛丽亚公爵小姐与农民对话.html">
+  <div class="noun">玛丽亚公爵小姐与农民对话</div>
+  <div class="snippet">玛丽亚公爵小姐在父亲去世后亲自到谷仓前与农民对话，表示愿意提供粮食并安排他们迁往莫斯科近郊，保证食宿。但农民怀疑她的动机，认为她是要骗他们当奴隶，愤怒地拒绝并让她一个人走。</div>
+</a>
+<a class="entry-item" href="玛丽亚哭泣.html">
+  <div class="noun">玛丽亚哭泣</div>
+  <div class="snippet">玛丽亚公爵小姐在与罗斯托夫交谈时因情绪激动而落泪。她提到父亲下葬的第二天就发生这些事，声音颤抖，终于忍不住哭了出来。这既是因为感激，也是多日压抑后的情感释放。</div>
+</a>
+<a class="entry-item" href="玛丽亚回忆父亲之死.html">
+  <div class="noun">玛丽亚回忆父亲之死</div>
+  <div class="snippet">玛丽亚公爵小姐在与农民交涉失败后独自回房，在月光下回忆父亲尼古拉·安德烈耶维奇老公爵从发病到临终的种种细节，包括他在花房与吉洪的对话、临终前说出的「亲爱的」一词等，内心充满悔恨与悲伤。</div>
+</a>
+<a class="entry-item" href="玛丽亚感激目光.html">
+  <div class="noun">玛丽亚感激目光</div>
+  <div class="snippet">玛丽亚公爵小姐看到罗斯托夫为她含泪后，向他投以感激的目光。托尔斯泰描写这目光如此明亮，使人忘记她那并不美貌的面容，强调了她内在精神之美的感染力。</div>
+</a>
+<a class="entry-item" href="玛丽亚致信朱莉·卡拉金娜.html">
+  <div class="noun">玛丽亚致信朱莉·卡拉金娜</div>
+  <div class="snippet">玛丽亚公爵小姐在安德烈公爵离开童山后，给居住在彼得堡的女友朱莉·卡拉金娜写了一封长信。信中表达了宗教对苦难的安慰作用，讨论了嫂子丽莎之死的意义，解释父亲因对拿破仑的愤怒不愿去莫斯科的原因，并澄清了彼得堡关于安德烈与娜塔莎订婚的传闻。这封信是</div>
+</a>
+<a class="entry-item" href="瓦格拉木战役.html">
+  <div class="noun">瓦格拉木战役</div>
+  <div class="snippet">1809年7月5—6日拿破仑在维也纳东北瓦格拉姆村击败奥地利卡尔大公的会战，是第五次反法同盟的决定性战役。双方投入约30万兵力、1000门火炮，为当时欧洲史上规模最大的战役。法军惨胜，奥军随后求和并签订《申布伦条约》。</div>
+</a>
+<a class="entry-item" href="申格拉本战役.html">
+  <div class="noun">申格拉本战役</div>
+  <div class="snippet">申格拉本战役（Battle of Schöngrabern）发生于1805年11月16日，是第三次反法同盟期间的一场阻击战。巴格拉季昂率约5000俄军阻击缪拉率领的数万法军先头部队，以重大代价掩护库图佐夫主力安全撤退。小说中安德烈公爵、尼古</div>
+</a>
+<a class="entry-item" href="皇上任命总司令.html">
+  <div class="noun">皇上任命总司令</div>
+  <div class="snippet">沙皇亚历山大一世派信使到前线正式任命总司令，结束了布克斯格夫登与贝尼格森之间的指挥权之争，使俄军得以集中对付拿破仑。</div>
+</a>
+<a class="entry-item" href="皇帝告民众书.html">
+  <div class="noun">皇帝告民众书</div>
+  <div class="snippet">1812年拿破仑入侵俄国后，沙皇亚历山大一世于7月6日签署的告全民宣言。该宣言号召全体民众奋起抗敌，组建地方民兵保卫祖国，标志着俄国正式发动人民战争抵抗拿破仑入侵。</div>
+</a>
+<a class="entry-item" href="皮埃尔与士兵同食.html">
+  <div class="noun">皮埃尔与士兵同食</div>
+  <div class="snippet">皮埃尔在战后的深夜与三名俄军士兵共享面糊糊的场景，通过这一平民化的接触，皮埃尔体验到了从未有过的简单快乐和与普通人的亲近感。</div>
+</a>
+<a class="entry-item" href="皮埃尔共济会.html">
+  <div class="noun">皮埃尔共济会</div>
+  <div class="snippet">皮埃尔在人生迷茫期加入共济会，将其视为精神救赎途径，试图在田庄推行农奴解放和社会改革以实现共济会理想。</div>
+</a>
+<a class="entry-item" href="皮埃尔共济会演讲.html">
+  <div class="noun">皮埃尔共济会演讲</div>
+  <div class="snippet">1809年夏，皮埃尔从国外领受共济会高级秘诀回到彼得堡后，在二级支会庄严大会上发表激进演说。他提倡共济会应积极行动——扫除偏见、教育青年、建立普遍的道德权威。演讲引起支会分裂，教头指责皮埃尔有&quot;光明教倾向&quot;并拒绝其建议。此事标志着皮埃尔对俄</div>
+</a>
+<a class="entry-item" href="皮埃尔决定参军.html">
+  <div class="noun">皮埃尔决定参军</div>
+  <div class="snippet">皮埃尔在目睹法国厨子受刑和围观人群的反应后，深受震动，决定离开莫斯科奔赴前线参军。</div>
+</a>
+<a class="entry-item" href="皮埃尔到访罗斯托夫家.html">
+  <div class="noun">皮埃尔到访罗斯托夫家</div>
+  <div class="snippet">安德烈公爵在离开彼得堡前一天带皮埃尔到罗斯托夫家。皮埃尔手足无措、心绪不宁。娜塔莎说皮埃尔&quot;是好人，不过太可笑了&quot;。安德烈告诉娜塔莎他已把订婚秘密告诉了皮埃尔，并请娜塔莎承诺：他不在时不论发生什么事，只找皮埃尔讨主意和帮助，称皮埃尔&quot;有一颗</div>
+</a>
+<a class="entry-item" href="皮埃尔在波罗金诺.html">
+  <div class="noun">皮埃尔在波罗金诺</div>
+  <div class="snippet">皮埃尔以非军人身份出现在波罗金诺战役现场，他最初以好奇和观察者的心态来到战场，但战争的残酷现实彻底改变了他的认知，使他经历了从理论兴趣到切身体验的转变。</div>
+</a>
+<a class="entry-item" href="皮埃尔打法国兵.html">
+  <div class="noun">皮埃尔打法国兵</div>
+  <div class="snippet">《战争与和平》中皮埃尔见亚美尼亚女子被法军士兵侵害，在狂怒中出手攻击法国兵的情节。皮埃尔在盛怒之下力气大增，将拔短剑的法国兵扑倒并拳打，周围俄国百姓发出喝彩声，但随后被赶来的枪骑兵巡逻队逮捕。</div>
+</a>
+<a class="entry-item" href="皮埃尔拒绝搬到军官棚.html">
+  <div class="noun">皮埃尔拒绝搬到军官棚</div>
+  <div class="snippet">法军提出将皮埃尔从条件差的士兵棚转到条件较好的军官棚，但他拒绝离开，留在普通士兵中间。这象征他的精神转变——放弃贵族特权，从平民生活中获得真正的内心和谐。</div>
+</a>
+<a class="entry-item" href="皮埃尔救女孩.html">
+  <div class="noun">皮埃尔救女孩</div>
+  <div class="snippet">《战争与和平》中皮埃尔·别祖霍夫在莫斯科大火期间从一幢燃烧的大房子中救出一个三岁女孩的情节。皮埃尔原本被压抑的思绪在大火中解脱，变得年轻快活，他冲入火场寻人，在花园长凳下发现女孩并抱起她逃离。</div>
+</a>
+<a class="entry-item" href="皮埃尔波罗金诺经历.html">
+  <div class="noun">皮埃尔波罗金诺经历</div>
+  <div class="snippet">皮埃尔在波罗金诺战役中的完整经历，从他在拉耶夫斯基炮垒观战到战后徒步离开、与士兵共食、深夜受创伤记忆困扰的系列心理和物理旅程。这是皮埃尔精神转折的关键节点。</div>
+</a>
+<a class="entry-item" href="皮埃尔混进士兵群.html">
+  <div class="noun">皮埃尔混进士兵群</div>
+  <div class="snippet">皮埃尔在目睹救护站的血腥场景后，出于对战争恐怖的逃避本能，主动混入普通士兵的队伍中行走，试图在集体中找到安全感。</div>
+</a>
+<a class="entry-item" href="皮埃尔田庄改革.html">
+  <div class="noun">皮埃尔田庄改革</div>
+  <div class="snippet">皮埃尔加入共济会后巡视基辅省田庄，计划解放农奴、设立医院学校等，但总管表面顺从实际敷衍，改革流于形式。</div>
+</a>
+<a class="entry-item" href="皮埃尔的精神觉醒.html">
+  <div class="noun">皮埃尔的精神觉醒</div>
+  <div class="snippet">皮埃尔·别祖霍夫在被法军俘虏期间，经历了目睹行刑的信仰崩塌、与卡拉塔耶夫的相遇以及极端困苦中的领悟，最终找到内心宁静与精神自由，完成了从迷茫贵族到精神觉醒者的转变。</div>
+</a>
+<a class="entry-item" href="皮埃尔离开炮垒.html">
+  <div class="noun">皮埃尔离开炮垒</div>
+  <div class="snippet">波罗金诺战役临近结束时，皮埃尔离开拉耶夫斯基炮垒，试图逃离战场上的恐怖景象。这是他在这场战役中精神转折的开始，从参与观察者变为寻求逃避的受创者。</div>
+</a>
+<a class="entry-item" href="皮埃尔移居莫斯科.html">
+  <div class="noun">皮埃尔移居莫斯科</div>
+  <div class="snippet">皮埃尔因安德烈与娜塔莎订婚和导师去世的双重打击，觉得彼得堡的生活无法继续。妻子海伦与他作了严肃谈话后，皮埃尔为顾及她的名声而独自动身前往莫斯科。在莫斯科他感到如归港湾，过上退休侍从的生活，沉溺于俱乐部和社交。</div>
+</a>
+<a class="entry-item" href="皮埃尔自称民兵军官.html">
+  <div class="noun">皮埃尔自称民兵军官</div>
+  <div class="snippet">皮埃尔为拉近与士兵的距离，主动降低自己的社会身份，自称是民兵军官，与部队失散。实际上他是别祖霍夫伯爵，属于俄国最富有的贵族之一。</div>
+</a>
+<a class="entry-item" href="皮埃尔被捕.html">
+  <div class="noun">皮埃尔被捕</div>
+  <div class="snippet">《战争与和平》中皮埃尔因攻击抢劫亚美尼亚人的法国士兵而被法军枪骑兵巡逻队逮捕的情节。皮埃尔在盛怒之下力气大增，将法国兵撂倒并拳打，随后一队枪骑兵赶到将他包围，搜身后绑起带走。</div>
+</a>
+<a class="entry-item" href="神圣同盟.html">
+  <div class="noun">神圣同盟</div>
+  <div class="snippet">1815年9月26日由俄国沙皇亚历山大一世发起，俄国、奥地利、普鲁士三国在巴黎签署的同盟条约，宣称以基督教教义为治国准则，旨在维护维也纳会议建立的封建统治秩序，镇压欧洲革命运动。</div>
+</a>
+<a class="entry-item" href="立法委员会.html">
+  <div class="noun">立法委员会</div>
+  <div class="snippet">斯佩兰斯基主导下的法律修订机构。安德烈公爵经斯佩兰斯基举荐被任命为军事条例委员会成员及法律修订委员会下属分会主席，负责起草《民法典》中关于人身权利的部分，参考《拿破仑法典》和《查士丁尼法典》进行编纂。</div>
+</a>
+<a class="entry-item" href="米兰的加冕礼.html">
+  <div class="noun">米兰的加冕礼</div>
+  <div class="snippet">1805年5月26日拿破仑在米兰大教堂加冕为意大利国王的历史事件。拿破仑佩戴伦巴第铁王冠，自戴王冠并宣称&quot;上帝赐我以王冠，谁要碰它，谁就倒霉&quot;。此次加冕标志着拿破仑帝国的扩张和意大利北部被纳入法兰西帝国体系，建立意大利王国（1805—181</div>
+</a>
+<a class="entry-item" href="米坚卡被逐.html">
+  <div class="noun">米坚卡被逐</div>
+  <div class="snippet">尼古拉·罗斯托夫回家后处理家务的第一个激烈行动。他发现管家米坚卡在账目中大肆盗窃，以军人作风直接将其踢出庄园。与软弱的老伯爵形成鲜明对比，标志着罗斯托夫家族权力开始从老伯爵向长子过渡。</div>
+</a>
+<a class="entry-item" href="米季卡弹三弦琴.html">
+  <div class="noun">米季卡弹三弦琴</div>
+  <div class="snippet">车夫米季卡在猎仆室为客人们弹奏三弦琴，曲目是《芭勒娘舞曲》，旋律重复上百次。娜塔莎被琴声吸引走到走廊倾听，认为这是&quot;音乐魅力的顶峰&quot;。这段描写传递了俄罗斯民间音乐质朴而持久的感染力。</div>
+</a>
+<a class="entry-item" href="米洛拉多维奇民军.html">
+  <div class="noun">米洛拉多维奇民军</div>
+  <div class="snippet">米洛拉多维奇将军率领的民军部队，在波罗金诺战役前未能及时赶到前线。托尔斯泰将此列为俄军未能在有利阵地设防的原因之一。</div>
+</a>
+<a class="entry-item" href="索尼娅发现安德烈.html">
+  <div class="noun">索尼娅发现安德烈</div>
+  <div class="snippet">索尼娅在出发时无意中发现受伤的安德烈公爵就在罗斯托夫家的伤员马车队中，急忙告知伯爵夫人。</div>
+</a>
+<a class="entry-item" href="约瑟夫·阿列克谢耶维奇去世.html">
+  <div class="noun">约瑟夫·阿列克谢耶维奇去世</div>
+  <div class="snippet">皮埃尔的共济会导师巴兹杰耶夫去世。与安德烈和娜塔莎订婚的消息几乎同时传到皮埃尔耳中，两个事件共同导致皮埃尔的精神危机，使他觉得生活只剩下空架子，失去了精神支柱，最终离开彼得堡。</div>
+</a>
+<a class="entry-item" href="绞死.html">
+  <div class="noun">绞死</div>
+  <div class="snippet">以绞索勒颈致死的刑罚方式。在小说中指老公爵以总司令身份下令处决盗窃后备军物资的书记官，体现了老保尔康斯基公爵严厉无情的性格和掌握生杀大权的威势。</div>
+</a>
+<a class="entry-item" href="维也纳会议.html">
+  <div class="noun">维也纳会议</div>
+  <div class="snippet">1814年9月至1815年6月在奥地利维也纳举行的欧洲列强外交会议，由梅特涅主持，确立正统主义、补偿原则和均势原则，重新划定欧洲版图，建立维也纳体系维持欧洲百年和平。</div>
+</a>
+<a class="entry-item" href="维亚济马战役.html">
+  <div class="noun">维亚济马战役</div>
+  <div class="snippet">1812年俄法战争中的一场后卫战，拿破仑军队从莫斯科撤退过程中的重要战役。 --- 1812年11月3日发生于俄罗斯西部城市维亚济马（莫斯科以西约200公里）的一场战役，是拿破仑从莫斯科撤退期间的重要战斗之一。交战双方为法兰西第一帝国（拿破</div>
+</a>
+<a class="entry-item" href="维捷布斯克战役.html">
+  <div class="noun">维捷布斯克战役</div>
+  <div class="snippet">1812年7月26-28日拿破仑入侵俄国期间在维捷布斯克发生的战役。法军与俄军巴克莱·德·托利指挥的部队交火，俄军成功撤退避免了包围。拿破仑在波罗金诺战役前发布的动员令中以此战激励士气。</div>
+</a>
+<a class="entry-item" href="维绍战役.html">
+  <div class="noun">维绍战役</div>
+  <div class="snippet">1805年11月25日发生在摩拉维亚维绍的前哨战斗，俄军巴格拉季昂指挥约24000人以优势兵力击退法军约1400人，俄军轻取胜利导致联军过度自信，直接影响了奥斯特里茨战役前的决策。</div>
+</a>
+<a class="entry-item" href="罗斯托夫与玛丽亚相识.html">
+  <div class="noun">罗斯托夫与玛丽亚相识</div>
+  <div class="snippet">尼古拉·罗斯托夫在博古恰罗沃庄园偶然遇见玛丽亚公爵小姐。当时玛丽亚正被农民围困无法脱身，罗斯托夫以其骠骑兵军官的身份出面解围，两人在这次危机中相识并互生好感，为日后婚姻埋下伏笔。</div>
+</a>
+<a class="entry-item" href="罗斯托夫伯爵之死.html">
+  <div class="noun">罗斯托夫伯爵之死</div>
+  <div class="snippet">《战争与和平》中伊利亚·安德烈伊奇·罗斯托夫伯爵于1813年去世的情节。在经历了莫斯科大火、安德烈公爵之死、幼子彼佳战死等一系列打击后，他为女儿娜塔莎操办完婚事便病倒，临终痛哭请求宽恕荡尽家产的罪过，平静离世。他的死标志着罗斯托夫家族旧时代</div>
+</a>
+<a class="entry-item" href="罗斯托夫保护玛丽亚.html">
+  <div class="noun">罗斯托夫保护玛丽亚</div>
+  <div class="snippet">尼古拉·罗斯托夫在得知玛丽亚公爵小姐被农民围困后，主动承诺以名誉担保护送她安全离开博古恰罗沃。他的果断干预和军人威严震慑了闹事农民，使玛丽亚得以脱险。</div>
+</a>
+<a class="entry-item" href="罗斯托夫发怒.html">
+  <div class="noun">罗斯托夫发怒</div>
+  <div class="snippet">罗斯托夫在了解到农民对玛丽亚公爵小姐的无礼行为后非常愤怒，决定出面惩罚闹事的农民。他恶狠狠地对伊林表达不满，快步向村子走去，准备收拾这些强盗。</div>
+</a>
+<a class="entry-item" href="罗斯托夫名誉担保.html">
+  <div class="noun">罗斯托夫名誉担保</div>
+  <div class="snippet">罗斯托夫以自己的贵族名誉向玛丽亚公爵小姐郑重保证，只要她允许他护送，绝不会有人敢找她的麻烦。这是19世纪俄国军官以荣誉为誓的最高承诺形式。</div>
+</a>
+<a class="entry-item" href="罗斯托夫含泪.html">
+  <div class="noun">罗斯托夫含泪</div>
+  <div class="snippet">尼古拉·罗斯托夫在听玛丽亚公爵小姐讲述父亲下葬第二天就遭遇这些困境时，深受感动，眼中涌出泪水。这体现了他性格中善良、富于同情心的一面。</div>
+</a>
+<a class="entry-item" href="罗斯托夫家产负债.html">
+  <div class="noun">罗斯托夫家产负债</div>
+  <div class="snippet">《战争与和平》中老罗斯托夫伯爵死后暴露的家族财务危机。负债总额比家产多一倍，债主纷纷上门逼债。尼古拉·罗斯托夫拒绝放弃继承，接受遗产并承担还债义务，以半价拍卖产业、向妹夫皮埃尔借三万卢布后仍有一半债务未清，被迫脱下军服去莫斯科做文官维持生计</div>
+</a>
+<a class="entry-item" href="罗斯托夫家撤离莫斯科.html">
+  <div class="noun">罗斯托夫家撤离莫斯科</div>
+  <div class="snippet">1812年法军逼近莫斯科时，罗斯托夫伯爵一家匆忙收拾贵重物品准备撤离的过程。其间娜塔莎说服父母腾出马车运送伤员，体现了罗斯托夫家族在国难当头时的善良与慷慨。 --- 1812年法军入侵莫斯科时，罗斯托夫伯爵一家舍弃大部分家产，带着伤员离开莫</div>
+</a>
+<a class="entry-item" href="罗斯托夫家经济困窘.html">
+  <div class="noun">罗斯托夫家经济困窘</div>
+  <div class="snippet">伊利亚·安德烈伊奇伯爵辞去贵族长职务后经济状况仍未好转，娜塔莎和尼古拉常看见父母秘密商谈，传闻要卖掉莫斯科的祖传宅第和近郊田产。家中仍维持大量仆人和传统生活方式难以改变，体现了旧式贵族对社会身份的执着。</div>
+</a>
+<a class="entry-item" href="罗斯托夫家迁居彼得堡.html">
+  <div class="noun">罗斯托夫家迁居彼得堡</div>
+  <div class="snippet">《战争与和平》第二卷第三部中的重要转折点。罗斯托夫家在奥特拉德诺耶乡下住了两年后，由于经济状况持续恶化，老伯爵决定带着全家迁居彼得堡谋求公差。这次迁居使罗斯托夫家重新进入上流社会圈子，直接促成了贝格向薇拉的求婚、娜塔莎与鲍里斯的重逢以及娜塔</div>
+</a>
+<a class="entry-item" href="罗斯托夫家迁往莫斯科.html">
+  <div class="noun">罗斯托夫家迁往莫斯科</div>
+  <div class="snippet">因家族经济亏空必须卖掉莫斯科的房子和近郊田产，加上需要置办娜塔莎的嫁妆和等待安德烈公爵，罗斯托夫家于一月底迁往莫斯科。伯爵夫人因健康原因留在乡下。</div>
+</a>
+<a class="entry-item" href="罗斯托夫皱眉鞠躬.html">
+  <div class="noun">罗斯托夫皱眉鞠躬</div>
+  <div class="snippet">玛丽亚公爵小姐哭泣后，罗斯托夫皱起眉头，又深深鞠了一躬，然后走出房间。这一动作反映了他内心的复杂情感——既被打动又不愿流露，以庄重的礼节克制情感。</div>
+</a>
+<a class="entry-item" href="老公爵反对儿子婚事.html">
+  <div class="noun">老公爵反对儿子婚事</div>
+  <div class="snippet">老公爵尼古拉·安德烈耶维奇强烈反对儿子安德烈与娜塔莎·罗斯托娃的婚事，要求等待一年作为考验期，并拒绝缩短期限。他认为娜塔莎&quot;不是安德烈公爵所喜欢的那类女人&quot;，且希望儿子有更显赫的婚姻。当玛丽亚公爵小姐转交安德烈的信请求将期限缩短三个月时，老</div>
+</a>
+<a class="entry-item" href="耶拿战役.html">
+  <div class="noun">耶拿战役</div>
+  <div class="snippet">耶拿战役是1806年10月14日拿破仑法军与普鲁士军队之间的关键战役，是耶拿-奥尔施泰特双重会战的一部分。拿破仑亲率约9.6万法军在耶拿击败霍恩洛厄亲王率领的约3.8万普军。此役与奥尔施泰特战役同日进行，普军一天内被彻底击溃，法军随后攻占柏</div>
+</a>
+<a class="entry-item" href="腊肠烧酒军事参议院.html">
+  <div class="noun">腊肠烧酒军事参议院</div>
+  <div class="snippet">原文指Hofkriegsrat（霍夫克里格斯拉特），即哈布斯堡君主国的帝国战争委员会（宫廷军事参议院），1556年至1848年间的中央军事行政机构。&quot;腊肠烧酒&quot;是托尔斯泰借老公爵之口对该奥地利机构的讥讽蔑称。</div>
+</a>
+<a class="entry-item" href="自东向西运动.html">
+  <div class="noun">自东向西运动</div>
+  <div class="snippet">托尔斯泰对1812年卫国战争后俄军反攻欧洲的历史概括。俄军及其盟军从莫斯科向西追击拿破仑大军，最终攻占巴黎，推翻了拿破仑政权。托尔斯泰将此视为与先前自西向东运动相对称的相反历史运动。</div>
+</a>
+<a class="entry-item" href="自西向东运动.html">
+  <div class="noun">自西向东运动</div>
+  <div class="snippet">托尔斯泰对拿破仑战争（1805—1812年）的历史概括。他认为法国大革命后西方势力多次向东挺进，不断壮大，最终到达莫斯科——这是自西向东的侵略运动，被托尔斯泰视为一种历史必然性的体现。</div>
+</a>
+<a class="entry-item" href="舍瓦尔金诺战役.html">
+  <div class="noun">舍瓦尔金诺战役</div>
+  <div class="snippet">1812年8月24日（俄历）在舍瓦尔金诺多面堡发生的战斗，是波罗金诺大会战的前哨战。俄军损失约六千人，放弃了舍瓦尔金诺多面堡。</div>
+</a>
+<a class="entry-item" href="舍瓦尔金诺村战斗.html">
+  <div class="noun">舍瓦尔金诺村战斗</div>
+  <div class="snippet">即舍瓦尔金诺战役，1812年8月24日发生在舍瓦尔金诺村附近的战斗，为波罗金诺大会战的前奏。</div>
+</a>
+<a class="entry-item" href="舞会.html">
+  <div class="noun">舞会</div>
+  <div class="snippet">19世纪俄国贵族社会最重要的社交活动，是联姻、展示财富地位、政治博弈的重要场所。小说中描写了多种舞会：约格尔的快乐舞会、新年盛大舞会、宫廷晚会等。娜塔莎从进入舞会就陷入恋爱状态，&quot;不是爱上某一个特定的人，而是爱所有的人&quot;。 --- 指前文发</div>
+</a>
+<a class="entry-item" href="芬兰战争(一八〇八至一八〇九).html">
+  <div class="noun">芬兰战争(一八〇八至一八〇九)</div>
+  <div class="snippet">芬兰战争（1808年2月-1809年9月），是俄罗斯帝国与瑞典王国之间为争夺芬兰控制权而爆发的战争。俄国在《提尔西特和约》后与法国结盟，要求瑞典加入大陆封锁体系遭拒后发动进攻。俄军穿越冰海进行奇袭，最终迫使瑞典割让芬兰及阿兰群岛，芬兰成为俄</div>
+</a>
+<a class="entry-item" href="莫扎伊斯克大道行军.html">
+  <div class="noun">莫扎伊斯克大道行军</div>
+  <div class="snippet">皮埃尔在波罗金诺战役后沿莫扎伊斯克大道行走，虽已离开战场但周围依然可见伤员、血迹和军大衣，空气中弥漫尘土和闷热。他走了约三俄里后在路边坐下休息。</div>
+</a>
+<a class="entry-item" href="莫斯科劫后重建.html">
+  <div class="noun">莫斯科劫后重建</div>
+  <div class="snippet">1812年拿破仑军队撤出莫斯科后，该城的恢复与重建过程。大火烧毁了莫斯科约四分之三的建筑。1813年俄国政府成立莫斯科城市建设委员会，由奥西普·博韦、多梅尼科·吉拉尔迪等建筑师主导，采用砖石替代木结构，形成独特的&quot;莫斯科帝国风格&quot;，重建持续</div>
+</a>
+<a class="entry-item" href="莫斯科大撤退.html">
+  <div class="noun">莫斯科大撤退</div>
+  <div class="snippet">1812年拿破仑军队逼近莫斯科时，俄军统帅库图佐夫决定放弃莫斯科以保存实力，俄军和大部分居民撤离的历史事件。俄军坚壁清野，最终导致法军在莫斯科空城中补给耗尽而惨败撤退。 --- 1812年9月14日（俄历9月2日）俄军与莫斯科居民大规模撤离</div>
+</a>
+<a class="entry-item" href="莫斯科大火.html">
+  <div class="noun">莫斯科大火</div>
+  <div class="snippet">1812年9月14日拿破仑军队占领莫斯科后发生的大火灾，城市四分之三遭到毁灭。起火原因存在争议，主流观点认为是俄军统帅罗斯托普钦伯爵下令执行焦土政策。大火摧毁了法军粮草装备，迫使拿破仑在10月撤军，成为拿破仑帝国由盛转衰的关键转折点。</div>
+</a>
+<a class="entry-item" href="莫斯科弃守.html">
+  <div class="noun">莫斯科弃守</div>
+  <div class="snippet">1812年俄军统帅库图佐夫在波罗金诺战役后决定放弃莫斯科，不战而退的战略决策。拉斯托普钦对此缺乏心理准备。</div>
+</a>
+<a class="entry-item" href="莫斯科撤离.html">
+  <div class="noun">莫斯科撤离</div>
+  <div class="snippet">1812年拿破仑军队逼近莫斯科时，城内居民大规模撤离的历史事件，罗斯托夫家也在其中。</div>
+</a>
+<a class="entry-item" href="莫斯科撤退.html">
+  <div class="noun">莫斯科撤退</div>
+  <div class="snippet">1812年拿破仑入侵俄国后，莫斯科居民和俄军大规模撤离的历史事件。托尔斯泰在书中详细描写了撤退时的混乱景象。</div>
+</a>
+<a class="entry-item" href="莫斯科河战役.html">
+  <div class="noun">莫斯科河战役</div>
+  <div class="snippet">即博罗季诺战役（法语称Bataille de la Moskova），1812年9月7日拿破仑与库图佐夫在莫斯科以西博罗季诺村进行的大会战，是19世纪前最血腥的单日战役。</div>
+</a>
+<a class="entry-item" href="莱茵联邦.html">
+  <div class="noun">莱茵联邦</div>
+  <div class="snippet">莱茵联邦（1806—1813），又称莱茵邦联，是拿破仑在德意志中西部建立的卫星政治实体。1806年7月16个德意志邦国宣布脱离神圣罗马帝国，组成莱茵联邦，拿破仑自任&quot;联邦保护人&quot;。该联邦直接导致神圣罗马帝国于1806年8月灭亡。鼎盛时期包含</div>
+</a>
+<a class="entry-item" href="菲利会议.html">
+  <div class="noun">菲利会议</div>
+  <div class="snippet">1812年9月13日（俄历9月1日）在莫斯科郊外菲利村由俄军总司令库图佐夫主持召开的军事会议。会议核心议题是是否在莫斯科城下与法军再战。多数将领主张撤退，库图佐夫最终单方面决定放弃莫斯科以保存俄军有生力量，这一决定成为1812年卫国战争反败</div>
+</a>
+<a class="entry-item" href="菲利军事会议.html">
+  <div class="noun">菲利军事会议</div>
+  <div class="snippet">1812年9月13日（俄历9月1日）在莫斯科以西菲利村农民安德烈·萨沃斯季亚诺夫家中召开的俄军高级将领会议。由库图佐夫主持，议题是是否在莫斯科城下与拿破仑再战。巴克莱·德·托利主张撤退，贝尼格森主张保卫莫斯科。库图佐夫最终决定放弃莫斯科以保</div>
+</a>
+<a class="entry-item" href="萨尔塔诺夫战役.html">
+  <div class="noun">萨尔塔诺夫战役</div>
+  <div class="snippet">又称莫吉廖夫战役，1812年7月23日发生于今白俄罗斯莫吉廖夫以南的萨尔塔诺夫卡村。俄军拉耶夫斯基将军率第七军约两万人阻击法军达武元帅的优势兵力，虽付出重大伤亡，但为巴格拉季昂主力部队渡过第聂伯河赢得了时间，最终俄军得以在斯摩棱斯克会师。</div>
+</a>
+<a class="entry-item" href="萨拉戈萨保卫战.html">
+  <div class="noun">萨拉戈萨保卫战</div>
+  <div class="snippet">西班牙独立战争期间萨拉戈萨城抵抗法军入侵的两次围城战（1808年6至8月第一次围城，1808年12月至1809年2月第二次围城）。守将帕拉福率军民顽强抵抗，第二次围城战中法军逐屋争夺，巷战极其惨烈，全城约五万五千居民仅剩一万五千人。此役被视</div>
+</a>
+<a class="entry-item" href="萨拉曼卡战役.html">
+  <div class="noun">萨拉曼卡战役</div>
+  <div class="snippet">1812年7月22日发生于西班牙萨拉曼卡附近的战役，英西联军在威灵顿公爵指挥下击败法国元帅马尔蒙指挥的法军，是半岛战争的重要转折点之一。托尔斯泰在本书中借法布维埃之口提及此战以展现拿破仑两线作战的困境。</div>
+</a>
+<a class="entry-item" href="蒂尔西特会谈.html">
+  <div class="noun">蒂尔西特会谈</div>
+  <div class="snippet">1807年6—7月，法国皇帝拿破仑与俄国沙皇亚历山大一世在尼曼河中央木筏上举行的会晤，随后签订《蒂尔西特和约》。法俄结束战争并结盟，俄国加入大陆封锁体系，普鲁士遭受严厉惩罚。该会谈标志着拿破仑欧洲霸权的顶峰，但也埋下了法俄战争（1812年）</div>
+</a>
+<a class="entry-item" href="蒂尔西特会面.html">
+  <div class="noun">蒂尔西特会面</div>
+  <div class="snippet">蒂尔西特会面（1807年6月25日—7月7日）是拿破仑与俄国沙皇亚历山大一世在普鲁士蒂尔西特（今俄罗斯苏维埃茨克）涅曼河上木筏中举行的历史性会晤。双方进行了多次单独密谈（史称&quot;蒂尔西特的秘密&quot;），最终签订《蒂尔西特和约》：俄国加入大陆封锁体</div>
+</a>
+<a class="entry-item" href="蒂尔西特和约.html">
+  <div class="noun">蒂尔西特和约</div>
+  <div class="snippet">1807年7月拿破仑与亚历山大一世在蒂尔西特签订的和约，包括法俄和约（7月7日）和法普和约（7月9日）。俄国获得比亚韦斯托克地区并加入大陆封锁体系；普鲁士丧失一半以上领土，沦为三流国家。标志着第四次反法同盟瓦解和拿破仑欧陆霸权的确立。 --</div>
+</a>
+<a class="entry-item" href="薇拉与安德烈的谈话.html">
+  <div class="noun">薇拉与安德烈的谈话</div>
+  <div class="snippet">在罗斯托夫家的晚会上，薇拉主动与安德烈公爵谈论爱情话题，问他对妹妹娜塔莎的看法——娜塔莎能否忠贞不渝。安德烈以讥讽回应说&quot;一个女人越是不惹人爱，她就越忠贞不渝&quot;，并借鲍里斯的童年爱情来掩饰自己的窘态。这场谈话展现了薇拉自以为是的外交手腕和安</div>
+</a>
+<a class="entry-item" href="行刑.html">
+  <div class="noun">行刑</div>
+  <div class="snippet">指拿破仑军队占领莫斯科后，法军对俄国&quot;纵火犯&quot;嫌疑人的公开处决。皮埃尔在莫斯科被法军逮捕后，目睹了法军处决俄国平民的残酷场面，这一经历给他带来巨大的精神冲击。</div>
+</a>
+<a class="entry-item" href="行刑恐惧.html">
+  <div class="noun">行刑恐惧</div>
+  <div class="snippet">皮埃尔被法军俘虏后亲眼目睹对俄国平民的处决，造成精神崩溃——他心中支撑一切的&quot;强大弹簧&quot;断裂，对世界、良心、灵魂和上帝的信仰全部破灭，这是其精神转变的起点。</div>
+</a>
+<a class="entry-item" href="被俘.html">
+  <div class="noun">被俘</div>
+  <div class="snippet">军人在战争中被敌方俘虏成为战俘的状态。根据1949年《日内瓦第三公约》，战俘享有受到人道待遇、获得充足饮食和医疗照顾、与家人通信等基本权利。在《战争与和平》中，罗斯托夫目睹一名俄国骠骑兵被法军俘虏，随后自己也陷入即将被俘的恐惧中。</div>
+</a>
+<a class="entry-item" href="装载伤员的马车.html">
+  <div class="noun">装载伤员的马车</div>
+  <div class="snippet">罗斯托夫家将家具卸下后，用马车装载受伤士兵，帮助他们撤离莫斯科的义举。</div>
+</a>
+<a class="entry-item" href="解放农奴.html">
+  <div class="noun">解放农奴</div>
+  <div class="snippet">解放农奴指废除农奴制度、赋予农奴人身自由的社会变革。俄国于1861年由亚历山大二世正式废除农奴制，约2000万农奴获得解放。在小说中，皮埃尔主张解放农奴，但他的总管以农奴&quot;不解放也过得很幸福&quot;为由加以劝阻。</div>
+</a>
+<a class="entry-item" href="诏书.html">
+  <div class="noun">诏书</div>
+  <div class="snippet">指俄国皇帝颁布的敕令或宣战文告（俄语称манифест，即&quot;宣言&quot;）。在《战争与和平》的故事背景1805年，沙皇亚历山大一世发布了宣战诏书，宣布派兵出征以&quot;在歐洲奠定和平的巩固基础&quot;，由此开启了俄国参加第三次反法同盟的战争。小说中客人们在书</div>
+</a>
+<a class="entry-item" href="试马.html">
+  <div class="noun">试马</div>
+  <div class="snippet">伊林购买新马后，与罗斯托夫一起骑马出行，通过赛跑等方式测试新马的速度和性能。这是骑兵军官常见的休闲活动。</div>
+</a>
+<a class="entry-item" href="请求离开.html">
+  <div class="noun">请求离开</div>
+  <div class="snippet">玛丽亚公爵小姐请求农民允许她离开博古恰罗沃，但遭到拒绝。她以庄园主的身份向农民解释法军到来的危险，并提出提供粮食和安置方案，但农民们完全不听。</div>
+</a>
+<a class="entry-item" href="贝格向薇拉求婚.html">
+  <div class="noun">贝格向薇拉求婚</div>
+  <div class="snippet">《战争与和平》第二卷第三部中的重要情节。贝格——一位利沃尼亚德意志裔的俄军军官——在彼得堡向罗斯托夫家长女薇拉求婚。他在莫斯科剧院初见薇拉时就已下定决心娶她，四年后衡量双方经济条件成熟后正式提出。尽管贝格出身不高，罗斯托夫家在经济窘迫和薇拉</div>
+</a>
+<a class="entry-item" href="贝格家晚会.html">
+  <div class="noun">贝格家晚会</div>
+  <div class="snippet">贝格和薇拉在新居举办的社交晚会，刻意模仿上流社会的一切。皮埃尔、鲍里斯、伊利亚·安德烈伊奇、将军、上校及罗斯托夫家的人都参加了。托尔斯泰用讽刺笔调描写这场&quot;与别人家晚会毫无二致&quot;的聚会——同样有谈话、茶、蜡烛、牌局，宛如两滴水彼此相像。晚会</div>
+</a>
+<a class="entry-item" href="赌博.html">
+  <div class="noun">赌博</div>
+  <div class="snippet">19世纪俄国贵族中盛行的恶习，纸牌赌博尤其流行。小说中多洛霍夫是赌博高手，认为&quot;只有傻瓜才靠运气赌博&quot;，强调要有把握地玩。他设局引诱尼古拉·罗斯托夫，在英吉利饭店连续杀牌，使罗斯托夫欠下八百卢布的巨债，反映了贵族社会奢靡腐化的一面。</div>
+</a>
+<a class="entry-item" href="车夫逃散.html">
+  <div class="noun">车夫逃散</div>
+  <div class="snippet">当罗斯托夫和伊林等骑马奔驰而来时，玛丽亚公爵小姐家中的人误以为是法军骑兵到来，车夫们纷纷逃跑，导致已套好的马车无法出发，家中响起一片妇女的哭喊声。</div>
+</a>
+<a class="entry-item" href="辎重队被劫持.html">
+  <div class="noun">辎重队被劫持</div>
+  <div class="snippet">法军驻留莫斯科期间，其辎重队在斯摩棱斯克大路上被俄军劫持；塔鲁丁诺战役后法军惊慌失措，被迫沿旧路撤退，辎重损失惨重。</div>
+</a>
+<a class="entry-item" href="远征英国.html">
+  <div class="noun">远征英国</div>
+  <div class="snippet">指拿破仑一世于1803—1805年间策划的入侵英国计划。拿破仑在法国北部布伦（Boulogne）建立大营，集结约20万大军（即&quot;大洋海岸军团&quot;），建造大量平底登陆艇，计划控制英吉利海峡后渡海攻英。后因法国舰队在特拉法加海战（1805）中被纳</div>
+</a>
+<a class="entry-item" href="远征非洲.html">
+  <div class="noun">远征非洲</div>
+  <div class="snippet">1798—1799年拿破仑率军远征埃及和叙利亚的军事行动。拿破仑率约4万士兵和百余名学者从土伦出发，先后攻占马耳他、亚历山大港，在金字塔战役中大败马穆鲁克骑兵。但因纳尔逊在尼罗河海战中摧毁法国舰队，法军被困埃及。拿破仑于1799年秘密返回法</div>
+</a>
+<a class="entry-item" href="追狼.html">
+  <div class="noun">追狼</div>
+  <div class="snippet">追狼是《战争与和平》狩猎场景中的核心事件，指罗斯托夫家族在奥特拉德诺耶庄园附近组织的大规模猎狼行动。猎人们布置围猎阵型，放出成群猎犬追逐躲藏在孤林中的狼。这次追狼行动涉及伯爵、尼古拉、丹尼洛、大叔等多方猎人，经过数轮激烈的追逐和搏斗，最终由</div>
+</a>
+<a class="entry-item" href="醉酒农民唱歌.html">
+  <div class="noun">醉酒农民唱歌</div>
+  <div class="snippet">罗斯托夫和伊林进入博古恰罗沃时，从酒馆里出来两个高个老头，满脸皱纹、胡子稀疏，摇摇晃晃地唱着不成调的歌向军官们走来。这一细节生动刻画了俄国乡村农民的粗犷形象。</div>
+</a>
+<a class="entry-item" href="野蛮人入侵.html">
+  <div class="noun">野蛮人入侵</div>
+  <div class="snippet">古代游牧民族对欧洲文明地区的大规模入侵，主要指公元4至6世纪民族大迁徙时期。托尔斯泰在《战争与和平》中将民族迁徙和野蛮人入侵并提，作为论证自由与必然性关系的宏观历史案例：从长远视角看，人们越来越倾向于将这些事件视为必然性法则的产物。</div>
+</a>
+<a class="entry-item" href="金字塔战役.html">
+  <div class="noun">金字塔战役</div>
+  <div class="snippet">1798年7月21日拿破仑远征埃及期间在吉萨金字塔附近击败马穆鲁克军队的战役，法军以步兵方阵战术以少胜多。</div>
+</a>
+<a class="entry-item" href="阿尔帕特奇汇报.html">
+  <div class="noun">阿尔帕特奇汇报</div>
+  <div class="snippet">管家阿尔帕特奇向罗斯托夫详细禀报博古恰罗沃发生的情况：农民不让公爵小姐离开、卸掉马匹、德龙交出钥匙与农民站到一起等。阿尔帕特奇以恭谨的语气向这位年轻军官求助。</div>
+</a>
+<a class="entry-item" href="阿尔科拉战役.html">
+  <div class="noun">阿尔科拉战役</div>
+  <div class="snippet">1796年11月15日至17日拿破仑率领法军在意大利阿尔科拉桥附近击败奥地利军队的战役，是拿破仑意大利战役的关键转折点，粉碎了奥地利第三次解围曼图亚的企图。</div>
+</a>
+<a class="entry-item" href="阿尔科拉桥战役.html">
+  <div class="noun">阿尔科拉桥战役</div>
+  <div class="snippet">1796年11月15-17日拿破仑在意大利阿尔科拉桥击败奥地利军的战役。拿破仑亲自举旗冲锋，掉入沼泽险些被俘。此役巩固了拿破仑在意大利战场的胜利，是其早期军事生涯的关键一战。</div>
+</a>
+<a class="entry-item" href="难产.html">
+  <div class="noun">难产</div>
+  <div class="snippet">小公爵夫人丽莎在分娩时因难产去世，这是《战争与和平》中最重要的转折性事件之一。安德烈公爵在奥斯特利茨战场负伤后赶回家中，刚到达妻子即开始阵痛，最终丽莎产下男婴后死亡。这一打击使安德烈公爵陷入深深的内疚和精神低谷，很长一段时间隐居乡下。</div>
+</a>
+<a class="entry-item" href="雪橇出游.html">
+  <div class="noun">雪橇出游</div>
+  <div class="snippet">圣诞节夜晚罗斯托夫家的年轻人乘坐四辆三驾雪橇前往梅柳科娃家的冬季出游。 月光下雪橇在广阔的雪原上飞驰，马匹在冰冻的雪地上奔跑，充满欢乐与浪漫气氛。 这是小说中著名的冬季场景之一，展现了19世纪俄国贵族冬季社交生活。</div>
+</a>
+<a class="entry-item" href="雪橇返程.html">
+  <div class="noun">雪橇返程</div>
+  <div class="snippet">圣诞聚会结束后，一行人乘雪橇返回罗斯托夫家。娜塔莎特意安排座位让索尼娅和尼古拉同乘一橇。在月光照耀的雪夜中，尼古拉不断端详索尼娅，中途还跳到娜塔莎的雪橇上与她交谈关于索尼娅的决定。寒冷的月光、吱吱作响的雪地和繁星灿烂的天空构成了美妙的冬夜氛</div>
+</a>
+<a class="entry-item" href="雾月十八日.html">
+  <div class="noun">雾月十八日</div>
+  <div class="snippet">雾月十八日（1799年11月9—10日），即法国共和历雾月18日的政变，是拿破仑·波拿巴夺取政权的关键事件。拿破仑在巴黎大资产阶级和银行家支持下，以武力推翻督政府，成立执政府，自任第一执政。此次政变标志着法国大革命的结束和拿破仑军事独裁的开</div>
+</a>
+<a class="entry-item" href="韦列夏金被杀害.html">
+  <div class="noun">韦列夏金被杀害</div>
+  <div class="snippet">1812年莫斯科撤退期间，莫斯科总督拉斯托普钦将政治犯韦列夏金交给暴民处死的暴力事件。是《战争与和平》中的著名场景。</div>
+</a>
+<a class="entry-item" href="马伦戈战役.html">
+  <div class="noun">马伦戈战役</div>
+  <div class="snippet">1800年6月14日拿破仑在意大利亚历山德里亚附近的马伦戈村击败奥地利军队的决定性战役。拿破仑翻越阿尔卑斯山大圣伯纳德山口出其不意进入意大利，在首战不利的情况下因德赛将军率援军折返而实现惊天逆转，巩固了其第一执政的地位。</div>
+</a>
+<a class="entry-item" href="马夫寻主.html">
+  <div class="noun">马夫寻主</div>
+  <div class="snippet">皮埃尔的马夫在城里寻找他未果后返回客栈，在莫扎伊斯克半山腰遇见黑暗中戴白帽子的皮埃尔，认出主人，得知主人竟步行归来，大为惊讶。</div>
+</a>
+<a class="entry-item" href="马画了十字.html">
+  <div class="noun">马画了十字</div>
+  <div class="snippet">此处指车夫和仆人在出发前画十字以祈祷旅途平安。</div>
+</a>
+<a class="entry-item" href="龙骑兵排成长队.html">
+  <div class="noun">龙骑兵排成长队</div>
+  <div class="snippet">在处决韦列夏金前，龙骑兵奉命在门前列队以维持秩序和控制人群。</div>
+</a>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>

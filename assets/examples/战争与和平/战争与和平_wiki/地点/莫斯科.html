@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>莫斯科 · 战争与和平</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-detail: #fafaf7;
+  --text: #2c2c2c;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --heading: #1a1a1a;
+  --border: #d9d4cc;
+  --accent: #333333;
+  --accent-hover: #555555;
+  --link: #444444;
+  --tag-bg: #e8e3d8;
+  --tag-text: #444444;
+  --divider: #d9d4cc;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 3px 12px rgba(0,0,0,0.1);
+  --font-heading: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-mono: "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+
+/* ── header ── */
+.site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky; top: 0; z-index: 10;
+}
+.site-header .title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--heading); letter-spacing: 0.02em;
+}
+.site-header .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── breadcrumb ── */
+.breadcrumb {
+    padding: 0.75rem 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.breadcrumb a { color: var(--text-secondary); }
+.breadcrumb span { color: var(--text-muted); margin: 0 0.35rem; }
+
+/* ── main layout ── */
+.container { max-width: 920px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ── category cards (index) ── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+.category-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.category-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+.category-card h3 {
+    font-family: var(--font-heading); font-size: 1.1rem;
+    color: var(--heading); margin-bottom: 0.4rem;
+}
+.category-card .count { color: var(--text-muted); font-size: 0.85rem; }
+.category-card .preview { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* ── view toggle ── */
+.view-toggle-bar {
+    display: flex; gap: 0.5rem; margin-bottom: 1.25rem;
+}
+.view-toggle-btn {
+    padding: 0.4rem 1rem; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--bg-card); color: var(--text-secondary);
+    cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.view-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.view-toggle-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ── flat list (index all-entries view) ── */
+.flat-list { margin-top: 0.5rem; }
+.flat-item {
+    display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.flat-item:hover { background: var(--bg-card); text-decoration: none; }
+.flat-item .noun { font-weight: 600; color: var(--heading); }
+.flat-item .cat-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.75rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+    margin-left: 0.5rem; vertical-align: middle;
+}
+.flat-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── hidden utility ── */
+.view-hidden { display: none !important; }
+
+/* ── entry list (category page) ── */
+.entry-list { margin-top: 1rem; }
+.entry-item {
+    display: block; padding: 0.85rem 1rem; border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+}
+.entry-item:hover { background: var(--bg-card); text-decoration: none; }
+.entry-item .noun { font-weight: 600; color: var(--heading); }
+.entry-item .snippet { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.2rem; }
+
+/* ── detail page ── */
+.detail-card {
+    background: var(--bg-detail); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; box-shadow: var(--shadow);
+}
+.detail-card h1 {
+    font-family: var(--font-heading); font-size: 1.6rem;
+    color: var(--heading); margin-bottom: 0.5rem;
+}
+.detail-card .meta-tag {
+    display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+    font-size: 0.8rem; padding: 0.2rem 0.65rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.detail-section { margin-top: 1.5rem; }
+.detail-section h2 {
+    font-family: var(--font-heading); font-size: 1rem;
+    color: var(--accent); margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--divider);
+}
+.detail-section p { color: var(--text); white-space: pre-line; font-size: 0.95rem; }
+.detail-section a { word-break: break-all; }
+
+.source-url-item {
+    display: block; padding: 0.3rem 0; color: var(--link);
+    word-break: break-all;
+}
+
+/* ── footer ── */
+.site-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    color: var(--text-muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="title">莫斯科 · 战争与和平</div>
+</header>
+<nav class="breadcrumb">
+<a href="../../战争与和平_wiki.html">Home</a>
+<span>/</span>
+<a href="index.html">地点</a>
+<span>/</span>
+莫斯科
+</nav>
+<main class="container">
+<div class="detail-card">
+  <h1>莫斯科</h1>
+  <span class="meta-tag">地点</span>
+
+  <div class="detail-section">
+    <h2>解释</h2>
+    <p>莫斯科是俄罗斯联邦首都，建于1147年，是俄罗斯政治、经济、文化中心。克里姆林宫和红场为其标志性建筑，被列入世界文化遗产。1812年拿破仑入侵时曾遭大火。1918年成为苏俄首都，1991年苏联解体后成为俄罗斯联邦首都。莫斯科以绿化面积大著称，有&quot;森林中的首都&quot;之美誉。<br>---<br>莫斯科是俄罗斯的古都，19世纪初仍是俄国传统文化和贵族生活的中心。与代表官方和西化的彼得堡相比，莫斯科在《战争与和平》中常被描绘为更传统、更俄罗斯化的空间，是罗斯托夫家族和别祖霍夫家族的居住地。在本卷文本中，约瑟夫·阿列克谢耶维奇从彼得堡退居莫斯科深居简出，代表了共济会中拒绝世俗事务、专注精神修行的倾向。<br>---<br>莫斯科（Москва），俄罗斯的古都，19世纪初俄国的文化和社会中心。与彼得堡的官方严肃氛围不同，莫斯科更代表俄国传统贵族的生活方式和人情世故。《战争与和平》的开篇和许多重要场景均发生在莫斯科（如罗斯托夫家的命名日舞会、皮埃尔继承遗产、别祖霍夫老伯爵之死、1812年莫斯科大火等）。在本书第77段中，罗斯托夫家在莫斯科属于上流社会，但在彼得堡却被视为外省人。<br>---<br>莫斯科，俄罗斯帝国的古都和最大城市，1812年俄法战争中的核心战场。在《战争与和平》中，莫斯科是罗斯托夫家族等众多贵族的主要居住地，也是拿破仑大军入侵时放弃的空城。玛丽亚公爵小姐在信中提及不愿去莫斯科过冬，因为父亲无法忍受听到人们对拿破仑的颂扬。<br>---<br>莫斯科是《战争与和平》中最核心的故事场景之一，罗斯托夫家族和博尔孔斯基家族的主要生活地。与作为官僚首都的彼得堡不同，莫斯科代表传统的俄罗斯贵族生活方式。尼古拉·罗斯托夫被莫斯科社交圈认为&quot;风度欠佳&quot;。<br>---<br>俄罗斯古都，罗斯托夫家在此拥有祖传豪华宅第和近郊田产。因家道中落传闻要变卖。1812年拿破仑入侵时经历了大火和撤离，是小说的核心事件之一。<br>---<br>朱莉·卡拉金娜的居住地，伯爵夫人邀请尼古拉前去提亲的城市。19世纪初的莫斯科是俄国贵族社交生活的重要中心，与彼得堡的官方宫廷氛围不同，莫斯科的贵族生活更为传统、悠闲和家族化。罗斯托夫家族就定居在莫斯科。<br>---<br>在《战争与和平》中被托尔斯泰描绘为传统俄国的象征，与西化的彼得堡形成鲜明对比。皮埃尔离开彼得堡来到莫斯科感到如归港湾。莫斯科社交界以英国俱乐部为中心，生活方式慵懒温暖。罗斯托夫家须卖掉此地的房子，皮埃尔移居于此，老博尔孔斯基公爵在此过冬。<br>---<br>俄国古都，小说中重要的故事舞台。1811年初冬，博尔孔斯基公爵带着女儿来到这里，立刻成为莫斯科反政府保守派贵族的中心。莫斯科上流社会在战争前夕依然举办舞会和宴会，但战争阴云已笼罩全城。1812年法军占领莫斯科前经历了大火和撤离。<br>---<br>俄国古都，小说中最重要的故事场景之一。罗斯托夫家族和博尔孔斯基家族（老公爵时期）居住于此。1812年拿破仑入侵时被法军占领并发生大火。莫斯科的上流社会与彼得堡宫廷形成鲜明对比，更传统、更热情、更具俄罗斯本色。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>书中原文</h2>
+    <p>回到莫斯科以后，他父亲辞退了那个神甫<br>---<br>约瑟夫·阿列克谢耶维奇不在彼得堡。（他近来推掉彼得堡支会的事务，在莫斯科深居简出。）<br>---<br>罗斯托夫家虽然在莫斯科属于上流社会，其实他们并不知道也不考虑他们是属于哪个社会，可是在彼得堡他们的交游相当庞杂而且不固定。<br>---<br>您问我们是不是去莫斯科过冬？虽然很想看见您，可是，我不想也不愿去莫斯科。原因是在波拿巴身上……我父亲的健康显著地恶化：任何拂他意的事情他都不能忍受，他很容易动怒。他的怒气，您是知道的，多半是针对政治问题。<br>---<br>罗斯托夫成为一个举止粗野、心地善良的小伙子，莫斯科的熟人一定认为他有点风度欠佳。<br>---<br>传闻要卖掉罗斯托夫祖传的豪华宅第和莫斯科近郊的田产。<br>---<br>伯爵夫人直接给莫斯科的卡拉金娜写信，向她提出她们两家子女的婚事，并且接到对方令人满意的回答。卡拉金娜说，她本人是同意的，但问题全看她女儿的意思了。卡拉金娜邀请尼古拉去莫斯科。<br>---<br>在莫斯科居住有如穿上一件旧长衫，舒适、温暖、肮脏。<br>---<br>初冬，尼古拉·安德烈伊奇·博尔孔斯基公爵带着女儿来到了莫斯科。<br>---<br>在莫斯科，鲍里斯在朱莉和玛丽亚公爵小姐这两个最有钱的姑娘之间犹豫不决。</p>
+  </div>
+
+  <div class="detail-section">
+    <h2>参考链接</h2>
+    <a class="source-url-item" href="https://baike.baidu.com/item/%E8%8E%AB%E6%96%AF%E7%A7%91" target="_blank" rel="noopener">https://baike.baidu.com/item/%E8%8E%AB%E6%96%AF%E7%A7%91</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/%E8%8E%AB%E6%96%AF%E7%A7%91/215731" target="_blank" rel="noopener">https://baike.baidu.com/item/%E8%8E%AB%E6%96%AF%E7%A7%91/215731</a>
+<a class="source-url-item" href="https://baike.baidu.com/item/莫斯科" target="_blank" rel="noopener">https://baike.baidu.com/item/莫斯科</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/wiki/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%88%98%E4%BA%89%E4%B8%8E%E5%92%8C%E5%B9%B3</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/wiki/战争与和平人物列表" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/战争与和平人物列表</a>
+<a class="source-url-item" href="https://zh.wikipedia.org/zh-mo/%E6%88%B0%E7%88%AD%E8%88%87%E5%92%8C%E5%B9%B3" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-mo/%E6%88%B0%E7%88%AD%E8%88%87%E5%92%8C%E5%B9%B3</a>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  Generated by ebook2wiki &middot; 2026-05-01 15:11
+</footer>
+</body>
+</html>
